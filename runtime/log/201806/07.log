@@ -1,0 +1,1702 @@
+[ 2018-06-07T11:57:32+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/
+[ log ] localhost/tpAdmin-master/public/ [运行时间：0.402002s][吞吐率：2.49req/s] [内存消耗：996.87kb] [文件加载：41]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1',
+  'referer' => 'http://localhost/tpAdmin-master/',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ RUN ] app\index\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\index\controller\Index.php ]
+[ info ] [ LOG ] INIT File
+
+---------------------------------------------------------------
+[ 2018-06-07T11:57:38+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/
+[ log ] localhost/tpAdmin-master/public/index.php/ [运行时间：0.082002s][吞吐率：12.19req/s] [内存消耗：996.09kb] [文件加载：41]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ RUN ] app\index\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\index\controller\Index.php ]
+[ info ] [ LOG ] INIT File
+
+---------------------------------------------------------------
+[ 2018-06-07T11:57:39+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin.html [运行时间：0.912005s][吞吐率：1.10req/s] [内存消耗：4,533.57kb] [文件加载：69]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.220000s ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.501004s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.090000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.160000s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (0 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin.html' , 'admin' , 'Index' , 'index' , 'GET' , 'a:0:{}' , 1528343858) [ RunTime:0.131003s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:57:39+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin/pub/login.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin/pub/login.html [运行时间：0.352011s][吞吐率：2.84req/s] [内存消耗：4,537.77kb] [文件加载：69]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'pub',
+    2 => 'login',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.025001s ]
+[ info ] [ RUN ] app\admin\controller\Pub->login[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Pub.php ]
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\pub\login.html [ array (
+) ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.064001s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.018000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.020000s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (0 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin/pub/login.html' , 'admin' , 'Pub' , 'login' , 'GET' , 'a:0:{}' , 1528343859) [ RunTime:0.000000s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:57:40+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/captcha.html
+[ log ] localhost/tpAdmin-master/public/index.php/captcha.html [运行时间：0.511024s][吞吐率：1.96req/s] [内存消耗：1,024.03kb] [文件加载：41]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'method',
+  'method' => 
+  array (
+    0 => '\\think\\captcha\\CaptchaController',
+    1 => 'index',
+  ),
+  'var' => 
+  array (
+  ),
+)
+[ info ] [ HEADER ] array (
+  'connection' => 'keep-alive',
+  'cookie' => 'hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'referer' => 'http://localhost/tpAdmin-master/public/index.php/admin/pub/login.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => '*/*',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+  'id' => '',
+)
+[ info ] [ RUN ] think\captcha\CaptchaController->index[ D:\phpStudy\WWW\tpAdmin-master\vendor\topthink\think-captcha\src\CaptchaController.php ]
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ LOG ] INIT File
+
+---------------------------------------------------------------
+[ 2018-06-07T11:57:46+08:00 ] 127.0.0.1 127.0.0.1 POST /tpAdmin-master/public/index.php/admin/pub/checklogin.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin/pub/checklogin.html [运行时间：0.686006s][吞吐率：1.46req/s] [内存消耗：4,627.46kb] [文件加载：72]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'pub',
+    2 => 'checklogin',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'content-length' => '51',
+  'x-requested-with' => 'XMLHttpRequest',
+  'content-type' => 'application/x-www-form-urlencoded; charset=UTF-8',
+  'referer' => 'http://localhost/tpAdmin-master/public/index.php/admin/pub/login.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'application/json, text/javascript, */*; q=0.01',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+)
+[ info ] [ PARAM ] array (
+  'account' => 'admin',
+  'password' => '123456',
+  'captcha' => 'asme',
+  'online' => '1',
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.020001s ]
+[ info ] [ RUN ] app\admin\controller\Pub->checkLogin[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Pub.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ CACHE ] INIT File
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.030000s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.010000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_user` [ RunTime:0.070000s ]
+[ sql ] [ SQL ] SELECT * FROM `fy_admin_user` WHERE  `account` = 'admin'  AND `status` = 1 LIMIT 1 [ RunTime:0.019001s ]
+[ sql ] [ SQL ] UPDATE `fy_admin_user`  SET `last_login_time`=1528343865,`login_count`=login_count+1,`last_login_ip`='127.0.0.1'  WHERE  `id` = 1 [ RunTime:0.030000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_login_log` [ RunTime:0.160000s ]
+[ sql ] [ SQL ] INSERT INTO `fy_login_log` (`uid` , `login_ip` , `login_location` , `login_browser` , `login_os`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Firefox(60.0)' , 'Windows 7') [ RunTime:0.112003s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.030000s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (0 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin/pub/checklogin.html' , 'admin' , 'Pub' , 'checklogin' , 'POST' , 'a:4:{s:7:\"account\";s:5:\"admin\";s:8:\"password\";s:6:\"123456\";s:7:\"captcha\";s:4:\"asme\";s:6:\"online\";s:1:\"1\";}' , 1528343865) [ RunTime:0.000000s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:57:46+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin/index/index.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin/index/index.html [运行时间：0.355008s][吞吐率：2.82req/s] [内存消耗：4,658.58kb] [文件加载：72]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'index',
+    2 => 'index',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'referer' => 'http://localhost/tpAdmin-master/public/index.php/admin/pub/login.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.014001s ]
+[ info ] [ RUN ] app\admin\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\index.html [ array (
+  0 => 'groups',
+  1 => 'menu',
+) ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.030000s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.010000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_node` [ RunTime:0.050000s ]
+[ sql ] [ SQL ] SELECT `id`,`pid`,`name`,`group_id`,`title`,`type` FROM `fy_admin_node` WHERE  (  status=1 AND group_id > 0 ) [ RunTime:0.010000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_group` [ RunTime:0.040000s ]
+[ sql ] [ SQL ] SELECT `id`,`name`,`icon` FROM `fy_admin_group` WHERE  `id` IN (1,2)  AND `status` = 1 ORDER BY sort asc,id asc [ RunTime:0.030000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.020000s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin/index/index.html' , 'admin' , 'Index' , 'index' , 'GET' , 'a:0:{}' , 1528343866) [ RunTime:0.010000s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:57:47+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin/index/welcome.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin/index/welcome.html [运行时间：0.441024s][吞吐率：2.27req/s] [内存消耗：4,598.36kb] [文件加载：70]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'index',
+    2 => 'welcome',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'referer' => 'http://localhost/tpAdmin-master/public/index.php/admin/index/index.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.026002s ]
+[ info ] [ RUN ] app\admin\controller\Index->welcome[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\welcome.html [ array (
+  0 => 'last_login_ip',
+  1 => 'last_login_loc',
+  2 => 'current_login_ip',
+  3 => 'current_login_loc',
+  4 => 'info',
+) ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.051003s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.008001s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_user` [ RunTime:0.046002s ]
+[ sql ] [ SQL ] SELECT * FROM `fy_admin_user` WHERE  `id` = 1 LIMIT 1 [ RunTime:0.005000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.047002s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin/index/welcome.html' , 'admin' , 'Index' , 'welcome' , 'GET' , 'a:0:{}' , 1528343867) [ RunTime:0.002000s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:05+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin/index/index.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin/index/index.html [运行时间：0.294003s][吞吐率：3.40req/s] [内存消耗：4,658.46kb] [文件加载：72]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'index',
+    2 => 'index',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.020000s ]
+[ info ] [ RUN ] app\admin\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\index.html [ array (
+  0 => 'groups',
+  1 => 'menu',
+) ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.040000s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.010000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_node` [ RunTime:0.030000s ]
+[ sql ] [ SQL ] SELECT `id`,`pid`,`name`,`group_id`,`title`,`type` FROM `fy_admin_node` WHERE  (  status=1 AND group_id > 0 ) [ RunTime:0.010000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_group` [ RunTime:0.030000s ]
+[ sql ] [ SQL ] SELECT `id`,`name`,`icon` FROM `fy_admin_group` WHERE  `id` IN (1,2)  AND `status` = 1 ORDER BY sort asc,id asc [ RunTime:0.000000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.030000s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin/index/index.html' , 'admin' , 'Index' , 'index' , 'GET' , 'a:0:{}' , 1528343885) [ RunTime:0.000000s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:06+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin/index/welcome.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin/index/welcome.html [运行时间：0.188010s][吞吐率：5.32req/s] [内存消耗：4,598.37kb] [文件加载：70]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'index',
+    2 => 'welcome',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'referer' => 'http://localhost/tpAdmin-master/public/index.php/admin/index/index.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.011001s ]
+[ info ] [ RUN ] app\admin\controller\Index->welcome[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\welcome.html [ array (
+  0 => 'last_login_ip',
+  1 => 'last_login_loc',
+  2 => 'current_login_ip',
+  3 => 'current_login_loc',
+  4 => 'info',
+) ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.035002s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.002000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_user` [ RunTime:0.028001s ]
+[ sql ] [ SQL ] SELECT * FROM `fy_admin_user` WHERE  `id` = 1 LIMIT 1 [ RunTime:0.002000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.031002s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin/index/welcome.html' , 'admin' , 'Index' , 'welcome' , 'GET' , 'a:0:{}' , 1528343886) [ RunTime:0.001000s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:11+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/
+[ log ] localhost/tpAdmin-master/public/index.php/ [运行时间：0.071004s][吞吐率：14.08req/s] [内存消耗：996.04kb] [文件加载：41]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ RUN ] app\index\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\index\controller\Index.php ]
+[ info ] [ LOG ] INIT File
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:11+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin.html [运行时间：0.265006s][吞吐率：3.77req/s] [内存消耗：4,658.23kb] [文件加载：72]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.020000s ]
+[ info ] [ RUN ] app\admin\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\index.html [ array (
+  0 => 'groups',
+  1 => 'menu',
+) ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.042001s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.010000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_node` [ RunTime:0.030000s ]
+[ sql ] [ SQL ] SELECT `id`,`pid`,`name`,`group_id`,`title`,`type` FROM `fy_admin_node` WHERE  (  status=1 AND group_id > 0 ) [ RunTime:0.000000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_group` [ RunTime:0.030000s ]
+[ sql ] [ SQL ] SELECT `id`,`name`,`icon` FROM `fy_admin_group` WHERE  `id` IN (1,2)  AND `status` = 1 ORDER BY sort asc,id asc [ RunTime:0.010000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.037001s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin.html' , 'admin' , 'Index' , 'index' , 'GET' , 'a:0:{}' , 1528343891) [ RunTime:0.004000s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:12+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin/index/welcome.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin/index/welcome.html [运行时间：0.180008s][吞吐率：5.56req/s] [内存消耗：4,598.48kb] [文件加载：70]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'index',
+    2 => 'welcome',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'referer' => 'http://localhost/tpAdmin-master/public/index.php/admin.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.012000s ]
+[ info ] [ RUN ] app\admin\controller\Index->welcome[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\welcome.html [ array (
+  0 => 'last_login_ip',
+  1 => 'last_login_loc',
+  2 => 'current_login_ip',
+  3 => 'current_login_loc',
+  4 => 'info',
+) ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.024001s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.003000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_user` [ RunTime:0.020001s ]
+[ sql ] [ SQL ] SELECT * FROM `fy_admin_user` WHERE  `id` = 1 LIMIT 1 [ RunTime:0.001000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.021001s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin/index/welcome.html' , 'admin' , 'Index' , 'welcome' , 'GET' , 'a:0:{}' , 1528343892) [ RunTime:0.001000s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:14+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/
+[ log ] localhost/tpAdmin-master/public/index.php/ [运行时间：0.020000s][吞吐率：50.00req/s] [内存消耗：996.13kb] [文件加载：41]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ RUN ] app\index\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\index\controller\Index.php ]
+[ info ] [ LOG ] INIT File
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:15+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin.html [运行时间：0.120005s][吞吐率：8.33req/s] [内存消耗：4,658.24kb] [文件加载：72]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.010000s ]
+[ info ] [ RUN ] app\admin\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\index.html [ array (
+  0 => 'groups',
+  1 => 'menu',
+) ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.015001s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.002000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_node` [ RunTime:0.014001s ]
+[ sql ] [ SQL ] SELECT `id`,`pid`,`name`,`group_id`,`title`,`type` FROM `fy_admin_node` WHERE  (  status=1 AND group_id > 0 ) [ RunTime:0.000000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_group` [ RunTime:0.020001s ]
+[ sql ] [ SQL ] SELECT `id`,`name`,`icon` FROM `fy_admin_group` WHERE  `id` IN (1,2)  AND `status` = 1 ORDER BY sort asc,id asc [ RunTime:0.006000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.014000s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin.html' , 'admin' , 'Index' , 'index' , 'GET' , 'a:0:{}' , 1528343895) [ RunTime:0.001001s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:15+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin/index/welcome.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin/index/welcome.html [运行时间：0.098003s][吞吐率：10.20req/s] [内存消耗：4,598.52kb] [文件加载：70]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'index',
+    2 => 'welcome',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'referer' => 'http://localhost/tpAdmin-master/public/index.php/admin.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.010000s ]
+[ info ] [ RUN ] app\admin\controller\Index->welcome[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\welcome.html [ array (
+  0 => 'last_login_ip',
+  1 => 'last_login_loc',
+  2 => 'current_login_ip',
+  3 => 'current_login_loc',
+  4 => 'info',
+) ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.022001s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.007000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_user` [ RunTime:0.018001s ]
+[ sql ] [ SQL ] SELECT * FROM `fy_admin_user` WHERE  `id` = 1 LIMIT 1 [ RunTime:0.001001s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.020001s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin/index/welcome.html' , 'admin' , 'Index' , 'welcome' , 'GET' , 'a:0:{}' , 1528343895) [ RunTime:0.001000s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:21+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin.html [运行时间：0.274009s][吞吐率：3.65req/s] [内存消耗：4,658.45kb] [文件加载：72]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.013000s ]
+[ info ] [ RUN ] app\admin\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\index.html [ array (
+  0 => 'groups',
+  1 => 'menu',
+) ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.030000s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.006000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_node` [ RunTime:0.028001s ]
+[ sql ] [ SQL ] SELECT `id`,`pid`,`name`,`group_id`,`title`,`type` FROM `fy_admin_node` WHERE  (  status=1 AND group_id > 0 ) [ RunTime:0.004000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_group` [ RunTime:0.031002s ]
+[ sql ] [ SQL ] SELECT `id`,`name`,`icon` FROM `fy_admin_group` WHERE  `id` IN (1,2)  AND `status` = 1 ORDER BY sort asc,id asc [ RunTime:0.001000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.020000s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin.html' , 'admin' , 'Index' , 'index' , 'GET' , 'a:0:{}' , 1528343901) [ RunTime:0.010000s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:21+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin.html [运行时间：0.223002s][吞吐率：4.48req/s] [内存消耗：4,658.45kb] [文件加载：72]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.020000s ]
+[ info ] [ RUN ] app\admin\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\index.html [ array (
+  0 => 'groups',
+  1 => 'menu',
+) ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.043000s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.000000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_node` [ RunTime:0.020000s ]
+[ sql ] [ SQL ] SELECT `id`,`pid`,`name`,`group_id`,`title`,`type` FROM `fy_admin_node` WHERE  (  status=1 AND group_id > 0 ) [ RunTime:0.000000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_group` [ RunTime:0.030000s ]
+[ sql ] [ SQL ] SELECT `id`,`name`,`icon` FROM `fy_admin_group` WHERE  `id` IN (1,2)  AND `status` = 1 ORDER BY sort asc,id asc [ RunTime:0.000000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.036000s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin.html' , 'admin' , 'Index' , 'index' , 'GET' , 'a:0:{}' , 1528343901) [ RunTime:0.005000s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:23+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin.html [运行时间：0.352018s][吞吐率：2.84req/s] [内存消耗：4,658.45kb] [文件加载：72]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.016001s ]
+[ info ] [ RUN ] app\admin\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\index.html [ array (
+  0 => 'groups',
+  1 => 'menu',
+) ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.036002s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.007000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_node` [ RunTime:0.027002s ]
+[ sql ] [ SQL ] SELECT `id`,`pid`,`name`,`group_id`,`title`,`type` FROM `fy_admin_node` WHERE  (  status=1 AND group_id > 0 ) [ RunTime:0.037003s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_group` [ RunTime:0.025001s ]
+[ sql ] [ SQL ] SELECT `id`,`name`,`icon` FROM `fy_admin_group` WHERE  `id` IN (1,2)  AND `status` = 1 ORDER BY sort asc,id asc [ RunTime:0.003001s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.025001s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin.html' , 'admin' , 'Index' , 'index' , 'GET' , 'a:0:{}' , 1528343903) [ RunTime:0.007001s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:24+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin.html [运行时间：0.182002s][吞吐率：5.49req/s] [内存消耗：4,658.45kb] [文件加载：72]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; _gat=1; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.010000s ]
+[ info ] [ RUN ] app\admin\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\index.html [ array (
+  0 => 'groups',
+  1 => 'menu',
+) ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.020000s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.010000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_node` [ RunTime:0.010000s ]
+[ sql ] [ SQL ] SELECT `id`,`pid`,`name`,`group_id`,`title`,`type` FROM `fy_admin_node` WHERE  (  status=1 AND group_id > 0 ) [ RunTime:0.010000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_group` [ RunTime:0.030000s ]
+[ sql ] [ SQL ] SELECT `id`,`name`,`icon` FROM `fy_admin_group` WHERE  `id` IN (1,2)  AND `status` = 1 ORDER BY sort asc,id asc [ RunTime:0.000000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.010000s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin.html' , 'admin' , 'Index' , 'index' , 'GET' , 'a:0:{}' , 1528343904) [ RunTime:0.010000s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:44+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin.html [运行时间：1.725031s][吞吐率：0.58req/s] [内存消耗：4,528.98kb] [文件加载：72]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.040000s ]
+[ info ] [ RUN ] app\admin\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ error ] [2002]SQLSTATE[HY000] [2002] ����Ŀ�����������ܾ����޷����ӡ�
+[D:\phpStudy\WWW\tpAdmin-master\thinkphp\library\think\db\Connection.php:300]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:49+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/
+[ log ] localhost/tpAdmin-master/public/index.php/ [运行时间：0.097004s][吞吐率：10.31req/s] [内存消耗：996.13kb] [文件加载：41]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ RUN ] app\index\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\index\controller\Index.php ]
+[ info ] [ LOG ] INIT File
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:49+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin.html [运行时间：0.506005s][吞吐率：1.98req/s] [内存消耗：4,658.28kb] [文件加载：72]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.010000s ]
+[ info ] [ RUN ] app\admin\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\index.html [ array (
+  0 => 'groups',
+  1 => 'menu',
+) ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.047002s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.055000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_node` [ RunTime:0.224001s ]
+[ sql ] [ SQL ] SELECT `id`,`pid`,`name`,`group_id`,`title`,`type` FROM `fy_admin_node` WHERE  (  status=1 AND group_id > 0 ) [ RunTime:0.000000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_group` [ RunTime:0.020000s ]
+[ sql ] [ SQL ] SELECT `id`,`name`,`icon` FROM `fy_admin_group` WHERE  `id` IN (1,2)  AND `status` = 1 ORDER BY sort asc,id asc [ RunTime:0.000000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.039002s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin.html' , 'admin' , 'Index' , 'index' , 'GET' , 'a:0:{}' , 1528343929) [ RunTime:0.005000s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:50+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin/index/welcome.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin/index/welcome.html [运行时间：0.336020s][吞吐率：2.98req/s] [内存消耗：4,598.57kb] [文件加载：70]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'index',
+    2 => 'welcome',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'referer' => 'http://localhost/tpAdmin-master/public/index.php/admin.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.014000s ]
+[ info ] [ RUN ] app\admin\controller\Index->welcome[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\welcome.html [ array (
+  0 => 'last_login_ip',
+  1 => 'last_login_loc',
+  2 => 'current_login_ip',
+  3 => 'current_login_loc',
+  4 => 'info',
+) ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.032002s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.003000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_user` [ RunTime:0.025002s ]
+[ sql ] [ SQL ] SELECT * FROM `fy_admin_user` WHERE  `id` = 1 LIMIT 1 [ RunTime:0.049003s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.027002s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin/index/welcome.html' , 'admin' , 'Index' , 'welcome' , 'GET' , 'a:0:{}' , 1528343930) [ RunTime:0.002000s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:55+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php
+[ log ] localhost/tpAdmin-master/public/index.php [运行时间：0.109006s][吞吐率：9.17req/s] [内存消耗：996.13kb] [文件加载：41]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ RUN ] app\index\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\index\controller\Index.php ]
+[ info ] [ LOG ] INIT File
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:55+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin.html [运行时间：0.225009s][吞吐率：4.44req/s] [内存消耗：4,658.28kb] [文件加载：72]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.016001s ]
+[ info ] [ RUN ] app\admin\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\index.html [ array (
+  0 => 'groups',
+  1 => 'menu',
+) ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.030000s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.002000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_node` [ RunTime:0.028002s ]
+[ sql ] [ SQL ] SELECT `id`,`pid`,`name`,`group_id`,`title`,`type` FROM `fy_admin_node` WHERE  (  status=1 AND group_id > 0 ) [ RunTime:0.001000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_group` [ RunTime:0.021000s ]
+[ sql ] [ SQL ] SELECT `id`,`name`,`icon` FROM `fy_admin_group` WHERE  `id` IN (1,2)  AND `status` = 1 ORDER BY sort asc,id asc [ RunTime:0.000000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.030000s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin.html' , 'admin' , 'Index' , 'index' , 'GET' , 'a:0:{}' , 1528343935) [ RunTime:0.000000s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:56+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin/index/welcome.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin/index/welcome.html [运行时间：0.161007s][吞吐率：6.21req/s] [内存消耗：4,598.57kb] [文件加载：70]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'index',
+    2 => 'welcome',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'referer' => 'http://localhost/tpAdmin-master/public/index.php/admin.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.012000s ]
+[ info ] [ RUN ] app\admin\controller\Index->welcome[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\welcome.html [ array (
+  0 => 'last_login_ip',
+  1 => 'last_login_loc',
+  2 => 'current_login_ip',
+  3 => 'current_login_loc',
+  4 => 'info',
+) ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.022001s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.010000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_user` [ RunTime:0.018001s ]
+[ sql ] [ SQL ] SELECT * FROM `fy_admin_user` WHERE  `id` = 1 LIMIT 1 [ RunTime:0.001001s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.020001s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin/index/welcome.html' , 'admin' , 'Index' , 'welcome' , 'GET' , 'a:0:{}' , 1528343936) [ RunTime:0.001000s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T11:58:59+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/
+[ log ] localhost/tpAdmin-master/public/ [运行时间：0.010000s][吞吐率：100.00req/s] [内存消耗：996.09kb] [文件加载：41]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ RUN ] app\index\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\index\controller\Index.php ]
+[ info ] [ LOG ] INIT File
+
+---------------------------------------------------------------
+[ 2018-06-07T11:59:04+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/
+[ log ] localhost/tpAdmin-master/public/ [运行时间：0.092005s][吞吐率：10.87req/s] [内存消耗：996.09kb] [文件加载：41]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ RUN ] app\index\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\index\controller\Index.php ]
+[ info ] [ LOG ] INIT File
+
+---------------------------------------------------------------
+[ 2018-06-07T11:59:09+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/
+[ log ] localhost/tpAdmin-master/public/ [运行时间：0.081005s][吞吐率：12.34req/s] [内存消耗：996.09kb] [文件加载：41]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; trdipcktrffcext=1; _gid=GA1.1.1743354644.1528343844; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ RUN ] app\index\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\index\controller\Index.php ]
+[ info ] [ LOG ] INIT File
+
+---------------------------------------------------------------
+[ 2018-06-07T13:01:34+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/
+[ log ] localhost/tpAdmin-master/public/index.php/ [运行时间：0.084004s][吞吐率：11.90req/s] [内存消耗：996.73kb] [文件加载：41]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; _gid=GA1.1.1743354644.1528343844; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ RUN ] app\index\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\index\controller\Index.php ]
+[ info ] [ LOG ] INIT File
+
+---------------------------------------------------------------
+[ 2018-06-07T13:01:34+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin.html [运行时间：0.342001s][吞吐率：2.92req/s] [内存消耗：4,658.22kb] [文件加载：72]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; _gid=GA1.1.1743354644.1528343844; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.040000s ]
+[ info ] [ RUN ] app\admin\controller\Index->index[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\index.html [ array (
+  0 => 'groups',
+  1 => 'menu',
+) ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ RUN ] app\admin\widget\Index->menu[ D:\phpStudy\WWW\tpAdmin-master\application\admin\widget\Index.php ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.040000s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.009000s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_node` [ RunTime:0.040000s ]
+[ sql ] [ SQL ] SELECT `id`,`pid`,`name`,`group_id`,`title`,`type` FROM `fy_admin_node` WHERE  (  status=1 AND group_id > 0 ) [ RunTime:0.010000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_group` [ RunTime:0.050000s ]
+[ sql ] [ SQL ] SELECT `id`,`name`,`icon` FROM `fy_admin_group` WHERE  `id` IN (1,2)  AND `status` = 1 ORDER BY sort asc,id asc [ RunTime:0.000000s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.040000s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin.html' , 'admin' , 'Index' , 'index' , 'GET' , 'a:0:{}' , 1528347694) [ RunTime:0.000000s ]
+
+---------------------------------------------------------------
+[ 2018-06-07T13:01:35+08:00 ] 127.0.0.1 127.0.0.1 GET /tpAdmin-master/public/index.php/admin/index/welcome.html
+[ log ] localhost/tpAdmin-master/public/index.php/admin/index/welcome.html [运行时间：0.248011s][吞吐率：4.03req/s] [内存消耗：4,598.49kb] [文件加载：70]
+[ info ] [ LANG ] D:\phpStudy\WWW\tpAdmin-master\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'index',
+    2 => 'welcome',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'keep-alive',
+  'cookie' => 'thinkphp_show_page_trace=0|0; thinkphp_show_page_trace=0|0; hibext_instdsigdipv2=1; _ga=GA1.1.1737713849.1527579970; pgv_pvi=9400284160; BJYADMIN=g8491a5bo7pbfkqaamruh2jdf4; Huiskin=default; _gid=GA1.1.1743354644.1528343844; PHPSESSID=s4le01jjuuqucmv78sk2g5mjg2',
+  'referer' => 'http://localhost/tpAdmin-master/public/index.php/admin.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
+  'host' => 'localhost',
+  'content-length' => '',
+  'content-type' => '',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @module_init [ RunTime:0.016001s ]
+[ info ] [ RUN ] app\admin\controller\Index->welcome[ D:\phpStudy\WWW\tpAdmin-master\application\admin\controller\Index.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ VIEW ] D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\index\welcome.html [ array (
+  0 => 'last_login_ip',
+  1 => 'last_login_loc',
+  2 => 'current_login_ip',
+  3 => 'current_login_loc',
+  4 => 'info',
+) ]
+[ info ] [ BEHAVIOR ] Run \app\common\behavior\WebLog @app_end [ RunTime:0.031002s ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.013001s ] mysql:dbname=tpadmin;host=127.0.0.1;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_admin_user` [ RunTime:0.019001s ]
+[ sql ] [ SQL ] SELECT * FROM `fy_admin_user` WHERE  `id` = 1 LIMIT 1 [ RunTime:0.003001s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `fy_web_log_all` [ RunTime:0.028001s ]
+[ sql ] [ SQL ] INSERT INTO `fy_web_log_all` (`uid` , `ip` , `location` , `os` , `browser` , `url` , `module` , `controller` , `action` , `method` , `data` , `create_at`) VALUES (1 , '127.0.0.1' , '本机地址 本机地址  ' , 'Windows 7' , 'Firefox(60.0)' , 'http://localhost/tpAdmin-master/public/index.php/admin/index/welcome.html' , 'admin' , 'Index' , 'welcome' , 'GET' , 'a:0:{}' , 1528347695) [ RunTime:0.002001s ]
+
+---------------------------------------------------------------
