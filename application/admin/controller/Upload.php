@@ -34,7 +34,8 @@ class Upload extends Controller
         if (!$info) {
             return ajax_return_error($file->getError());
         }
-        $data = $this->request->root() . '/tmp/uploads/' . $info->getSaveName();
+        $res =  str_ireplace('index.php','',$this->request->root()) ;
+        $data = $res. 'tmp/uploads/' . $info->getSaveName();
         $insert = [
             'cate'     => 3,
             'name'     => $data,

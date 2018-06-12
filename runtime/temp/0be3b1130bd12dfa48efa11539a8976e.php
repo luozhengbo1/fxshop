@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:80:"D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\pub\profile.html";i:1488957233;s:82:"D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\template\base.html";i:1488957233;s:93:"D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\template\javascript_vars.html";i:1488957233;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:80:"D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\pub\profile.html";i:1528767838;s:82:"D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\template\base.html";i:1488957233;s:93:"D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\template\javascript_vars.html";i:1488957233;}*/ ?>
 ﻿<!DOCTYPE HTML>
 <html>
 <head>
@@ -56,9 +56,30 @@
             <div class="col-xs-3 col-sm-3"></div>
         </div>
         <div class="row cl">
-            <label class="form-label col-xs-3 col-sm-3">手机：</label>
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>手机：</label>
             <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text" value="<?php echo isset($vo['mobile']) ? $vo['mobile'] :  ''; ?>" placeholder="" name="mobile" datatype="m" ignore="ignore" errormsg="手机格式错误">
+                <input type="text" class="input-text" required value="<?php echo isset($vo['mobile']) ? $vo['mobile'] :  ''; ?>" placeholder="" name="mobile" datatype="m" ignore="ignore" errormsg="手机格式错误">
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3">性别：</label>
+            <div class="formControls col-xs-6 col-sm-6 skin-minimal">
+                <div class="radio-box">
+                    <input type="radio" name="sex" id="status-1" <?php echo !empty($vo['sex'])?'checked': ''; ?>  value="1" datatype="*" nullmsg="请选择性别">
+                    <label for="status-1">男</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="sex" id="status-0" <?php echo !empty($vo['sex'])?'':'checked'; ?> value="0" datatype="*" nullmsg="请选择性别">
+                    <label for="status-0">女</label>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+         <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>微信号：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text"  name="wechat_num" value="<?php echo isset($vo['wechat_num']) ? $vo['wechat_num'] :  ''; ?>" placeholder="微信号非微信昵称，用于转账打款"   errormsg="请填微信号">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>

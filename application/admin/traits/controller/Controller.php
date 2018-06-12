@@ -33,14 +33,11 @@ trait Controller
         if (method_exists($this, $actionFilter)) {
             $this->$actionFilter($map);
         }
-
         // 自定义过滤器
         if (method_exists($this, 'filter')) {
             $this->filter($map);
         }
-
         $this->datalist($model, $map);
-
         return $this->view->fetch();
     }
 
@@ -62,7 +59,10 @@ trait Controller
     public function add()
     {
         $controller = $this->request->controller();
-
+        if($controller=="GoodsClass"){
+            $userList = Db::name('admin_user')->field('id,realname,account')->where('id>1')->select(); 
+            $this->view->assign('userList',$userList);
+        }
         if ($this->request->isAjax()) {
             // 插入
             $data = $this->request->except(['id']);

@@ -206,7 +206,7 @@ class Pub
         $this->checkUser();
         if ($this->request->isPost()) {
             // 修改资料
-            $data = $this->request->only(['realname', 'email', 'mobile', 'remark'], 'post');
+            $data = $this->request->only(['realname', 'email', 'mobile', 'remark','sex','wechat_num'], 'post');
             if (Db::name("AdminUser")->where("id", UID)->update($data) === false) {
                 return ajax_return_adv_error("信息修改失败");
             }
@@ -214,7 +214,7 @@ class Pub
             return ajax_return_adv("信息修改成功", '');
         } else {
             // 查看用户信息
-            $vo = Db::name("AdminUser")->field('realname,email,mobile,remark')->where("id", UID)->find();
+            $vo = Db::name("AdminUser")->field('realname,email,mobile,remark,sex,wechat_num')->where("id", UID)->find();
             $this->view->assign('vo', $vo);
 
             return $this->view->fetch();

@@ -5,6 +5,7 @@ class Index
 {
     public function index()
     {
-        return \think\Response::create(\think\Url::build('/admin'), 'redirect');
+    	echo 123;
+        // return \think\Response::create(\think\Url::build('/admin'), 'redirect');
     }
 }

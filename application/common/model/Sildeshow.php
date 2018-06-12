@@ -3,10 +3,10 @@ namespace app\common\model;
 
 use think\Model;
 
-class Sildeshow extends Model
+class SildeShow extends Model
 {
     // 指定表名,不含前缀
-    protected $name = 'sildeshow';
+    protected $name = 'silde_show';
     // 开启自动写入时间戳字段
     protected $autoWriteTimestamp = 'int';
 }

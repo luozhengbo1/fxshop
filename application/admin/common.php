@@ -289,6 +289,7 @@ function list_to_tree($list, $pk = 'id', $pid = 'pid', $child = '_child', $root 
  */
 function password_hash_tp($password)
 {
+    // return hash("md5", trim($password));
     return hash("md5", trim($password));
 }
 
