@@ -1,0 +1,5 @@
+<td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
+<td>{$vo.name|high_light=$Request.param.name}</td>
+<td><img src="{$vo.pic}" width=130 alt="无品牌图片"></td>
+<td>{$vo.desc?$vo.desc:'无'}</td>
+<?php if($_SESSION['think']['auth_id']==1){ ?><td>{$vo.account}&nbsp;&nbsp;&nbsp;&nbsp;{$vo.realname}</td><?php } ?>

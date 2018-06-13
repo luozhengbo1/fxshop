@@ -1,0 +1,6 @@
+<td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
+<td><img src="{$vo.pic}" width="200" /></td>
+<td>{$vo.title|high_light=$Request.param.title}</td>
+<td>{$vo.status|get_status}</td>
+<td>{$vo.orderby}</td>
+<td>{$vo.url}</td>

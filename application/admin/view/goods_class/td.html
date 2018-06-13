@@ -1,0 +1,5 @@
+<td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
+<td style="text-align: left">{$vo.name}</td>
+<td>{$vo.grade}级</td>
+<td><img src="{$vo.pic}" width="120" alt="无分类图片"></td>
+<?php if($_SESSION['think']['auth_id']==1){ ?><td>{$vo.account}&nbsp;&nbsp;&nbsp;&nbsp;{$vo.realname}</td> <?php }?>
