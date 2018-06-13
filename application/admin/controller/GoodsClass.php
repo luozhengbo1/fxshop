@@ -143,11 +143,9 @@ class GoodsClass extends Controller
                 } catch (\Exception $e) {
                     // 回滚事务
                     Db::rollback();
-
                     return ajax_return_adv_error($e->getMessage());
                 }
             }
-
            $this->success("编辑成功");
         } else {
             // 编辑
@@ -155,14 +153,12 @@ class GoodsClass extends Controller
             if (!$id) {
             	$this->error("缺少参数ID");
             }
-            $vo = $this->getModel($controller)->find($id);
+            $vo = Db::name('goods_class')->where(['id'=>$id])->find($id);
             if (!$vo) {
                $this->error("该记录不存在");
             }
             $this->view->assign('userList',Db::name('admin_user')->field('account,id,realname')->where('id>1')->select());
             $this->view->assign("vo", $vo);
-            $data = getGoodsClassTree($this->uid);
-            $this->view->assign("data", $data);
             return $this->view->fetch();
         }
     }
