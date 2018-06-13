@@ -465,6 +465,22 @@ function get_model($modelName)
 
     return $db;
 }
+#商品分类树
+function getGoodsClassTree($uid)
+{
+    $list = \think\Db::name('goods_class')->where(['user_id'=>$uid])->order('concat(path,id) ')->select();
+    if(!empty($list)){
+        foreach ($list as $k=>$v) {
+            $arr = [];
+            $num = substr_count($v['path'],',');
+            $str = '┡'.str_repeat('->>', $num);
+            $v['name'] = $str.$v['name'];
+            $list[$k]['name'] = $v['name'];
+        }
+    }
+    return $list?$list:false;
+}
+
 
 /**
  * 验证规则扩展
