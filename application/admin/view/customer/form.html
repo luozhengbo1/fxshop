@@ -1,0 +1,18 @@
+<form class="mb-20" method="get" action="{:\\think\\Url::build($Request.action)}">
+    <label>用户名：</label>
+    <input type="text" class="input-text" style="width:250px" placeholder="请输入用户名" name="username" value="{$Request.param.username}" >&nbsp;&nbsp;
+    <label>性别：</label>
+    <div class="select-box" style="width:250px">
+        <select name="sex" class="select">
+            <option value="">请选择性别</option>
+            <option value="1">男</option>
+            <option value="2">女</option>
+        </select>
+    </div>&nbsp;&nbsp;
+    <label>生日：</label>
+    <input type="text" class="input-text Wdate" style="width:250px" placeholder="请输入起始生日" name="startBirthday" value="{$Request.param.startBirthday}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" {/literal} >&nbsp;至&nbsp;
+    <input type="text" class="input-text Wdate" style="width:250px" placeholder="请输入结束生日" name="endBirthday" value="{$Request.param.endBirthday}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" {/literal} >&nbsp;&nbsp;
+    <label>手机号码：</label>
+    <input type="text" class="input-text" style="width:250px" placeholder="请输入手机号" name="mobile" value="{$Request.param.mobile}" >&nbsp;
+    <button type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+</form>
