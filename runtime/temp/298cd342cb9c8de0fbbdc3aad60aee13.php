@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:81:"D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\demo\ueditor.html";i:1488957233;s:82:"D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\template\base.html";i:1488957233;s:93:"D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\template\javascript_vars.html";i:1488957233;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:81:"D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\demo\ueditor.html";i:1528783056;s:82:"D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\template\base.html";i:1488957233;s:93:"D:\phpStudy\WWW\tpAdmin-master\public/../application/admin\view\template\javascript_vars.html";i:1488957233;}*/ ?>
 ﻿<!DOCTYPE HTML>
 <html>
 <head>

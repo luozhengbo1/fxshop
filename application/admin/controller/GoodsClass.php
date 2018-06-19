@@ -150,7 +150,7 @@ class GoodsClass extends Controller
         } else {
             // 编辑
             $id = $this->request->param('id');
-            if (!$id) {
+            if (!$id){
             	$this->error("缺少参数ID");
             }
             $vo = Db::name('goods_class')->where(['id'=>$id])->find($id);

@@ -16,7 +16,6 @@ class Goods extends Validate
         "detail|商品详情" => "require",
         "status|商品状态" => "require",
         "goods_weight|重量" => "require",
-        "start_date|开售时间" => "require",
         "is_real|是否是实物" => "require",
         "return_score|返现积分" => "require",
     ];
