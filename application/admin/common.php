@@ -466,9 +466,9 @@ function get_model($modelName)
     return $db;
 }
 #商品分类树
-function getGoodsClassTree($uid)
+function getGoodsClassTree()
 {
-    $list = \think\Db::name('goods_class')->where(['user_id'=>$uid])->order('concat(path,id) ')->select();
+    $list = \think\Db::name('goods_class')->order('concat(path,id) ')->select();
     if(!empty($list)){
         foreach ($list as $k=>$v) {
             $arr = [];

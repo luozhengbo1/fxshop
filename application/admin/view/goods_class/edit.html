@@ -32,7 +32,7 @@
                 <div class="row cl">
                     <label class="form-label col-xs-3 col-sm-3"><span class="c-red"></span>分类图片：</label>
                     <div class="formControls col-xs-6 col-sm-6">
-                        <input type="text" class="input-text" id="upload" name="pic"  placeholder="请点击后面的上传按钮" datatype="" nullmsg="请填写图片url" value="{$vo.pic ?? ''}" style="width: 70%">
+                        <input type="text" class="input-text" id="upload" readonly name="pic"  placeholder="请点击后面的上传按钮" datatype="" nullmsg="请填写图片url" value="{$vo.pic ?? ''}" style="width: 70%">
                         <button type="button" class="btn btn-primary radius" onclick="layer_open('文件上传','{:\\think\\Url::build(\'Upload/index\', [\'id\' => \'upload\'])}')">上传</button>
                         <a onclick="$(this).attr('href', $('#upload').val())" type="button" class="btn btn-success radius" data-lightbox="preview">预览</a>
                     </div>
@@ -41,22 +41,6 @@
             </div>
             <div id="markdown" class="mt-20"></div>
         </div>
-        {if condition="isset($userList) neq null"}
-        <div class="row cl">
-            <label class="form-label col-xs-3 col-sm-3">所属商户：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <div class="select-box">
-                    <select name="user_id" class="select">
-                         <option value="0">请选择</option>
-                        {volist name="userList" id="vo1"}
-                        <option value="{$vo1.id}" <?php if(isset($vo['user_id']) ){ echo ($vo1['id']==$vo['user_id'])?'selected':'' ;} ?> >{$vo1.account}&nbsp;&nbsp;&nbsp;&nbsp;{$vo1.realname}</option>
-                        {/volist}
-                    </select>
-                </div>
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        {/if}
         <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
                 <button type="submit" class="btn btn-primary radius">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>

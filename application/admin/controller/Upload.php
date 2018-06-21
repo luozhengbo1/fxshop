@@ -31,19 +31,20 @@ class Upload extends Controller
         $file = $this->request->file('file');
         $path = ROOT_PATH . 'public/tmp/uploads/';
         $info = $file->move($path);
-        if (!$info) {
+        $a = $info ? 1 : '';
+        if (!$a) {
             return ajax_return_error($file->getError());
         }
-        $res =  str_ireplace('index.php','',$this->request->root()) ;
-        $data = $res. 'tmp/uploads/' . $info->getSaveName();
+        $res = str_ireplace('index.php', '', $this->request->root());
+        $data = $res . 'tmp/uploads/' . $info->getSaveName();
         $insert = [
-            'cate'     => 3,
-            'name'     => $data,
+            'cate' => 3,
+            'name' => $data,
             'original' => $info->getInfo('name'),
-            'domain'   => '',
-            'type'     => $info->getInfo('type'),
-            'size'     => $info->getInfo('size'),
-            'mtime'    => time(),
+            'domain' => '',
+            'type' => $info->getInfo('type'),
+            'size' => $info->getInfo('size'),
+            'mtime' => time(),
         ];
         Db::name('File')->insert($insert);
 

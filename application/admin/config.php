@@ -21,6 +21,7 @@ return [
         '__ROOT__'   => $basename,
         '__STATIC__' => $basename . '/static/admin',
         '__LIB__'    => $basename . '/static/admin/lib',
+        '__UEDITOR__'=> $basename .'/ueditor',
     ],
 
     // traits 目录

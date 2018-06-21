@@ -8,7 +8,7 @@
                 <div class="row cl">
                     <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>图片：</label>
                     <div class="formControls col-xs-6 col-sm-6">
-                        <input type="text" class="input-text" id="upload" name="pic"  placeholder="请点击后面的上传按钮" datatype="*" nullmsg="请填写图片url" value="{$vo.pic ?? ''}" style="width: 70%">
+                        <input type="text" class="input-text" id="upload" name="pic" readonly  placeholder="请点击后面的上传按钮" datatype="*" nullmsg="请填写图片url" value="{$vo.pic ?? ''}" style="width: 70%">
                         <button type="button" class="btn btn-primary radius" onclick="layer_open('文件上传','{:\\think\\Url::build(\'Upload/index\', [\'id\' => \'upload\'])}')">上传</button>
                         <a onclick="$(this).attr('href', $('#upload').val())" type="button" class="btn btn-success radius" data-lightbox="preview">预览</a>
                     </div>

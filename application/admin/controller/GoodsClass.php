@@ -39,17 +39,12 @@ class GoodsClass extends Controller
   				$this->error('分类名不能为空');
            }
            $res = Db::name('goods_class')
-           		->where(['name'=>$data['name'],'user_id'=>$this->uid])
+           		->where(['name'=>$data['name']])
            		->find();
            if($res){
            		$this->error('分类名已经存在');
 			}
-			if($this->uid!=1){
-				$data['user_id'] = $this->uid;
-			}
-			if(empty($data['user_id']) ){
-           		$this->error('所属商户不能为空');
-			}
+
             if( !empty($data['pid']) ){
                $path = Db::name('goods_class')->find(['id'=>$data['pid']]);
                $data['path']=$path['path'].$data['pid'].',';
@@ -81,24 +76,7 @@ class GoodsClass extends Controller
             $this->success('添加成功');
         } else {
             // 添加 
-            if($this->uid==1){
-            	$this->view->assign('userList',Db::name('admin_user')->field('account,id,realname')->where('id>1')->select());
-            	$data = Db::name('goods_class')
-            	 	->field('id ,pid,name,user_id,path')
-            	 	->order('concat(path,id) ')
-            	 	->select();
-                      #c查处所有类目
-                foreach ($data as $k=>$v) {
-                    $arr = [];
-                    $num = substr_count($v['path'],',');
-                    $str = '┡'.str_repeat('->>', $num);
-                    $v['name'] = $str.$v['name'];
-                    $data[$k]['name'] = $v['name'];
-                }
-            }else{
-            	$data = getGoodsClassTree($this->uid);
-            }
-           
+            $data = getGoodsClassTree();
 	        $this->view->assign('data',$data);
             return $this->view->fetch(isset($this->template) ? $this->template : 'edit');
         }
@@ -157,7 +135,6 @@ class GoodsClass extends Controller
             if (!$vo) {
                $this->error("该记录不存在");
             }
-            $this->view->assign('userList',Db::name('admin_user')->field('account,id,realname')->where('id>1')->select());
             $this->view->assign("vo", $vo);
             return $this->view->fetch();
         }
@@ -204,16 +181,8 @@ class GoodsClass extends Controller
         if (method_exists($this, 'filter')) {
             $this->filter($map);
         }
-         $model = new gc();
-        if($this->uid==1){
-            $list = $model->alias('g')->field('g.*,fy_admin_user.account,fy_admin_user.realname')->join('fy_admin_user',' g.user_id=fy_admin_user.id','left')->order('g.user_id desc,concat(g.path,g.id)')->paginate(10);
-        }else{
-            #查出属于自己的 并排序
-          
-            $list =$model->where('user_id='.$this->uid)->order('concat(path,id)')->paginate(10);
-          
-        }
-        // dump($list);die;
+        $model = new gc();
+        $list =$model->order('concat(path,id)')->paginate(10);
         if(!empty($list)){
             foreach ($list as $k=>&$v) {
                 $num = substr_count($v['path'],',');
