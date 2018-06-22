@@ -1,0 +1,276 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    padding-bottom: 41px;
+    line-height: 1;
+}
+
+.wrapper {
+    display: -webkit-box;
+    display: flex;
+    flex-flow: column nowrap;
+    height: 100%;
+    /*background-color: #00a699;*/
+}
+
+.hd {
+    display: -webkit-box;
+    display: flex;
+    flex-flow: row nowrap;
+    padding: 24px 12px 32px 24px;
+}
+
+.hd .user-avatar {
+    margin-right: 12px;
+    border-radius: 50%;
+}
+
+.hd .user-info {
+    display: -webkit-box;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    flex: 1;
+    padding: 4px 0;
+    color: #fff;
+}
+
+.hd .user-name {
+    font-size: 18px;
+}
+
+.hd .user-link {
+    display: -webkit-box;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
+.hd .user-link a {
+    color: #fff;
+}
+
+.hd .user-link .iconfont {
+    font-size: 14px;
+}
+
+.hd .user-integral {
+    flex: 1;
+    font-size: 16px;
+}
+
+.bd {
+    display: -webkit-box;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex: 1;
+    color: #000;
+    background: url(../../themes/img/signIn/signin-bg.jpg) no-repeat center center / cover;
+}
+
+.bd .cricle {
+    display: -webkit-box;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    position: relative;
+    /*bottom: 225px;*/
+    width: 217.5px;
+    height: 191px;
+    text-align: center;
+    background: url(../../themes/img/signIn/signin-cricle1.png) no-repeat center center / cover;
+}
+
+.bd .cricle:before, .bd .cricle:after {
+    position: absolute;
+    top: 100%;
+    content: '';
+}
+
+.bd .cricle:before {
+    left: 23px;
+    width: 26px;
+    height: 27.5px;
+    margin-top: -6px;
+    background: url(../../themes/img/signIn/signin-cricle2.png) no-repeat center center / cover;
+}
+
+.bd .cricle:after {
+    left: 46px;
+    width: 14.5px;
+    height: 14.5px;
+    margin-top: 33px;
+    background: url(../../themes/img/signIn/signin-cricle3.png) no-repeat center center / cover;
+}
+
+.bd .cricle .text {
+    font-size: 20px;
+}
+
+.bd .cricle .count {
+    margin-top: 30px;
+    font-size: 18px;
+}
+
+.bd .cricle .count span {
+    margin-right: 8px;
+    font-size: 53px;
+}
+
+.water-box {
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    left: 0;
+    height: 20px;
+    overflow: hidden;
+}
+
+.water {
+    position: absolute;
+    top: 0;
+    left: -25%;
+    bottom: 0;
+    width: 200%;
+    background-repeat: repeat-x;
+    background-position: left center;
+    background-size: auto 100%;
+    /*animation-name: water;
+    animation-timing-function: linear;
+    animation-delay: 0;
+    animation-iteration-count: infinite;*/
+}
+
+.water1 {
+    animation-duration: 1.2s;
+    background-image: url(../../themes/img/signIn/signin-water1.png);
+}
+
+.water2 {
+    animation-duration: 0.8s;
+    background-image: url(../../themes/img/signIn/signin-water2.png);
+}
+
+.water3 {
+    animation-duration: 0.5s;
+    background-image: url(../../themes/img/signIn/signin-water3.png);
+}
+
+@keyframes water {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+@-webkit-keyframes water {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.btn {
+    position: relative;
+    /*bottom: 114px;*/
+    display: block;
+    width: 244px;
+    height: 44px;
+    margin-top: 30px;
+    font-size: 18px;
+    line-height: 44px;
+    color: #000;
+    text-align: center;
+    background-color: #ffc61a;
+    border-radius: 22px;
+    box-shadow: 0 0 7px rgba(255, 255, 255, .35);
+}
+
+@media screen and (min-width: 375px) {
+    .btn {
+        margin-top: 60px;
+    }
+}
+
+.btn.disabled {
+    color: #f7f7f7;
+    background-color: #bdbdbd;
+}
+
+.btn:before, .btn:after {
+    position: absolute;
+    width: 38px;
+    height: 43px;
+    content: '';
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.btn:before {
+    bottom: 0;
+    left: 0;
+    background-image: url(../../themes/img/signIn/signin-btn-before.png);
+}
+
+.btn:after {
+    top: 0;
+    right: 0;
+    background-image: url(../../themes/img/signIn/signin-btn-after.png);
+}
+
+#xkdBottom {
+    display: none;
+}
+
+.mt10 {
+    margin-top: 10px;
+}
+
+[v-cloak] {
+    display: none;
+}
+
+.mui-popup-title {
+    font-weight: 700;
+}
+
+.isend {
+    min-height: 110px;
+    position: relative;
+    padding: 150px 0;
+    text-align: center;
+    background-color: #f7f7f7;
+    box-sizing: content-box;
+}
+
+.isend p {
+    margin-top: 130px;
+}
+
+.isend:before {
+    position: absolute;
+    left: 50%;
+    width: 112.5px;
+    height: 110px;
+    margin-left: -56.25px;
+    content: '';
+    background: url(../../images/MemberCenter/isend.png) no-repeat center center / cover;
+}
+.aui-dialog-header{
+    font-weight: bold;
+}
+.f14{
+    font-size: 14px!important;
+}
