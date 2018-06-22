@@ -1,0 +1,150 @@
+{extend name="template/base" /}
+{block name="content"}
+<div class="page-container">
+    <form class="form form-horizontal" id="form" method="post" action="{:\\think\\Request::instance()->baseUrl()}">
+        <input type="hidden" name="id" value="{$vo.id ?? ''}">
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>任务名称：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" placeholder="任务名称" name="name" value="{$vo.name ?? ''}"
+                       datatype="*" nullmsg="请输入任务名称" autocomplete="off">
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>任务主题图：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" id="upload" name="main_pic" value="{$vo.main_pic ?? ''}"
+                       placeholder="请点击后面的上传按钮" datatype="*" nullmsg="请填写图片url" style="width: 70%">
+                <button type="button" class="btn btn-primary radius"
+                        onclick="layer_open('文件上传','{:\\think\\Url::build(\'Upload/index\', [\'id\' => \'upload\'])}')">上传</button>
+                <a onclick="$(this).attr('href', $('#upload').val())" type="button" class="btn btn-success radius"
+                   data-lightbox="preview">预览</a>
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>任务展示方式：</label>
+            <div class="formControls col-xs-6 col-sm-6 skin-minimal">
+                <div class="radio-box">
+                    <input type="radio" name="display" id="display-" value="1" datatype="*" nullmsg="请选择展示方式">
+                    <label for="display-">图片</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="display" id="display-" value="2" datatype="*" nullmsg="请选择展示方式">
+                    <label for="display-">图片+文字</label>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>链接：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" placeholder="链接" name="url" value="{$vo.url ?? ''}" datatype="*"
+                       nullmsg="请输入任务链接" errormsg="链接地址无效" autocomplete="off">
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>任务开始时间：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text Wdate" placeholder="任务开始时间" id="start_date" name="start_date" value="{$vo.start_date ?? ''}"
+                       {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'end_date\',{d:-1})}'})" {/literal}
+                datatype="*" nullmsg="请输入任务开始时间" errormsg="格式：yyyy-mm-dd" autocomplete="off">
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>任务结束时间：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text Wdate" placeholder="任务结束时间" id="end_date" name="end_date" value="{$vo.end_date ?? ''}"
+                       {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'start_date\',{d:1})}'})" {/literal}
+                datatype="*" nullmsg="请输入任务结束时间" errormsg="格式：yyyy-mm-dd" autocomplete="off">
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>任务内容：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <textarea id="container" name="detail" nullmsg="请输入任务内容">{$vo.detail ?? ''}</textarea>
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3">任务说明：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <textarea class="textarea" placeholder="" name="desc" onKeyUp="textarealength(this, 100)">{$vo.desc ?? ''}</textarea>
+                <p class="textarea-numberbar"><em class="textarea-length">0</em>/200</p>
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3">任务状态：</label>
+            <div class="formControls col-xs-6 col-sm-6 skin-minimal">
+                <div class="radio-box">
+                    <input type="radio" name="status" id="status-1" value="1">
+                    <label for="status-1">启用</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="status" id="status-0" value="0">
+                    <label for="status-0">禁用</label>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <button type="submit" class="btn btn-primary radius">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
+                <button type="button" class="btn btn-default radius ml-20" onClick="layer_close();">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </form>
+</div>
+{/block}
+{block name="style"}
+<link rel="stylesheet" href="__LIB__/lightbox2/css/lightbox.min.css">
+{/block}
+{block name="script"}
+<script src="__LIB__/lightbox2/js/lightbox.min.js"></script>
+<script type="text/javascript" src="__LIB__/Validform/5.3.2/Validform.min.js"></script>
+<script type="text/javascript" src="__LIB__/My97DatePicker/WdatePicker.js"></script>
+<!--配置文件-->
+<script type="text/javascript" src="__UEDITOR__/ueditor.config.js"></script>
+<!--编辑器源码文件-->
+<script type="text/javascript" src="__UEDITOR__/ueditor.all.js"></script>
+<!--实例化编辑器并设置toolbar的按钮-->
+<script type="text/javascript">
+    var ue = UE.getEditor('container', {
+        toolbars: [
+            ['source', 'fullscreen', 'undo', 'redo', 'formatmatch', '|', 'bold', 'italic', 'underline', 'strikethrough', 'horizontal', '|',
+                'fontfamily', 'fontsize', 'forecolor', 'backcolor', 'paragraph', 'lineheight', '|', 'insertorderedlist', 'insertunorderedlist', '|',
+                'justifyleft', 'justifyright', 'justifycenter', 'justifyjustify', '|',
+                'snapscreen','simpleupload', 'insertimage', 'insertvideo','link', 'unlink', '|']
+        ],
+        autoFrameWidth: true,
+        autoFrameHeight: true
+    });
+</script>
+<script>
+    $(function () {
+        $("[name='status'][value='{$vo.status ?? '1'}']").prop("checked", true);
+        $("[name='display'][value='{$vo.display ?? '1'}']").prop("checked", true);
+
+        $('.skin-minimal input').iCheck({
+            checkboxClass: 'icheckbox-blue',
+            radioClass: 'iradio-blue',
+            increaseArea: '20%'
+        });
+
+        $("#form").Validform({
+            tiptype: 2,
+            ajaxPost: true,
+            showAllError: true,
+            callback: function (ret) {
+                ajax_progress(ret);
+            }
+        });
+    })
+</script>
+{/block}

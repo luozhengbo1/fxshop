@@ -1,0 +1,13 @@
+<form class="mb-20" method="get" action="{:\\think\\Url::build($Request.action)}">
+    <input type="text" class="input-text" style="width:250px" placeholder="奖券名称" name="name" value="{$Request.param.name}" >
+    <div class="select-box" style="width:250px">
+        <select name="type" class="select">
+            <option value="0">请选择</option>
+            <option value="1">  抵扣券</option>
+            <option value="2">优惠券</option>
+            <option value="3">代金券</option>
+            <option value="4">积分抵现金</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+</form>

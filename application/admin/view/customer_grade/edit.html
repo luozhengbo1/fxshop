@@ -1,0 +1,86 @@
+{extend name="template/base" /}
+{block name="content"}
+<div class="page-container">
+    <form class="form form-horizontal" id="form" method="post" action="{:\\think\\Request::instance()->baseUrl()}">
+        <input type="hidden" name="id" value="{$vo.id ?? ''}">
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>等级名称：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" placeholder="等级名称" name="name" value="{$vo.name ?? ''}"
+                       datatype="*" nullmsg="请输入会员等级名称">
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>起始积分：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" placeholder="起始积分" name="score_start"
+                       value="{$vo.score_start ?? ''}" datatype="*" nullmsg="请输入等级起始积分">
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>结束积分：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" placeholder="结束积分" name="score_end" value="{$vo.score_end ?? ''}"
+                       datatype="*" nullmsg="请输入等级结束积分">
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+
+        <?php
+            if(isset($vo)){  $checkbox_val=explode('<br/>', $vo['all']); }
+        ?>
+
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>权益列表：</label>
+            <div class="formControls col-xs-6 col-sm-6 skin-minimal">
+                <div class="radio-box">
+                    <input type="checkbox" name="all[]" id="all-1" value="提现特权"
+                    <?php if(isset($checkbox_val)){ if(in_array("提现特权",$checkbox_val)){  echo 'checked="checked"'; }  } ?>> 提现特权
+                    <label for="all-1"></label>
+                    <input type="checkbox" name="all[]" id="all-2" value="会员生日礼物"
+                    <?php if(isset($checkbox_val)){ if(in_array("会员生日礼物",$checkbox_val)){  echo 'checked="checked"'; }  } ?>> 会员生日礼物
+                    <label for="all-2"></label>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <button type="submit" class="btn btn-primary radius">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
+                <button type="button" class="btn btn-default radius ml-20" onClick="layer_close();">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </form>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript" src="__LIB__/Validform/5.3.2/Validform.min.js"></script>
+<script>
+    $(function () {
+        var checks = ''.split(",");
+        if (checks.length > 0) {
+            for (var i in checks) {
+                $("[name='all[]'][value='" + checks[i] + "']").prop("checked", true);
+            }
+        }
+
+        $('.skin-minimal input').iCheck({
+            checkboxClass: 'icheckbox-blue',
+            radioClass: 'iradio-blue',
+            increaseArea: '20%'
+        });
+
+        $("#form").Validform({
+            tiptype: 2,
+            ajaxPost: true,
+            showAllError: true,
+            callback: function (ret) {
+                ajax_progress(ret);
+            }
+        });
+    })
+</script>
+{/block}

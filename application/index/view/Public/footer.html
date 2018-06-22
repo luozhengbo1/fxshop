@@ -1,0 +1,43 @@
+
+<ul class="footer-nav">
+	<li id="indexPage">
+		<a  href="{:\\think\\Url::build(\'index\')}">
+			<i class="iconfont icon-home"></i><p>首页</p>
+		</a>
+	</li>
+	<li  id="searchPage">
+		<a  href="{:\\think\\Url::build(\'goodsSearch\')}">
+			<i class="iconfont icon-sousuo"></i><p>搜索</p>
+		</a>
+	</li>
+	<li  id="sortPage">
+		<a  href="{:\\think\\Url::build(\'sort\')}">
+			<i class="iconfont icon-caidan"></i><p>分类</p>
+		</a>
+	</li>
+	<li  id="carPage">
+		<a href="{:\\think\\Url::build(\'goodsCar\')}">
+			<i class="iconfont icon-gouwuche"></i><p>购物车</p>
+		</a>
+	</li>
+	<li id="mePage">
+		<a href="#">
+			<i class="iconfont icon-geren"></i><p>会员中心</p>
+		</a>
+	</li>
+
+</ul>
+
+<script>
+
+    addActive()
+    //对点击的位置进行一个记录
+    $('.footer-nav li').click(function () {
+        $('.footer-nav li').removeClass('active')
+        $(this).addClass('active')
+        $.cookie('currentPage', $(this).attr('id'), {path: '/' });
+    })
+	function addActive(){
+        $('#'+ $.cookie('currentPage')).addClass('active')
+	}
+</script>

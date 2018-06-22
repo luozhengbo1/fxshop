@@ -1,0 +1,208 @@
+{include file="Public/header-resource"}
+<body>
+{include file="Public/header"}
+<!--轮播图-->
+<div class="swiper-container header-banner">
+	<ul class="swiper-wrapper" >
+		<li class="swiper-slide">
+			<img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg" lazy="loaded">
+		</li>
+		<li class="swiper-slide">
+			<img  src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg" lazy="loaded">
+		</li>
+	</ul>
+	<!-- 如果需要分页器 -->
+	<div class="swiper-pagination"></div>
+</div>
+<!--广告-->
+<div class="announcement clear" >
+	<div class="image fl">
+		<img  style="height: .3rem;" src="__STATIC__/index/images/gonggao.png">
+	</div>
+	<div class="content fl swiper-container announcement-banner" >
+		<ul class="swiper-wrapper">
+			<li class="swiper-slide"><a href="{:\\think\\Url::build(\'announce\')}" >一杯敬朝阳 一杯敬月光，唤醒我的向往 温柔了寒窗，于是可以不回头地逆风飞翔.</a></li>
+			<li class="swiper-slide"><a href="{:\\think\\Url::build(\'announce\')}" >111111111111一杯敬朝阳 一杯敬月光，唤醒我的向往 温柔了寒窗，1111111111111111.</a></li>
+		</ul>
+	</div>
+	<div class="more fl">更多》</div>
+</div>
+<!--活动分类-->
+<ul class="module-nav clear">
+	<li>
+		<a href="{:\\think\\Url::build(\'rushPurchase\')}" >
+			<img src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg">
+			<p>限时抢购</p>
+		</a>
+	</li>
+	<li>
+		<img src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg">
+		<p>券集市</p>
+	</li>
+	<li>
+		<a href="{:\\think\\Url::build(\'goodsPoints\')}" >
+			<img src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg">
+			<p>积分商城</p>
+		</a>
+	</li>
+	<li>
+		<img src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg">
+		<p>充值中心</p>
+	</li>
+	<li>
+		<img src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg">
+		<p>会员签到</p>
+	</li>
+</ul>
+<div class="module-active clear mt10">
+	<p class="title clear">
+		<span class="fl">互动活动</span>
+		<span class="fr">查看更多</span>
+	</p>
+	<img class="big-img" src="http://scsc.top/data/gallery_album/original_img/5b109f656e378.jpg">
+	<ul class="fl mt5 clear w100p">
+		<li class="fl"><img src="http://scsc.top/data/gallery_album/original_img/5b109f656e378.jpg"></li>
+		<li class="fl"><img src="http://scsc.top/data/gallery_album/original_img/5b109f656e378.jpg"></li>
+	</ul>
+</div>
+<!--商品列表-->
+<div class="module-hot-goods">
+	<p class="title mt10 mb10">热销商品</p>
+	<div id="dataListWrap" class="data-refresh-list-wrap">
+		<ul class="goods-list list clear" id="goodsList">
+		<!--	<li>
+				<img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
+				 <p class="good-desc ellipsis">Lay’s/乐事薯片清爽酸奶零食 </p>
+				<div>
+					<p class="fl">已售3</p>
+					<p class="fr">
+						<span class="goods-price">¥45.00</span>
+						<span class="goods-old-price">¥45.00</span>
+					</p>
+				</div>
+			</li>-->
+		</ul>
+</div>
+{include file="Public/footer"}
+<script>
+    var swiper1= bannerSwiper('header-banner');
+    new Swiper('.announcement-banner', {
+        direction : 'vertical',
+        autoplay: {
+            delay: 5000,
+            stopOnLastSlide: false,
+            disableOnInteraction: false,
+        },
+    });
+    function dealData(data) {
+        var html='';
+        for(var i = 0; i < data.length; i++){
+            //href="{:\\think\\Url::build(\'rushPurchase\')}"
+            html +='<li>';
+            html +='	<a href="{:\\think\\Url::build(\'product\')}">';
+            html +='     <p class="tc"><img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg"></p>';
+            html +='     <p class="good-desc ellipsis">Lay’s/乐事薯片清爽酸奶零食 </p>';
+            html +='   </a>';
+            html +='    <div>';
+			html +='  		  <p class="fl">已售3</p>';
+			html +='  		      <p class="fr">';
+			html +='  		      <span class="goods-price">¥45.00</span>';
+			html +='  				<span class="goods-old-price">¥45.00</span>';
+			html +='  		  </p>';
+            html +='    </div>';
+            html +='  </li>';
+        }
+        return html;
+    }
+     pageload({
+		 targetWarp:'dataListWrap',
+         target:'goodsList',
+         page:1,
+         size:4,
+         ajaxData:{
+              url:"__STATIC__/index/json/more.json",
+              data:{},
+          },
+		dealFun:dealData
+     });
+
+</script>
+<!--<script>
+	var pageLoad= function () {
+
+        droploadFun()
+    }
+    // 页数
+    var page = 0;
+    // 每页展示5个
+    var size = 5;
+    droploadFun(droploadData)
+    function droploadFun(dealDataFn) {
+        var dropload =  $('#dataListWrap').dropload({
+            scrollArea : window,
+            loadDownFn : function(me){
+                page++;
+                $.ajax({
+                    url:"__STATIC__/index/json/more.json",
+                    type:'post',
+                 //   data:{goods_id:95,similarity_score:core,page:page,size:size,t:new Date().getTime()},
+                    dataType:'json',
+                    success: function(data){
+                        var data = data.lists
+						if (data.length>0){
+							var html = dealData(data);
+							//如果获取的数据还没有条数多，表明数据已经没有了
+							if(data.length<size){
+								$('#goodsList').append(html);
+								dropload.lock();
+								dropload.noData();
+								dropload.resetload();
+							}else{
+								setTimeout(function(){
+									$('#goodsList').append(html);
+									// 每次数据加载完，必须重置
+									dropload.resetload();
+								},100);
+							}
+						} else{
+							dropload.lock();
+							dropload.noData();
+							dropload.resetload();
+						}
+                    },
+                    error: function(xhr, type){
+                        console.error('Ajax 请求出错');
+                        // 即使加载出错，也得重置
+                        dropload.lock();
+                        dropload.noData();
+                        dropload.resetload();
+                    }
+                });
+            }
+        });
+    }
+    function droploadData(data,dropload){
+
+
+    }
+    function dealData(data) {
+        var html;
+        for(var i = 0; i < data.length; i++){
+            html +='<li>';
+            html +='    <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">';
+            html +='        <p class="good-desc ellipsis">Lay’s/乐事薯片清爽酸奶零食 </p>';
+            html +='    <div>';
+            html +='    <p class="fl">已售3</p>';
+            html +='        <p class="fr">';
+            html +='        <span class="goods-price">¥45.00</span>';
+            html +='    <span class="goods-old-price">¥45.00</span>';
+            html +='    </p>';
+            html +='    </div>';
+            html +='  </li>';
+        }
+        return html;
+    }
+</script>-->
+
+</body>
+</html>

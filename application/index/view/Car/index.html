@@ -1,0 +1,125 @@
+<include file="./Application/Index/View/Public/header-resource.html" />
+<body class="pt40">
+	<include file="./Application/Index/View/Public/header-bar.html" />
+	<notempty name="data" >
+	<section class="aui-car-content">
+		<div class="aui-car-box">
+			<div class="aui-car-box-name">
+				<label>
+					<input type="checkbox" class="check goods-check shopCheck">
+				 	<span  style="margin-left:2rem;">
+						全选
+					</span>
+				</label>
+			</div>
+			<div class="aui-car-box-list">
+				<ul>
+					<volist name="data" id="vo">
+						<li>
+							<div class="aui-car-box-list-item">
+								<input type="checkbox" data-id="{$vo['id']}" class="check goods-check goodsCheck settlementCheckbox">
+								<div class="aui-car-box-list-img">
+									<a href="{:U('Goods/Index',array('id'=>$vo['id']))}">
+										<img src="{$vo['logo']}" alt="">
+									</a>
+								</div>
+								<div class="aui-car-box-list-text">
+									<h4>
+										<a href="{:U('Goods/Index',array('id'=>$vo['id']))}">{$vo['name']}</a>
+									</h4>
+									<div class="aui-car-box-list-text-brief">
+										<volist name="vo['attribute_id']" id="vol">
+										<span>{$vol['key']}：{$vol['value']}</span>
+										</volist>
+										<!--<span>重量:3.3kg</span>-->
+										<!--<span>颜色:标配版</span>-->
+										<!--<span>版本:5.7英寸</span>-->
+									</div>
+									<div class="aui-car-box-list-text-price">
+										<div class="aui-car-box-list-text-pri">
+											￥<b class="price">{$vo['real_price']}</b>
+										</div>
+										<div class="aui-car-box-list-text-arithmetic">
+											<a href="javascript:;" data-id="{$vo['id']}" class="minus">-</a>
+											<span class="num">{$vo['num']}</span>
+											<a href="javascript:;" data-id="{$vo['id']}" class="plus">+</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+					</volist>
+				</ul>
+			</div>
+			<div class="aui-shopPrice">
+				总计：￥
+				<span class="aui-total-amount ShopTotal">0.00</span>
+			</div>
+		</div>
+	</section>
+
+	<div class="aui-payment-bar">
+		<div class="all-checkbox">
+			<input type="checkbox" class="check goods-check" id="AllCheck">全选</div>
+		<div class="shop-total">
+			<strong>合计：<i class="total" id="AllTotal">0.00</i></strong>
+		</div>
+		<a href="javascript:;" onclick="truncate()	" class="settlement" style="width:90px;">清空购物车</a>
+		<a href="javascript:;"   class="settlement1"  style="    text-align: center;
+    width: 90px;background: red;display: block;float: right;line-height: 49px;">结算</a>
+	</div>
+		<else />
+		<a href="{:U('Index/index')}">
+		<div class="mingxi_div_02 tc" >
+			<img class="auto" src="__PUBLIC__/images/null.png" alt="无数据">
+			<a  href="{:U('Index/index')}" class="layui-btn layui-btn-primary layui-btn-radius" >去&nbsp;逛&nbsp;逛</a>
+		</div>
+		</a>
+	</notempty>
+	<script src="__PUBLIC__/themes/js/jquery.min.js"></script>
+	<script src="__PUBLIC__/themes/js/aui-car.js"></script>
+	<script>
+		var judgeNumUrl = "{:U('Car/judgeNum')}";
+        var carTruncate = "{:U('Car/truncate')}";
+        function truncate(){
+            $.ajax({
+                url:carTruncate,
+                type:'post',
+                data:{},
+				dataType:'json',
+                success:function (data) {
+                    console.log(data)
+                    if(data.status==200){
+                        alert(data.msg);
+                        document.location.reload()
+                    }else{
+                        alert('清空失败')
+                        document.location.reload()
+                    }
+                }
+            })
+		}
+		$('.settlement1').click(function () {
+		    var flag = false;
+		    var id='';
+            $('.settlementCheckbox').each(function (index, element) {
+ 					if( $(element).prop('checked')==true ){
+ 					    flag=true
+ 					    id+= $(element).attr('data-id')+',';
+					}
+            })
+			if( flag==false ){
+				alert('请选择结算商品')
+				return false;
+			}else{
+                if(id){
+                    var url="{:U('Order/index')}";
+                    var reg = /\.html/;
+                    str= url.replace(reg,"");
+                    document.location.href = str+'/id/'+id+'.html';
+				}
+			}
+        })
+	</script>
+</body>
+</html>

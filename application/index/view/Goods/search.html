@@ -1,0 +1,20 @@
+<div class="aui-slide-box">
+	<div class="aui-slide-list">
+		<ul class="aui-slide-item-list">
+			<volist name="goodsList" id="vo">
+				<notempty name="vo">
+				<li class="aui-slide-item-item">
+					<a href="{:U('Goods/index',array('id'=>$vo['id']))}" class="v-link">
+						<img class="v-img" src="{$vo.logo}">
+						<p class="aui-slide-item-title aui-slide-item-f-els">{$vo.name}</p>
+						<p class="aui-slide-item-info">
+							<span class="aui-slide-item-price">¥{$vo.real_price}</span>&nbsp;&nbsp;<span class="aui-slide-item-mrk">¥{$vo.price}</span>
+						</p>
+					</a>
+				</li>
+				</notempty>
+			</volist>
+
+		</ul>
+	</div>
+</div>
