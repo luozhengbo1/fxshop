@@ -1,6 +1,12 @@
 {extend name="template/base" /}
 {block name="content"}
-
+<style>
+    .layui-layer-error{
+        background: #bc0505;
+        color: white;
+        border-radius: 8px;
+    }
+</style>
 <div class="page-container bgf">
     <form class="form form-horizontal" id="form" method="post" action="{:\\think\\Request::instance()->baseUrl()}">
         <!--<input type="hidden" name="id" value="{$vo.id ?? ''}">-->
@@ -8,7 +14,7 @@
          <!--<div class="row cl">-->
             <!--<label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>商品名称：</label>-->
             <!--<div class="formControls col-xs-6 col-sm-7">-->
-                <!--<input type="text" class="input-text" placeholder="商品名称" name="name" value="{$vo.name ?? ''}"  datatype="*" nullmsg="请输入商品名称" errormsg="请输入商品名称">-->
+            x    <!--<input type="text" class="input-text" placeholder="商品名称" name="name" value="{$vo.name ?? ''}"  datatype="*" nullmsg="请输入商品名称" errormsg="请输入商品名称">-->
             <!--</div>-->
             <!--<div class="col-xs-3 col-sm-2"></div>-->
         <!--</div>-->
@@ -34,6 +40,7 @@
             <!--</div>-->
             <!--<div id="markdown" class="mt-20"></div>-->
         <!--</div>-->
+
         <!--<div class="row cl">-->
             <!--<label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>商品原价：</label>-->
             <!--<div class="formControls col-xs-6 col-sm-7">-->
@@ -293,7 +300,7 @@
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>商品规格：</label>
             <div class="formControls col-xs-6 col-sm-7 skin-minimal bgwhite borderd pad20">
                 <div class="specifications mb10" id="specifications">
-                   <!-- <div class="pb20 pt10 borderb w100p">
+                    <!--<div class="pb20 pt10 borderb w100p">
                         <h2 class="PId_Title mb10 clear" >
                             <div class="fl"><input type="text" class="form_control w120"></div>
                             <div class="fr">
@@ -301,7 +308,14 @@
                             </div>
                         </h2>
                         <div style="width: 100% !important;">
-                            <div class="labelwidth"></div>
+                            <div class="laber-wrap" id="laberWrap">
+                                <div class="labelwidth">
+                                    <label class="active">
+                                        <span class="txtDiv" data-value="22">22</span>
+                                        <i class="del-icon" style="display:block;">x</i>
+                                    </label>
+                                </div>
+                            </div>
                             <div style="display: inline-block">
                                 <label class="mr10 mb10">
                                     <input type="text" class="form_control w100" placeholder="规格值">
@@ -311,11 +325,25 @@
                         </div>
                     </div>-->
                 </div>
+
                 <div class="borderdashed p10 tr">
-                    <button href="javascript:;" class="btn btn-secondary radius mr-5" id="btn-newcataddspec" > + 新增规格</button>
+                    <a class="btn btn-secondary radius mr-5" id="btn-newcataddspec" onclick="newCatAddSpec()" > + 新增规格</a>
+                </div>
+                <div class="f14 pt10">
+                    <p>销售规格<span class="grey"> （该类目下：颜色尺寸，请全选或不选，如果只选一部分无法保证库存及价格）</span></p>
+                    <div class="pt10 pb10">
+                        <span>批量填充</span>
+                        <input class="form_control w80 mr10" type="text" placeholder="价格" id="priceSet">
+                        <input class="form_control w80 mr10" type="text" placeholder="数量" id="numSet">
+                        <input class="form_control w80  mr10" type="text" placeholder="编码" id="codeSet">
+                        <input class="form_control w80  mr20" type="text" placeholder="条形码" id="barSet">
+                        <a href="javascript:;" onclick="SetAll()" class="btn btn-success radius mr-5">
+                            <i class="Hui-iconfont"></i> 确定</a>
+
+                    </div>
                 </div>
                 <div id="createTable">
-                    <table id="process" class="table table-hover table-bordered">
+                   <!-- <table id="process" class="table table-hover table-bordered">
                         <thead>
                         <tr>
                             <td class="width90">颜色</td>
@@ -327,81 +355,11 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td rowspan="3">red</td>
-                            <td>S</td>
-                            <td id="3000120424_3000120325" data-value="300035702_颜色:3000120424_red,300035700_尺寸:3000120325_S" data-skuid="0" data-="" class="tdrow"><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="price3000120424_3000120325" class="saleprice width70" type="text" onchange="ChangeSkuValues('3000120424_3000120325',1)" /><input style="padding:0 !important;" value="会员价" onclick="ShowMemberPriceBox('3000120424_3000120325',$(this))" type="button" /></td>
-                            <td><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="num3000120424_3000120325" class="salenum width60" type="text" onchange="ChangeSkuValues('3000120424_3000120325')" /></td>
-                            <td><input id="code3000120424_3000120325" class="salecode w100 " style="text-align:left" type="text" onchange="ChangeSkuValues('3000120424_3000120325')" /></td>
-                            <td><input id="bar3000120424_3000120325" class="salebar w100" style="text-align:left" type="text" onchange="ChangeSkuValues('3000120424_3000120325')" /></td>
-                        </tr>
-                        <tr>
-                            <td style="display: none;">red</td>
-                            <td>M</td>
-                            <td id="3000120424_3000120323" data-value="300035702_颜色:3000120424_red,300035700_尺寸:3000120323_M" data-skuid="0" data-="" class="tdrow"><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="price3000120424_3000120323" class="saleprice width70" type="text" onchange="ChangeSkuValues('3000120424_3000120323',1)" /><input style="padding:0 !important;" value="会员价" onclick="ShowMemberPriceBox('3000120424_3000120323',$(this))" type="button" /></td>
-                            <td><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="num3000120424_3000120323" class="salenum width60" type="text" onchange="ChangeSkuValues('3000120424_3000120323')" /></td>
-                            <td><input id="code3000120424_3000120323" class="salecode w100 " style="text-align:left" type="text" onchange="ChangeSkuValues('3000120424_3000120323')" /></td>
-                            <td><input id="bar3000120424_3000120323" class="salebar w100" style="text-align:left" type="text" onchange="ChangeSkuValues('3000120424_3000120323')" /></td>
-                        </tr>
-                        <tr>
-                            <td style="display: none;">red</td>
-                            <td>B</td>
-                            <td id="3000120424_3000120427" data-value="300035702_颜色:3000120424_red,300035700_尺寸:3000120427_B" data-skuid="0" data-="" class="tdrow"><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="price3000120424_3000120427" class="saleprice width70" type="text" onchange="ChangeSkuValues('3000120424_3000120427',1)" /><input style="padding:0 !important;" value="会员价" onclick="ShowMemberPriceBox('3000120424_3000120427',$(this))" type="button" /></td>
-                            <td><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="num3000120424_3000120427" class="salenum width60" type="text" onchange="ChangeSkuValues('3000120424_3000120427')" /></td>
-                            <td><input id="code3000120424_3000120427" class="salecode w100 " style="text-align:left" type="text" onchange="ChangeSkuValues('3000120424_3000120427')" /></td>
-                            <td><input id="bar3000120424_3000120427" class="salebar w100" style="text-align:left" type="text" onchange="ChangeSkuValues('3000120424_3000120427')" /></td>
-                        </tr>
-                        <tr>
-                            <td rowspan="3">blue</td>
-                            <td>S</td>
-                            <td id="3000120425_3000120325" data-value="300035702_颜色:3000120425_blue,300035700_尺寸:3000120325_S" data-skuid="0" data-="" class="tdrow"><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="price3000120425_3000120325" class="saleprice width70" type="text" onchange="ChangeSkuValues('3000120425_3000120325',1)" /><input style="padding:0 !important;" value="会员价" onclick="ShowMemberPriceBox('3000120425_3000120325',$(this))" type="button" /></td>
-                            <td><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="num3000120425_3000120325" class="salenum width60" type="text" onchange="ChangeSkuValues('3000120425_3000120325')" /></td>
-                            <td><input id="code3000120425_3000120325" class="salecode w100 " style="text-align:left" type="text" onchange="ChangeSkuValues('3000120425_3000120325')" /></td>
-                            <td><input id="bar3000120425_3000120325" class="salebar w100" style="text-align:left" type="text" onchange="ChangeSkuValues('3000120425_3000120325')" /></td>
-                        </tr>
-                        <tr>
-                            <td style="display: none;">blue</td>
-                            <td>M</td>
-                            <td id="3000120425_3000120323" data-value="300035702_颜色:3000120425_blue,300035700_尺寸:3000120323_M" data-skuid="0" data-="" class="tdrow"><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="price3000120425_3000120323" class="saleprice width70" type="text" onchange="ChangeSkuValues('3000120425_3000120323',1)" /><input style="padding:0 !important;" value="会员价" onclick="ShowMemberPriceBox('3000120425_3000120323',$(this))" type="button" /></td>
-                            <td><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="num3000120425_3000120323" class="salenum width60" type="text" onchange="ChangeSkuValues('3000120425_3000120323')" /></td>
-                            <td><input id="code3000120425_3000120323" class="salecode w100 " style="text-align:left" type="text" onchange="ChangeSkuValues('3000120425_3000120323')" /></td>
-                            <td><input id="bar3000120425_3000120323" class="salebar w100" style="text-align:left" type="text" onchange="ChangeSkuValues('3000120425_3000120323')" /></td>
-                        </tr>
-                        <tr>
-                            <td style="display: none;">blue</td>
-                            <td>B</td>
-                            <td id="3000120425_3000120427" data-value="300035702_颜色:3000120425_blue,300035700_尺寸:3000120427_B" data-skuid="0" data-="" class="tdrow"><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="price3000120425_3000120427" class="saleprice width70" type="text" onchange="ChangeSkuValues('3000120425_3000120427',1)" /><input style="padding:0 !important;" value="会员价" onclick="ShowMemberPriceBox('3000120425_3000120427',$(this))" type="button" /></td>
-                            <td><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="num3000120425_3000120427" class="salenum width60" type="text" onchange="ChangeSkuValues('3000120425_3000120427')" /></td>
-                            <td><input id="code3000120425_3000120427" class="salecode w100 " style="text-align:left" type="text" onchange="ChangeSkuValues('3000120425_3000120427')" /></td>
-                            <td><input id="bar3000120425_3000120427" class="salebar w100" style="text-align:left" type="text" onchange="ChangeSkuValues('3000120425_3000120427')" /></td>
-                        </tr>
-                        <tr>
-                            <td rowspan="3">black</td>
-                            <td>S</td>
-                            <td id="3000120426_3000120325" data-value="300035702_颜色:3000120426_black,300035700_尺寸:3000120325_S" data-skuid="0" data-="" class="tdrow"><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="price3000120426_3000120325" class="saleprice width70" type="text" onchange="ChangeSkuValues('3000120426_3000120325',1)" /><input style="padding:0 !important;" value="会员价" onclick="ShowMemberPriceBox('3000120426_3000120325',$(this))" type="button" /></td>
-                            <td><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="num3000120426_3000120325" class="salenum width60" type="text" onchange="ChangeSkuValues('3000120426_3000120325')" /></td>
-                            <td><input id="code3000120426_3000120325" class="salecode w100 " style="text-align:left" type="text" onchange="ChangeSkuValues('3000120426_3000120325')" /></td>
-                            <td><input id="bar3000120426_3000120325" class="salebar w100" style="text-align:left" type="text" onchange="ChangeSkuValues('3000120426_3000120325')" /></td>
-                        </tr>
-                        <tr>
-                            <td style="display: none;">black</td>
-                            <td>M</td>
-                            <td id="3000120426_3000120323" data-value="300035702_颜色:3000120426_black,300035700_尺寸:3000120323_M" data-skuid="0" data-="" class="tdrow"><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="price3000120426_3000120323" class="saleprice width70" type="text" onchange="ChangeSkuValues('3000120426_3000120323',1)" /><input style="padding:0 !important;" value="会员价" onclick="ShowMemberPriceBox('3000120426_3000120323',$(this))" type="button" /></td>
-                            <td><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="num3000120426_3000120323" class="salenum width60" type="text" onchange="ChangeSkuValues('3000120426_3000120323')" /></td>
-                            <td><input id="code3000120426_3000120323" class="salecode w100 " style="text-align:left" type="text" onchange="ChangeSkuValues('3000120426_3000120323')" /></td>
-                            <td><input id="bar3000120426_3000120323" class="salebar w100" style="text-align:left" type="text" onchange="ChangeSkuValues('3000120426_3000120323')" /></td>
-                        </tr>
-                        <tr>
-                            <td style="display: none;">black</td>
-                            <td>B</td>
-                            <td id="3000120426_3000120427" data-value="300035702_颜色:3000120426_black,300035700_尺寸:3000120427_B" data-skuid="0" data-="" class="tdrow"><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="price3000120426_3000120427" class="saleprice width70" type="text" onchange="ChangeSkuValues('3000120426_3000120427',1)" /><input style="padding:0 !important;" value="会员价" onclick="ShowMemberPriceBox('3000120426_3000120427',$(this))" type="button" /></td>
-                            <td><input onkeyup="clearNoNum(this)" onkeypress="return keyNumAll(event);" id="num3000120426_3000120427" class="salenum width60" type="text" onchange="ChangeSkuValues('3000120426_3000120427')" /></td>
-                            <td><input id="code3000120426_3000120427" class="salecode w100 " style="text-align:left" type="text" onchange="ChangeSkuValues('3000120426_3000120427')" /></td>
-                            <td><input id="bar3000120426_3000120427" class="salebar w100" style="text-align:left" type="text" onchange="ChangeSkuValues('3000120426_3000120427')" /></td>
-                        </tr>
                         </tbody>
-                    </table>
+                    </table>-->
                 </div>
+                <a href="javascript:;" onclick="GetSaleProperty()" class="btn btn-success radius mr-5">
+                    <i class="Hui-iconfont"></i> 提交</a>
             </div>
             <div class="col-xs-3 col-sm-2"></div>
         </div>
@@ -434,38 +392,74 @@
 <script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/ueditor.all.min.js"> </script>
 <script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="__STATIC__/js/setProductInfo.js"></script>
 <script>
+
+    //删除规格属性
+    var $target = $('#btn-newcataddspec');//规格添加按钮
     function removeProperty(_this){
-        $(_this).parents('.propertyWrap').rem
+        $(_this).parents('.propertyWrap').remove();
+        refeashskus();
+    }
+    //删除单个规格属性值
+    function deletePropVal(_this){
+        $(_this).parents('.labelwidth').remove();
+        refeashskus();
+    }
+    //添加单个规格属性值
+    function addpropertyvalue(_this){
+        var $this = $(_this),
+            $propertyName =  $this.parents('.propertyWrap').find('.propertyName'),
+            $thisVal =  $this.parents('.propertyWrap').find('.propertyVal');
+        if(!validSku(_this)){
+            return ;
+        }
+        var html ='';
+        html +='<div class="labelwidth">';
+        html +='    <label class="active">';
+        html +='        <span class="txtDiv" data-pName="'+$propertyName.val()+'" data-pValue="'+$thisVal.val()+'">'+$thisVal.val()+'</span>';
+        html +='        <i class="del-icon" style="display:block;" onclick="deletePropVal(this)">x</i>';
+        html +='    </label>';
+        html +='</div>'
+        $(_this).parents('.propertyValWrap').find('.laber-wrap').append(html);
+        $thisVal.val('');
+        $target.removeAttr('disabled');
+        refeashskus();
     }
     //商品规格添加
-    $("#btn-newcataddspec").click(function () {
+    function newCatAddSpec() {
+
+        if($target.attr('disabled') =='disabled'){
+            ShowMsg('请输入规格相关信息再加入下一个');
+            return;
+        }
         var html ='';
         html +='<div class="pb20 pt10 borderb w100p propertyWrap">';
         html +='    <h2 class="PId_Title mb10 clear" >';
-        html +='        <div class="fl"><input type="text" class="form_control w120"></div>';
+        html +='        <div class="fl"><input type="text"  class="form_control w120 propertyName"></div>';
         html +='        <div class="fr">';
         html +='            <a href="javascript:;" onclick="removeProperty(this)" class="btn btn-danger radius mr-5"><i class="Hui-iconfont"></i> 删除</a>';
         html +='        </div>';
         html +='    </h2>';
-        html +='    <div style="width: 100% !important;">';
-        html +='        <div class="labelwidth"></div>';
+        html +='    <div class="propertyValWrap" style="width: 100% !important;">';
+        html +='        <div class="laber-wrap"></div>';
         html +='        <div style="display: inline-block">';
         html +='            <label class="mr10 mb10">';
-        html +='                <input type="text" class="form_control w100" placeholder="规格值">';
-        html +='                <button class="add-cion-btn" href="javascript:;" onclick="addpropertyvalue(this);" >+</button>';
+        html +='                <input type="text" class="form_control w100 propertyVal" placeholder="规格值">';
+        html +='                <a class="add-cion-btn" href="javascript:;" onclick="addpropertyvalue(this);" >+</a>';
         html +='            </label>';
         html +='        </div>';
         html +='    </div>';
         html +='</div>';
-        $(this).attr('disabled','disabled');
+        $target.attr('disabled','disabled');
         $("#specifications").append(html);
-    })
+    }
 
 
-
-
-
+    function refeashskus() {
+        ChangeSku().Creat_Table();
+        SetValue();
+    }
 
 
 

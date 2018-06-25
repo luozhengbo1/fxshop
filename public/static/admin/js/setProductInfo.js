@@ -747,6 +747,7 @@ var maxIntValue = 2147483647; //32位整型最大值
 
 //获取SKU信息
 function GetSaleProperty() {
+   // debugger
     var result = true;
     var list = [];
     _totalStockCounts = 0;
@@ -822,7 +823,7 @@ function GetSaleProperty() {
     } else {
         salelist = list;
     }
-
+    console.log(salelist)
 
     return result;
 }
@@ -1147,20 +1148,29 @@ function ChangeSku() {
             var arrayColumn = new Array();//指定列，用来合并哪些列
             var bCheck = true;//是否全选
             var columnIndex = 0;
+            //300036174_2345:3000122464   pid_propertyName_vid
             $.each(SKUObj, function (i, item) {
                 arrayColumn.push(columnIndex);
                 columnIndex++;
-                arrayTile.push(SKUObj.eq(i).find("span").html().replace("：", ""));
+                arrayTile.push(SKUObj.eq(i).find(".propertyName").val());
                 arrayTitleValue.push(SKUObj.eq(i).attr("data-value"));
-                var itemName = "PId_Item" + i;
+               // var itemName = "PId_Item" + i;
+               // var itemName = "propertyValWrap"
+                var $propertyValWrap = $(item).parent().find('.propertyValWrap');
+                var $txtDiv = $propertyValWrap.find('.txtDiv');
                 //选中的CHeckBox取值
                 var order = new Array();
                 var orderName = new Array();
-                $("." + itemName + " input[type=checkbox]:checked").each(function () {
+              /*  $("." + itemName + " input[type=checkbox]:checked").each(function () {
                     //alert($(this).attr("data-vname"));
                     order.push($(this).val() + '_' + $(this).attr("data-vname"));
 
-                });
+                });*/
+                $txtDiv.each(function () {
+                    //alert($(this).attr("data-vname"));
+                    order.push($(this).attr('data-pName') + ':' + $(this).attr("data-pValue"));
+
+                })
                 arrayInfor.push(order);
                 if (order.join() == "") {
                     bCheck = false;
@@ -1172,7 +1182,7 @@ function ChangeSku() {
 
                 var RowsCount = 0;
                 $("#createTable").html("");
-                var table = $("<table id=\"process\" class=\"table table-hover table-bordered\"></table>");
+                var table = $("<table id=\"process\" class=\"table table-border table-bordered table-hover table-bg mt-20\"></table>");
                 table.appendTo($("#createTable"));
                 var thead = $("<thead></thead>");
                 thead.appendTo(table);
@@ -1185,9 +1195,9 @@ function ChangeSku() {
                 });
                 var itemColumHead = $("<td  class='width140'><span>*</span>价格(元)</td><td class='width80'><span>*</span>库存(件)</td><td class='width80'>编码</td><td class='width80'>条形码</td> ");
 
-                if (SupplierId != "0") {
+               /* if (SupplierId != "0") {
                     itemColumHead = $("<td  class='width140'><span>*</span>价格(元)</td><td class='width150 hide'><span>*</span>供货价(元)</td><td class='width80'><span>*</span>库存(件)</td><td class='width80'>编码</td><td class='width80'>条形码</td> ");
-                }
+                }*/
                 itemColumHead.appendTo(trHead);
                 //var itemColumHead2 = $("<td >商家编码</td><td >商品条形码</td>");
                 //itemColumHead2.appendTo(trHead);
@@ -1207,19 +1217,19 @@ function ChangeSku() {
                         tr.appendTo(tbody);
                         var rowid = '';
                         $.each(td_array, function (i, values) {
-                            var tempArr = values.split('_');
-                            var td = $("<td>" + tempArr[2] + "</td>");
-                            var tempArr1 = tempArr[1].split(':');
-                            rowid += tempArr1[1] + '_';
+                            var tempArr = values.split(':');
+                            var td = $("<td>" + tempArr[1] + "</td>");
+                           // var tempArr1 = tempArr[1].split(':');
+                            //rowid += tempArr1[1] + '_';
                             td.appendTo(tr);
                         });
                         rowid = rowid.substr(0, rowid.length - 1);
                         var td1 = $("<td id='" + rowid + "' data-value='" + item + "' data-skuid='0' data- class='tdrow'><input onkeyup=\"clearNoNum(this)\" onKeyPress=\"return keyNumAll(event);\" id=\"price" + rowid + "\" class=\"saleprice width70\" type=\"text\" onchange=\"ChangeSkuValues('" + rowid + "',1)\"><input style=\"padding:0 !important;\" value=\"会员价\" onclick=\"ShowMemberPriceBox('" + rowid + "',$(this))\"  type=\"button\"></td>");
                         td1.appendTo(tr);
-                        if (SupplierId != "0") {
+                        /*if (SupplierId != "0") {
                             var td11 = $("<td id='" + rowid + "' data-value=" + item + " class='hide'><input id=\"proxyprice" + rowid + "\" value=\"0\" class=\"proxyprice width80\" type=\"text\" onchange=\"ChangeSkuValues('" + rowid + "')\"></td>");
                             td11.appendTo(tr);
-                        }
+                        }*/
                         var td2 = $("<td ><input onkeyup=\"clearNoNum(this)\" onKeyPress=\"return keyNumAll(event);\" id=\"num" + rowid + "\" class=\"salenum width60\" type=\"text\"onchange=\"ChangeSkuValues('" + rowid + "')\"></td>");
                         td2.appendTo(tr);
                         var td3 = $("<td ><input id=\"code" + rowid + "\" class=\"salecode w100 \" style=\"text-align:left\" type=\"text\" onchange=\"ChangeSkuValues('" + rowid + "')\"></td>");
@@ -1414,4 +1424,48 @@ function addAttr(modelId) {
 
 }
 
+function ShowMsg(msg,flag) {
+    layer.msg( '<p>'+msg+'!</p>',{
+        time: 3000, //20s后自动关闭
+        skin: 'layui-layer-error', //样式类名
+    });
+}
+
+//校验规格名称及规格值
+function validSku(_this) {
+    var $this = $(_this),
+        falg = true,
+        $propertyName =  $this.parents('.propertyWrap').find('.propertyName'),
+        $thisVal =  $this.parents('.propertyWrap').find('.propertyVal');
+    //非空校验
+    if($propertyName.val()==''){
+        ShowMsg('请输入规格名称');
+        falg = false;
+        return falg;
+    }else if($thisVal.val() ==""){
+        ShowMsg('请输入规格值');
+        falg = false;
+        return falg;
+    }
+    //规格名称校验
+    var  skuName = ($this.parents('.propertyWrap').siblings()).find('.PId_Title');
+    $.each(skuName, function (i, item) {
+        var itemName =   skuName.eq(i).find(".propertyName").val();
+        if($propertyName.val() ==itemName){
+            ShowMsg('规格名称不能相同');
+            falg = false;
+            return falg;
+        }
+    });
+    var $skuVal =$this.parents('.propertyValWrap').find('.txtDiv')
+    $.each($skuVal, function (j, ele) {
+        var skuVal = $(ele).attr("data-pvalue");
+        if($thisVal.val() ==skuVal){
+            ShowMsg('规格值不能相同');
+            falg = false;
+            return falg;
+        }
+    });
+    return falg;
+}
 
