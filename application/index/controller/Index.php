@@ -1,12 +1,17 @@
 <?php
 namespace app\index\controller;
-
+use app\index\controller\SildeShow;
 use think\Controller;
 class Index extends Controller
 {
     public function index(){
         $this->assign('titleName', "泛亚商城");
+//        $sildeShow = new \app\index\controller\SildeShow();
+//        $sildeShowList =$sildeShow->getSildeShow();
+//        dump($sildeShowList);
+
         return $this->fetch();
+
     }
     public function message(){
         $this->assign('titleName', "个人消息");

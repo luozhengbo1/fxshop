@@ -25,9 +25,18 @@ class Customer extends Controller
             $map['sex'] = ["like", $this->request->param("sex")];
         }
 
-        //按出生日期时间段搜索
-        if ($this->request->param("startBirthday") && $this->request->param("endBirthday")) {
-            $map['birthday'] = ["between", [$this->request->param("startBirthday"), $this->request->param("endBirthday")]];
+        //按会员等级搜索
+        if ($this->request->param("grade")) {
+            $map['grade'] = ["like", $this->request->param("grade")];
+        }
+
+        //按创建时间段搜索
+        if ($this->request->param("startCreate_time") && $this->request->param("endCreate_time")) {
+            $start = $this->request->param("startCreate_time");
+            $end = $this->request->param("endCreate_time");
+            $starttime = strtotime($start);
+            $endtime = strtotime($end);
+            $map['create_time'] = ["between", [$starttime, $endtime]];
         }
 
         //按手机号搜索
@@ -42,12 +51,10 @@ class Customer extends Controller
     public function excel()
     {
         if ($this->request->isPost()) {
-            $header = ['用户名', '昵称', '性别', '生日', '手机号', '邮箱', '头像', '微信ID', '登录IP', '创建时间'];
-            $data = \think\Db::name("customer")->field("username,nickname,sex,birthday,mobile,email,headimgurl,openid,login_ip,create_time")->order("id desc")->select();
-            if ($error = \Excel::export($header, $data, "会员信息表.xls", '2007')) {
+            $header = ['用户名', '昵称', '性别', '生日', '手机号', '邮箱', '积分','等级', '头像','微信ID', '登录IP', '创建时间'];
+            $data = \think\Db::name("customer")->field("username,nickname,sex,birthday,mobile,email,score,grade,headimgurl,openid,login_ip,create_time")->order("id desc")->select();
+            if ($error = \Excel::export($header, $data, "会员信息表", '2007')) {
                 throw new Exception($error);
-            }else{
-                return ajax_return_adv('表格已导出！');
             }
         }
     }
@@ -74,4 +81,40 @@ class Customer extends Controller
 
     }
 
+    /**
+     * 首页
+     * @return mixed
+     */
+    public function index()
+    {
+        $model = $this->getModel();
+
+        // 列表过滤器，生成查询Map对象
+        $map = $this->search($model, [$this->fieldIsDelete => $this::$isdelete]);
+
+        // 特殊过滤器，后缀是方法名的
+        $actionFilter = 'filter' . $this->request->action();
+        if (method_exists($this, $actionFilter)) {
+            $this->$actionFilter($map);
+        }
+        // 自定义过滤器
+        if (method_exists($this, 'filter')) {
+            $this->filter($map);
+        }
+        $this->datalist($model, $map);
+        return $this->view->fetch();
+    }
+
+    public function getGradeVal()
+    {
+        $data = \app\common\model\CustomerGrade::all();
+        for ($i = 0; $i < count($data); $i++) {
+            $item = $data[$i]->toArray();
+            dump($item);
+            $id[$i] = $item['id'];
+            $name[$i] = $item['name'];
+        }
+        dump($id);
+        dump($name);
+    }
 }

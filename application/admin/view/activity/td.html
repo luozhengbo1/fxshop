@@ -1,9 +1,10 @@
 <td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
 <td>{$vo.name|high_light=$Request.param.name}</td>
 <td>{$vo.desc}</td>
-<td>{$vo.main_pic}</td>
+<td><img src="{$vo.main_pic}"  width="120"  alt="图片"/></td>
 <td>{$vo.start_date|high_light=$Request.param.start_date}</td>
 <td>{$vo.end_date|high_light=$Request.param.end_date}</td>
 <td>{$vo.url}</td>
 <td>{$vo.detail}</td>
+<td>{$vo.lottery_name}</td>
 <td>{$vo.lottery_id}</td>

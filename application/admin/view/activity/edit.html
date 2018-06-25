@@ -1,4 +1,7 @@
 {extend name="template/base" /}
+{block name="style"}
+<link rel="stylesheet" href="__LIB__/lightbox2/css/lightbox.min.css">
+{/block}
 {block name="content"}
 <div class="page-container">
     <form class="form form-horizontal" id="form" method="post" action="{:\\think\\Request::instance()->baseUrl()}">
@@ -13,43 +16,43 @@
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3">描述：</label>
             <div class="formControls col-xs-6 col-sm-6">
-                <textarea class="textarea" placeholder="" name="desc" onKeyUp="textarealength(this, 100)">{$vo.desc ?? ''}</textarea>
+                <textarea class="textarea" placeholder="" name="desc" onKeyUp="textarealength(this, 300)">{$vo.desc ?? ''}</textarea>
                 <p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
-        <div class="row cl">
-            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>活动主图：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text" placeholder="活动主图" name="main_pic" value="{$vo.main_pic ?? ''}"  datatype="*" nullmsg="请上传活动主图" errormsg="请上传活动主图">
+        <div class="page-container">
+            <div class="form form-horizontal">
+                <div class="row cl">
+                    <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>活动图片：</label>
+                    <div class="formControls col-xs-6 col-sm-6">
+                        <input type="text" class="input-text" id="upload" name="main_pic" readonly  placeholder="请点击后面的上传按钮" datatype="*" nullmsg="请填写图片url" value="{$vo.main_pic ?? ''}" style="width: 70%">
+                        <button type="button" class="btn btn-primary radius" onclick="layer_open('文件上传','{:\\think\\Url::build(\'Upload/index\', [\'id\' => \'upload\'])}')">上传</button>
+                        <a onclick="$(this).attr('href', $('#upload').val())" type="button" class="btn btn-success radius" data-lightbox="preview">预览</a>
+                    </div>
+                    <div class="col-xs-3 col-sm-3"></div>
+                </div>
             </div>
-            <div class="col-xs-3 col-sm-3"></div>
+            <div id="markdown" class="mt-20"></div>
         </div>
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>活动开始时间：</label>
             <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text Wdate" placeholder="活动开始时间" name="start_date" value="{$vo.start_date ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" {/literal}  datatype="*" nullmsg="请填写活动开始时间" errormsg="请填写活动开始时间">
+                <input type="text" class="input-text Wdate" placeholder="活动开始时间" name="start_date" value="{$vo.start_date ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}  datatype="*" nullmsg="请填写活动开始时间" errormsg="请填写活动开始时间">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>活动结束时间：</label>
             <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text Wdate" placeholder="活动结束时间" name="end_date" value="{$vo.end_date ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" {/literal}  datatype="*" nullmsg="请填写活动结束时间" errormsg="请填写活动结束时间">
+                <input type="text" class="input-text Wdate" placeholder="活动结束时间" name="end_date" value="{$vo.end_date ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}  datatype="*" nullmsg="请填写活动结束时间" errormsg="请填写活动结束时间">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3">活动链接：</label>
             <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text" placeholder="活动链接" name="url" value="{$vo.url ?? ''}" >
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-xs-3 col-sm-3">详情：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text" placeholder="详情" name="detail" value="{$vo.detail ?? ''}" >
+                <input type="url" class="input-text" placeholder="活动链接" name="url" value="{$vo.url ?? ''}" >
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
@@ -58,16 +61,25 @@
             <div class="formControls col-xs-6 col-sm-6">
                 <div class="select-box">
                     <select name="lottery_id" class="select">
-                        <option value=""></option>
+                        <option value="">--请选择--</option>
+                        {volist name="lotteryList" id="vo1"}
+                        <option value="{$vo1.id}" {if condition="$vo1.id eq $vo.lottery_id" }selecdted{/if}>{$vo.name}</option>
+                        {/volist}
                     </select>
                 </div>
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
-
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2">详情：</label>
+            <div class="formControls col-xs-6 col-sm-7 skin-minimal">
+                    <script id="editor" type="text/plain" name="detail" style="text-align:center;width:400px;">{$vo.detail ?? ''}</script>
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
         <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-                <button type="submit" class="btn btn-primary radius">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
+                <button type="submit" onclick="getEditV()" class="btn btn-primary radius">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
                 <button type="button" class="btn btn-default radius ml-20" onClick="layer_close();">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
             </div>
         </div>
@@ -75,6 +87,7 @@
 </div>
 {/block}
 {block name="script"}
+<script src="__LIB__/lightbox2/js/lightbox.min.js"></script>
 <script type="text/javascript" src="__LIB__/Validform/5.3.2/Validform.min.js"></script>
 <script type="text/javascript" src="__LIB__/My97DatePicker/WdatePicker.js"></script>
 <script>
@@ -91,10 +104,47 @@
             tiptype: 2,
             ajaxPost: true,
             showAllError: true,
+            beforeSubmit:function(curform){
+                // if( $('input[name="start_date"]').val()>= $('input[name="start_date"]').val() ){
+                //     alert('活动开始时间必须小于活动结束时间');
+                //     return false;
+                // }else{
+                //     $.ajax({
+                //         type:'post',
+                //         data:$form.serialize(),
+                //         url:$form.attr('action'),
+                //         success:function(ret){
+                //             alert(ret.msg);
+                //         }
+                //     })
+                // }
+
+            },
             callback: function (ret){
                 ajax_progress(ret);
             }
         });
     })
 </script>
+<!--编辑器start-->
+<script type="text/javascript" src="__LIB__/showdown/1.4.2/showdown.min.js"></script>
+<script>window.UEDITOR_HOME_URL = '__LIB__/ueditor/1.4.3/'</script>
+<script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+<script>
+    var ue = UE.getEditor('editor',{
+        serverUrl:'{:\\think\\Url::build("Ueditor/index")}'
+    });
+    $(function () {
+        var converter = new showdown.Converter(),
+            text      = $("#markdown_tpl").html();
+        $("#markdown").html(converter.makeHtml(text));
+    })
+    function getEditV(){
+        $('input[name=detail]').val( ue.getContent() )
+    }
+</script>
+<!--编辑器end-->
+
 {/block}

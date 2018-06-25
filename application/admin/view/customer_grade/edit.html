@@ -7,7 +7,7 @@
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>等级名称：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <input type="text" class="input-text" placeholder="等级名称" name="name" value="{$vo.name ?? ''}"
-                       datatype="*" nullmsg="请输入会员等级名称">
+                       datatype="*" nullmsg="请输入会员等级名称" autocomplete="off">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
@@ -15,7 +15,7 @@
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>起始积分：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <input type="text" class="input-text" placeholder="起始积分" name="score_start"
-                       value="{$vo.score_start ?? ''}" datatype="*" nullmsg="请输入等级起始积分">
+                       value="{$vo.score_start ?? ''}" datatype="*" nullmsg="请输入等级起始积分" autocomplete="off">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
@@ -23,11 +23,11 @@
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>结束积分：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <input type="text" class="input-text" placeholder="结束积分" name="score_end" value="{$vo.score_end ?? ''}"
-                       datatype="*" nullmsg="请输入等级结束积分">
+                       datatype="*" nullmsg="请输入等级结束积分" autocomplete="off">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
-
+        <!-- 判断$vo是否已被定义 -->
         <?php
             if(isset($vo)){  $checkbox_val=explode('<br/>', $vo['all']); }
         ?>
@@ -37,10 +37,14 @@
             <div class="formControls col-xs-6 col-sm-6 skin-minimal">
                 <div class="radio-box">
                     <input type="checkbox" name="all[]" id="all-1" value="提现特权"
-                    <?php if(isset($checkbox_val)){ if(in_array("提现特权",$checkbox_val)){  echo 'checked="checked"'; }  } ?>> 提现特权
+                    <?php if(isset($checkbox_val)){ if(in_array("提现特权",$checkbox_val)){  echo 'checked="checked"'; }  } ?>
+                    > 提现特权
                     <label for="all-1"></label>
+                </div>
+                <div class="radio-box">
                     <input type="checkbox" name="all[]" id="all-2" value="会员生日礼物"
-                    <?php if(isset($checkbox_val)){ if(in_array("会员生日礼物",$checkbox_val)){  echo 'checked="checked"'; }  } ?>> 会员生日礼物
+                    <?php if(isset($checkbox_val)){ if(in_array("会员生日礼物",$checkbox_val)){  echo 'checked="checked"'; }  } ?>
+                    > 会员生日礼物
                     <label for="all-2"></label>
                 </div>
             </div>

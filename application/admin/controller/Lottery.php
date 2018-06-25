@@ -10,8 +10,8 @@ use think\Db;
 class Lottery extends Controller
 {
     use \app\admin\traits\controller\Controller;
-    // 方法黑名单
     use \traits\controller\Jump;
+    // 方法黑名单
     protected static $blacklist = [];
 
     protected function filter(&$map)
@@ -59,9 +59,10 @@ class Lottery extends Controller
             if( !empty($data['grant_end_date']) ){
                 $data['grant_end_date']=strtotime($data['grant_end_date']);
             }
-            if( strtotime($data['grant_end_date']) < strtotime($data['grant_start_date']) ){
+            if( ($data['grant_end_date']) < ($data['grant_start_date']) ){
                 return ajax_return_adv_error('开始时间必须小于结束时间');
             }
+
             if( $data['expire_start_date'] ){
                 $data['expire_start_date']=strtotime($data['expire_start_date']);
             }else{
@@ -83,6 +84,7 @@ class Lottery extends Controller
             unset($data['id']);
             #剩余量
             $data['surplus_number']=$data['number'];
+
             $res = $model->insert($data);
             if($res){
                 return ajax_return_adv('添加成功');
@@ -130,7 +132,7 @@ class Lottery extends Controller
             if( !empty($data['grant_end_date']) ){
                 $data['grant_end_date']=strtotime($data['grant_end_date']);
             }
-            if( strtotime($data['grant_end_date']) < strtotime($data['grant_start_date']) ){
+            if( ($data['grant_end_date']) < ($data['grant_start_date']) ){
                 return ajax_return_adv_error('开始时间必须小于结束时间');
             }
             if( $data['expire_start_date'] ){
