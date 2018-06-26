@@ -1,7 +1,10 @@
 /// <reference path="SetProxyProductInfo.js" />
 var productInfoModel = {};
+var arrayInforList;
+var skuZuheData;
 var setpid = 0;
-$(function () {
+var $priceShow = $('#priceShow');//商品销售属性
+/*$(function () {
     //初始化商品分类
     InitTypeId();
     //分佣设置
@@ -19,8 +22,8 @@ $(function () {
         var id = $("#" + $(this).attr("list")).find("option[value='" + text + "']").attr("id");
         var value = $("#" + $(this).attr("list")).find("option[value='" + text + "']").attr("value");
         if (typeof (id) == "undefined" || typeof (value) == "undefined") {
-            $("#" + $(this).attr("list")).attr("vid", "0");
-            $("#" + $(this).attr("list")).attr("value", text);
+            $("#"+ $(this).attr("list")).attr("vid", "0");
+            $("#"+ $(this).attr("list")).attr("value", text);
         } else {
             $("#" + $(this).attr("list")).attr("vid", id);
             $("#" + $(this).attr("list")).attr("value", value);
@@ -38,8 +41,8 @@ $(function () {
                 break;
             }
         }
-        $("#" + $(this).attr("list")).attr("data-value", value);
-        $("#" + $(this).attr("list")).attr("data-title", text);
+        $("#"+ $(this).attr("list")).attr("data-value", value);
+        $("#"+ $(this).attr("list")).attr("data-title", text);
 
 
         //var id = $("#" + $(this).attr("list")).find('option[value="' + text + '"]').attr("id");
@@ -200,7 +203,7 @@ $(function () {
 
 
 
-});
+});*/
 
 function setCategory() {
     var typeId = $("#TypeId").val();
@@ -225,7 +228,7 @@ function setCategory() {
         $("#TypeId").show();
         $("#TypeId").val(0);
     } else {
-        $("#TypeId").hide();
+        $('#TypeId').hide();
         $("#TypeId").before('<div style="width:100px; height:32px;" id="setcategory-Separated"></div>');
     }
 }
@@ -636,8 +639,8 @@ function BindSaleProperty(productid) {
 function setDisableSwitch() {
     $('#mySwitch').empty();
     $('#mySwitch').append('<input type="checkbox" id="mySwitchValue" disabled />');
-    $('#mySwitch').bootstrapSwitch();
-    $('#mySwitch').bootstrapSwitch('setState', false);
+/*    $('#mySwitch').bootstrapSwitch();
+    $('#mySwitch').bootstrapSwitch('setState', false);*/
     $("#ThirdCommission,#SecondCommission,#FirstCommission").removeAttr("disabled");
     $("#hIsSetCommission").val("0");
 }
@@ -645,11 +648,11 @@ function setDisableSwitch() {
 function setUnDisableSwitch() {
     $('#mySwitch').empty();
     $('#mySwitch').append('<input type="checkbox" id="mySwitchValue" />');
-    $('#mySwitch').bootstrapSwitch();
-    $('#mySwitch').bootstrapSwitch('setActive', true);
+ /*   $('#mySwitch').bootstrapSwitch();
+    $('#mySwitch').bootstrapSwitch('setActive', true);*/
     var hIsSetCommission = $("#hIsSetCommission").val();
     var isOpen = hIsSetCommission == '1';
-    $('#mySwitch').bootstrapSwitch('setState', isOpen);
+ //   $('#mySwitch').bootstrapSwitch('setState', isOpen);
     if (isOpen) {
         $("#ThirdCommission,#SecondCommission,#FirstCommission").attr("disabled", true);
     } else {
@@ -824,8 +827,8 @@ function GetSaleProperty() {
         salelist = list;
     }
     console.log(salelist)
-
-    return result;
+    return salelist;
+   // return result;
 }
 
 
@@ -1052,7 +1055,7 @@ function ChangeSkuValues(id, type) {
     }
 
     //
-    if (type == undefined || secound == 0) {//商家修改会员价格才会影响到规格的价格
+    if ( type == undefined || secound == 0) {//商家修改会员价格才会影响到规格的价格
         setTimeout(function () {
             initCacheMemberPrice(id);
             secound++;
@@ -1205,8 +1208,15 @@ function ChangeSku() {
                 var tbody = $("<tbody></tbody>");
                 tbody.appendTo(table);
 
+                //商品销售属性修改
+                if(arrayInfor.length>0){
+                    $('#priceShow').remove();
+                }else{
+                    $('#productSale').append($priceShow)
+                }
                 ////生成组合
                 var zuheDate = step.doExchange(arrayInfor);
+
                 if (zuheDate && zuheDate.length > 0) {
                     //创建行
                     //console.log(zuheDate);
@@ -1224,7 +1234,7 @@ function ChangeSku() {
                             td.appendTo(tr);
                         });
                         rowid = rowid.substr(0, rowid.length - 1);
-                        var td1 = $("<td id='" + rowid + "' data-value='" + item + "' data-skuid='0' data- class='tdrow'><input onkeyup=\"clearNoNum(this)\" onKeyPress=\"return keyNumAll(event);\" id=\"price" + rowid + "\" class=\"saleprice width70\" type=\"text\" onchange=\"ChangeSkuValues('" + rowid + "',1)\"><input style=\"padding:0 !important;\" value=\"会员价\" onclick=\"ShowMemberPriceBox('" + rowid + "',$(this))\"  type=\"button\"></td>");
+                        var td1 = $("<td id='" + rowid + "' data-value='" + item + "' data-skuid='0' data- class='tdrow'><input onkeyup=\"clearNoNum(this)\" onKeyPress=\"return keyNumAll(event);\" id=\"price" + rowid + "\" class=\"saleprice width70\" type=\"text\" onchange=\"ChangeSkuValues('" + rowid + "',1)\"></td>");
                         td1.appendTo(tr);
                         /*if (SupplierId != "0") {
                             var td11 = $("<td id='" + rowid + "' data-value=" + item + " class='hide'><input id=\"proxyprice" + rowid + "\" value=\"0\" class=\"proxyprice width80\" type=\"text\" onchange=\"ChangeSkuValues('" + rowid + "')\"></td>");
@@ -1239,6 +1249,9 @@ function ChangeSku() {
 
                     });
                 }
+                //请求传递数据
+                arrayInforList = arrayInfor;
+                skuZuheData = zuheDate;
                 //结束创建Table表
                 arrayColumn.pop();//删除数组中最后一项
                 //合并单元格

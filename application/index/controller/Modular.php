@@ -7,7 +7,7 @@
 	{
 		public function getModular()
 		{
-			$model = Db::('modular');
+			$model = Db::name('modular');
 			$list = $model
 				->where(['status'=>1,'isdelete'=>0])
 				->orderby('orderby DESC,create_time DESC')
