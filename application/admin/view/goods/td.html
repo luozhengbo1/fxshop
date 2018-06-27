@@ -1,21 +1,32 @@
 <td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
 <td>{$vo.name|high_light=$Request.param.name}</td>
-<td>{$vo.main_image}</td>
-<td>{$vo.original_price}</td>
-<td>{$vo.settlement_type}</td>
-<td>{$vo.goods_class_id}</td>
-<td>{$vo.goods_brand_id}</td>
-<td>{$vo.show_area}</td>
-<td>{$vo.detail}</td>
-<td>{$vo.status|get_status}</td>
-<td>{$vo.pic}</td>
 <td>{$vo.subtitle}</td>
+<td><img src="{$vo.main_image}" width="100" alt="主图"></td>
+<td>{$vo.original_price}</td>
+<td>
+    <?php
+      $goods_name = \think\Db::name('goods_class')->field('name')->where(['id'=>$vo['goods_class_id']])->find();
+    echo $goods_name['name'];
+?>
+</td>
+<td> <?php
+      $brand_name = \think\Db::name('brand')->field('name')->where(['id'=>$vo['goods_brand_id']])->find();
+        echo $brand_name['name'];
+    ?>
+</td>
+<td>{if condition="$vo.show_area eq 1"}
+    限时抢购
+    {elseif condition="$vo.show_area eq 2" /}
+    积分商城
+    {elseif condition="$vo.show_area eq 3" /}
+    日常售卖
+    {elseif condition="$vo.show_area eq 4" /}
+    热销商品
+    {/if}
+</td>
+<td>{$vo.create_time|date="Y-m-d H:i:s",###}</td>
+<td>{$vo.status|get_status}</td>
 <td>{$vo.orderby}</td>
-<td>{$vo.goods_weight}</td>
-<td>{$vo.start_date}</td>
-<td>{$vo.end_date}</td>
-<td>{$vo.is_real}</td>
+<td>{if condition="$vo.is_real eq 1"}是{else /}否{/if}</td>
 <td>{$vo.return_score}</td>
-<td>{$vo.score_price}</td>
-<td>{$vo.socre}</td>
-<td>{$vo.price}</td>
+<!--<td>{$vo.score_price}</td>-->

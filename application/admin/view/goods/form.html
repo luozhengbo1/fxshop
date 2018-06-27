@@ -1,29 +1,47 @@
 <form class="mb-20" method="get" action="{:\\think\\Url::build($Request.action)}">
     <input type="text" class="input-text" style="width:250px" placeholder="商品名称" name="name" value="{$Request.param.name}" >
     <div class="select-box" style="width:250px">
-        <select name="settlement_type" class="select">
-            <option value=""></option>
-        </select>
-    </div>
-    <div class="select-box" style="width:250px">
         <select name="goods_class_id" class="select">
-            <option value=""></option>
+            <option value="">分类名称</option>
+            {volist name="goodsClassList" id="vo"}
+            <option value="{$vo.id}">{$vo.name}</option>
+            {/volist}
         </select>
     </div>
     <div class="select-box" style="width:250px">
-        <select name="goods_brand_id" class="select">
-            <option value=""></option>
-        </select>
+        <input type="text" class="input-text Wdate" placeholder="创建时间" name="create_time" value="{$Request.param.create_time ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}  nullmsg="请输入开售时间" errormsg="请输入开售时间">
+        <input type="text" class="input-text Wdate" placeholder="创建时间" name="end_create_time" value="{$Request.param.end_create_time ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}  nullmsg="请输入开售时间" errormsg="请输入开售时间">
     </div>
     <div class="select-box" style="width:250px">
         <select name="show_area" class="select">
-            <option value=""></option>
+            <?php
+                $a ='';
+                if(isset($_GET['show_area'])){
+                    if($_GET['show_area']  ) {
+                     $a = "selected";
+                  }
+                }
+            ?>
+            <option value="">上架展示区</option>
+            <option value="1" "{$a}" >限时抢购</option>
+            <option value="2"  "{$a}" >积分商城</option>
+            <option value="3"  "{$a}">日常售卖</option>
+            <option value="4"  "{$a}" >热销商品</option>
         </select>
     </div>
     <div class="select-box" style="width:250px">
         <select name="is_real" class="select">
-            <option value="">是</option>
-            <option value="">否</option>
+            <?php
+            $b ='';
+                if(isset($_GET['is_real'])){
+                    if($_GET['is_real']  ) {
+                     $b = "selected";
+                  }
+                }
+            ?>
+            <option value="">实物</option>
+            <option value="1">是</option>
+            <option value="0">否</option>
         </select>
     </div>
     <button type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
