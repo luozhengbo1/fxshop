@@ -88,20 +88,45 @@ class Customer extends Controller
      */
     public function index()
     {
-        if ($_POST) {
+        //点击清空按钮后将传递空的查询条件值到$map
+        if ($_GET) {
             $model = $this->getModel();
-            $map = [
-                'username' => $_POST['username'],
-                'sex' => $_POST['sex'],
-                'grade' => $_POST['grade'],
-                'startCreate_time' => $_POST['startCreate_time'],
-                'endCreate_time' => $_POST['endCreate_time'],
-                'mobile' => $_POST['mobile'],
-            ];
+            // 列表过滤器，生成查询Map对象
+            $map = $this->search($model, [$this->fieldIsDelete => $this::$isdelete]);
+
+            // 特殊过滤器，后缀是方法名的
+            $actionFilter = 'filter' . $this->request->action();
+            if (method_exists($this, $actionFilter)) {
+                $this->$actionFilter($map);
+            }
+            // 自定义过滤器
+            if (method_exists($this, 'filter')) {
+                $this->filter($map);
+            }
+
+            //  根据积分自动更新grade
+            $score = $model->where('isdelete', '0')->select();
+            $gradeList = Model('CustomerGrade')->field('id ,name,score_start,score_end')->order('id ')->where('isdelete', 0)->select();
+            for ($i = 0; $i < count($score); $i++) {
+                $scoreitem = $score[$i];
+                for ($j = 0; $j < count($gradeList); $j++) {
+                    $gradeitem = $gradeList[$j];
+                    if ($scoreitem['score'] > $gradeitem['score_start'] && $scoreitem['score'] < $gradeitem['score_end']) {
+                        //插入grade_id
+                        $model->save([
+                            'grade_id' => $gradeitem['id']
+                        ], ['id' => $scoreitem['id']]);
+                        $gradelist[$i] = [
+                            'name' => $gradeitem['name']
+                        ];
+                    }
+                }
+            }
             $this->datalist($model, $map);
-//            $this->view->assign('gradelist', $gradeList);
+            $this->view->assign('gradelist', $gradeList);
             return $this->view->fetch();
-        } else {
+        }else{
+            //初始化列表数据
             $model = $this->getModel();
             // 列表过滤器，生成查询Map对象
             $map = $this->search($model, [$this->fieldIsDelete => $this::$isdelete]);
@@ -138,13 +163,6 @@ class Customer extends Controller
             $this->view->assign('gradelist', $gradeList);
             return $this->view->fetch();
         }
-
-
     }
 
-    public function emptyall()
-    {
-        dump($_GET);
-        die;
-    }
 }

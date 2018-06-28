@@ -2,6 +2,9 @@
 {block name="content"}
 <div class="page-container">
     <table class="table table-border table-bordered table-hover table-bg mt-20">
+        <form action="{:url('customer_task/excel')}" target="_blank" method="post">
+            <button class="btn btn-success radius" type="submit">导出Excel</button>
+        </form>
         <thead>
         <tr class="text-c">
             <th width="">会员用户名</th>
