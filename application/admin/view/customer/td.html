@@ -6,7 +6,10 @@
 <td>{$vo.mobile|high_light=$Request.param.mobile}</td>
 <td>{$vo.email}</td>
 <td>{$vo.score}</td>
-<td>{$vo.grade_id}</td>
+<td><?php
+        $grade = \think\Db::name('customer_grade')->where(['id'=>$vo['grade_id']])->find();
+         echo $grade['name'];
+    ?></td>
 <td>{$vo.headimgurl}</td>
 <td>{$vo.openid}</td>
 <td>{$vo.login_ip}</td>

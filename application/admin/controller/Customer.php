@@ -88,7 +88,6 @@ class Customer extends Controller
     public function index()
     {
         $model = $this->getModel();
-
         // 列表过滤器，生成查询Map对象
         $map = $this->search($model, [$this->fieldIsDelete => $this::$isdelete]);
 
@@ -104,32 +103,24 @@ class Customer extends Controller
 
         //  根据积分自动更新grade
         $score = $model->where('isdelete', '0')->select();
-        $where = "1=1";
-        $typeList = Model('CustomerGrade')->field('id ,name,score_start,score_end')->order('id ')->where($where)->select();
+        $gradeList = Model('CustomerGrade')->field('id ,name,score_start,score_end')->order('id ')->where('isdelete',0)->select();
         for ($i = 0; $i < count($score); $i++) {
             $scoreitem = $score[$i];
-            for ($j = 0; $j < count($typeList); $j++) {
-                $listitem = $typeList[$j];
-                if ($scoreitem['score'] > $listitem['score_start'] && $scoreitem['score'] < $listitem['score_end']) {
+            for ($j = 0; $j < count($gradeList); $j++) {
+                $gradeitem = $gradeList[$j];
+                if ($scoreitem['score'] > $gradeitem['score_start'] && $scoreitem['score'] < $gradeitem['score_end']) {
                     //插入grade_id
                     $model->save([
-                        'grade_id' => $listitem['id']
+                        'grade_id' => $gradeitem['id']
                     ], ['id' => $scoreitem['id']]);
-                    $gradelist[$i]=[
-                        'name'=>$listitem['name']
+                    $gradelist[$i] = [
+                        'name' => $gradeitem['name']
                     ];
                 }
             }
         }
-        //根据grade_id查询grade名称
-//        $list = $model->alias('customer')
-//            ->field('customer.*,fy_customer_grade.name')
-//            ->join('fy_customer_grade', 'customer.grade_id=fy_customer_grade.id', 'left')
-//            ->where('customer.isdelete','0')
-//            ->select();
         $this->datalist($model, $map);
-        $this->view->assign('typelist', $typeList);
-//        $this->view->assign('gradelist', $gradelist);
+        $this->view->assign('gradelist', $gradeList);
         return $this->view->fetch();
     }
 }

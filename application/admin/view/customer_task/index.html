@@ -14,7 +14,7 @@
         <thead>
         <tr class="text-c">
             {include file="th" /}
-            <th width="70">操作</th>
+            <th width="120">操作</th>
         </tr>
         </thead>
         <tbody>
@@ -22,6 +22,7 @@
         <tr class="text-c">
             {include file="td" /}
             <td class="f-14">
+                {tp:menu menu='sdetail' url='detail:id=$vo.id' title='详情'/}
                 {$vo.status|show_status=$vo.id}
                 {tp:menu menu='sedit' /}
                 {tp:menu menu='sdelete' /}
