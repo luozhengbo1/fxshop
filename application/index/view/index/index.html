@@ -1,7 +1,7 @@
 {include file="Public/header-resource"}
-<body>
+<body class="footer-boottom">
 {include file="Public/header"}
-<!--轮播图-->
+<!--轮播图1-->
 <div class="swiper-container header-banner">
 	<ul class="swiper-wrapper" >
 		<li class="swiper-slide">
@@ -21,8 +21,8 @@
 	</div>
 	<div class="content fl swiper-container announcement-banner" >
 		<ul class="swiper-wrapper">
-			<li class="swiper-slide"><a href="{:\\think\\Url::build(\'announce\')}" >一杯敬朝阳 一杯敬月光，唤醒我的向往 温柔了寒窗，于是可以不回头地逆风飞翔.</a></li>
-			<li class="swiper-slide"><a href="{:\\think\\Url::build(\'announce\')}" >111111111111一杯敬朝阳 一杯敬月光，唤醒我的向往 温柔了寒窗，1111111111111111.</a></li>
+			<li class="swiper-slide ellipsis-oneline"><a href="{:\\think\\Url::build(\'announce\')}" >一杯敬朝阳 一杯敬月光，唤醒我的向往 温柔了寒窗，于是可以不回头地逆风飞翔.</a></li>
+			<li class="swiper-slide ellipsis-oneline"><a href="{:\\think\\Url::build(\'announce\')}" >11111111e1111一杯敬朝阳 一杯敬月光，唤醒我的向往 温柔了寒窗，1111111111111111.</a></li>
 		</ul>
 	</div>
 	<div class="more fl">更多》</div>
@@ -68,7 +68,7 @@
 <!--商品列表-->
 <div class="module-hot-goods">
 	<p class="title mt10 mb10">热销商品</p>
-	<div id="dataListWrap" class="data-refresh-list-wrap">
+	<div id="dataListWrap">
 		<ul class="goods-list list clear" id="goodsList">
 		<!--	<li>
 				<img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
@@ -107,7 +107,7 @@
 			html +='  		  <p class="fl">已售3</p>';
 			html +='  		      <p class="fr">';
 			html +='  		      <span class="goods-price">¥45.00</span>';
-			html +='  				<span class="goods-old-price">¥45.00</span>';
+			html +='  				<span class="goods-old-price">¥45.0</span>';
 			html +='  		  </p>';
             html +='    </div>';
             html +='  </li>';
@@ -120,7 +120,7 @@
          page:1,
          size:4,
          ajaxData:{
-              url:"__STATIC__/index/json/more.json",
+             url:"{:url('index/index/return_json')}",
               data:{},
           },
 		dealFun:dealData

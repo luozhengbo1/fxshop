@@ -74,5 +74,9 @@ MyPageload.prototype.fnDropload=function(dropload){
     dropload.noData();
     dropload.resetload();
 }
-
+///每次在重新加载调用时可初始化数据
+function initData(target){
+    $('#'+target).empty();
+    $('.dropload-down').remove();
+}
 

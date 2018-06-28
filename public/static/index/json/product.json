@@ -351,3 +351,12 @@
         "FreightTemplateId": 0
     }
 ]
+
+/*[
+
+    {"SkuId":"颜色:56,尺寸:大","price":12,"num":"23","code":"3","SupplyPrice":"0","bar":"3","img":""},
+    {"SkuId":"颜色:56,尺寸:小","price":12,"num":"23","code":"3","SupplyPrice":"0","bar":"3","img":""},
+    {"SkuId":"颜色:红色,尺寸:大","price":12,"num":"23","code":"3","SupplyPrice":"0","bar":"3","img":""},
+    {"SkuId":"颜色:红色,尺寸:小","price":12,"num":"23","code":"3","SupplyPrice":"0","bar":"3","img":""},
+    {"SkuId":"颜色:blue,尺寸:大","price":12,"num":"23","code":"3","SupplyPrice":"0","bar":"3","img":""},
+    {"SkuId":"颜色:blue,尺寸:小","price":12,"num":"23","code":"3","SupplyPrice":"0","bar":"3","img":""}]*/

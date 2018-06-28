@@ -7,11 +7,11 @@
         <ul class="goods-list list clear" id="goodsList">
             <!--<li>
                 <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                 <p class="good-desc ellipsis">Lay’s/乐事薯片清爽酸奶零食 </p>
+                 <p class="good-desc ellipsis">Lay’s/乐事e薯片清爽酸奶零食 </p>
                 <div>
                     <p class="fl">已售3</p>
                     <p class="fr">
-                        <span class="goods-price">2000积分</span>
+                        <span class="goods-price">20e00积分</span>
                     </p>
                 </div>
             </li>-->
@@ -34,7 +34,7 @@
                 page:1,
                 size:4,
                 ajaxData:{
-                    url:"__STATIC__/index/json/more.json",
+                    url:"{:url('index/index/return_json')}",
                     data:formData('form'),
                 },
                 dealFun:dealData,

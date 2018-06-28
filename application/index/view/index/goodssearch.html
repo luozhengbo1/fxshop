@@ -6,9 +6,9 @@
         <ul class="goods-list list clear" id="goodsList">
             <!--<li>
                 <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                 <p class="good-desc ellipsis">Lay’s/乐事薯片清爽酸奶零食 </p>
+                 <p class="good-desc ellipsis">Lay’s/乐事e薯片清爽酸奶零食 </p>
                 <div>
-                    <p class="fl">已售3</p>
+                    <p class="fl">已售33</p>
                     <p class="fr">
                         <span class="goods-price">¥45.00</span>
                         <span class="goods-old-price">¥45.00</span>
@@ -18,23 +18,27 @@
         </ul>
     </div>
     <script>
-
+        loadSearchData()
         function searchGoods(){
             if(!formEmptyValid('form')){
                 return;
             }else{
-                pageload({
-                    targetWarp:'dataListWrap',
-                    target:'goodsList',
-                    page:1,
-                    size:4,
-                    ajaxData:{
-                        url:"{:url('index/index/return_json')}",
-                        data:formData('form'),
-                    },
-                    dealFun:dealData
-                });
+                loadSearchData()
             }
+        }
+        function loadSearchData() {
+            initData('goodsList');
+            pageload({
+                targetWarp:'dataListWrap',
+                target:'goodsList',
+                page:1,
+                size:4,
+                ajaxData:{
+                    url:"{:url('index/index/return_json')}",
+                    data:formData('form'),
+                },
+                dealFun:dealData
+            });
         }
         function dealData(data) {
             var html='';

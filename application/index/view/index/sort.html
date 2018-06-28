@@ -2,6 +2,7 @@
 <body>
 <style>
     .module-title{
+
         background: white;
         line-height: .34rem;
         height: .34rem;
@@ -21,8 +22,8 @@
             <li class="tc"><img src="https://m.360buyimg.com/mobilecms/s240x240_jfs/t6376/61/1152254070/492223/90c59f8b/594b8118Nd6abac12.jpg!q70.jpg.dpg.webp"></li>
         </ul>
     </div>
-    <section class="menu-right padding-all" style="margin-bottom:4.6rem">
-        <div class="menu-left " id="sidebar">
+    <section class="menu-right padding-all" style="margin-bottom:4.6rem;">
+        <div class="menu-left" id="sidebar">
             <ul>
                 <li data="/mobile/index.php?m=category&amp;a=childcategory&amp;id=1855" data-id="1855" class="active">名酒茶礼</li>
                 <li data="/mobile/index.php?m=category&amp;a=childcategory&amp;id=1536" data-id="1536">
@@ -52,7 +53,7 @@
         <div class="data-list-wrap" id="dataListWrap">
             <div class="child_category" id="goodsList">
                 <!--<li>
-                    &lt;!&ndash;<div class="title" > <a href="/mobile/index.php?m=category&amp;a=products&amp;id=1593"><h5>食用油</h5></a></div>&ndash;&gt;
+                    &lt;!&ndash;<div class="title" > <a href="/mobile/index.23php?m=category&amp;a=products&amp;id=1593"><h5>食用油</h5></a></div>&ndash;&gt;
                     &lt;!&ndash;<ul class="clear">
                         <li><a href="#"></a><img src="http://scsc.top/images/201709/thumb_img/2912_thumb_G_1505608995337.jpg" alt="花生油"><span>花生油</span></li>
                     </ul>&ndash;&gt;
@@ -78,7 +79,7 @@
             page:1,
             size:4,
             ajaxData:{
-                url:"__STATIC__/index/json/more.json",
+                url:"{:url('index/index/return_json')}",
                 data:formData('form'),
             },
             dealFun:dealData,
