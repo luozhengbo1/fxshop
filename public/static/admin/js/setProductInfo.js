@@ -1482,3 +1482,4 @@ function validSku(_this) {
     return falg;
 }
 
+
