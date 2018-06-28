@@ -400,14 +400,7 @@ class Goods extends Controller
             $this->view->assign('proprety_name_val',$proprety_name_val);
             $this->view->assign('skuData',$skuData);
             $this->view->assign('proprety_name',$proprety_name);
-            $this->view->assign('proprety_name',$arr);
-            dump($proprety_name_val);
-            dump($skuData);
-            dump($proprety_name);
-            dump($arr);
-            dump(json_encode($arr));
-            die;
-
+            $this->view->assign('proprety_name1',$arr);
             return $this->view->fetch('edit');
         }
 
