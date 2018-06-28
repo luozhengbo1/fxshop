@@ -41,18 +41,24 @@
 <!-- 清空筛选条件并刷新页面 -->
 <script type="text/javascript">
     function empty() {
-        var username = document.getElementById("username");
-        username.value = "";
-        var sex = document.getElementById("sex");
-        sex.value = "";
-        var grade = document.getElementById("grade");
-        grade.value = "";
-        var startCreate_time = document.getElementById("startCreate_time");
-        startCreate_time.value = "";
-        var endCreate_time = document.getElementById("endCreate_time");
-        endCreate_time.value = "";
-        var mobile = document.getElementById("mobile");
-        mobile.value = "";
-        location.replace(document.referrer);
+        var input_username = document.getElementById("username");
+        input_username.value = "";
+        var username = input_username.value;
+        var input_sex = document.getElementById("sex");
+        input_sex.value = "";
+        var sex = input_username.value;
+        var input_grade = document.getElementById("grade");
+        input_grade.value = "";
+        var grade = input_username.value;
+        var input_startCreate_time = document.getElementById("startCreate_time");
+        input_startCreate_time.value = "";
+        var startCreate_time = input_username.value;
+        var input_endCreate_time = document.getElementById("endCreate_time");
+        input_endCreate_time.value = "";
+        var endCreate_time = input_username.value;
+        var input_mobile = document.getElementById("mobile");
+        input_mobile.value = "";
+        var mobile = input_username.value;
+        // location.replace(document.referrer);
     }
 </script>

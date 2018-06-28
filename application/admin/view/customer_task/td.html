@@ -1,7 +1,8 @@
 <td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
 <td>{$vo.name}</td>
-<td><img src="{$vo.main_pic}" width=130 alt="无会员头像"></td>
+<td><img src="{$vo.main_pic}" width=130 alt="无任务主题图"></td>
 <td>{if condition = "$vo.display==1"}图片{elseif condition = "$vo.display==2"/}图片+文字{/if}</td>
+<td>{$vo.reward_score}</td>
 <td>{:htmlspecialchars_decode($vo['detail'])}</td><!-- 不输出HTML元素 -->
 <td>{$vo.desc}</td>
 <td>{$vo.start_date}</td>

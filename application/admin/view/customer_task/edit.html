@@ -38,6 +38,14 @@
             <div class="col-xs-3 col-sm-3"></div>
         </div>
         <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>奖励积分：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" placeholder="奖励积分" name="reward_score" value="{$vo.reward_score ?? ''}" datatype="*"
+                       nullmsg="请输入奖励积分" autocomplete="off">
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>链接：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <input type="text" class="input-text" placeholder="链接" name="url" value="{$vo.url ?? ''}" datatype="*"
