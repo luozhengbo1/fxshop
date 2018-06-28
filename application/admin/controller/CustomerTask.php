@@ -19,7 +19,7 @@ class CustomerTask extends Controller
     public function detail()
     {
         $controller = $this->request->controller();
-        // 编辑
+        // 查询单个任务的参与情况
         $id = $this->request->param('id');
         $model_task = new TaskAchievement();
         $list_task_achive = $model_task->alias('task')
@@ -35,22 +35,25 @@ class CustomerTask extends Controller
         }
 
         $this->view->assign("task", $list_task_achive);
-
         return $this->view->fetch();
 
     }
 
-    public function gettime()
+    /**
+     * 会员参与任务信息一键导出
+     */
+    public function excel()
     {
-        $time1 = '2018-06-28 10:00:05';
-        $strtime1 = strtotime($time1);
-        dump($strtime1);
-        $time2 = '2018-06-23 17:54:05';
-        $strtime2 = strtotime($time2);
-        dump($strtime2);
-        $time3 = '2018-06-24 15:04:35';
-        $strtime3 = strtotime($time3);
-        dump($strtime3);
+        if ($this->request->isPost()) {
+            $header = ['ID','用户ID', '任务ID', '完成状态', '获得奖励积分', '创建时间', '更新时间'];
+            $data = \think\Db::name("task_achievement")
+                ->field("id,uid,task_id,status,reward_score,create_time,update_time")
+                ->where('task_id',$id)
+                ->order("id desc")->select();
+            if ($error = \Excel::export($header, $data, "会员参与任务明细表", '2007')) {
+                throw new Exception($error);
+            }
+        }
     }
 }
 

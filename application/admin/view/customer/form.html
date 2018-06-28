@@ -36,29 +36,22 @@
     <input type="text" class="input-text" style="width:250px" placeholder="请输入手机号" name="mobile"
            value="{$Request.param.mobile}" autocomplete="off" id="mobile">&nbsp;
     <button type="submit" class="btn btn-success radius"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
-    <button type="button" class="btn btn-success radius" onclick="empty()">&nbsp;清空&nbsp;</button>
+    <button type="submit" class="btn btn-success radius" onclick="empty()">&nbsp;清空&nbsp;</button>
 </form>
 <!-- 清空筛选条件并刷新页面 -->
 <script type="text/javascript">
     function empty() {
         var input_username = document.getElementById("username");
         input_username.value = "";
-        var username = input_username.value;
         var input_sex = document.getElementById("sex");
         input_sex.value = "";
-        var sex = input_username.value;
         var input_grade = document.getElementById("grade");
         input_grade.value = "";
-        var grade = input_username.value;
         var input_startCreate_time = document.getElementById("startCreate_time");
         input_startCreate_time.value = "";
-        var startCreate_time = input_username.value;
         var input_endCreate_time = document.getElementById("endCreate_time");
         input_endCreate_time.value = "";
-        var endCreate_time = input_username.value;
         var input_mobile = document.getElementById("mobile");
         input_mobile.value = "";
-        var mobile = input_username.value;
-        // location.replace(document.referrer);
     }
 </script>
