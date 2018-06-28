@@ -5,8 +5,9 @@
     <div id="dataListWrap" class="data-refresh-list-wrap">
         <ul class="goods-list list clear" id="goodsList">
             <!--<li>
+
                  <p class="tc"> <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg"></p>
-                 <p class="good-desc ellipsis">Lay’s/乐事薯片清爽酸奶零食 </p>
+                 <p class="good-desc ellipsis">Lay’s/乐2事薯片清爽酸奶零食 </p>
                   <div class="layui-progress layui-progress-big">
                       <div class="clear text-show" >
                           <p class="fl">已抢38件</p>
@@ -38,7 +39,7 @@
                 page:1,
                 size:4,
                 ajaxData:{
-                    url:"__STATIC__/index/json/more.json",
+                    url:"{:url('index/index/return_json')}",
                     data:formData('form'),
                 },
                 dealFun:dealData,
@@ -59,7 +60,7 @@
                 html +='          </div>';
                 html +='          <div class="layui-progress-bar layui-bg-red" style="width: '+width+'px"></div>';
                 html +='      </div>';
-                html +='     <p class="lh30 h30">活动时间：2017.10.18-2017.10.20</p>';
+                html +='     <p class="lh30 h30">时间2017.10.18-2017.10.20</p>';
                 html +='     <div class="clear">';
                 html +='         <p class="fl">';
                 html +='             <span class="goods-price">¥45.00</span>';

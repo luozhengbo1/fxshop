@@ -21,7 +21,7 @@
 		</a>
 	</li>
 	<li id="mePage">
-		<a href="#">
+		<a href="{:\\think\\Url::build(\'customer\')}">
 			<i class="iconfont icon-geren"></i><p>会员中心</p>
 		</a>
 	</li>
@@ -29,15 +29,17 @@
 </ul>
 
 <script>
-
     addActive()
     //对点击的位置进行一个记录
-    $('.footer-nav li').click(function () {
-        $('.footer-nav li').removeClass('active')
-        $(this).addClass('active')
-        $.cookie('currentPage', $(this).attr('id'), {path: '/' });
-    })
+    tabSwitch( $('.footer-nav li'))
 	function addActive(){
         $('#'+ $.cookie('currentPage')).addClass('active')
 	}
+	function tabSwitch($target) {
+        $target.click(function () {
+            $target.removeClass('active')
+            $(this).addClass('active')
+            $.cookie('currentPage', $(this).attr('id'), {path: '/' });
+        })
+    }
 </script>

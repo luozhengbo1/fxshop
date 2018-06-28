@@ -1,0 +1,91 @@
+<div class="good-evaluate">
+    <p class="good-evaluate-bar clear bg_white">
+        <span class="fl">评价</span>
+        <span class="fl">好评97%</span>
+        <span class="fr">共2800条</span>
+    </p>
+    <ul class="good-evaluate-all clear">
+        <li>好评2700+</li>
+        <li>中评2700+</li>
+        <li>差评2700+</li>
+        <li>有图2700+</li>
+    </ul>
+    <div id="dataListWrap">
+        <ul  id="evaluateList" class="good-evaluate-content">
+           <!-- <li>
+                <div class="good-evaluate-user-info clear">
+                    <span class="fl user">夜空领域</span>
+                    <span class="credit fl"><span style="width:60%"></span></span>
+                    <p class="fr date">2018/2/23</p>
+                </div>
+                <p class="good-evaluate-title h30 lh30">还可以，不错！不错！挺不错的。下次再买！</p>
+                <ul class="good-evaluate-img clear">
+                    <li onclick="showImage(this,0)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
+                    <li onclick="showImage(this,1)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
+                    <li onclick="showImage(this,2)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
+                    <li onclick="showImage(this,3)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
+                    <li onclick="showImage(this,4)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
+                </ul>
+            </li>-->
+        </ul>
+    </div>
+</div>
+<div class="swiper-container swiper-evaluate" id="origin-img">
+    <div class="swiper-wrapper"></div>
+    <div class="swiper-pagination pagination-top" ></div>
+</div>
+<script>
+
+
+    //评价图片滚动
+    var swiper = new Swiper('.swiper-evaluate',{
+        zoom:true,
+        width: window.innerWidth,
+        virtual: true,
+        spaceBetween:20,
+        pagination: {
+            el: '.swiper-pagination',
+            type: 'fraction',
+        },
+        on:{
+            click: function(){
+                $('#origin-img').fadeOut('fast');
+                this.virtual.slides.length=0;
+                this.virtual.cache=[];
+                swiperStatus=false;
+
+            },
+        },
+
+    });
+    function showImage(_this,index){
+        var imgs = $(_this).parent().find("img");
+        imgs.each(function (i,ele) {
+            swiper.virtual.appendSlide('<div class="swiper-zoom-container"><img src="'+$(ele).attr("src")+'" /></div>');
+        });
+        swiper.slideTo(index);
+        $('#origin-img').fadeIn('fast');
+        swiperStatus=true;
+    }
+    function dealData(data) {
+        var html='';
+        for(var i = 0; i < data.length; i++){
+            html +='<li>';
+            html +='    <div class="good-evaluate-user-info clear">';
+            html +='        <span class="fl user">夜空领域</span>';
+            html +='        <span class="credit fl"><span style="width:60%"></span></span>';
+            html +='        <p class="fr date">2018/2/23</p>';
+            html +='    </div>';
+            html +='    <p class="good-evaluate-title h30 lh30">还可以，不错！不错！挺不错的。下次再买！</p>';
+            html +='    <ul class="good-evaluate-img clear">';
+            html +='        <li onclick="showImage(this,0)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>';
+            html +='        <li onclick="showImage(this,1)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>';
+            html +='        <li onclick="showImage(this,2)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>';
+            html +='        <li onclick="showImage(this,3)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>';
+            html +='        <li onclick="showImage(this,4)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>';
+            html +='    </ul>';
+            html +='</li>';
+        }
+        return html;
+    }
+</script>

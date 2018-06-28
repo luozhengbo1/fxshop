@@ -39,7 +39,7 @@ function formEmptyValid(id) {
             var value = $(ele).val();
             if(value==""){
                 $(ele).focus();
-                mobile_layer_msg($(ele).data("text"))
+                layer_msg($(ele).data("text"))
                 flag = false;
                 return flag;
             }
@@ -50,7 +50,7 @@ function formEmptyValid(id) {
 
 /*使用该js需要引入jquery， Validform，layer手机提示*/
 /*手机版弹出提示框*/
-function mobile_layer_msg(msg){
+function layer_msg(msg){
     layer.open({
         content: msg
         ,skin: 'msg'
@@ -79,7 +79,7 @@ function submitForm(obj,post_url){
 	obj.Validform({
 		tiptype:function(msg,o,cssctl){
 			if(o.type != 2){
-				mobile_layer_msg(msg);
+				layer_msg(msg);
 			}
 		},
 		beforeSubmit:function(curform){
@@ -187,7 +187,7 @@ countCalculate.prototype.init =function () {
     minus.click(function () {
         var input = $(this).parents('.count-wrap').find('.sumInput');
         if(input.val() ==1 || input.val() <1){
-            mobile_layer_msg('数据最小为1');
+            layer_msg('数据最小为1');
             input.val(1);
         }else{
             input.val(parseInt(input.val())-1);
@@ -224,4 +224,30 @@ function layerLoad(){
         ,time: 200000 //2秒后自动关闭
     });
     return loading;
+}
+
+/*数字跳动*/
+function countUpFun(id){
+    var target =$("#"+id).attr("data-value");
+    target = target.replace( /,/g, '');
+    var options = {
+        useEasing : true,
+        useGrouping : true,
+        separator : ',',
+        // decimal : '.',
+    };
+    new CountUp(id, 0.00,target, 2, 5, options).start();//为理财人赚取收益
+}
+
+/**
+ *
+ * @param $target 导航的tab对象
+ * @param fun 点击导航执行的函数 s
+ */
+function tabSwitch($target,complete) {
+    $target.click(function () {
+        $target.removeClass('active')
+        $(this).addClass('active');
+        complete()
+    })
 }

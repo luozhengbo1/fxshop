@@ -9,7 +9,7 @@ var eventDeal = function(options){
 var MyEventDeal = function(element, options){
     var _this = this;
     var mainViewScrol=0;
-    _this.init(options)
+    _this.init(options);
 };
 MyEventDeal.prototype.init = function(options){
     var _this = this;

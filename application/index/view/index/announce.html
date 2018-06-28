@@ -6,7 +6,7 @@
         <ul class="announce-lists title-top" id="goodsList">
           <!--  <li>
                 <p class="grey tc h50 lh50">2017年11月01日10:54:46</p>
-                <p class="grey h30 lh30 bg_white">【公告】发货提醒！</p>
+                <p class="grey h30 lh30 bg_white">【公告】发货3提醒！</p>
             </li>-->
         </ul>
     </div>
@@ -15,7 +15,7 @@
             var html='';
             for(var i = 0; i < data.length; i++){
                 html +='<li class="mt10">';
-                html +='    <p class="grey tc h50 lh50">2017年11月01日10:54:46</p>';
+                html +='    <p class="grey tc h50 lh50">2017 11月01日10:54:46</p>';
                 html +='    <p class="grey h40 lh40 bg_white">【公告】发货提醒！</p>';
                 html +='</li>';
             }
@@ -27,7 +27,7 @@
             page:1,
             size:4,
             ajaxData:{
-                url:"__STATIC__/index/json/more.json",
+                url:"{:url('index/index/return_json')}",
                 data:{},
             },
             dealFun:dealData

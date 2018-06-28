@@ -1,7 +1,6 @@
 /// <reference path="SetProxyProductInfo.js" />
 var productInfoModel = {};
 var arrayInforList;
-var skuZuheData;
 var setpid = 0;
 var $priceShow = $('#priceShow');//商品销售属性
 /*$(function () {
@@ -639,8 +638,8 @@ function BindSaleProperty(productid) {
 function setDisableSwitch() {
     $('#mySwitch').empty();
     $('#mySwitch').append('<input type="checkbox" id="mySwitchValue" disabled />');
-/*    $('#mySwitch').bootstrapSwitch();
-    $('#mySwitch').bootstrapSwitch('setState', false);*/
+    /*    $('#mySwitch').bootstrapSwitch();
+        $('#mySwitch').bootstrapSwitch('setState', false);*/
     $("#ThirdCommission,#SecondCommission,#FirstCommission").removeAttr("disabled");
     $("#hIsSetCommission").val("0");
 }
@@ -648,11 +647,11 @@ function setDisableSwitch() {
 function setUnDisableSwitch() {
     $('#mySwitch').empty();
     $('#mySwitch').append('<input type="checkbox" id="mySwitchValue" />');
- /*   $('#mySwitch').bootstrapSwitch();
-    $('#mySwitch').bootstrapSwitch('setActive', true);*/
+    /*   $('#mySwitch').bootstrapSwitch();
+       $('#mySwitch').bootstrapSwitch('setActive', true);*/
     var hIsSetCommission = $("#hIsSetCommission").val();
     var isOpen = hIsSetCommission == '1';
- //   $('#mySwitch').bootstrapSwitch('setState', isOpen);
+    //   $('#mySwitch').bootstrapSwitch('setState', isOpen);
     if (isOpen) {
         $("#ThirdCommission,#SecondCommission,#FirstCommission").attr("disabled", true);
     } else {
@@ -750,7 +749,7 @@ var maxIntValue = 2147483647; //32位整型最大值
 
 //获取SKU信息
 function GetSaleProperty() {
-   // debugger
+    // debugger
     var result = true;
     var list = [];
     _totalStockCounts = 0;
@@ -827,8 +826,8 @@ function GetSaleProperty() {
         salelist = list;
     }
     console.log(salelist)
-    return salelist;
-   // return result;
+
+    return result;
 }
 
 
@@ -1055,7 +1054,7 @@ function ChangeSkuValues(id, type) {
     }
 
     //
-    if ( type == undefined || secound == 0) {//商家修改会员价格才会影响到规格的价格
+    if (type == undefined || secound == 0) {//商家修改会员价格才会影响到规格的价格
         setTimeout(function () {
             initCacheMemberPrice(id);
             secound++;
@@ -1157,21 +1156,21 @@ function ChangeSku() {
                 columnIndex++;
                 arrayTile.push(SKUObj.eq(i).find(".propertyName").val());
                 arrayTitleValue.push(SKUObj.eq(i).attr("data-value"));
-               // var itemName = "PId_Item" + i;
-               // var itemName = "propertyValWrap"
+                // var itemName = "PId_Item" + i;
+                // var itemName = "propertyValWrap"
                 var $propertyValWrap = $(item).parent().find('.propertyValWrap');
                 var $txtDiv = $propertyValWrap.find('.txtDiv');
                 //选中的CHeckBox取值
                 var order = new Array();
                 var orderName = new Array();
-              /*  $("." + itemName + " input[type=checkbox]:checked").each(function () {
-                    //alert($(this).attr("data-vname"));
-                    order.push($(this).val() + '_' + $(this).attr("data-vname"));
+                /*  $("." + itemName + " input[type=checkbox]:checked").each(function () {
+                      //alert($(this).attr("data-vname"));
+                      order.push($(this).val() + '_' + $(this).attr("data-vname"));
 
-                });*/
+                  });*/
                 $txtDiv.each(function () {
                     //alert($(this).attr("data-vname"));
-                    order.push($(this).attr('data-pName') + ':' + $(this).attr("data-pValue"));
+                    order.push($(this).attr('data-pName') + '_' + $(this).attr("data-pValue"));
 
                 })
                 arrayInfor.push(order);
@@ -1198,9 +1197,9 @@ function ChangeSku() {
                 });
                 var itemColumHead = $("<td  class='width140'><span>*</span>价格(元)</td><td class='width80'><span>*</span>库存(件)</td><td class='width80'>编码</td><td class='width80'>条形码</td> ");
 
-               /* if (SupplierId != "0") {
-                    itemColumHead = $("<td  class='width140'><span>*</span>价格(元)</td><td class='width150 hide'><span>*</span>供货价(元)</td><td class='width80'><span>*</span>库存(件)</td><td class='width80'>编码</td><td class='width80'>条形码</td> ");
-                }*/
+                /* if (SupplierId != "0") {
+                     itemColumHead = $("<td  class='width140'><span>*</span>价格(元)</td><td class='width150 hide'><span>*</span>供货价(元)</td><td class='width80'><span>*</span>库存(件)</td><td class='width80'>编码</td><td class='width80'>条形码</td> ");
+                 }*/
                 itemColumHead.appendTo(trHead);
                 //var itemColumHead2 = $("<td >商家编码</td><td >商品条形码</td>");
                 //itemColumHead2.appendTo(trHead);
@@ -1216,7 +1215,6 @@ function ChangeSku() {
                 }
                 ////生成组合
                 var zuheDate = step.doExchange(arrayInfor);
-
                 if (zuheDate && zuheDate.length > 0) {
                     //创建行
                     //console.log(zuheDate);
@@ -1226,15 +1224,16 @@ function ChangeSku() {
                         var tr = $("<tr></tr>");
                         tr.appendTo(tbody);
                         var rowid = '';
+                        debugger
                         $.each(td_array, function (i, values) {
-                            var tempArr = values.split(':');
-                            var td = $("<td>" + tempArr[1] + "</td>");
-                           // var tempArr1 = tempArr[1].split(':');
-                            //rowid += tempArr1[1] + '_';
+                            var tempArr = values.split('_');
+                            var td = $("<td>" + tempArr[2] + "</td>");
+                            var tempArr1 = tempArr[1].split(':');
+                            rowid += tempArr1[1] + '_';
                             td.appendTo(tr);
                         });
                         rowid = rowid.substr(0, rowid.length - 1);
-                        var td1 = $("<td id='" + rowid + "' data-value='" + item + "' data-skuid='0' data- class='tdrow'><input onkeyup=\"clearNoNum(this)\" onKeyPress=\"return keyNumAll(event);\" id=\"price" + rowid + "\" class=\"saleprice width70\" type=\"text\" onchange=\"ChangeSkuValues('" + rowid + "',1)\"></td>");
+                        var td1 = $("<td id='" + rowid + "' data-value='" + item + "' data-skuid='0' data- class='tdrow'><input onkeyup=\"clearNoNum(this)\" onKeyPress=\"return keyNumAll(event);\" id=\"price" + rowid + "\" class=\"saleprice width70\" type=\"text\" onchange=\"ChangeSkuValues('" + rowid + "',1)\"><input style=\"padding:0 !important;\" value=\"会员价\" onclick=\"ShowMemberPriceBox('" + rowid + "',$(this))\"  type=\"button\"></td>");
                         td1.appendTo(tr);
                         /*if (SupplierId != "0") {
                             var td11 = $("<td id='" + rowid + "' data-value=" + item + " class='hide'><input id=\"proxyprice" + rowid + "\" value=\"0\" class=\"proxyprice width80\" type=\"text\" onchange=\"ChangeSkuValues('" + rowid + "')\"></td>");
@@ -1249,9 +1248,7 @@ function ChangeSku() {
 
                     });
                 }
-                //请求传递数据
                 arrayInforList = arrayInfor;
-                skuZuheData = zuheDate;
                 //结束创建Table表
                 arrayColumn.pop();//删除数组中最后一项
                 //合并单元格
@@ -1481,5 +1478,9 @@ function validSku(_this) {
     });
     return falg;
 }
-
+//console.log(genID(10),genID(10))
+function genID(length){
+    return new Date().getTime();
+    //  return Number(Math.random().toString().substr(3,length) + Date.now()).toString(36);
+}
 
