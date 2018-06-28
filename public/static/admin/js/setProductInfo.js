@@ -575,23 +575,32 @@ function viewUpload() {
     }
 }
 //绑定商品属性
-function BindItemProperty(productid) {
+function BindItemProperty(productid,url) {
+    debugger
     $.ajax({
-        url: '/ProductInfo/GetProductAttrs/' + productid,
+        url: url,
         type: 'post',
         dataType: 'json',
+        data:{id:productid},
         success: function (data) {
+            console.log(data);
             if (data != null) {
                 data.forEach(function (item) {
-                    //$("select[data-pid='" + item.PId + "']").val(item.VId);
-                    $("#pro_" + item.PId).val(item.PropValue);
-                    $("#" + item.PId).attr("vid", item.VId);
-                    $("#" + item.PId).attr("value", item.PropValue);
-
-                    if (item.VId = 0) {
+                    debugger;
+                    var id='';
+                    var namearr=(item.attribute_name).split(',');
+                    for(var i=0; i<namearr.length; i++){
+                        id += (namearr[i].split(':')[1]).split('_')[0]+'_';
+                    }
+                    id = id.substr(0,id.length-1);
+                    $("#price" + id).val(item.price);
+                    $("#num" + id).val(item.store);
+                    $("#code" + id).val(item.goods_code);
+                    $("#bar" + id).val(item.bar_code);
+                    /*if (item.VId = 0) {
                         $("#" + item.PId).append("<option value='" + item.PropValue + "' id='" + item.VId + "' isparent='False'></option>");
                     }
-
+*/
                 });
             }
         }
@@ -1224,7 +1233,6 @@ function ChangeSku() {
                         var tr = $("<tr></tr>");
                         tr.appendTo(tbody);
                         var rowid = '';
-                        debugger
                         $.each(td_array, function (i, values) {
                             var tempArr = values.split('_');
                             var td = $("<td>" + tempArr[2] + "</td>");
