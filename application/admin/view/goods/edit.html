@@ -382,18 +382,19 @@
 <script>
     //删除规格属性
 
+
+    //删除规格属性
+
     function removeProperty(_this){
         $(_this).parents('.propertyWrap').remove();
         refeashskus();
         //判断删除的是不是最后一个规格属性
-
-
     }
     //删除单个规格属性值
     function deletePropVal(_this){
         var txtDiv = $(_this).parents('.propertyValWrap').find('.txtDiv');
         if( txtDiv.size()<=1){
-           // $(_this).parents('.propertyWrap').find('.PId_Title').attr('disabled','disabled');//
+            // $(_this).parents('.propertyWrap').find('.PId_Title').attr('disabled','disabled');//
             $(_this).parents('.propertyWrap').remove();
         }else{
             $(_this).parents('.labelwidth').remove();
@@ -401,24 +402,27 @@
         refeashskus();
     }
     //添加单个规格属性值
-    function addpropertyvalue(_this){
+    function addpropertyvalue(_this,PId){
         var $this = $(_this),
+            id= genID(10),
             $propertyName =  $this.parents('.propertyWrap').find('.propertyName'),
-            $thisVal =  $this.parents('.propertyWrap').find('.propertyVal');
+            $thisVal =  $this.parents('.propertyWrap').find('.propertyVal'),
+            $PId_Title =  $thisVal.parents('.propertyWrap').find('.PId_Title');
         if(!validSku(_this)){
             return ;
         }
+        var dataVal = PId+"_"+$propertyName.val()+":"+id;
         var html ='';
         html +='<div class="labelwidth">';
         html +='    <label class="active">';
-        html +='        <span class="txtDiv" data-pName="'+$propertyName.val()+'" data-pValue="'+$thisVal.val()+'">'+$thisVal.val()+'</span>';
+        html +='        <span class="txtDiv" data-pName="'+dataVal+'" data-id="'+id+'" data-pValue="'+$thisVal.val()+'">'+$thisVal.val()+'</span>';
         html +='        <i class="del-icon" style="display:block;" onclick="deletePropVal(this)">x</i>';
         html +='    </label>';
         html +='</div>'
         $(_this).parents('.propertyValWrap').find('.laber-wrap').append(html);
         $thisVal.val('');
-       // $target.removeAttr('disabled');
-        $thisVal.parents('.propertyWrap').find('.PId_Title').removeAttr('disabled');//
+        // $target.removeAttr('disabled');
+        $PId_Title .removeAttr('disabled');//
         refeashskus();
     }
     //商品规格添加
@@ -428,10 +432,11 @@
             ShowMsg('请输入规格相关信息再加入下一个');
             return;
         }
+        var id = genID(10);//表示一类属性id  如：颜色，尺寸 id
         var html ='';
         html +='<div class="pb20 pt10 borderb w100p propertyWrap">';
         html +='    <h2 class="PId_Title mb10 clear" disabled="disabled" >';
-        html +='        <div class="fl"><input type="text"  class="form_control w120 propertyName"></div>';
+        html +='        <div class="fl"><input type="text" data-id="'+id+'"  class="form_control w120 propertyName"></div>';
         html +='        <div class="fr">';
         html +='            <a href="javascript:;" onclick="removeProperty(this)" class="btn btn-danger radius mr-5 remove"><i class="Hui-iconfont"></i> 删除</a>';
         html +='        </div>';
@@ -441,14 +446,17 @@
         html +='        <div style="display: inline-block">';
         html +='            <label class="mr10 mb10">';
         html +='                <input type="text" class="form_control w100 propertyVal" placeholder="规格值">';
-        html +='                <a class="add-cion-btn" href="javascript:;" onclick="addpropertyvalue(this);" >+</a>';
+        html +='                <a class="add-cion-btn" href="javascript:;" onclick="addpropertyvalue(this,'+id+');" >+</a>';
         html +='            </label>';
         html +='        </div>';
         html +='    </div>';
         html +='</div>';
-      //  $target.attr('disabled','disabled');
+        //  $target.attr('disabled','disabled');
         $("#specifications").append(html);
     }
+
+
+
 
     function refeashskus() {
         ChangeSku().Creat_Table();
