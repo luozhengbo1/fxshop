@@ -16,8 +16,8 @@
             <div class="formControls col-xs-6 col-sm-7">
                 <div class="select-box">
                     <select name="user_id" class="select" datatype="*" nullmsg="请选择所属商户" errormsg="请选择所属商户">
-                        {volist name="userList" id="vo"}
-                        <option value="{$vo.id}">{$vo.account}&nbsp;&nbsp;&nbsp;&nbsp;{$vo.realname}</option>
+                        {volist name="userList" id="vo1"}
+                        <option value="{$vo1.id}">{$vo1.account}&nbsp;&nbsp;&nbsp;&nbsp;{$vo1.realname}</option>
                         {/volist}
                     </select>
                 </div>

@@ -186,7 +186,7 @@ class Goods extends Controller
     		$this->view->assign('goodsClassList',getGoodsClassTree($this->uid));
             $this->view->assign('brandList',$brandList);
 
-    		return $this->view->fetch(isset($this->template) ? $this->template : 'edit');
+    		return $this->view->fetch('edit');
     	}
     }
 
@@ -361,10 +361,13 @@ class Goods extends Controller
                 ->where(['goods_id'=>$id])
                 ->select();
             $proprety_name_val =  Db::name('goods_proprety_name')->alias('n')
-                ->field('n.id as pro_id,n.name,fy_goods_proprety_val.value')
+                ->field('n.id as pro_id,n.name,fy_goods_proprety_val.value,fy_goods_proprety_val.id')
                 ->join('fy_goods_proprety_val','fy_goods_proprety_val.propre_name_id=n.id')
                 ->where(['n.goods_id'=>$id])
                 ->select();
+
+
+
             if( !getGoodsClassTree($this->uid) && $this->uid!=1 ){
                 return $this->error('请先添加商品分类');
             }
@@ -385,15 +388,26 @@ class Goods extends Controller
             #品牌
             $this->view->assign('brandList',$brandList);
             #商品
-
+            $arr =[];
+            foreach($proprety_name as $k=>$v){
+                foreach ($proprety_name_val as $key=>$val){
+                    if($v['id']==$val['pro_id']){
+                        $arr[$v['name']][]=$val['value'];
+                    }
+                }
+            }
             $this->view->assign('vo',$vo);
             $this->view->assign('proprety_name_val',$proprety_name_val);
             $this->view->assign('skuData',$skuData);
             $this->view->assign('proprety_name',$proprety_name);
+            $this->view->assign('proprety_name',$arr);
             dump($proprety_name_val);
             dump($skuData);
             dump($proprety_name);
+            dump($arr);
+            dump(json_encode($arr));
             die;
+
             return $this->view->fetch('edit');
         }
 

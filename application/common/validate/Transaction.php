@@ -7,5 +7,6 @@ class Transaction extends Validate
 {
     protected $rule = [
         "rate|费率" => "require",
+
     ];
 }

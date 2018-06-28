@@ -17,7 +17,7 @@
                 <div class="select-box">
                     <select name="user_id" class="select" datatype="*" nullmsg="请选择所属商户" errormsg="请选择所属商户">
                         {volist name="userList" id="vo1"}
-                        <option value="{$vo.id}" <?php if($vo1['id']==$vo['user_id'] ){ echo  "selected"; } ?> >{$vo1.account}&nbsp;&nbsp;&nbsp;&nbsp;{$vo1.realname}</option>
+                        <option value="{$vo1.id}" <?php if( isset($vo['user_id']) && $vo1['id']==$vo['user_id'] ){ echo  "selected"; } ?> >{$vo1.account}&nbsp;&nbsp;&nbsp;&nbsp;{$vo1.realname}</option>
                         {/volist}
                     </select>
                 </div>
@@ -82,7 +82,7 @@
                 <div class="select-box">
                     <select name="goods_class_id" class="select" datatype="*" nullmsg="请选择商品分类" errormsg="请选择商品分类">
                         {volist name="goodsClassList" id="vo1"}
-                        <option value="{$vo1.id}" <?php if($vo1['id']==$vo['goods_class_id'] ){ echo  "selected"; } ?> >{$vo1.name}</option>
+                        <option value="{$vo1.id}" <?php if( isset($vo['goods_class_id']) && $vo1['id']==$vo['goods_class_id'] ){ echo  "selected"; } ?> >{$vo1.name}</option>
                         {/volist}
                     </select>
                 </div>
@@ -95,7 +95,7 @@
                 <div class="select-box">
                     <select name="goods_brand_id" class="select" datatype="*" nullmsg="请选择商品品牌" errormsg="请选择商品品牌">
                         {volist name="brandList" id="vo1"}
-                        <option value="{$vo1.id}" <?php if($vo1['id']==$vo['goods_brand_id'] ){ echo  "selected"; } ?> >{$vo1.name}</option>
+                        <option value="{$vo1.id}" <?php if(  isset($vo['goods_brand_id']) && $vo1['id']==$vo['goods_brand_id'] ){ echo  "selected"; } ?> >{$vo1.name}</option>
                         {/volist}
                     </select>
                 </div>
@@ -201,11 +201,14 @@
                 <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;width: 50%;margin-left: 25%;">
                     预览图：
                     <div class="layui-upload-list" id="demo2">
+                        <?php if(isset($vo['pic']) ){?>
+
                         {volist name="$vo.pic"  id="vo1"}
                             <img src="{$vo1}" style="width:100px;height:100px;" />
                             <input type="hidden" name="pic[]" value="{$vo1}">
                             <a href="javascript:;" class="layui-btn layui-btn-primary" onclick="return delPic(this)">删除该图</a>
                         {/volist}
+                        <?php } ?>
                     </div>
                 </blockquote>
             </div>
@@ -377,7 +380,6 @@
 <script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript" src="__STATIC__/js/setProductInfo.js"></script>
 <script>
-
     //删除规格属性
 
     function removeProperty(_this){
@@ -587,7 +589,7 @@
                     $.ajax({
                         type:'post',
                         data:data,//$form.serialize(),
-                        url:$form.attr('action'),
+                        url:$("form").attr('action'),
                         success:function(ret){
                             if(ret.code==200){
                                 alert(ret.msg)
@@ -598,7 +600,7 @@
                     return false;
                 },
                 callback: function (ret){
-                    //ajax_progress(ret);
+                    ajax_progress(ret);
                 },
             });
       

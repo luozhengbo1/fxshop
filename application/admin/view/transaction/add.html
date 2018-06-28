@@ -3,7 +3,6 @@
 <div class="page-container">
     <form class="form form-horizontal" id="form" method="post" action="{:\\think\\Request::instance()->baseUrl()}">
         <input type="hidden" name="id" value="{$vo.id ?? ''}">
-        {if condition="empty($vo.group_id) eq 1"}
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>用户组：</label>
             <div class="formControls col-xs-6 col-sm-7">
@@ -19,8 +18,6 @@
             <div class="col-xs-3 col-sm-2">用户组和用户只能二选一
             </div>
         </div>
-        {/if}
-        {if condition="empty($vo.uid) eq 0"}
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>用户：</label>
             <div class="formControls col-xs-6 col-sm-7">
@@ -37,7 +34,6 @@
             </div>
             <div class="col-xs-3 col-sm-2">用户组和用户只能二选一</div>
         </div>
-        {/if}
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3">状态：</label>
             <div class="formControls col-xs-6 col-sm-6 skin-minimal">
