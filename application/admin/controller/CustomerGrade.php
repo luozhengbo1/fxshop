@@ -33,17 +33,21 @@ class CustomerGrade extends Controller
             }
 
             // 验证
-            if ($data['score_end']<=$data['score_start']){
+            if ($data['score_end'] <= $data['score_start']) {
                 return ajax_return_adv_error('结束积分不能小于或等于起始积分');
             }
 
-            $customer_grade = \app\common\model\CustomerGrade::all();
-            for ($i = 0; $i < count($customer_grade); $i++) {
-                $item = $customer_grade[$i]->toArray();
+            $model_grade = new \app\common\model\CustomerGrade();
+            $list_grade = $model_grade->where('isdelete', 0)->select();
+            for ($i = 0; $i < count($list_grade); $i++) {
+                $item = $list_grade[$i]->toArray();
                 //起始积分和结束积分均不能在数据库中的积分区间内
-                if (($data['score_start']>=$item['score_start'] && $data['score_start']<=$item['score_end'])
-                    || ($data['score_end']>=$item['score_start'] && $data['score_end']<=$item['score_end'])){
-                    return ajax_return_adv_error('积分区间已设定，请重新填写');
+                if ($data['score_start'] >= $item['score_start'] && $data['score_start'] <= $item['score_end']) {
+                    return ajax_return_adv_error('起始积分不能在已有积分区间内，请重新填写');
+                } elseif ($data['score_end'] >= $item['score_start'] && $data['score_end'] <= $item['score_end']) {
+                    return ajax_return_adv_error('结束积分不能在已有积分区间内，请重新填写');
+                } elseif ($data['score_start'] < $item['score_start'] && $data['score_end'] > $item['score_end']) {
+                    return ajax_return_adv_error('包含已有的积分区间，请重新填写');
                 }
             }
 
@@ -106,18 +110,22 @@ class CustomerGrade extends Controller
                 $data['all'] = $all;
             }
             // 验证
-            if ($data['score_end']<=$data['score_start']){
+            if ($data['score_end'] <= $data['score_start']) {
                 return ajax_return_adv_error('结束积分不能小于或等于起始积分');
             }
 
-            $customer_grade = \app\common\model\CustomerGrade::all();
-            for ($i = 0; $i < count($customer_grade); $i++) {
-                $item = $customer_grade[$i]->toArray();
+            $model_grade = new \app\common\model\CustomerGrade();
+            $list_grade = $model_grade->where('isdelete', 0)->select();
+            for ($i = 0; $i < count($list_grade); $i++) {
+                $item = $list_grade[$i]->toArray();
                 //从数据库中取得的本条数据不参与区间验证，防止将取得的数据的结束积分修改为更小失败
-                if($data['id']!=$item['id']){
-                    if (($data['score_start']>=$item['score_start'] && $data['score_start']<=$item['score_end'])
-                        || ($data['score_end']>=$item['score_start'] && $data['score_end']<=$item['score_end'])){
-                        return ajax_return_adv_error('积分区间已设定，请重新填写');
+                if ($data['id'] != $item['id']) {
+                    if ($data['score_start'] >= $item['score_start'] && $data['score_start'] <= $item['score_end']) {
+                        return ajax_return_adv_error('起始积分不能在已有积分区间内，请重新填写');
+                    } elseif ($data['score_end'] >= $item['score_start'] && $data['score_end'] <= $item['score_end']) {
+                        return ajax_return_adv_error('结束积分不能在已有积分区间内，请重新填写');
+                    } elseif ($data['score_start'] < $item['score_start'] && $data['score_end'] > $item['score_end']) {
+                        return ajax_return_adv_error('包含已有的积分区间，请重新填写');
                     }
                 }
             }
