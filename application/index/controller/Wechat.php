@@ -1,13 +1,13 @@
 <?php 	
 
-namespace Index\Controller;
+namespace app\index\controller;
 
-use Think\Controller;
+use think\Controller;
 use think\Config;
 use think\Session;
 use think\Db;
 
-class WeChatController extends Controller
+class WeChat extends Controller
 {
     private $appId;
     private $appSecret;
