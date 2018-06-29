@@ -270,6 +270,7 @@
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>商品规格：</label>
             <div class="formControls col-xs-6 col-sm-7 skin-minimal bgwhite borderd pad20">
+                {if condition="empty($proprety_name1) neq 1"}
                 <div class="specifications mb10" id="specifications">
                     {foreach name="$proprety_name1" item="vo2" key="k"}
                      {php} $skuName= explode('_',$k); {/php}
@@ -303,6 +304,7 @@
                         </div>
                     </div>
                     {/foreach}
+                    {/if}
 
                 </div>
                 <div class="borderdashed p10 tr">
@@ -492,7 +494,7 @@
 
 
     function refeashskus() {
-        ChangeSku().Creat_Table("{$vo.id}","{:url('goods/getSkuData')}");
+        ChangeSku().Creat_Table("{$vo.id??''}","{:url('goods/getSkuData')}");
         SetValue();
     }
     //判断是否可以添加下一个商品规格 ture 表示不能添加

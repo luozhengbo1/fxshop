@@ -1,139 +1,30 @@
 {extend name="template/base" /}
 {block name="content"}
 <div class="page-container">
-    <form class="form form-horizontal" id="form" method="post" action="{:\\think\\Request::instance()->baseUrl()}">
-        <input type="hidden" name="id" value="{$vo.id ?? ''}">
-        <div class="row cl">
-            <label class="form-label col-xs-3 col-sm-3">任务名称：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text" name="name" value="{$vo.name ?? ''}" disabled="disabled">
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-xs-3 col-sm-3">任务主题图：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text" id="upload" name="main_pic" value="{$vo.main_pic ?? ''}"
-                       style="width: 90%" disabled="disabled">
-                <a onclick="$(this).attr('href', $('#upload').val())" type="button" class="btn btn-success radius"
-                   data-lightbox="preview">预览</a>
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-xs-3 col-sm-3">任务展示方式：</label>
-            <div class="formControls col-xs-6 col-sm-6 skin-minimal">
-                <div class="radio-box">
-                    <input type="radio" name="display" id="display-" value="1" onclick="return false;">
-                    <label for="display-">图片</label>
-                </div>
-                <div class="radio-box">
-                    <input type="radio" name="display" id="display-" value="2" onclick="return false;">
-                    <label for="display-">图片+文字</label>
-                </div>
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-xs-3 col-sm-3">链接：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text" name="url" value="{$vo.url ?? ''}" disabled="disabled">
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-xs-3 col-sm-3">任务开始时间：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text Wdate" id="start_date" name="start_date"
-                       value="{$vo.start_date ?? ''}" disabled="disabled">
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-xs-3 col-sm-3">任务结束时间：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text Wdate" id="end_date" name="end_date" value="{$vo.end_date ?? ''}"
-                       disabled="disabled">
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-xs-3 col-sm-3">任务内容：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <textarea id="container" name="detail" disabled="disabled">{$vo.detail ?? ''}</textarea>
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-xs-3 col-sm-3">任务说明：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <textarea class="textarea" name="desc" onKeyUp="textarealength(this, 100)" disabled="disabled">{$vo.desc ?? ''}</textarea>
-                <p class="textarea-numberbar"><em class="textarea-length">0</em>/200</p>
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-xs-3 col-sm-3">任务状态：</label>
-            <div class="formControls col-xs-6 col-sm-6 skin-minimal">
-                <div class="radio-box">
-                    <input type="radio" name="status" id="status-1" value="1" onclick="return false;">
-                    <label for="status-1">启用</label>
-                </div>
-                <div class="radio-box">
-                    <input type="radio" name="status" id="status-0" value="0" onclick="return false;">
-                    <label for="status-0">禁用</label>
-                </div>
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-
-        <div class="row cl">
-            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-                <button type="button" class="btn btn-default radius ml-20" onClick="layer_close();">&nbsp;&nbsp;返回&nbsp;&nbsp;</button>
-            </div>
-        </div>
-    </form>
+    <table class="table table-border table-bordered table-hover table-bg mt-20">
+        <form action="{:url('customer_task/excel')}" target="_blank" method="post">
+            <button class="btn btn-success radius" type="submit">导出Excel</button>
+        </form>
+        <thead>
+        <tr class="text-c">
+            <th width="">会员用户名</th>
+            <th width="">参与时间</th>
+            <th width="">活动状态</th>
+            <th width="">获得积分</th>
+        </tr>
+        </thead>
+        <tbody>
+        {volist name="task" id="task"}
+        <tr class="text-c">
+            <td>{$task.nickname}</td>
+            <td>{$task.time}</td>
+            <td>{if condition="$task.status==1"}完成{elseif condition="$task.status==0"/}未完成{/if}</td>
+            <td>{$task.reward_score}</td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+    <div class="page-bootstrap">{$page ?? ''}</div>
 </div>
 {/block}
-{block name="script"}
-<script type="text/javascript" src="__LIB__/Validform/5.3.2/Validform.min.js"></script>
-<!--配置文件-->
-<script type="text/javascript" src="__UEDITOR__/ueditor.config.js"></script>
-<!--编辑器源码文件-->
-<script type="text/javascript" src="__UEDITOR__/ueditor.all.js"></script>
-<!--实例化编辑器并设置toolbar的按钮-->
-<script type="text/javascript">
-    var ue = UE.getEditor('container', {
-        toolbars: [
-            ['source', 'fullscreen', 'undo', 'redo', 'formatmatch', '|', 'bold', 'italic', 'underline', 'strikethrough', 'horizontal', '|',
-                'fontfamily', 'fontsize', 'forecolor', 'backcolor', 'paragraph', 'lineheight', '|', 'insertorderedlist', 'insertunorderedlist', '|',
-                'justifyleft', 'justifyright', 'justifycenter', 'justifyjustify', '|',
-                'snapscreen', 'simpleupload', 'insertimage', 'insertvideo', 'link', 'unlink', '|']
-        ],
-        autoFrameWidth: true,
-        autoFrameHeight: true,
-        readonly: true
-    });
-</script>
-<script>
-    $(function () {
-        $("[name='status'][value='{$vo.status ?? '1'}']").prop("checked", true);
-        $("[name='display'][value='{$vo.display ?? '1'}']").prop("checked", true);
 
-        $('.skin-minimal input').iCheck({
-            checkboxClass: 'icheckbox-blue',
-            radioClass: 'iradio-blue',
-            increaseArea: '20%'
-        });
-
-        $("#form").Validform({
-            tiptype: 2,
-            ajaxPost: true,
-            showAllError: true,
-            callback: function (ret) {
-                ajax_progress(ret);
-            }
-        });
-    })
-</script>
-{/block}

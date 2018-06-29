@@ -1,0 +1,15 @@
+<form class="mb-20" method="get" action="{:\\think\\Url::build($Request.action)}">
+    <input type="text" class="input-text" style="width:250px" placeholder="" name="order_id" value="{$Request.param.order_id}" >
+    <div class="select-box" style="width:250px">
+        <select name="order_status" class="select">
+            <option value=""></option>
+        </select>
+    </div>
+    <input type="text" class="input-text Wdate" style="width:250px" placeholder="" name="addtime" value="{$Request.param.addtime}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" {/literal} >
+    <div class="select-box" style="width:250px">
+        <select name="pay_status" class="select">
+            <option value=""></option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+</form>
