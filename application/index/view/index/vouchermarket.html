@@ -1,0 +1,75 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+{include file="Public/header-title"}
+<!--券集市-->
+<style>
+    .message{
+        position: relative;
+    }
+    .message .sign{
+        position: absolute;
+        top: -2px;
+        right:-2px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: block;
+        background: red;
+    }
+
+    .voucher-market-list li{
+        padding: 8px;
+        background: white;
+        border-bottom: 4px;
+    }
+    .tag {
+        display: inline-block;
+        position: relative;
+        overflow: hidden;
+        padding: 2px;
+        border-radius: 4px;
+        vertical-align: middle;
+        font-size: 10px;
+        color: #FB6006;
+        border: 1px solid #FB6006;
+        margin-right: 8px;
+    }
+    .voucher-market-list .item-img img{
+        max-height: 1rem;
+        max-width: 1rem;
+    }
+</style>
+<section>
+   <div class="nav-list-tab p5 clear">
+       <div class="me fl"> <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger">&nbsp;我的&nbsp;</button></div>
+       <div class="message fr">
+           <span class="sign"></span>
+           <button class="layui-btn layui-btn-xs layui-btn-radius">&nbsp;消息&nbsp;</button>
+       </div>
+   </div>
+    <div><img  width="100%" src="http://scsc.top/data/gallery_album/original_img/5b109f656e378.jpg"></div>
+    <ul class="clear bg_white mt5 mb5">
+        <li class="w20p fl tc"><img class="w80p" src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg"></li>
+        <li class="w20p fl tc"><img class="w80p" src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg"></li>
+        <li class="w20p fl tc"><img class="w80p" src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg"></li>
+        <li class="w20p fl tc"><img class="w80p" src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg"></li>
+        <li class="w20p fl tc"><img class="w80p" src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg"></li>
+    </ul>
+    <ul class="voucher-market-list">
+        <li>
+            <div class="clear">
+                <p class="fl" ><span class="catalog tag">美食</span>财门一号北京烤鸭</p>
+                <p class="price fr">￥6 8</p>
+            </div>
+            <div class="clear">
+                <ul class="item-img">
+                    <li><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
+                    <li><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
+                    <li><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</section>
+</body>
+</html>

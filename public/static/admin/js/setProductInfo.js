@@ -591,6 +591,7 @@ function BindItemProperty(productid,url) {
                         id += (namearr[i].split(':')[1]).split('_')[0]+'_';
                     }
                     id = id.substr(0,id.length-1);
+                    $("#skuid" +id).val(item.id)
                     $("#price" + id).val(item.price);
                     $("#num" + id).val(item.store);
                     $("#code" + id).val(item.goods_code);
@@ -799,7 +800,7 @@ function GetSaleProperty() {
         }
 
         supplyPrice = proxyprice;
-        var item = { SkuId: $this.attr("data-value"), price: price, num: num, code: $("#code" + id).val(), SupplyPrice: proxyprice, bar: $("#bar" + id).val(), img: img };
+        var item = {id: $("#skuid" + id).val(), SkuId: $this.attr("data-value"), price: price, num: num, code: $("#code" + id).val(), SupplyPrice: proxyprice, bar: $("#bar" + id).val(), img: img };
         list.push(item);
     });
     if (list.length < 1) {
@@ -1239,13 +1240,13 @@ function ChangeSku() {
                             td.appendTo(tr);
                         });
                         rowid = rowid.substr(0, rowid.length - 1);
-                        var td1 = $("<td id='" + rowid + "' data-value='" + item + "' data-skuid='0' data- class='tdrow'><input onkeyup=\"clearNoNum(this)\" onKeyPress=\"return keyNumAll(event);\" id=\"price" + rowid + "\" class=\"saleprice width70\" type=\"text\" onchange=\"ChangeSkuValues('" + rowid + "',1)\"><input style=\"padding:0 !important;\" value=\"会员价\" onclick=\"ShowMemberPriceBox('" + rowid + "',$(this))\"  type=\"button\"></td>");
+                        var td1 = $("<td id='" + rowid + "' data-value='" + item + "' data-skuid='0' data- class='tdrow'><input onkeyup=\"clearNoNum(this)\" onKeyPress=\"return keyNumAll(event);\" id=\"price" + rowid + "\" class=\"saleprice width70\" type=\"text\" onchange=\"ChangeSkuValues('" + rowid + "',1)\"></td>");
                         td1.appendTo(tr);
                         /*if (SupplierId != "0") {
                             var td11 = $("<td id='" + rowid + "' data-value=" + item + " class='hide'><input id=\"proxyprice" + rowid + "\" value=\"0\" class=\"proxyprice width80\" type=\"text\" onchange=\"ChangeSkuValues('" + rowid + "')\"></td>");
                             td11.appendTo(tr);
                         }*/
-                        var td2 = $("<td ><input onkeyup=\"clearNoNum(this)\" onKeyPress=\"return keyNumAll(event);\" id=\"num" + rowid + "\" class=\"salenum width60\" type=\"text\"onchange=\"ChangeSkuValues('" + rowid + "')\"></td>");
+                        var td2 = $("<td ><input type='hidden' id=\"skuid" + rowid + "\"><input onkeyup=\"clearNoNum(this)\" onKeyPress=\"return keyNumAll(event);\" id=\"num" + rowid + "\" class=\"salenum width60\" type=\"text\"onchange=\"ChangeSkuValues('" + rowid + "')\"></td>");
                         td2.appendTo(tr);
                         var td3 = $("<td ><input id=\"code" + rowid + "\" class=\"salecode w100 \" style=\"text-align:left\" type=\"text\" onchange=\"ChangeSkuValues('" + rowid + "')\"></td>");
                         td3.appendTo(tr);
