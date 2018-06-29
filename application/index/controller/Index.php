@@ -88,6 +88,10 @@ class Index extends Controller
         $this->assign('titleName', "卡券中兴");
         return $this->view->fetch();
     }
+    public function vouchermarket(){
+        $this->assign('titleName', "券集市");
+        return $this->view->fetch();
+    }
 
     public function demo(){
         return $this->view->fetch();
