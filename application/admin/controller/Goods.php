@@ -185,7 +185,6 @@ class Goods extends Controller
             #渲染商品分类数
     		$this->view->assign('goodsClassList',getGoodsClassTree($this->uid));
             $this->view->assign('brandList',$brandList);
-
     		return $this->view->fetch('edit');
     	}
     }
@@ -397,29 +396,13 @@ class Goods extends Controller
                 }
             }
             $this->view->assign('vo',$vo);
-            $this->view->assign('proprety_name_val',json_encode($proprety_name_val));
+            $this->view->assign('proprety_name_val',$proprety_name_val);
             $this->view->assign('skuData',$skuData);
             $this->view->assign('proprety_name',$proprety_name);
             $this->view->assign('proprety_name1',$arr);
-            //dump($skuData);
-            foreach ($arr as $k=>$v){
-              //  dump($k);
-                foreach ($v as $k1=>$v1){
-                }
-            }
-           // die();
             return $this->view->fetch('edit');
         }
 
     }
-    public function getSkuData(){
-        if($this->request->isAjax()){
-            $id = $this->request->post('id');
-            $skuZuheData1 =  Db::name('goods_attribute')
-                ->where(['goods_id'=>$id])
-                ->select();
-           //dump($skuZuheData1);die;
-            return json($skuZuheData1);
-        }
-    }
+
 }

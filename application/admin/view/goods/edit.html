@@ -270,11 +270,12 @@
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>商品规格：</label>
             <div class="formControls col-xs-6 col-sm-7 skin-minimal bgwhite borderd pad20">
+                {if condition="empty($proprety_name1) neq 1"}
                 <div class="specifications mb10" id="specifications">
                     {foreach name="$proprety_name1" item="vo2" key="k"}
                      {php} $skuName= explode('_',$k); {/php}
                     <div class="pb20 pt10 borderb w100p propertyWrap">
-                        <h2 class="PId_Title mb10 clear" disabled="disabled" >
+                        <h2 class="PId_Title mb10 clear"  >
                             <div class="fl"><input type="text" data-id="{$skuName[0]}" value="{$skuName[1]}"  class="form_control w120 propertyName"></div>
                             <div class="fr">
                                 <a href="javascript:;" onclick="removeProperty(this)" class="btn btn-danger radius mr-5 remove"><i class="Hui-iconfont"></i> 删除</a>
@@ -282,15 +283,17 @@
                         </h2>
                         <div class="propertyValWrap" style="width: 100% !important;">
                             <div class="laber-wrap">
-                                <div class="labelwidth">
-                                    {foreach name="$vo2" item="vo3" key="k1"  empty=""}
-                                        {php} $skuVal= explode('_',$vo3); {/php}
+
+                                {foreach name="$vo2" item="vo3" key="k1"  empty=""}
+                                    {php} $skuVal= explode('_',$vo3); {/php}
+                                    <div class="labelwidth">
                                         <label class="active">
                                             <span class="txtDiv" data-pName="{$skuName[0]}_{$skuName[1]}:{$skuVal[0]}" data-id="{$skuVal[0]}" data-pValue="{$skuVal[1]}">{$skuVal[1]}</span>
                                             <i class="del-icon" style="display:block;" onclick="deletePropVal(this)">x</i>
                                         </label>
-                                    {/foreach}
-                                </div>
+                                    </div>
+                                {/foreach}
+
                             </div>
                             <div style="display: inline-block">
                                 <label class="mr10 mb10">
@@ -301,6 +304,7 @@
                         </div>
                     </div>
                     {/foreach}
+                    {/if}
 
                 </div>
                 <div class="borderdashed p10 tr">
@@ -413,7 +417,7 @@
 <script>
 
     refeashskus();
-    BindItemProperty("{$vo.id}","{:url('goods/getSkuData')}")
+  //  BindItemProperty()
 
     //删除规格属性
     function removeProperty(_this){
@@ -490,7 +494,7 @@
 
 
     function refeashskus() {
-        ChangeSku().Creat_Table();
+        ChangeSku().Creat_Table("{$vo.id??''}","{:url('goods/getSkuData')}");
         SetValue();
     }
     //判断是否可以添加下一个商品规格 ture 表示不能添加
