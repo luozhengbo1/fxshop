@@ -508,6 +508,40 @@ function get_model($modelName)
     return $db;
 }
 
+/**
+ * @return string
+ * getUrl
+ */
+function myUrl()
+{
+    return urlencode('http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"]);
+}
+
+
+//不同环境下获取真实的IP
+function get_client_ip(){
+    //判断服务器是否允许$_SERVER
+    if(isset($_SERVER)){
+        if(isset($_SERVER[HTTP_X_FORWARDED_FOR])){
+            $realip = $_SERVER[HTTP_X_FORWARDED_FOR];
+        }elseif(isset($_SERVER[HTTP_CLIENT_IP])) {
+            $realip = $_SERVER[HTTP_CLIENT_IP];
+        }else{
+            $realip = $_SERVER[REMOTE_ADDR];
+        }
+    }else{
+        //不允许就使用getenv获取
+        if(getenv("HTTP_X_FORWARDED_FOR")){
+            $realip = getenv( "HTTP_X_FORWARDED_FOR");
+        }elseif(getenv("HTTP_CLIENT_IP")) {
+            $realip = getenv("HTTP_CLIENT_IP");
+        }else{
+            $realip = getenv("REMOTE_ADDR");
+        }
+    }
+
+    return $realip;
+}
 
 /**
  * 验证规则扩展
