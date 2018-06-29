@@ -2908,9 +2908,9 @@ span.pink-bg {
 .module-hot-goods{
 
 }
-.module-hot-goods .title{
-	height: .3rem;
-	line-height: .3rem;
+.item-title{
+	height: .36rem;
+	line-height: .36rem;
 	padding-left: .1rem;
 	background: white;
 }

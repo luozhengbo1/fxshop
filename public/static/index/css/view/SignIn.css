@@ -1,12 +1,6 @@
 html, body {
     height: 100%;
 }
-
-body {
-    padding-bottom: 41px;
-    line-height: 1;
-}
-
 .wrapper {
     display: -webkit-box;
     display: flex;
