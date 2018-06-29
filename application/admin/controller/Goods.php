@@ -365,8 +365,6 @@ class Goods extends Controller
                 ->where(['n.goods_id'=>$id])
                 ->select();
 
-
-
             if( !getGoodsClassTree($this->uid) && $this->uid!=1 ){
                 return $this->error('请先添加商品分类');
             }
@@ -401,6 +399,20 @@ class Goods extends Controller
             $this->view->assign('proprety_name',$proprety_name);
             $this->view->assign('proprety_name1',$arr);
             return $this->view->fetch('edit');
+        }
+
+
+
+    }
+
+    public function getskudata()
+    {
+        if($this->request->isAjax()){
+            $data = $this->request->post('id');
+            $skuData =  Db::name('goods_attribute')
+                ->where(['goods_id'=>$id])
+                ->select();
+            return json($skuData);
         }
 
     }
