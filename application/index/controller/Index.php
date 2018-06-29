@@ -2,7 +2,7 @@
 namespace app\index\controller;
 
 use think\Controller;
-class Index extends Controller
+class Index extends Mustlogin
 {
     public function index(){
         $this->assign('titleName', "泛亚商城");

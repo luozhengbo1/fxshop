@@ -41,4 +41,5 @@
             $goodsList = $this->model->where(['goods_class_id'=>$goodsClassId,'status'=>1,'isdelete'=>'0'])->select();
             return ajax_return($goodsList,'ok','200');
         }
+
 	}
