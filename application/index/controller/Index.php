@@ -92,7 +92,18 @@ class Index extends Controller
         $this->assign('titleName', "券集市");
         return $this->view->fetch();
     }
-
+    public function voucherdetail(){
+        $this->assign('titleName', "券详情");
+        return $this->view->fetch();
+    }
+    public function memberbenefits(){
+        $this->assign('titleName', "会员权益");
+        return $this->view->fetch();
+    }
+    public function memberrule(){
+        $this->assign('titleName', "会员权益规则");
+        return $this->view->fetch();
+    }
     public function demo(){
         return $this->view->fetch();
     }
