@@ -21,11 +21,11 @@
 	</div>
 	<div class="content fl swiper-container announcement-banner" >
 		<ul class="swiper-wrapper">
-			<li class="swiper-slide ellipsis-oneline"><a href="{:\\think\\Url::build(\'announce\')}" >一杯敬朝阳 一杯敬月光，唤醒我的向往 温柔了寒窗，于是可以不回头地逆风飞翔.</a></li>
-			<li class="swiper-slide ellipsis-oneline"><a href="{:\\think\\Url::build(\'announce\')}" >11111111e1111一杯敬朝阳 一杯敬月光，唤醒我的向往 温柔了寒窗，1111111111111111.</a></li>
+			<li class="swiper-slide"><a class="ellipsis-oneline" href="{:\\think\\Url::build(\'announce\')}" >13333333333333331111111111.</a></li>
+			<li class="swiper-slide"><a class="ellipsis-oneline" href="{:\\think\\Url::build(\'announce\')}" >22222222222222222222222221111111111111.</a></li>
 		</ul>
 	</div>
-	<div class="more fl">更多》</div>
+	<div class="more fl">更多<i class="iconfont icon-right-arrow f12 grey"></i></div>
 </div>
 <!--活动分类-->
 <ul class="module-nav clear">
@@ -50,14 +50,18 @@
 		<p>充值中心</p>
 	</li>
 	<li>
-		<img src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg">
-		<p>会员签到</p>
+		<a  href="{:\\think\\Url::build(\'mysign\')}">
+			<img src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg">
+			<p>会员签到</p>
+		</a>
 	</li>
 </ul>
 <div class="module-active clear mt10">
-	<p class="title clear">
-		<span class="fl">互动活动</span>
-		<span class="fr">查看更多</span>
+	<p class="item-title clear">
+		<a href="{:\\think\\Url::build(\'myactivity\')}" >
+			<span class="fl">互动活动</span>
+			<span class="fr">查看更多<i class="iconfont icon-right-arrow f12 grey"></i></span>
+		</a>
 	</p>
 	<img class="big-img" src="http://scsc.top/data/gallery_album/original_img/5b109f656e378.jpg">
 	<ul class="fl mt5 clear w100p">
@@ -67,7 +71,7 @@
 </div>
 <!--商品列表-->
 <div class="module-hot-goods">
-	<p class="title mt10 mb10">热销商品</p>
+	<p class="item-title mt10 mb10">热销商品</p>
 	<div id="dataListWrap">
 		<ul class="goods-list list clear" id="goodsList">
 		<!--	<li>
