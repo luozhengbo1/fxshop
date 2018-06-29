@@ -124,17 +124,17 @@
             </div>
             <div class="col-xs-3 col-sm-2"></div>
         </div>
-         <div class="row cl start_date"  style="display: none;">
+         <div class="row cl start_date"  style="display: {$vo.show_area==1?'block':'none'};">
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>开售时间：</label>
             <div class="formControls col-xs-6 col-sm-7">
-                <input type="text" class="input-text Wdate" placeholder="开售时间" name="start_date" value="{$vo.start_date ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}  nullmsg="请输入开售时间" errormsg="请输入开售时间">
+                <input type="text" class="input-text Wdate" placeholder="开售时间" name="start_date" value="<?php echo isset($vo['start_date'])?date('Y-m-d H:i:s',$vo['start_date']):'';   ?>" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}  nullmsg="请输入开售时间" errormsg="请输入开售时间">
             </div>
             <div class="col-xs-3 col-sm-2"></div>
         </div>
-        <div class="row cl start_date" style="display: none;" >
+        <div class="row cl start_date" style="display: {$vo.show_area==1?'block':'none'};" >
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>截止时间：</label>
             <div class="formControls col-xs-6 col-sm-7">
-                <input type="text" class="input-text Wdate" placeholder="截止时间" name="end_date" value="{$vo.end_date ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}   nullmsg="请输入截止时间" errormsg="请输入截止时间">
+                <input type="text" class="input-text Wdate" placeholder="截止时间" name="end_date" value="<?php echo isset($vo['end_date'])?date('Y-m-d H:i:s',$vo['end_date']):'';   ?>" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}   nullmsg="请输入截止时间" errormsg="请输入截止时间">
             </div>
             <div class="col-xs-3 col-sm-2"></div>
         </div>
@@ -156,17 +156,17 @@
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>是否包邮：</label>
             <div class="formControls col-xs-6 col-sm-7 skin-minimal">
                 <div class="radio-box">
-                    <input type="radio" name="free_type" {$vo.free_type==1?'checked':''} id="status-1" value="1" datatype="*" nullmsg="请选择商品状态" errormsg="">
+                    <input type="radio" name="free_type" {$vo.free_type==1?'checked':''} id="status-1" value="1" >
                     <label for="status-1">是</label>
                 </div>
                 <div class="radio-box">
-                    <input type="radio" name="free_type" {$vo.free_type?:'checked'} id="status-0" value="0" datatype="*" nullmsg="请选择商品状态" errormsg="">
+                    <input type="radio" name="free_type" {$vo.free_type?:'checked'} id="status-0" value="0" >
                     <label for="status-0">否</label>
                 </div>
             </div>
             <div class="col-xs-3 col-sm-2"></div>
         </div>
-         <div class="row cl postage" style="display:none;">
+         <div class="row cl postage" style="display:{$vo.free_type?'none':'display'};">
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>邮费：</label>
             <div class="formControls col-xs-6 col-sm-7">
                 <input type="number" class="input-text" placeholder="请输入邮费" name="postage" value="{$vo.postage ?? ''}"  nullmsg="请输入邮费" errormsg="请输入邮费">
@@ -202,7 +202,6 @@
                     预览图：
                     <div class="layui-upload-list" id="demo2">
                         <?php if(isset($vo['pic']) ){?>
-
                         {volist name="$vo.pic"  id="vo1"}
                             <img src="{$vo1}" style="width:100px;height:100px;" />
                             <input type="hidden" name="pic[]" value="{$vo1}">
@@ -256,11 +255,21 @@
                 <table class="table table-border table-bordered table-hover table-bg mt-20">
                     <thead>
                         <tr id="">
+                            {if condition="empty($routine_name) neq 1"}
+                            {volist name="routine_name" id="routine_name_vo"}
+                            <td width="100"><input type="text" name="routine_key[]" value="{$routine_name_vo}"/></td>
+                            {/volist}
+                            {/if}
                             <th width="100" rowspan="100000"><a href="javascript:;" class="btn" onclick="addth(this,1)">新增属性名</a></th>
                         </tr>
                     </thead>
                     <tbody  id="">
                         <tr id="td">
+                            {if condition="empty($routine_val) neq 1"}
+                            {volist name="routine_val" id="routine_val_vo"}
+                            <td width="100"><input type="text" name="routine_val[]" value="{$routine_val_vo}"/></td>
+                            {/volist}
+                            {/if}
                         </tr>
                     </tbody>
                 </table>
@@ -387,7 +396,7 @@
          <div class="row cl">
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>商品详情：</label>
             <div class="formControls col-xs-6 col-sm-7 skin-minimal">
-                <div id="editor" type="text/plain" name="detail" value="{$vo.detail ?? ''}" style="text-align:center;width:800px;"></div>
+                <script id="editor" type="text/plain" name="detail" value="{$vo.detail ?? ''}" style="text-align:center;width:800px;">{$vo.detail ?? ''}</script>
             </div>
             <div class="col-xs-3 col-sm-2"></div>
         </div>
@@ -524,25 +533,6 @@
              $(obj).parent().before('<th width="100"><input type="text" name="routine_key[]" value=""/></th>')
              $('#td').append('<td width="100"><input type="text" name="routine_val[]" value=""/></td>')
         }
-        else{
-            $(obj).parent().before('<th width="100"><input type="text" name="guige_name[]" value=""/></th>')
-             var num=$('#tbody').children().length-1;
-             console.log(num)
-             for(var i=1; i<=num; i++){
-                $('#tbody tr:nth-child('+i+')').append('<td width="100"><input type="text" name="guige_val[]" value=""/></td>')
-             }
-        }
-        
-    }
-    function addtd(obj)
-    {
-        var th=$('#th').children().length-3;
-        var str='<tr><td width="100"><input type="text" name="goods_code[]" value=""/></td><td width="100"><input type="text" name="store[]" value=""/></td>';
-        for(var i=0;i<th;i++){
-            str+='<td width="100"><input type="text" name="guige_val[]" value=""/></td>';
-        }
-        str+='</tr>'
-        $('#tr').before(str);
     }
     // 限时抢购模块
     $('input[name="show_area"]').click(function(){
@@ -616,6 +606,8 @@
                             return false;
                         }
                     }
+                    // console.log( ($('input[name="routine_key"]'))
+                    // console.log( ($('input[name="routine_val"]'))
 
                     //邮费
                     if( $('input[name="free_type"]:checked').val()==0){
