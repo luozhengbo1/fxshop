@@ -103,6 +103,24 @@ function sort_by($name, $field = '')
         "<a href='{$url}' title='点击排序' class='sorting-box sorting'>{$name}</a>";
 }
 
+
+#商品分类树
+function getGoodsClassTree()
+{
+    $list = \think\Db::name('goods_class')->order('concat(path,id) ')->select();
+    if(!empty($list)){
+        foreach ($list as $k=>$v) {
+            $arr = [];
+            $num = substr_count($v['path'],',');
+            $str = '┡'.str_repeat('->>', $num);
+            $v['name'] = $str.$v['name'];
+            $list[$k]['name'] = $v['name'];
+        }
+    }
+    return $list?$list:false;
+}
+
+
 /**
  * 用于高亮搜索关键词
  * @param string $string 原文本
