@@ -408,7 +408,7 @@ class Goods extends Controller
     public function getskudata()
     {
         if($this->request->isAjax()){
-            $data = $this->request->post('id');
+            $id = $this->request->post('id');
             $skuData =  Db::name('goods_attribute')
                 ->where(['goods_id'=>$id])
                 ->select();
