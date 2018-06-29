@@ -62,7 +62,13 @@
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3">等级：</label>
             <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text" name="grade" value="{$vo.grade ?? ''}" disabled="disabled">
+                <input type="text" class="input-text" name="grade" value="<?php
+                       if($vo['grade_id']==0){
+                            echo '未知等级';
+                       } else {
+                            $grade = \think\Db::name('customer_grade')->where(['id'=>$vo['grade_id']])->find();
+                            echo $grade['name'];
+                       } ?>" disabled="disabled">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
