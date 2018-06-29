@@ -576,7 +576,6 @@ function viewUpload() {
 }
 //绑定商品属性
 function BindItemProperty(productid,url) {
-    debugger
     $.ajax({
         url: url,
         type: 'post',
@@ -586,7 +585,6 @@ function BindItemProperty(productid,url) {
             console.log(data);
             if (data != null) {
                 data.forEach(function (item) {
-                    debugger;
                     var id='';
                     var namearr=(item.attribute_name).split(',');
                     for(var i=0; i<namearr.length; i++){
@@ -1149,7 +1147,7 @@ function ChangeSku() {
     $("#createTable").empty();
     var step = {
         //SKU信息组合
-        Creat_Table: function () {
+        Creat_Table: function (productid,url) {
             step.hebingFunction();
             var SKUObj = $(".PId_Title");
             //var skuCount = SKUObj.length;//
@@ -1264,6 +1262,10 @@ function ChangeSku() {
                     // 目前只有cols这么一个配置项, 用数组表示列的索引,从0开始
                     cols: arrayColumn
                 });
+                if(productid){//id存在  说明是修改
+                    BindItemProperty(productid,url)
+                }
+
             }
         },//合并行
         hebingFunction: function () {
