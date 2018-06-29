@@ -226,19 +226,14 @@ class Goods extends Controller
             #前端json过来的数据需要转义
             $allData['skuZuheData'] = json_decode(str_replace("&quot;", "\"", $allData['skuZuheData'] ),true);
             $allData['propty_name_val'] = json_decode(str_replace("&quot;", "\"", $allData['propty_name_val'] ),true);
+            dump($allData);die;
             $validate = \think\Loader::validate('Goods');
             $data = $allData;
             if(!$validate->check($data)){
                 return $validate->getError();
             }
             $goods=[];
-//    		if( $data['settlement_type']==1 ){#现价
-//				$goods['price'] = $data['price'];
-//    		}else if( $data['settlement_type']==2 ){#积分价
-//				$goods['socre'] = $data['socre'];
-//    		}else{#积分+现价
-//    			$goods['score_price'] = $data['score_price'];
-//    		}
+
             if( $data['show_area']==1 ){#限时抢购区域
                 $goods['start_date'] = isset($data['start_date'])? strtotime($data['start_date']):'';
                 $goods['end_date'] = isset($data['end_date'])? strtotime($data['end_date']):'';
@@ -353,6 +348,11 @@ class Goods extends Controller
                 ->where(['g.id'=>$id])
                 ->find();
             $vo['pic'] = json_decode($vo['pic'],true);
+            if(isset($vo['routine'])){
+                $routine = json_decode($vo['routine'],true);
+                $routine_name = array_keys($routine);
+                $routine_val = array_values($routine);
+            }
             $skuData =  Db::name('goods_attribute')
                 ->where(['goods_id'=>$id])
                 ->select();
@@ -394,6 +394,9 @@ class Goods extends Controller
                 }
             }
             $this->view->assign('vo',$vo);
+            #常规属性
+            $this->view->assign('routine_name',$routine_name?$routine_name:'');
+            $this->view->assign('routine_val',$routine_val?$routine_val:'');
             $this->view->assign('proprety_name_val',$proprety_name_val);
             $this->view->assign('skuData',$skuData);
             $this->view->assign('proprety_name',$proprety_name);
