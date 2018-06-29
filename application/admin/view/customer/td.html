@@ -7,8 +7,12 @@
 <td>{$vo.email}</td>
 <td>{$vo.score}</td>
 <td><?php
-        $grade = \think\Db::name('customer_grade')->where(['id'=>$vo['grade_id']])->find();
-         echo $grade['name'];
+        if($vo['grade_id']==0){
+            echo '未知等级';
+        }else{
+            $grade = \think\Db::name('customer_grade')->where(['id'=>$vo['grade_id']])->find();
+              echo $grade['name'];
+         }
     ?></td>
 <td>{$vo.headimgurl}</td>
 <td>{$vo.openid}</td>

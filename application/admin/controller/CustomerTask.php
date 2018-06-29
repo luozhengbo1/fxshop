@@ -35,7 +35,7 @@ class CustomerTask extends Controller
         }
 
         $this->view->assign("task", $list_task_achive);
-        return $this->view->fetch();
+        return $this->view->fetch('detail',['id'=>$id]);
 
     }
 
@@ -45,9 +45,10 @@ class CustomerTask extends Controller
     public function excel()
     {
         if ($this->request->isPost()) {
-            $header = ['ID','用户ID', '任务ID', '完成状态', '获得奖励积分', '创建时间', '更新时间'];
+            $id = $_POST['id'];
+            $header = ['用户ID', '任务ID', '参与时间','完成状态', '获得奖励积分', '创建时间', '更新时间'];
             $data = \think\Db::name("task_achievement")
-                ->field("id,uid,task_id,status,reward_score,create_time,update_time")
+                ->field("uid,task_id,time,status,reward_score,create_time,update_time")
                 ->where('task_id',$id)
                 ->order("id desc")->select();
             if ($error = \Excel::export($header, $data, "会员参与任务明细表", '2007')) {
