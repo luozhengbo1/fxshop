@@ -543,6 +543,30 @@ function get_client_ip(){
     return $realip;
 }
 
+#获取分类下面的所有子分类 商品
+function getAllChildcateIds($categoryID)
+{
+    //初始化ID数组
+    $array[] = $categoryID;
+    do
+    {
+        $ids = '';
+        $where['pid'] = array('in',$categoryID);
+        $cate = \think\Db::name('goods_class')->where($where)->select();
+        foreach ($cate as $k=>$v)
+        {
+            $array[] = $v['id'];
+            $ids .= ',' . $v['id'];
+        }
+        $ids = substr($ids, 1, strlen($ids));
+        $categoryID = $ids;
+    }
+    while (!empty($cate));
+    $ids = implode(',', $array);
+    return $ids;    //  返回字符串
+    //return $array //返回数组
+}
+
 /**
  * 验证规则扩展
  */

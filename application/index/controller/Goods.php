@@ -32,14 +32,13 @@
             }
         }
 
-        #获取上
-        public function  getGoodsClassGoods($goodsClassId)
+
+        #获取这个商品的详情
+        public function getGoodsDetail($id)
         {
-            if(!$goodsClassId){
-                return ajax_return_error('缺少参数id');
+            if(!$id){
+                return ajax_return_error('缺少商品id','500');
             }
-            $goodsList = $this->model->where(['goods_class_id'=>$goodsClassId,'status'=>1,'isdelete'=>'0'])->select();
-            return ajax_return($goodsList,'ok','200');
         }
 
 	}

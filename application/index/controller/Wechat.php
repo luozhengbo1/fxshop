@@ -19,7 +19,7 @@ class WeChat extends Controller
         $this->appId = Config::get('app_id');
         $this->appSecret = Config::get('app_secret');
         $serverUrl ="http://{$_SERVER['SERVER_NAME']}/index.php";
-        $this->authBack = urlencode("{$serverUrl}/index/WeChat/sessionwxuser");
+        $this->authBack = urlencode("{$serverUrl}/index/WeChat/sessionWxUser");
 
     }
     # 网页授权只能配置一个白名单，将获取code的请求放到授权域名下。
@@ -31,8 +31,8 @@ class WeChat extends Controller
         $this->redirect("{$authUrl}?appid={$this->appId}&scope=snsapi_userinfo&state={$state}&redirect_uri={$this->authBack}");
     }
     # 获取微信用户信息，存放在session中
-//    public function sessionWxUser()
-    public function sessionwxuser()
+    public function sessionWxUser()
+//    public function sessionwxuser()
     {
         $code = $this->request->param('code');
         $url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={$this->appId}&secret={$this->appSecret}&code={$code}&grant_type=authorization_code";

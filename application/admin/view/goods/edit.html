@@ -526,6 +526,8 @@
                 text      = $("#markdown_tpl").html();
         $("#markdown").html(converter.makeHtml(text));
     })
+    ue.execCommand("<?php echo isset($vo['detail'])?$vo['detail']:'';?>");
+
 
     // 属性表格js
     function addth(obj, flag){
