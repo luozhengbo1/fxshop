@@ -22,7 +22,6 @@
         <tr class="text-c">
             {include file="td" /}
             <td class="f-14">
-                {$vo.status|show_status=$vo.id}
                 {tp:menu menu='sedit' /}
                 {tp:menu menu='sdelete' /}
             </td>
@@ -44,6 +43,17 @@
         $("[name='show_area']").find("[value='{$Request.param.show_area}']").attr("selected", true);
         $("[name='is_real']").find("[value='{$Request.param.is_real}']").attr("selected", true);
     })
+    function editStatus(id,flag) {
+       $.ajax({
+           url:"{:url('goods/editStatus')}",
+           data:{'id':id,'flag':flag},
+           type:'post',
+           success:function (res) {
+                alert(res.msg)
+               document.location.reload();
+           },
+       })
+    }
 </script>
 {/block}
 

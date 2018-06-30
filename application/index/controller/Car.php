@@ -26,7 +26,7 @@
             $time=time()-3600*24*30;
 //            $time2 + 3600*24*30<time();#过期
             $carList = $this->model
-                ->where([ 'openid'=>$this->userInfo['openid'],'update_time'=>['<',$time],'status'=>1] )
+                ->where([ 'openid'=>$this->userInfo['openid'],'update_time'=>['<',$time],'status'=>1,'show_status'=>'1'] )
                 ->select();
             if($carList){
                 return ajax_return($carList,'ok','200');
@@ -42,6 +42,31 @@
                 return ajax_return_error('缺少商品id');
             }
         }
+
+        #删除
+        public function  delCar($id,$filter="")
+        {
+            if(!$id){
+                return ajax_return_error('缺少参数id');
+            }
+            #非真删除
+            if($filter=="all"){
+                $res = $this->model
+                    ->where(['openid'=>$this->userInfo['openid']])
+                    ->update(['show_status'=>0]);
+            }else{
+                $res = $this->model
+                    ->where(['id'=>$id,'openid'=>$this->userInfo['openid']])
+                    ->update(['show_status'=>0]);
+            }
+            if($res){
+                return ajax_return('','ok','200');
+            }else{
+                return ajax_return('','no','400');
+            }
+        }
+
+
 
 
 

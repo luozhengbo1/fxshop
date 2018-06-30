@@ -35,6 +35,13 @@ class Goods extends Controller
         if ($this->request->param("create_time") ) {
             $map['create_time'] =['between',[strtotime($this->request->param("create_time")),strtotime($this->request->param("end_create_time"))] ] ;
         }
+        if ($this->request->param("status") ) {
+            $map['status'] =$this->request->param("status") ;
+        }
+
+        if($this->uid!=1){#非超级管理员只显示自己的商品
+            $map['user_id'] =$this->uid;
+        }
     }
     #商品添加
     public function add()
@@ -407,6 +414,20 @@ class Goods extends Controller
         }
 
 
+
+    }
+    #修改该状态
+    public function  editStatus()
+    {
+        if($this->request->isAjax()){
+            $data = $this->request->post();
+            if($data['flag']=="up"){
+                Db::name('goods')->where(['id'=>$data['id']])->update(['status'=>2]);
+            }else{
+                Db::name('goods')->where(['id'=>$data['id']])->update(['status'=>1]);
+            }
+            return json(['msg'=>'操作成功']);
+        }
 
     }
 
