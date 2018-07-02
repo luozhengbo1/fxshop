@@ -24,7 +24,7 @@
                     $goodsList =$this->model->select();
                 }else{
                     $goodsList = $this->model
-                        ->where(['show_area'=>$show_area,'status'=>1,'isdelete'=>'0'])
+                        ->where(['show_area'=>$show_area,'status'=>2,'isdelete'=>'0'])#2表示获取上市的商品
                         ->select();
                 }
                 Cache::set('goods'.$show_area,$goodsList,'3600');

@@ -1,16 +1,14 @@
 <?php
 namespace app\index\controller;
-
 use think\Controller;
 class Index extends Mustlogin
 {
     public function index()
     {
         #获取轮播图数据
-        $sildeShow =  new  Sildeshow();
-        $sildeShow->getSildeShow();
-        $this->view->assign('sildeShow',$sildeShow);
-
+        $sildeShow =  new  Sildeshow($num=6);
+        $getSildeShow = $sildeShow->getSildeShow();
+        $this->view->assign('sildeShow',$getSildeShow);
         $this->assign('titleName', "泛亚商城");
         return $this->fetch();
     }

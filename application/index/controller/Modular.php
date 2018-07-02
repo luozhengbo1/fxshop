@@ -5,14 +5,14 @@
 	
 	Class Modular extends Controller
 	{
-		public function getModular()
+		public function getModular($num=5)
 		{
 			$model = Db::name('modular');
 			$list = $model
 				->where(['status'=>1,'isdelete'=>0])
 				->orderby('orderby DESC,create_time DESC')
-				->limit(5)
+				->limit($num)
 				->select();
-			return json($list);
+			return empty($list)?ajax_return($list,'no','500'):ajax_return($list,'ok','200');
 		}
 	}
