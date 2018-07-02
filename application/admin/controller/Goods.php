@@ -114,6 +114,7 @@ class Goods extends Controller
             $goods['bar_code'] = $data['bar_code'];
             #所属商户
             $goods['user_id'] = $data['user_id'];
+            $goods['is_return_goods'] = $data['is_return_goods'];
 
             if(  !empty($data['pic']) ){
                 $goods['pic'] = json_encode($data['pic']);
@@ -162,6 +163,7 @@ class Goods extends Controller
                     $skuData[$k]['price']=$v['price'];
                     $skuData[$k]['store']=$v['num'];
                     $skuData[$k]['goods_code']=$v['code'];
+                    $skuData[$k]['point_score']=$v['point_score'];
                     #条形码
                     $skuData[$k]['bar_code']=$v['bar'];
                     $skuData[$k]['goods_id']= $goods_id;
@@ -289,6 +291,7 @@ class Goods extends Controller
             $goods['bar_code'] = $data['bar_code'];
             #所属商户
             $goods['user_id'] = $data['user_id'];
+            $goods['is_return_goods'] = $data['is_return_goods'];
 
             if(  !empty($data['pic']) ){
                 $goods['pic'] = json_encode($data['pic']);
@@ -340,6 +343,7 @@ class Goods extends Controller
                     $skuData[$k]['price']=$v['price'];
                     $skuData[$k]['store']=$v['num'];
                     $skuData[$k]['goods_code']=$v['code'];
+                    $skuData[$k]['point_score']=$v['point_score'];
                     #条形码
                     $skuData[$k]['bar_code']=$v['bar'];
                     $skuData[$k]['goods_id']= $data['id'];

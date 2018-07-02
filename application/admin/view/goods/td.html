@@ -43,5 +43,7 @@ if($vo['status']==1){
 <td><a class="btn" href="javascript:;" onclick="editStatus({$vo.id},'up')" >上市</a></td>
 <?php }else if($vo['status']==2){?>
 <td><a class="btn" href="javascript:;" onclick="editStatus({$vo.id},'down')">下市</a></td>
+<?php }else{?>
+<td><a class="btn" href="javascript:;" onclick="editStatus({$vo.id},'up1')" >上架</a></td>
 <?php }} ?>
 <!--<td>{$vo.score_price}</td>-->
