@@ -593,7 +593,7 @@ function BindItemProperty(productid,url) {
                     id = id.substr(0,id.length-1);
                     $("#skuid" +id).val(item.id)
                     $("#price" + id).val(item.price);
-                    $("#memprice" + id).val(item.memprice);
+                    $("#pointPrice" + id).val(item.pointPrice);
                     $("#num" + id).val(item.store);
                     $("#code" + id).val(item.goods_code);
                     $("#bar" + id).val(item.bar_code);
@@ -767,7 +767,7 @@ function GetSaleProperty() {
         var $this = $(this);
         var id = $this.attr("id");
         var price = parseFloat($("#price" + id).val());
-        var memprice = parseFloat($("#memprice" + id).val());
+        var pointPrice = parseFloat($("#pointPrice" + id).val());
         var proxyprice = $("#proxyprice" + id).val() ? parseFloat($("#proxyprice" + id).val()) : "0";
         var num = $("#num" + id).val();
         //验证数据
@@ -802,7 +802,7 @@ function GetSaleProperty() {
         }
 
         supplyPrice = proxyprice;
-        var item = {id: $("#skuid" + id).val(), SkuId: $this.attr("data-value"), memprice:$("#memprice" + id).val(), price: price, num: num, code: $("#code" + id).val(), SupplyPrice: proxyprice, bar: $("#bar" + id).val(), img: img };
+        var item = {id: $("#skuid" + id).val(), SkuId: $this.attr("data-value"), pointPrice:$("#pointPrice" + id).val(), price: price, num: num, code: $("#code" + id).val(), SupplyPrice: proxyprice, bar: $("#bar" + id).val(), img: img };
         list.push(item);
     });
     if (list.length < 1) {
@@ -824,7 +824,7 @@ function GetSaleProperty() {
 
             _totalStockCounts += parseInt(num);//总库存
 
-            var item = { SkuId: "", price: defaultPrice, memprice: '', num: parseInt(num), code: $("#ProductCode").val(), bar: $("#ProductBar").val(), img: "",memprice:$("#ProductMemprice").val() };
+            var item = { SkuId: "", price: defaultPrice, pointPrice: '', num: parseInt(num), code: $("#ProductCode").val(), bar: $("#ProductBar").val(), img: "",pointPrice:$("#ProductpointPrice").val() };
             minPrice = parseFloat(defaultPrice);
             //maxPrice如果是没有规格，则等于minPrice
             maxPrice = minPrice;
@@ -995,7 +995,7 @@ function ValidateWeight(jobj) {
 //批量设置数据
 function SetAll() {
     var price = $("#priceSet").val();
-    var menPrice= $("#memPriceSet").val()
+    var pointPrice= $("#pointPriceSet").val()
     var proxyprice = $("#proxypriceSet").val();
     var num = $("#numSet").val();
     var code = $("#codeSet").val();
@@ -1010,7 +1010,7 @@ function SetAll() {
         $(".proxyprice").val(proxyprice);
     }
     $(".saleprice").val(price).trigger('change');
-    $(".memprice").val(menPrice);
+    $(".pointPrice").val(pointPrice);
 
     $(".salenum").val(num);
     $(".salecode").val(code);
@@ -1053,7 +1053,7 @@ function ChangeSkuValues(id, type) {
     }
     var item = {
         proxyPrice: $("#proxyprice" + id).val() ? $("#proxyprice" + id).val() : "0",
-        price: inputObj.val(), num: $("#num" + id).val(), code: $("#code" + id).val(), bar: $("#bar" + id).val(), memprice: $("#memprice" + id).val()
+        price: inputObj.val(), num: $("#num" + id).val(), code: $("#code" + id).val(), bar: $("#bar" + id).val(), pointPrice: $("#pointPrice" + id).val()
     };
     var isExist = false;
     skuValues.forEach(function (data) {
@@ -1141,7 +1141,7 @@ function initCacheMemberPrice(id) {
 function SetValue() {
     skuValues.forEach(function (item) {
         $("#price" + item.id).val(item.item.price);
-        $("#memprice" + item.id).val(item.item.memprice);
+        $("#pointPrice" + item.id).val(item.item.pointPrice);
         $("#num" + item.id).val(item.item.num);
         $("#code" + item.id).val(item.item.code);
         $("#bar" + item.id).val(item.item.bar);
@@ -1209,7 +1209,7 @@ function ChangeSku() {
                     var td = $("<td class='width90'>" + item + "</td>");
                     td.appendTo(trHead);
                 });
-                var itemColumHead = $("<td  class='width140'><span>*</span>价格(元)</td><td>会员价</td><td class='width80'><span>*</span>库存(件)</td><td class='width80'>编码</td><td class='width80'>条形码</td> ");
+                var itemColumHead = $("<td  class='width140'><span>*</span>价格(元)</td><td>积分价</td><td class='width80'><span>*</span>库存(件)</td><td class='width80'>编码</td><td class='width80'>条形码</td> ");
 
                 /* if (SupplierId != "0") {
                      itemColumHead = $("<td  class='width140'><span>*</span>价格(元)</td><td class='width150 hide'><span>*</span>供货价(元)</td><td class='width80'><span>*</span>库存(件)</td><td class='width80'>编码</td><td class='width80'>条形码</td> ");
@@ -1252,7 +1252,7 @@ function ChangeSku() {
                             var td11 = $("<td id='" + rowid + "' data-value=" + item + " class='hide'><input id=\"proxyprice" + rowid + "\" value=\"0\" class=\"proxyprice width80\" type=\"text\" onchange=\"ChangeSkuValues('" + rowid + "')\"></td>");
                             td11.appendTo(tr);
                         }*/
-                        var td5 = $("<td id='" + rowid + "' data-value='" + item + "' data-skuid='0' data- class='tdrow'><input   id=\"memprice" + rowid + "\" class=\"memprice width70\" type=\"text\" </td>");
+                        var td5 = $("<td id='" + rowid + "' data-value='" + item + "' data-skuid='0' data- class='tdrow'><input   id=\"pointPrice" + rowid + "\" class=\"pointPrice width70\" type=\"text\" </td>");
                         td5.appendTo(tr);
 
                         var td2 = $("<td ><input type='hidden' id=\"skuid" + rowid + "\"><input onkeyup=\"clearNoNum(this)\" onKeyPress=\"return keyNumAll(event);\" id=\"num" + rowid + "\" class=\"salenum width60\" type=\"text\"onchange=\"ChangeSkuValues('" + rowid + "')\"></td>");
