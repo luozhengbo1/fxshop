@@ -4,9 +4,9 @@
 <!--轮播图1-->
 <div class="swiper-container header-banner">
 	<ul class="swiper-wrapper" >
-		<!--<li class="swiper-slide">
+		<li class="swiper-slide">
 			<img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg" lazy="loaded">
-		</li>-->
+		</li>
 	</ul>
 	<!-- 如果需要分页器 -->
 	<div class="swiper-pagination"></div>
@@ -123,89 +123,12 @@
          page:1,
          size:4,
          ajaxData:{
-             url:"{:url('index/index/return_json')}",
+              url:"{:url('index/index/return_json')}",
               data:{},
           },
 		dealFun:dealData
      });
 
 </script>
-<!--<script>
-	var pageLoad= function () {
-
-        droploadFun()
-    }
-    // 页数
-    var page = 0;
-    // 每页展示5个
-    var size = 5;
-    droploadFun(droploadData)
-    function droploadFun(dealDataFn) {
-        var dropload =  $('#dataListWrap').dropload({
-            scrollArea : window,
-            loadDownFn : function(me){
-                page++;
-                $.ajax({
-                    url:"__STATIC__/index/json/more.json",
-                    type:'post',
-                 //   data:{goods_id:95,similarity_score:core,page:page,size:size,t:new Date().getTime()},
-                    dataType:'json',
-                    success: function(data){
-                        var data = data.lists
-						if (data.length>0){
-							var html = dealData(data);
-							//如果获取的数据还没有条数多，表明数据已经没有了
-							if(data.length<size){
-								$('#goodsList').append(html);
-								dropload.lock();
-								dropload.noData();
-								dropload.resetload();
-							}else{
-								setTimeout(function(){
-									$('#goodsList').append(html);
-									// 每次数据加载完，必须重置
-									dropload.resetload();
-								},100);
-							}
-						} else{
-							dropload.lock();
-							dropload.noData();
-							dropload.resetload();
-						}
-                    },
-                    error: function(xhr, type){
-                        console.error('Ajax 请求出错');
-                        // 即使加载出错，也得重置
-                        dropload.lock();
-                        dropload.noData();
-                        dropload.resetload();
-                    }
-                });
-            }
-        });
-    }
-    function droploadData(data,dropload){
-
-
-    }
-    function dealData(data) {
-        var html;
-        for(var i = 0; i < data.length; i++){
-            html +='<li>';
-            html +='    <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">';
-            html +='        <p class="good-desc ellipsis">Lay’s/乐事薯片清爽酸奶零食 </p>';
-            html +='    <div>';
-            html +='    <p class="fl">已售3</p>';
-            html +='        <p class="fr">';
-            html +='        <span class="goods-price">¥45.00</span>';
-            html +='    <span class="goods-old-price">¥45.00</span>';
-            html +='    </p>';
-            html +='    </div>';
-            html +='  </li>';
-        }
-        return html;
-    }
-</script>-->
-
 </body>
 </html>
