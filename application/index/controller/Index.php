@@ -14,9 +14,9 @@ class Index extends Mustlogin
         $getModular = $modular->getModular();
         $this->view->assign('notice',$getModular);
         $this->view->assign('titleName', "泛亚商城");
-        dump($getSildeShow);
-        dump($getModular);
-        die;
+//        dump($getSildeShow);
+//        dump($getModular);
+//        die;
         return $this->fetch();
     }
     public function message(){
