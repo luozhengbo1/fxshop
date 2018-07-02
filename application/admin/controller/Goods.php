@@ -106,6 +106,8 @@ class Goods extends Controller
     		#下单减库存类型
     		$goods['store_type'] = $data['store_type'];
             $goods['after_sale'] = $data['after_sale'];
+            #基础价格
+            $goods['basic_price'] = $data['basic_price'];
             #商家编码
             $goods['shop_code'] = $data['shop_code'];
             #销量
@@ -283,6 +285,8 @@ class Goods extends Controller
             #下单减库存类型
             $goods['store_type'] = $data['store_type'];
             $goods['after_sale'] = $data['after_sale'];
+            #基础价格
+            $goods['basic_price'] = $data['basic_price'];
             #商家编码
             $goods['shop_code'] = $data['shop_code'];
             #销量
