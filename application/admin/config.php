@@ -14,7 +14,7 @@ use \think\Request;
 //if (pathinfo($basename, PATHINFO_EXTENSION) == 'php') {
 //    $basename = dirname($basename);
 //}
-$basename = "http://{$_SERVER['SERVER_NAME']}";
+$basename = "http://{$_SERVER['SERVER_NAME']}:{$_SERVER['SERVER_PORT']}";
 
 //dump($basename);die;
 return [

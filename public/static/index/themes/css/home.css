@@ -3129,7 +3129,7 @@ a {
 	position: absolute; top: 0;z-index: 9; width: 100%; padding: 0 .08rem
 }
 /*底部导航*/
-.footer-nav{
+.footer-fixed{
 	position: fixed;
 	bottom: 0;
 	left: 0;
@@ -4031,4 +4031,80 @@ a {
 	position: absolute;
 	right: 0;
 	bottom: 0;
+}
+/*
+券集市*/
+.message-group{
+	position: relative;
+}
+.message-group .sign{
+	position: absolute;
+	top: -2px;
+	right:-2px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	display: block;
+	background: red;
+}
+
+.voucher-market-list li{
+	padding: 8px;
+	background: white;
+	margin-bottom: 4px;
+}
+.voucher-market-catalogs {
+	margin: 4px auto;
+	padding: 8px 0;
+	background: white;
+}
+.border-tag {
+	display: inline-block;
+	position: relative;
+	overflow: hidden;
+	padding:0 2px;
+	border-radius: 4px;
+	/*vertical-align:middle;*/
+	font-size: 12px;
+	color: orange;
+	border: 1px solid orange;
+	margin-right: 8px;
+}
+.voucher-market-list .item-img{
+	width: 80%;
+	overflow: hidden;
+	height: .7rem;
+}
+.voucher-market-list .item-img li{
+	width: 32%;
+	margin-right: 1%;
+	float: left;
+}
+.voucher-market-list .item-img img{
+	max-height: .7rem;
+	width: 100%;
+}
+/*会员权益*/
+.member-benefits header{
+	height: 1rem;
+	background: #0d0d0d;
+}
+.member-benefits .content li{
+	min-height: .5rem;
+	background: white;
+	padding: 8px 6px;
+	width: 98%;
+	border-radius: 4px;
+	margin: 0 auto 2px;
+}
+.member-benefits .content .image{
+	min-width: .7rem;
+	max-width: 100%;
+	max-height: 1rem
+}
+.member-update-method{
+	height: .46rem;
+	line-height: .46rem;
+	text-align: center;
+	background: white;
 }
