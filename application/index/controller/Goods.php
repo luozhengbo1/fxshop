@@ -14,7 +14,7 @@
             $this->model = Db::name('goods');
         }
         #获取商品的
-        public function  getGoodsHotOrOther($show_area='3')
+        public function  getGoodsHotOrOther($page,$size,$show_area='3')
         {
             $goodsList = Cache::get('goods'.$show_area);
             if($goodsList){
@@ -25,6 +25,7 @@
                 }else{
                     $goodsList = $this->model
                         ->where(['show_area'=>$show_area,'status'=>2,'isdelete'=>'0'])#2表示获取上市的商品
+                          ->page($page,$size)
                         ->select();
                 }
                 Cache::set('goods'.$show_area,$goodsList,'3600');
