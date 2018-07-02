@@ -223,7 +223,7 @@
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>重量：</label>
             <div class="formControls col-xs-6 col-sm-7">
-                <input type="text" class="input-text" placeholder="重量" name="goods_weight" value="{$vo.goods_weight ?? ''}"  datatype="*" nullmsg="请输入重量" errormsg="请输入重量">
+                <input type="text" class="input-text" placeholder="重量" name="goods_weight" value="{$vo.goods_weight ?? ''}" >
             </div>
             <div class="col-xs-3 col-sm-2">单位g</div>
         </div>
@@ -237,6 +237,20 @@
                 </div>
                 <div class="radio-box">
                     <input type="radio" name="is_real" id="is_real-0" value="0" {$vo.is_real?'':'checked'} datatype="*" nullmsg="请选择实物" errormsg="请选择实物">
+                    <label for="is_real-0">否</label>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>是否支持退换货：</label>
+            <div class="formControls col-xs-6 col-sm-7 skin-minimal">
+                <div class="radio-box">
+                    <input type="radio" name="is_return_goods"  checked id="is_return_goods-1" {$vo.is_return_goods?'checked':''} value="1" datatype="*" nullmsg="请选择" errormsg="请选择">
+                    <label for="is_real-1">是</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="is_return_goods" id="is_return_goods-0" value="0" {$vo.is_return_goods?'':'checked'} datatype="*" nullmsg="请选择" errormsg="请选择">
                     <label for="is_real-0">否</label>
                 </div>
             </div>

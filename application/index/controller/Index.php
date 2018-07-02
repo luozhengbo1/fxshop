@@ -8,6 +8,9 @@ class Index extends Mustlogin
     {
         #获取轮播图数据
         $sildeShow =  new  Sildeshow();
+        $sildeShow->getSildeShow();
+        $this->view->assign('sildeShow',$sildeShow);
+
         $this->assign('titleName', "泛亚商城");
         return $this->fetch();
     }
@@ -95,18 +98,7 @@ class Index extends Mustlogin
         $this->assign('titleName', "券集市");
         return $this->view->fetch();
     }
-    public function voucherdetail(){
-        $this->assign('titleName', "券详情");
-        return $this->view->fetch();
-    }
-    public function memberbenefits(){
-        $this->assign('titleName', "会员权益");
-        return $this->view->fetch();
-    }
-    public function memberrule(){
-        $this->assign('titleName', "会员权益规则");
-        return $this->view->fetch();
-    }
+
     public function demo(){
         return $this->view->fetch();
     }
