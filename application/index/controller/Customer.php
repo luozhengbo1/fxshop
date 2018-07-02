@@ -17,7 +17,7 @@ class Customer extends Controller
     {
         //获取前端传过来的分页数据
         if ($this->request->isAjax()) {
-            $user = session('wx-user');
+            $user = session('wx_user');
             $data = $this->request->post();
             $page = $data['page'] * $data['size'] - 4;
             $size = $data['size'];
@@ -28,7 +28,7 @@ class Customer extends Controller
                 ->alias('collect')
                 ->join('fy_customer customer', "collect.uid = customer.id  and customer.id=$uid")
                 ->join('fy_goods goods', "collect.goods_id = goods.id")
-                ->field('collect.uid,goods.id，goods.name,goods.main_image,goods.status,good.price')
+                ->field('collect.uid,goods.id,goods.name,goods.main_image,goods.status,goods.price')
                 ->limit($page, $size)
                 ->where('collect.status', '1')
                 ->select();
@@ -40,30 +40,49 @@ class Customer extends Controller
     /**
      * 取消收藏
      */
-    public
-    function collect_cancel()
+    public function collect_cancel()
     {
         if ($this->request->isAjax()) {
-            $user = session('wx-user');
+            $user = session('wx_user');
             $data = $this->request->post();
             $customer = Db::table('fy_customer')->where('openid', $user['openid'])->find();
             //取消指定用户的指定收藏内容
             Db::table('fy_customer_collect')->where('goods_id', $data['id'])->where('uid', $customer['id'])->setField('status', '0');
-            $this->collect_list();
         }
     }
 
     /**
+     * 签到主页面
+     */
+//    public function sign_main()
+//    {
+//        $user = session('wx_user');
+//        //根据openid在customer表中查询id,nickname,score,continuity_day
+//        $userData = Db::table('fy_customer')->where('openid', $user['openid'])->find();
+//        $this->view->assign('userData', $userData);
+//        return $this->view->fetch('mysign');
+//    }
+
+    /**
      * 签到
      */
-    public
-    function my_sign()
+    public function my_sign()
     {
         $user = session('wx_user');
         //根据openid在customer表中查询id,nickname,score,continuity_day
-        $user = ['openid' => 'brown123'];
         $userData = Db::table('fy_customer')->where('openid', $user['openid'])->find();
-        if ($this->request->isAjax()) {
+        if ($this->request->get()) {
+            $time = time();
+            $today_start = strtotime(date('Y-m-d', $time) . ' 00:00:00');
+            $today_end = strtotime(date('Y-m-d', $time) . ' 23:59:59');
+            $res = Db::table('fy_customer_sign')
+                ->where('uid', $userData['id'])
+                ->where('addtime', 'between', [$today_start, $today_end])
+                ->find();
+            $this->assign('flag', $res ? 1 : 0);
+            $this->assign('user', $userData);
+            return $this->view->fetch('mysign');
+        } else if ($this->request->isAjax()) {
 //            签到规则
 //             1、每天只能签到一次。
 //             2、连续签到3天，一次性奖励2积分。
