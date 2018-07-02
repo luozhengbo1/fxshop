@@ -60,6 +60,7 @@ class Transaction extends Controller
             if(!$validate->check($data)){
                 return $validate->getError();
             }
+//            dump($data);die;
             if($data['group_id'] ){
                 $res = Db::name('transaction')->where(['group_id'=>$data['group_id'],'id'=>['<>',$data['id']]])->find();
                 if( !empty($res) ){
@@ -73,18 +74,20 @@ class Transaction extends Controller
                 if($res2){
                     return ajax_return_adv('该用户已经设置');
                 }
-                $userName = Db::name('admin_user')->field('account')->where(['id'=>$data['group_id']])->find();
+                $userName = Db::name('admin_user')->field('account')->where(['id'=>$data['uid']])->find();
                 $data['username'] =$userName['account'];
             }
+            $id = $data['id'];
             unset($data['id']);
-            $res3 = Db::name('transaction')->where(['id'=>$data['id']])->update($data);
+            $res3 = Db::name('transaction')->where(['id'=>$id])->update($data);
             if($res3){
-                return ajax_return_adv('添加成功');
+                return ajax_return_adv('操作成功');
             }else{
-                return ajax_return_adv_error('添加失败');
+                return ajax_return_adv_error('操作失败');
             }
         }else{
             $id = $this->request->param('id');
+            
             #用户组
             $roleList = Db::name('admin_role')->where(['isdelete'=>0,'status'=>'1'])->select();
             $userList = Db::name('admin_user')->where(['isdelete'=>0,'status'=>'1','id'=>['>','1']])->select();
