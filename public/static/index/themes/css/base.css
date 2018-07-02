@@ -53,6 +53,8 @@ body{
 .none{ display:none !important;}
 .hidden{ overflow: hidden}
 .bold{font-weight: bold;}
+.f8{font-size: 8px!important;}
+.f10{font-size: 10px!important;}
 .f12{font-size: 12px!important;}
 .f14{font-size: 14px!important;}
 .f16{font-size: 16px!important;}
@@ -62,6 +64,9 @@ body{
 .f32{font-size: 32px!important;}
 .blue{color: #02ab2f}
 .blackRed{color: #9c0e11}
+.base-color{
+    color: #FB6006;
+}
 .fl{ float: left}
 .fr{ float: right}
 .clear{ zoom: 1}
@@ -514,6 +519,11 @@ body{
 .layui-btn-pink {
     background-color: orangered;
 }
+.price {
+    color: #ff8a0d;
+    font-size: 16px;
+}
+
 /*
 .swiper-pagination .swiper-pagination-bullet {
     width: 10px;

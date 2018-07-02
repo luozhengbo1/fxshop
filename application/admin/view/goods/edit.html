@@ -325,6 +325,7 @@
                     <div class="pt10 pb10">
                         <span>批量填充</span>
                         <input class="form_control w80 mr10" type="text" placeholder="价格" id="priceSet">
+                        <input class="form_control w80  mr20" type="text" placeholder="积分价" id="pointPriceSet">
                         <input class="form_control w80 mr10" type="text" placeholder="数量" id="numSet">
                         <input class="form_control w80  mr10" type="text" placeholder="编码" id="codeSet">
                         <input class="form_control w80  mr20" type="text" placeholder="条形码" id="barSet">
@@ -388,6 +389,10 @@
                         <td><input class="form_control w80" name="price"  type="number"></td>
                         <td><span class="c-red">*</span>总库存：</td>
                         <td><input class="form_control w80"  type="number" name="store"></td>
+                    </tr>
+                    <tr>
+                        <td>积分价：</td>
+                        <td><input class="form_control w80"  type="text" name="point_price" value="{$vo.point_price??''}"></td>
                     </tr>
                 </table>
             </div>
@@ -518,6 +523,7 @@
 
 
     function refeashskus() {
+        debugger
         ChangeSku().Creat_Table("{$vo.id??''}","{:url('goods/getSkuData')}");
         SetValue();
     }
