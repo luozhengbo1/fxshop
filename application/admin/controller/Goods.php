@@ -430,9 +430,9 @@ class Goods extends Controller
         if($this->request->isAjax()){
             $data = $this->request->post();
             if($data['flag']=="up"){
-                Db::name('goods')->where(['id'=>$data['id']])->update(['status'=>2]);
-            }else{
                 Db::name('goods')->where(['id'=>$data['id']])->update(['status'=>1]);
+            }else{
+                Db::name('goods')->where(['id'=>$data['id']])->update(['status'=>0]);
             }
             return json(['msg'=>'操作成功']);
         }
