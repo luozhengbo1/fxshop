@@ -38,13 +38,15 @@ MyPageload.prototype.init = function(options){
                 data:_this.opts.ajaxData.data || {},
                 dataType:'json',
                 success: function(data){
-                    var data = data.lists;//数据
-                    if (data.length>0){
+                  //  console.log('=========test2=================')
+                    var code = data.code;
+                    var data = data.data;//数据
+                    if (code==='200' && data.length){
                         var html = _this.opts.dealFun(data);
                         //如果获取的数据还没有条数多，表明数据已经没有了
                         if(data.length<_this.opts.size){
                             $('#'+_this.opts.target).append(html);
-                            _this.fnDropload(dropload)
+                            _this.fnDropload(dropload);
                         }else{
                             setTimeout(function(){
                                 $('#'+_this.opts.target).append(html);

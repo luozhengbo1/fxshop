@@ -12,11 +12,11 @@ class Index extends Mustlogin
         #功能模块
         $modular = new Modular($num=5);
         $getModular = $modular->getModular();
-        $this->view->assign('notice',$getModular);
+        $this->view->assign('modular',$getModular);
         $this->view->assign('titleName', "泛亚商城");
-        dump($getSildeShow);
-        dump($getModular);
-        die;
+       /* dump($getSildeShow);*/
+       /* dump($getModular);*/
+       /* die;*/
         return $this->fetch();
     }
     public function message(){

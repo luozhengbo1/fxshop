@@ -34,14 +34,16 @@
             }
         }
         #获取这个商品的详情
-        public function getGoodsDetail($id)
+        public function detail($id)
         {
+            $this->assign('titleName', "商品搜索");
             if(!$id){
                 return ajax_return_error('缺少商品id','500');
             }
             $this->model->where(['id'=>$id])->find();
             #查询该商品是否有优惠券或者通用的优惠券
             $lottery = Db::name('lottery')->where(['goods_id'=>$id,'isdelete'=>0,'status'=>1])->find();
+            return $this->view->fetch();
         }
 
 	}

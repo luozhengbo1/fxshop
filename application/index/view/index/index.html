@@ -4,9 +4,11 @@
 <!--轮播图1-->
 <div class="swiper-container header-banner">
 	<ul class="swiper-wrapper" >
-		<li class="swiper-slide">
-			<img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg" lazy="loaded">
-		</li>
+		 {volist name="sildeShow" id="vo" empty=""}
+			<li class="swiper-slide">
+				<a href="{$vo.url}"><img src="{$vo.pic}" alt="{$vo.name}" lazy="loaded"></a>
+			</li>
+		 {/volist}
 	</ul>
 	<!-- 如果需要分页器 -->
 	<div class="swiper-pagination"></div>
@@ -17,16 +19,22 @@
 		<img  style="height: .3rem;" src="__STATIC__/index/images/gonggao.png">
 	</div>
 	<div class="content fl swiper-container announcement-banner" >
-		<ul class="swiper-wrapper">
-			<li class="swiper-slide"><a class="ellipsis-oneline" href="{:\\think\\Url::build(\'announce\')}" >133333333we33333331111111111.</a></li>
-			<li class="swiper-slide"><a class="ellipsis-oneline" href="{:\\think\\Url::build(\'announce\')}" >22222222222222222222222221111111111111.</a></li>
-		</ul>
+		<ul class="swiper-wrapper pl10" id="notice"></ul>
 	</div>
-	<div class="more fl">更多<i class="iconfont icon-right-arrow f12 grey"></i></div>
+	<div class="more fl"><a href="{:\\think\\Url::build(\'announce\')}">更多<i class="iconfont icon-right-arrow f12 grey"></i></a></div>
 </div>
 <!--活动分类-->
 <ul class="module-nav clear">
-	<li>
+	{volist name="modular" id="vo" empty=""}
+		<li>
+			<a href="{$vo.url}" >
+				<img src="{$vo.pic}" alt="{$vo.title}">
+				<p>{$vo.title}</p>
+			</a>
+		</li>
+	{/volist}
+
+	<!--<li>
 		<a href="{:\\think\\Url::build(\'rushPurchase\')}" >
 			<img src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg">
 			<p>限时抢购</p>
@@ -53,7 +61,7 @@
 			<img src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg">
 			<p>会员签到</p>
 		</a>
-	</li>
+	</li>-->
 </ul>
 <div class="module-active clear mt10">
 	<p class="item-title clear">
@@ -88,6 +96,7 @@
 </div>
 {include file="Public/footer"}
 <script>
+    getNotice();
     var swiper1= bannerSwiper('header-banner');
     new Swiper('.announcement-banner', {
         direction : 'vertical',
@@ -100,17 +109,17 @@
     function dealData(data) {
         var html='';
         for(var i = 0; i < data.length; i++){
-            //href="{:\\think\\Url::build(\'rushPurchase\')}"
+            console.log(data[i])
             html +='<li>';
-            html +='	<a href="{:\\think\\Url::build(\'product\')}">';
-            html +='     <p class="tc"><img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg"></p>';
-            html +='     <p class="good-desc ellipsis">Lay’s/乐事薯片清爽酸奶零食 </p>';
+            html +='	<a href="{:url(\'goods/detail\',array(\'id\'=>$vo[\'id\']))}" >';
+            html +='     <p class="tc"><img class="good-img" src="'+data[i].main_image+'"></p>';
+            html +='     <p class="good-desc ellipsis">'+notEmpty(data[i].name)+' </p>';
             html +='   </a>';
             html +='    <div>';
-			html +='  		  <p class="fl">已售3</p>';
+			html +='  		  <p class="fl">已售'+notEmpty(data[i].buy_num)+'</p>';
 			html +='  		      <p class="fr">';
-			html +='  		      <span class="goods-price">¥45.00</span>';
-			html +='  				<span class="goods-old-price">¥45.0</span>';
+			html +='  		      <span class="goods-price">¥'+notEmpty(data[i].basic_price)+'</span>';
+			html +='  				<span class="goods-old-price">¥'+notEmpty(data[i].original_price)+'</span>';
 			html +='  		  </p>';
             html +='    </div>';
             html +='  </li>';
@@ -121,14 +130,38 @@
 		 targetWarp:'dataListWrap',
          target:'goodsList',
          page:1,
-         size:4,
+         size:10,
          ajaxData:{
-              url:"{:url('index/index/return_json')}",
-              data:{},
+              url:"{:url('index/goods/getGoodsHotOrOther')}",
+              data:{
+                  show_area:4
+			  },
           },
 		dealFun:dealData
      });
+	function getNotice() {
+		$.ajax({
+			type:'post',
+			data:{page:1, size:2},
+            url:"{:url('index/notice/getNotice')}",
+			success:function (data) {
+			    var data = data.data;
+                var html='';
+			    if(data.code='200'){
+                    for(var i = 0; i < data.length; i++){
+                        html +=' <li class="swiper-slide"><a class="ellipsis-oneline" href="{:url(\'Notice/detail\',array(\'id\'=>$vo[\'id\']))}" >'+notEmpty(data[i].title)+'</a></li>'
+                    }
+                    $('#notice').empty().append(html)
+				}
 
+            }
+		})
+    }
+    function notEmpty(val) {
+	    if(val==undefined || val =='undefined' || val =='null' || val ==null){
+	        return ''
+		}else return val;
+    }
 </script>
 </body>
 </html>
