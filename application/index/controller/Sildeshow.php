@@ -12,7 +12,7 @@ class SildeShow
             ->order('orderby DESC,create_time desc')
             ->limit($num)
             ->select();
-        return json($list);
+        return $list;
     }
 
 }

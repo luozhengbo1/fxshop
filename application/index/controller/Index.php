@@ -9,11 +9,14 @@ class Index extends Mustlogin
         $sildeShow =  new  Sildeshow($num=6);
         $getSildeShow = $sildeShow->getSildeShow();
         $this->view->assign('sildeShow',$getSildeShow);
-        #公告
-        $notice = new Notice($num=5);
-        $getNotice = $notice->getNotice();
-        $this->view->assign('notice',$getNotice);
-        $this->assign('titleName', "泛亚商城");
+        #功能模块
+        $modular = new Modular($num=5);
+        $getModular = $modular->getModular();
+        $this->view->assign('notice',$getModular);
+        $this->view->assign('titleName', "泛亚商城");
+        dump($getSildeShow);
+        dump($getModular);
+        die;
         return $this->fetch();
     }
     public function message(){
