@@ -415,7 +415,7 @@
          <div class="row cl">
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>商品详情：</label>
             <div class="formControls col-xs-6 col-sm-7 skin-minimal">
-                <script id="editor" type="text/plain" name="detail" value="{$vo.detail ?? ''}" style="text-align:center;width:800px;">{$vo.detail ?? ''}</script>
+                <div id="editor" type="text/plain" name="detail" value="{$vo.detail ?? ''}" style="text-align:center;width:800px;">{$vo.detail ?? ''}</div>
             </div>
             <div class="col-xs-3 col-sm-2"></div>
         </div>
@@ -444,8 +444,8 @@
 <script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript" src="__STATIC__/js/setProductInfo.js"></script>
 <script>
-
-    refeashskus();
+    //初始化编辑框内容
+        refeashskus();
   //  BindItemProperty()
 
     //删除规格属性
@@ -523,7 +523,6 @@
 
 
     function refeashskus() {
-        debugger
         ChangeSku().Creat_Table("{$vo.id??''}","{:url('goods/getSkuData')}");
         SetValue();
     }
@@ -541,6 +540,9 @@
      var ue = UE.getEditor('editor',{
             serverUrl:'{:\\think\\Url::build("Ueditor/index")}'
         });
+ /*   var htmlStr = $("#editor").val();
+    console.log("=========="+"{$vo.detail ?? ''}")
+    ue.setContent(htmlStr, false);*/
     $(function () {
         var converter = new showdown.Converter(),
                 text      = $("#markdown_tpl").html();
