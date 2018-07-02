@@ -522,12 +522,12 @@ function myUrl()
 function get_client_ip(){
     //判断服务器是否允许$_SERVER
     if(isset($_SERVER)){
-        if(isset($_SERVER[HTTP_X_FORWARDED_FOR])){
-            $realip = $_SERVER[HTTP_X_FORWARDED_FOR];
-        }elseif(isset($_SERVER[HTTP_CLIENT_IP])) {
-            $realip = $_SERVER[HTTP_CLIENT_IP];
+        if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])){
+            $realip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }elseif(isset($_SERVER['HTTP_CLIENT_IP'])) {
+            $realip = $_SERVER['HTTP_CLIENT_IP'];
         }else{
-            $realip = $_SERVER[REMOTE_ADDR];
+            $realip = $_SERVER['REMOTE_ADDR'];
         }
     }else{
         //不允许就使用getenv获取
@@ -541,6 +541,30 @@ function get_client_ip(){
     }
 
     return $realip;
+}
+
+#获取分类下面的所有子分类 商品
+function getAllChildcateIds($categoryID)
+{
+    //初始化ID数组
+    $array[] = $categoryID;
+    do
+    {
+        $ids = '';
+        $where['pid'] = array('in',$categoryID);
+        $cate = \think\Db::name('goods_class')->where($where)->select();
+        foreach ($cate as $k=>$v)
+        {
+            $array[] = $v['id'];
+            $ids .= ',' . $v['id'];
+        }
+        $ids = substr($ids, 1, strlen($ids));
+        $categoryID = $ids;
+    }
+    while (!empty($cate));
+    $ids = implode(',', $array);
+    return $ids;    //  返回字符串
+    //return $array //返回数组
 }
 
 /**

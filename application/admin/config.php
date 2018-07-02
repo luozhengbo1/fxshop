@@ -10,11 +10,13 @@
 
 use \think\Request;
 
-$basename = Request::instance()->root();
-if (pathinfo($basename, PATHINFO_EXTENSION) == 'php') {
-    $basename = dirname($basename);
-}
+//$basename = Request::instance()->root();
+//if (pathinfo($basename, PATHINFO_EXTENSION) == 'php') {
+//    $basename = dirname($basename);
+//}
+$basename = "http://{$_SERVER['SERVER_NAME']}";
 
+//dump($basename);die;
 return [
     // 模板参数替换
     'view_replace_str' => [

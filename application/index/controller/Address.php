@@ -16,7 +16,7 @@ class Address extends Controller
      */
     public function list_address()
     {
-        $user = session('wx-user');
+        $user = session('wx_user');
         //根据openid查id
         $user_data = Db::table('fy_customer')
             ->field('id')
@@ -36,7 +36,7 @@ class Address extends Controller
     public function add_address()
     {
         if ($this->request->isAjax()) {
-            $user = session('wx-user');
+            $user = session('wx_user');
             $data = $this->request->post();
             //根据openid查id
             $user_data = Db::table('fy_customer')
