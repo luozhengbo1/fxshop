@@ -19,7 +19,7 @@ class Address extends Controller
         if ($this->request->isAjax()) {
             $user = session('wx_user');
             $data = $this->request->post();
-            $page = $data['page'];
+            $page = $data['page'] * $data['size'] - 4;
             $size = $data['size'];
             //根据openid查id
             $user_data = Db::table('fy_customer')
