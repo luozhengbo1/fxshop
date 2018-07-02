@@ -1,13 +1,13 @@
 <?php 	
 
-namespace Index\Controller;
+namespace app\index\controller;
 
-use Think\Controller;
+use think\Controller;
 use think\Config;
 use think\Session;
 use think\Db;
 
-class WeChatController extends Controller
+class WeChat extends Controller
 {
     private $appId;
     private $appSecret;
@@ -18,8 +18,11 @@ class WeChatController extends Controller
         parent::__construct();
         $this->appId = Config::get('app_id');
         $this->appSecret = Config::get('app_secret');
-        $serverUrl ="http://{$_SERVER['SERVER_NAME']}/index.php";
-        $this->authBack = urlencode("{$serverUrl}/WeChat/sessionWxUser");
+        $serverUrl ="http://{$_SERVER['SERVER_NAME']}:{$_SERVER['SERVER_PORT']}/index.php";
+//        dump($serverUrl);
+//        dump($_SERVER);
+//        die;
+        $this->authBack = urlencode("{$serverUrl}/index/WeChat/sessionWxUser");
 
     }
     # 网页授权只能配置一个白名单，将获取code的请求放到授权域名下。
@@ -32,6 +35,7 @@ class WeChatController extends Controller
     }
     # 获取微信用户信息，存放在session中
     public function sessionWxUser()
+//    public function sessionwxuser()
     {
         $code = $this->request->param('code');
         $url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={$this->appId}&secret={$this->appSecret}&code={$code}&grant_type=authorization_code";
@@ -42,16 +46,17 @@ class WeChatController extends Controller
         $customer = Db::name("customer");
         if (!$user = $customer->where(['openid' => $userInfo['openid']])->find()) {
             $userInfo['create_time'] = strtotime(date("Y-m-d H:i:s"));
-            $customer->add($userInfo);
+            unset( $userInfo['privilege']);
+            $customer->insert($userInfo);
         }else {
             # 更新登录时间
             $up['update_time'] = strtotime(date("Y-m-d H:i:s"));
             $up['login_ip'] = get_client_ip();
-            $customer->where(array('openid'=>$userInfo['openid']))->save($up);
+            $customer->where(array('openid'=>$userInfo['openid']))->update($up);
         }
         Session::set('wx_user', $userInfo);
         # 从哪里来回哪里去
-        $this->redirect(urldecode($this->request->param('state')));
+        $this->redirect(urldecode($this->request->param('state'))?urldecode($this->request->param('state')):'index/index/index');
     }
 }
 

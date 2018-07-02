@@ -13,6 +13,7 @@
             parent::__construct();
             $this->model = Db::name('goods');
         }
+        #获取商品的
         public function  getGoodsHotOrOther($show_area='3')
         {
             $goodsList = Cache::get('goods'.$show_area);
@@ -31,14 +32,15 @@
 
             }
         }
-
-        #获取上
-        public function  getGoodsClassGoods($goodsClassId)
+        #获取这个商品的详情
+        public function getGoodsDetail($id)
         {
-            if(!$goodsClassId){
-                return ajax_return_error('缺少参数id');
+            if(!$id){
+                return ajax_return_error('缺少商品id','500');
             }
-            $goodsList = $this->model->where(['goods_class_id'=>$goodsClassId,'status'=>1,'isdelete'=>'0'])->select();
-            return ajax_return($goodsList,'ok','200');
+            $this->model->where(['id'=>$id])->find();
+            #查询该商品是否有优惠券或者通用的优惠券
+            $lottery = Db::name('lottery')->where(['goods_id'=>$id,'isdelete'=>0,'status'=>1])->find();
         }
+
 	}

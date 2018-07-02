@@ -13,6 +13,6 @@ Class Notice extends Controller
             ->where(['status'=>'1','isdelete'=>'0'])
             ->order('orderby DESC, create_time desc')
             ->select();
-        return json($list);
+        return ajax_return($list,'ok','200');
     }
 }

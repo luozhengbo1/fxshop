@@ -29,4 +29,19 @@
 <td>{$vo.orderby}</td>
 <td>{if condition="$vo.is_real eq 1"}是{else /}否{/if}</td>
 <td>{$vo.return_score}</td>
+<?php if($_SESSION['think']['auth_id']==1){
+if($vo['status']==1){?>
+<td><a href="javascript:;">上架</a></td>
+<?php }else if($vo['status']==2){ ?>
+<td><a href="javascript:;">上市</a></td>
+<?php }else{?>
+<td><a href="javascript:;">仓库中</a></td>
+<?php } } ?>
+<?php if($_SESSION['think']['auth_id']==1 ){
+if($vo['status']==1){
+?>
+<td><a class="btn" href="javascript:;" onclick="editStatus({$vo.id},'up')" >上市</a></td>
+<?php }else if($vo['status']==2){?>
+<td><a class="btn" href="javascript:;" onclick="editStatus({$vo.id},'down')">下市</a></td>
+<?php }} ?>
 <!--<td>{$vo.score_price}</td>-->

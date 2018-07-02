@@ -35,6 +35,13 @@ class Goods extends Controller
         if ($this->request->param("create_time") ) {
             $map['create_time'] =['between',[strtotime($this->request->param("create_time")),strtotime($this->request->param("end_create_time"))] ] ;
         }
+        if ($this->request->param("status") ) {
+            $map['status'] =$this->request->param("status") ;
+        }
+
+        if($this->uid!=1){#非超级管理员只显示自己的商品
+            $map['user_id'] =$this->uid;
+        }
     }
     #商品添加
     public function add()
@@ -62,13 +69,13 @@ class Goods extends Controller
     		if( $data['show_area']==1 ){#限时抢购区域
                 $goods['start_date'] = isset($data['start_date'])? strtotime($data['start_date']):'';
                 $goods['end_date'] = isset($data['end_date'])? strtotime($data['end_date']):'';
-    		}
-            if(  isset($goods['start_date']) &&  isset($goods['end_date']) ){
-                if( $goods['start_date'] >=$goods['end_date'] ){
-                    return ajax_return_adv_error('开售时间必须小于结束时间');
+                if(  isset($goods['start_date']) &&  isset($goods['end_date']) ){
+                    if( $goods['start_date'] >=$goods['end_date'] ){
+                        return ajax_return_adv_error('开售时间必须小于结束时间');
+                    }
                 }
-            }
-    		if( $data['free_type']!=1 ){
+    		}
+    		if( $data['free_type']!=1 ){#不包邮
     		    if( empty($data['postage']) ){
                     return ajax_return_adv_error('请填写邮费');
                 }
@@ -226,7 +233,7 @@ class Goods extends Controller
             #前端json过来的数据需要转义
             $allData['skuZuheData'] = json_decode(str_replace("&quot;", "\"", $allData['skuZuheData'] ),true);
             $allData['propty_name_val'] = json_decode(str_replace("&quot;", "\"", $allData['propty_name_val'] ),true);
-            dump($allData);die;
+//            dump($allData);die;
             $validate = \think\Loader::validate('Goods');
             $data = $allData;
             if(!$validate->check($data)){
@@ -237,10 +244,10 @@ class Goods extends Controller
             if( $data['show_area']==1 ){#限时抢购区域
                 $goods['start_date'] = isset($data['start_date'])? strtotime($data['start_date']):'';
                 $goods['end_date'] = isset($data['end_date'])? strtotime($data['end_date']):'';
-            }
-            if(  isset($goods['start_date']) &&  isset($goods['end_date']) ){
-                if( $goods['start_date'] >=$goods['end_date'] ){
-                    return ajax_return_adv_error('开售时间必须小于结束时间');
+                if(  isset($goods['start_date']) &&  isset($goods['end_date']) ){
+                    if( $goods['start_date'] >=$goods['end_date'] ){
+                        return ajax_return_adv_error('开售时间必须小于结束时间');
+                    }
                 }
             }
             if( $data['free_type']!=1 ){
@@ -291,8 +298,7 @@ class Goods extends Controller
             if( !empty($data['routine_key']) || !empty($data['routine_val'])   ){
                 $goods['routine'] = json_encode(array_combine($data['routine_key'],$data['routine_val']));
             }
-            $res = Db::name('goods')->insert($goods);
-            $goods_id = Db::name('goods')->getLastInsID();
+            $res = Db::name('goods')->where(['id'=>$data['id']])->update($goods);
             #属性和属性值插入
             if(!empty($allData['propty_name_val'])){
                 $propty_name =[];
@@ -305,8 +311,11 @@ class Goods extends Controller
                 }
 
                 #把数组去重
+                Db::name('goods_proprety_name')->where(['goods_id'=>$data['id']])->delete();
+                Db::name('goods_proprety_val')->where(['goods_id'=>$data['id']])->delete();
+                Db::name('goods_attribute')->where(['goods_id'=>$data['id']])->delete();
                 foreach (array_unique($propty_name) as $k=>$v){
-                    Db::name('goods_proprety_name')->insert(['goods_id'=>$goods_id,'name'=>$v]);
+                    Db::name('goods_proprety_name')->insert(['goods_id'=>$data['id'],'name'=>$v]);
                     $ids[]=Db::name('goods_proprety_name')->getLastInsID();
                 }
 
@@ -316,9 +325,8 @@ class Goods extends Controller
                         $name_num[]=$ids[$i];
                     }
                 }
-
                 for($i=0; $i<count($propty_name);$i++ ){
-                    $val[]=['goods_id'=>$goods_id,'value'=>$propty_name_val[$i],'propre_name_id'=>$name_num[$i]];
+                    $val[]=['goods_id'=>$data['id'],'value'=>$propty_name_val[$i],'propre_name_id'=>$name_num[$i]];
                 }
                 Db::name('goods_proprety_val')->insertAll($val );
 
@@ -326,32 +334,35 @@ class Goods extends Controller
             #sku插入
             if(!empty($allData['skuZuheData'])){
                 $skuData=[];
+                $where=[];
                 foreach ($allData['skuZuheData'] as $k=>$v){
+                    $where[$k][]=$v['id'];
                     $skuData[$k]['price']=$v['price'];
                     $skuData[$k]['store']=$v['num'];
                     $skuData[$k]['goods_code']=$v['code'];
                     #条形码
                     $skuData[$k]['bar_code']=$v['bar'];
-                    $skuData[$k]['goods_id']= $goods_id;
+                    $skuData[$k]['goods_id']= $data['id'];
                     $skuData[$k]['attribute_name']=$v['SkuId'];
                 }
-
-                $res = Db::name('goods_attribute')->insertAll($skuData);
+                 $res = Db::name('goods_attribute')->insertAll($skuData);
 
             }
 
-            return ajax_return('','添加成功','200');
+            return ajax_return('','操作成功','200');
 
         }else{
             $id = $this->request->param('id');
-            $vo = Db::name('goods')->alias('g')
+            $goodsData = Db::name('goods')->alias('g')
                 ->where(['g.id'=>$id])
                 ->find();
-            $vo['pic'] = json_decode($vo['pic'],true);
-            if(isset($vo['routine'])){
-                $routine = json_decode($vo['routine'],true);
+            $goodsData['pic'] = json_decode($goodsData['pic'],true);
+            if( !empty($goodsData['routine']) ){
+                $routine = json_decode($goodsData['routine'],true);
                 $routine_name = array_keys($routine);
                 $routine_val = array_values($routine);
+                $this->view->assign('routine_name',$routine_name?$routine_name:'');
+                $this->view->assign('routine_val',$routine_val?$routine_val:'');
             }
             $skuData =  Db::name('goods_attribute')
                 ->where(['goods_id'=>$id])
@@ -393,10 +404,8 @@ class Goods extends Controller
                     }
                 }
             }
-            $this->view->assign('vo',$vo);
+            $this->view->assign('vo',$goodsData);
             #常规属性
-            $this->view->assign('routine_name',$routine_name?$routine_name:'');
-            $this->view->assign('routine_val',$routine_val?$routine_val:'');
             $this->view->assign('proprety_name_val',$proprety_name_val);
             $this->view->assign('skuData',$skuData);
             $this->view->assign('proprety_name',$proprety_name);
@@ -405,6 +414,20 @@ class Goods extends Controller
         }
 
 
+
+    }
+    #修改该状态
+    public function  editStatus()
+    {
+        if($this->request->isAjax()){
+            $data = $this->request->post();
+            if($data['flag']=="up"){
+                Db::name('goods')->where(['id'=>$data['id']])->update(['status'=>2]);
+            }else{
+                Db::name('goods')->where(['id'=>$data['id']])->update(['status'=>1]);
+            }
+            return json(['msg'=>'操作成功']);
+        }
 
     }
 

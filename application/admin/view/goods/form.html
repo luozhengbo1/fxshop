@@ -39,9 +39,27 @@
                   }
                 }
             ?>
-            <option value="">实物</option>
-            <option value="1">是</option>
-            <option value="0">否</option>
+            <option value="" >实物</option>
+            <option value="1" {$b}>是</option>
+            <option value="0" {$b}>否</option>
+        </select>
+    </div>
+    <div class="select-box" style="width:250px">
+        <select name="status" class="select">
+            <option value="">--请选择状态--</option>
+            <option value="2" <?php if(isset($_GET['status'])){
+             if( $_GET['status']==2){
+             echo 'selected';}
+             }?>
+                >上市</option>
+            <option value="1"  <?php if(isset($_GET['status'])){
+             if( $_GET['status']==1){
+             echo 'selected';}
+             }?> >上架</option>
+            <option value="0" <?php if(isset($_GET['status'])){
+             if( $_GET['status']==='0'){
+             echo 'selected';}
+             }?>  >仓库中</option>
         </select>
     </div>
     <button type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>

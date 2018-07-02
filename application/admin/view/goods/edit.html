@@ -124,17 +124,17 @@
             </div>
             <div class="col-xs-3 col-sm-2"></div>
         </div>
-         <div class="row cl start_date"  style="display: none;">
+         <div class="row cl start_date"  style="display: {$vo.show_area==1?'block':'none'};">
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>开售时间：</label>
             <div class="formControls col-xs-6 col-sm-7">
-                <input type="text" class="input-text Wdate" placeholder="开售时间" name="start_date" value="{$vo.start_date ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}  nullmsg="请输入开售时间" errormsg="请输入开售时间">
+                <input type="text" class="input-text Wdate" placeholder="开售时间" name="start_date" value="<?php echo isset($vo['start_date'])?date('Y-m-d H:i:s',$vo['start_date']):'';   ?>" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}  nullmsg="请输入开售时间" errormsg="请输入开售时间">
             </div>
             <div class="col-xs-3 col-sm-2"></div>
         </div>
-        <div class="row cl start_date" style="display: none;" >
+        <div class="row cl start_date" style="display: {$vo.show_area==1?'block':'none'};" >
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>截止时间：</label>
             <div class="formControls col-xs-6 col-sm-7">
-                <input type="text" class="input-text Wdate" placeholder="截止时间" name="end_date" value="{$vo.end_date ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}   nullmsg="请输入截止时间" errormsg="请输入截止时间">
+                <input type="text" class="input-text Wdate" placeholder="截止时间" name="end_date" value="<?php echo isset($vo['end_date'])?date('Y-m-d H:i:s',$vo['end_date']):'';   ?>" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}   nullmsg="请输入截止时间" errormsg="请输入截止时间">
             </div>
             <div class="col-xs-3 col-sm-2"></div>
         </div>
@@ -156,17 +156,17 @@
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>是否包邮：</label>
             <div class="formControls col-xs-6 col-sm-7 skin-minimal">
                 <div class="radio-box">
-                    <input type="radio" name="free_type" {$vo.free_type==1?'checked':''} id="status-1" value="1" datatype="*" nullmsg="请选择商品状态" errormsg="">
+                    <input type="radio" name="free_type" {$vo.free_type==1?'checked':''} id="status-1" value="1" >
                     <label for="status-1">是</label>
                 </div>
                 <div class="radio-box">
-                    <input type="radio" name="free_type" {$vo.free_type?:'checked'} id="status-0" value="0" datatype="*" nullmsg="请选择商品状态" errormsg="">
+                    <input type="radio" name="free_type" {$vo.free_type?:'checked'} id="status-0" value="0" >
                     <label for="status-0">否</label>
                 </div>
             </div>
             <div class="col-xs-3 col-sm-2"></div>
         </div>
-         <div class="row cl postage" style="display:none;">
+         <div class="row cl postage" style="display:{$vo.free_type?'none':'display'};">
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>邮费：</label>
             <div class="formControls col-xs-6 col-sm-7">
                 <input type="number" class="input-text" placeholder="请输入邮费" name="postage" value="{$vo.postage ?? ''}"  nullmsg="请输入邮费" errormsg="请输入邮费">
@@ -232,11 +232,11 @@
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>是否是实物：</label>
             <div class="formControls col-xs-6 col-sm-7 skin-minimal">
                 <div class="radio-box">
-                    <input type="radio" name="is_real"  checked id="is_real-1" {$vo.real?'checked':''} value="1" datatype="*" nullmsg="请选择实物" errormsg="请选择实物">
+                    <input type="radio" name="is_real"  checked id="is_real-1" {$vo.is_real?'checked':''} value="1" datatype="*" nullmsg="请选择实物" errormsg="请选择实物">
                     <label for="is_real-1">是</label>
                 </div>
                 <div class="radio-box">
-                    <input type="radio" name="is_real" id="is_real-0" value="0" {$vo.real?'':'checked'} datatype="*" nullmsg="请选择实物" errormsg="请选择实物">
+                    <input type="radio" name="is_real" id="is_real-0" value="0" {$vo.is_real?'':'checked'} datatype="*" nullmsg="请选择实物" errormsg="请选择实物">
                     <label for="is_real-0">否</label>
                 </div>
             </div>
@@ -393,6 +393,20 @@
             </div>
             <div class="col-xs-3 col-sm-2"></div>
         </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>状态：</label>
+            <div class="formControls col-xs-6 col-sm-7 skin-minimal">
+                <div class="radio-box">
+                    <input type="radio" name="status"  checked id="is_real-1" {$vo.status?'checked':''} value="1" datatype="*" nullmsg="请选择状态" errormsg="请选择状态">
+                    <label for="is_real-1">是</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="status" id="is_real-0" value="0" {$vo.status?'':'checked'} datatype="*" nullmsg="请选择状态" errormsg="请选择状态">
+                    <label for="is_real-0">否</label>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
          <div class="row cl">
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>商品详情：</label>
             <div class="formControls col-xs-6 col-sm-7 skin-minimal">
@@ -526,6 +540,8 @@
                 text      = $("#markdown_tpl").html();
         $("#markdown").html(converter.makeHtml(text));
     })
+    ue.execCommand("<?php echo isset($vo['detail'])?$vo['detail']:'';?>");
+
 
     // 属性表格js
     function addth(obj, flag){
