@@ -19,9 +19,6 @@ class WeChat extends Controller
         $this->appId = Config::get('app_id');
         $this->appSecret = Config::get('app_secret');
         $serverUrl ="http://{$_SERVER['SERVER_NAME']}:{$_SERVER['SERVER_PORT']}/index.php";
-//        dump($serverUrl);
-//        dump($_SERVER);
-//        die;
         $this->authBack = urlencode("{$serverUrl}/index/WeChat/sessionWxUser");
 
     }
