@@ -2,6 +2,7 @@
 	namespace app\index\controller;
 	use Org\Util\Wehcat;
 	use think\Controller;
+	use think\Request;
 	Class MustLogin extends Controller
 	{
 		public function __construct()
@@ -13,5 +14,6 @@
 			}
 
 		}
+
 
 	}
