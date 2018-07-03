@@ -19,6 +19,13 @@ class Index extends Mustlogin
 //        die;
         return $this->fetch();
     }
+    public function  sendMessage()
+    {
+        $time = time();
+//        Db::name('message_user')->where(['create_time'=>['']])
+//        return $this->view->fetch('testweb');
+        return $this->view->fetch('test');
+    }
     public function message(){
         $this->assign('titleName', "个人消息 ");
         return $this->view->fetch();
