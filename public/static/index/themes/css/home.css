@@ -3162,6 +3162,7 @@ a {
 .hot-goods {
     padding: .08rem 0;
     background: white;
+	height: .58rem;
 }
 .hot-goods li{
     float: left;
@@ -3171,12 +3172,13 @@ a {
 .hot-goods li img{
    /* width: 100%;*/
     max-height: .5rem;
+	min-height: .2rem;
 }
 .menu-left{
 	background: white;
 	position: fixed;
 	left: 0;
-	top: 1.7rem;
+	top: 1.5rem;
 	bottom: 0;
 	overflow-y: scroll;
 	width: 26%;
@@ -3209,16 +3211,22 @@ a {
     margin-top: .06rem;
     width: 100%;
 }
-.child_category ul li{
+.child_category li{
     width: 31%;
     float: left;
     margin-right: 2%;
     text-align: center;
     margin-bottom: .06rem;
     background: white;
+	height: 1rem;
 }
-.child_category ul li img{
+.child_category li img{
     width: 100%;
+	max-height: .7rem;
+	height: .7rem;
+}
+.child_category li span{
+	padding: .06rem 0 ;
 }
 .child_category .title{
     height: .3rem;

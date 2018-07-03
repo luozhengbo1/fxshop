@@ -15,6 +15,7 @@
      });
  */
 var pageload = function(options){
+    debugger
     return new MyPageload(this, options);
 };
 var MyPageload = function(element, options){
