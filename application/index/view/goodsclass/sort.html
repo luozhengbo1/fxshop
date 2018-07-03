@@ -1,0 +1,230 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+<style>
+    .module-title{
+        background: white;
+        line-height: .34rem;
+        height: .34rem;
+    }
+</style>
+<!--商品分类-->
+{include file="Public/header-search"}
+    <div class="pl5 pr5">
+        <p class="module-title">
+            <span class="fl">热门推荐</span>
+            <!--<span class="fr">查看更多</span>-->
+        </p>
+        <ul class="hot-goods clear" id="hotGoods">
+          <!--  <li class="tc"><img src="https://m.360buyimg.com/mobilecms/s240x240_jfs/t6376/61/1152254070/492223/90c59f8b/594b8118Nd6abac12.jpg!q70.jpg.dpg.webp"></li>-->
+        </ul>
+    </div>
+    <section class="menu-right padding-all">
+        <div class="menu-left" id="sidebar">
+            <ul><!--<li class="active">名酒茶礼</li>--></ul>
+        </div>
+        <div id="dataListWrap">
+            <ul class="child_category" id="goodsList">
+                <!--<li>
+                    &lt;!&ndash;<div class="title" > <a href="/mobile/index.23php?m=category&amp;a=products&amp;id=1593"><h5>食用油</h5></a></div>&ndash;&gt;
+                    &lt;!&ndash;<ul class="clear">
+                        <li><a href="#"></a><img src="http://scsc.top/images/201709/thumb_img/2912_thumb_G_1505608995337.jpg" alt="花生油"><span>花生油</span></li>
+                    </ul>&ndash;&gt;
+                </li>-->
+            </ul>
+        </div>
+    </section>
+
+{include file="Public/footer"}
+<script>
+    var url ={
+        getGoodsClass:"{:url('index/goodsclass/getGoodsClass')}",//获取商品分类
+        getHotGoods:"{:url('index/goods/getGoodsHotOrOther')}",//获取热销商品
+        getGoods:"{:url('index/goodsclass/getGoodsClassGoods')}",//根据分类获取商品
+    }
+    $(function () {
+        getHotGoods();
+        getGoodsClass();
+        //分类导航点击
+       /* var  $sidebarLi =  $('#sidebar li');
+        $sidebarLi.click(function () {
+            $sidebarLi.removeClass('active');
+            $(this).addClass('active');
+            getGoods({id:$(this).data('id')});
+        });*/
+        //分类导航距离顶部位置处理
+        $(window).scroll(function () {
+            var menuTop=168-$(window).scrollTop();//菜单距离顶部的高度  初始高度168-滚动条滚动高度
+            if(menuTop>48){
+                $('.menu-left').css('top',menuTop);
+            }else if(menuTop<48){
+                //滚动条滚动太快处理
+                //  console.log(menuTop<48)
+                $('.menu-left').css('top','48px');
+            }
+            //   console.log($(window).scrollTop(), $('.menu-left').css('top'),menuTop)
+        });
+
+    })
+    function searchGoods(){
+        if(!formEmptyValid('form')){
+            return;
+        }else{
+            getGoods(formData('form'))
+        }
+    }
+    function getGoods(data) {
+        initData('goodsList');
+        pageload({
+            targetWarp:'dataListWrap',
+            target:'goodsList',
+            page:1,
+            size:8,
+            ajaxData:{
+                url:url.getGoods,
+                data:data,
+            },
+            dealFun:dealData,
+        });
+    }
+    function dealData(data) {
+
+        var html='';
+        for(var i = 0; i < data.length; i++){
+            html +='<li><a href="#"></a><img src="http://scsc.top/images/201709/thumb_img/2912_thumb_G_1505608995337.jpg" alt="花生油"><span>花生油</span></li>';
+        }
+        return html;
+    }
+
+    //获取热销商品
+    function getHotGoods() {
+        $.ajax({
+            type:'post',
+            data:{page:1, size:4, show_area:4},
+            url:url.getHotGoods,
+            success:function (data) {
+                var html='';
+                var code = data.code;
+                var data = data.data;
+                if(code='200'){
+                    for(var i = 0; i < data.length; i++){
+                        html +=' <li class="tc">'
+                        html +='	<a href="{:url(\'goods/detail\',array(\'id\'=>21))}" >';
+                        html +='    <img class="good-img" src="'+data[i].main_image+'">';
+                        html +='   </a>';
+                        html +='  </li>';
+                    }
+                    $('#hotGoods').empty().append(html)
+                }
+
+            }
+        })
+    }
+   //获取商品分类
+    function getGoodsClass() {
+        $.ajax({
+            type:'post',
+            url:url.getGoodsClass,
+            success:function (data) {
+                var html='', code = data.code,data = data.data;
+                if(code=='200'){
+                    for(var i = 0; i < data.length; i++){
+                        html +='<li data-id="'+data[i].id+'" onclick="getGoods({id:'+data[i].id+'})" >'+data[i].name+'</li>'
+                    }
+                    $('#sidebar ul').empty().append(html)
+                }
+            }
+        })
+    }
+
+
+
+ /*   $(function () {
+        var cat_id = 0;
+        //取出上次位置的值并保存
+        var sLocalCateO = sessionStorage.getItem("sCateO");
+        if (sLocalCateO != "" && sLocalCateO) {
+            var oCate = JSON.parse(sLocalCateO);
+            ajaxAction($("#sidebar li:first"), oCate.sData, oCate.sDataId);
+            $(".menu-left ul li").each(function () {
+                $(this).removeClass("active")
+                if ($(this).attr("data-id") == oCate.sDataId) {
+                    $(this).addClass("active")
+                }
+            })
+        } else {
+            ajaxAction($("#sidebar li:first"), $("#sidebar li:first").attr("data"), $("#sidebar li:first").attr("data-id"));
+        }
+
+        $("#sidebar li").click(function () {
+            var li = $(this);
+            var url = $(this).attr("data");
+            var id = $(this).attr("data-id");
+            ajaxAction(li, url, id);
+        });
+
+        function ajaxAction(obj, url, id) {
+            if (cat_id != id) {
+                $.ajax({
+                    type: 'get',
+                    url: url,
+                    data: '',
+                    cache: true,
+                    async: false,
+                    dataType: 'json',
+                    beforeSend: function () {
+                        $(".loading").show();
+                    },
+                    success: function (result) {
+                        if (typeof(result.code) == 'undefined') {
+                            $(window).scrollTop(0);
+                            template.config('openTag', '<%');
+                            template.config('closeTag', '%>');
+                            var html = template('category', result);
+                            $(".child_category").html(html);
+                            //$(".child_category ul").html(result);
+                            obj.addClass("active").siblings("li").removeClass("active");
+                        }
+                        else {
+                            d_messages(result.message);
+                        }
+                    },
+                    complete: function () {
+                        $(".loading").hide();
+                    }
+                });
+                cat_id = id;
+            }
+        }
+
+        //返回之前页面的操作位置
+        //将value存储到key字段
+        $(".menu-left").scroll(function () {
+            if ($(".menu-left").scrollTop() != 0) {
+                sessionStorage.setItem("offsetTop", $(".menu-left").scrollTop());//保存滚动位置
+            }
+        });
+        //取出并滚动到上次保存位置
+        var _offset = sessionStorage.getItem("offsetTop");
+        $(".menu-left").scrollTop(_offset);
+
+        //将value存储到key字段
+        $(".menu-left ul li").click(function () {
+            if ($(this).hasClass("active")) {
+                var sDataId = $(this).attr("data-id"),
+                    sData = $(this).attr("data")
+                sO = JSON.stringify({
+                    sDataId: sDataId,
+                    sData: sData
+                })
+                sessionStorage.setItem("sCateO", sO);//保存id,data
+            }
+        });
+        setTimeout(function () {
+            sessionStorage.removeItem("offsetTop");
+            sessionStorage.removeItem("sCateO");
+        }, 10000);
+
+    })*/
+</script>
+</body>
+</html>

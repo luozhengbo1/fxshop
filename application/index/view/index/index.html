@@ -147,7 +147,7 @@
 			success:function (data) {
 			    var data = data.data;
                 var html='';
-			    if(data.code='200'){
+			    if(data.code=='200'){
                     for(var i = 0; i < data.length; i++){
                         html +=' <li class="swiper-slide"><a class="ellipsis-oneline" href="{:url(\'Notice/detail\',array(\'id\'=>$vo[\'id\']))}" >'+notEmpty(data[i].title)+'</a></li>'
                     }
@@ -157,11 +157,7 @@
             }
 		})
     }
-    function notEmpty(val) {
-	    if(val==undefined || val =='undefined' || val =='null' || val ==null){
-	        return ''
-		}else return val;
-    }
+
 </script>
 </body>
 </html>
