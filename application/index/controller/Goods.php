@@ -16,22 +16,21 @@
         #获取商品的
         public function  getGoodsHotOrOther($page,$size,$show_area='3')
         {
-            $goodsList = Cache::get('goods'.$show_area);
-            if($goodsList){
-                return ajax_return($goodsList,'ok','200');
+            if($show_area="all"){
+                $goodsList =$this->model->select();
             }else{
-                if($show_area="all"){
-                    $goodsList =$this->model->select();
-                }else{
-                    $goodsList = $this->model
-                        ->where(['show_area'=>$show_area,'status'=>1,'isdelete'=>'0'])#2表示获取上市的商品
-                          ->page($page,$size)
-                        ->select();
-                }
-                Cache::set('goods'.$show_area,$goodsList,'3600');
-                return ajax_return($goodsList,'ok','200');
-
+                $goodsList = $this->model
+                    ->where(['show_area'=>$show_area,'status'=>1,'isdelete'=>'0'])#2表示获取上市的商品
+                      ->page($page,$size)
+                    ->select();
             }
+            if(!empty($goodsList)) {
+                return ajax_return($goodsList,'no','500');
+            }else{
+                return ajax_return($goodsList,'ok','200');
+            }
+
+
         }
         #获取这个商品的详情
         public function detail($id)

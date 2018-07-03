@@ -170,7 +170,8 @@
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3">奖券详情：</label>
             <div class="formControls col-xs-6 col-sm-6 skin-minimal">
-                <script id="editor" type="text/plain" name="desc" style="text-align:center;width:600px;height:500px;">{$vo.desc ?? ''}</script>
+                <!--<script id="editor" type="text/plain" name="desc" style="text-align:center;width:600px;height:500px;">{$vo.desc ?? ''}</script>-->
+                <textarea id="container" name="desc">{$vo.desc ?? ''}</textarea>
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
@@ -192,24 +193,46 @@
 <!--图片上传-->
 <script src="__LIB__/lightbox2/js/lightbox.min.js"></script>
 <!--百度编辑器 start-->
-<script type="text/javascript" src="__LIB__/showdown/1.4.2/showdown.min.js"></script>
-<script>window.UEDITOR_HOME_URL = '__LIB__/ueditor/1.4.3/'</script>
-<script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/ueditor.config.js"></script>
-<script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/ueditor.all.min.js"> </script>
-<script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
-<script>
-    $(function () {
-        var ue = UE.getEditor('editor',{
-            serverUrl:'{:\\think\\Url::build("Ueditor/index")}'
-        });
-        var converter = new showdown.Converter(),
-            text      = $("#markdown_tpl").html();
-        $("#markdown").html(converter.makeHtml(text));
-        // function getEditV(){
-        //     $('input[name="desc"]').val( ue.getContent() )
-        // }
-    })
+<!--<script type="text/javascript" src="__LIB__/showdown/1.4.2/showdown.min.js"></script>-->
+<!--<script>window.UEDITOR_HOME_URL = '__LIB__/ueditor/1.4.3/'</script>-->
+<!--<script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/ueditor.config.js"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/ueditor.all.min.js"> </script>-->
+<!--<script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>-->
+<!--配置文件-->
+<script type="text/javascript" src="__UEDITOR__/ueditor.config.js"></script>
+<!--编辑器源码文件-->
+<script type="text/javascript" src="__UEDITOR__/ueditor.all.js"></script>
+<!--实例化编辑器并设置toolbar的按钮-->
+<script type="text/javascript">
+    var ue = UE.getEditor('container', {
+        toolbars: [
+            ['source', 'fullscreen', 'undo', 'redo', 'formatmatch', '|',
+                'bold', 'italic', 'underline', 'strikethrough', 'horizontal', '|',
+                'fontfamily', 'fontsize', 'forecolor', 'backcolor', 'paragraph', 'lineheight', '|',
+                'justifyleft', 'justifyright', 'justifycenter', 'justifyjustify', '|',
+                'insertorderedlist', 'insertunorderedlist', '|',
+                'insertrow', 'insertcol', 'deleterow', 'deletecol', '|',
+                'mergeright', 'mergedown', 'mergecells', 'splittorows', 'splittocols', 'splittocells',
+                'deletecaption', 'inserttitle', 'deletetable', '|',
+                'simpleupload', 'insertimage', 'link', 'unlink', 'preview']
+        ],
+        autoFrameWidth: true,
+        autoFrameHeight: true
+    });
 </script>
+<!--<script>-->
+    <!--$(function () {-->
+        <!--var ue = UE.getEditor('editor',{-->
+            <!--serverUrl:'{:\\think\\Url::build("Ueditor/index")}'-->
+        <!--});-->
+        <!--var converter = new showdown.Converter(),-->
+            <!--text      = $("#markdown_tpl").html();-->
+        <!--$("#markdown").html(converter.makeHtml(text));-->
+        <!--// function getEditV(){-->
+        <!--//     $('input[name="desc"]').val( ue.getContent() )-->
+        <!--// }-->
+    <!--})-->
+<!--</script>-->
 <!--百度编辑器 end-->
 
 <script>
