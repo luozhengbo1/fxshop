@@ -15,15 +15,17 @@
             <!--<span class="fr">查看更多</span>-->
         </p>
         <ul class="hot-goods clear" id="hotGoods">
-          <!--  <li class="tc"><img src="https://m.360buyimg.com/mobilecms/s240x240_jfs/t6376/61/1152254070/492223/90c59f8b/594b8118Nd6abac12.jpg!q70.jpg.dpg.webp"></li>-->
+<!--
+            <li class="tc"><img src="https://m.360buyimg.com/mobilecms/s240x240_jfs/t6376/61/1152254070/492223/90c59f8b/594b8118Nd6abac12.jpg!q70.jpg.dpg.webp"></li>
+-->
         </ul>
     </div>
     <section class="menu-right padding-all">
         <div class="menu-left" id="sidebar">
             <ul><!--<li class="active">名酒茶礼</li>--></ul>
         </div>
-        <div id="dataListWrap">
-            <ul class="child_category" id="goodsList">
+        <div id="dataListWrap" style="width: 70%; float: right">
+            <ul class="child_category clear" id="goodsList">
                 <!--<li>
                     &lt;!&ndash;<div class="title" > <a href="/mobile/index.23php?m=category&amp;a=products&amp;id=1593"><h5>食用油</h5></a></div>&ndash;&gt;
                     &lt;!&ndash;<ul class="clear">
@@ -90,7 +92,12 @@
 
         var html='';
         for(var i = 0; i < data.length; i++){
-            html +='<li><a href="#"></a><img src="http://scsc.top/images/201709/thumb_img/2912_thumb_G_1505608995337.jpg" alt="花生油"><span>花生油</span></li>';
+            html +=' <li class="tc">'
+            html +='	<a href="{:url(\'goods/detail\',array(\'id\'=>21))}" >';
+            html +='    <img class="good-img" alt="'+data[i].name+'" src="'+data[i].main_image+'">';
+            html +='    <span>'+data[i].name+'</span>'
+            html +='   </a>';
+            html +='  </li>';
         }
         return html;
     }
@@ -105,13 +112,16 @@
                 var html='';
                 var code = data.code;
                 var data = data.data;
+                console.log(data)
                 if(code='200'){
                     for(var i = 0; i < data.length; i++){
-                        html +=' <li class="tc">'
-                        html +='	<a href="{:url(\'goods/detail\',array(\'id\'=>21))}" >';
-                        html +='    <img class="good-img" src="'+data[i].main_image+'">';
-                        html +='   </a>';
-                        html +='  </li>';
+                        if(i<4){
+                            html +=' <li class="tc">'
+                            html +='	<a href="{:url(\'goods/detail\',array(\'id\'=>21))}" >';
+                            html +='    <img class="good-img" alt="图片" src="'+data[i].main_image+'">';
+                            html +='   </a>';
+                            html +='  </li>';
+                        }
                     }
                     $('#hotGoods').empty().append(html)
                 }
@@ -128,7 +138,7 @@
                 var html='', code = data.code,data = data.data;
                 if(code=='200'){
                     for(var i = 0; i < data.length; i++){
-                        html +='<li data-id="'+data[i].id+'" onclick="getGoods({id:'+data[i].id+'})" >'+data[i].name+'</li>'
+                        html +='<li data-id="'+data[i].id+'" onclick="getGoods({goodsClassId:'+data[i].id+'})" >'+data[i].name+'</li>'
                     }
                     $('#sidebar ul').empty().append(html)
                 }
