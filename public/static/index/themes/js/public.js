@@ -251,3 +251,9 @@ function tabSwitch($target,complete) {
         complete()
     })
 }
+
+function notEmpty(val) {
+    if(val==undefined || val =='undefined' || val =='null' || val ==null){
+        return ''
+    }else return val;
+}

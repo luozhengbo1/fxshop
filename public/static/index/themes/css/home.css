@@ -2891,7 +2891,9 @@ span.pink-bg {
 	padding: .1rem;
 }
 .module-nav li img{
-	width: 100%;
+	/*min-height: .2rem;
+	width: 100%;*/
+    width: .44rem;
 }
 .module-active img{
 	height: 1rem;

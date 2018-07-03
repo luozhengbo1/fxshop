@@ -12,19 +12,12 @@ class Index extends Mustlogin
         #功能模块
         $modular = new Modular($num=5);
         $getModular = $modular->getModular();
-        $this->view->assign('notice',$getModular);
+        $this->view->assign('modular',$getModular);
         $this->view->assign('titleName', "泛亚商城");
-//        dump($getSildeShow);
-//        dump($getModular);
-//        die;
+       /* dump($getSildeShow);*/
+       /* dump($getModular);*/
+       /* die;*/
         return $this->fetch();
-    }
-    public function  sendMessage()
-    {
-        $time = time();
-//        Db::name('message_user')->where(['create_time'=>['']])
-//        return $this->view->fetch('testweb');
-        return $this->view->fetch('test');
     }
     public function message(){
         $this->assign('titleName', "个人消息 ");
