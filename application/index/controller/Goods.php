@@ -25,7 +25,7 @@
                     ->select();
             }
             if(!empty($goodsList)) {
-                return ajax_return($goodsList,'no','500');
+                return ajax_return('','no','500');
             }else{
                 return ajax_return($goodsList,'ok','200');
             }

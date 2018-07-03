@@ -96,7 +96,6 @@
 </div>
 {include file="Public/footer"}
 	<script>
-
         getNotice();
         var swiper1= bannerSwiper('header-banner');
         new Swiper('.announcement-banner', {
@@ -160,65 +159,5 @@
         }
 
 	</script>
-
-<!--<script>
-	var pageLoad= function () {
-
-        droploadFun()
-    }
-    // 页数
-    var page = 0;
-    // 每页展示5个
-    var size = 5;
-    droploadFun(droploadData)
-    function droploadFun(dealDataFn) {
-        var dropload =  $('#dataListWrap').dropload({
-            scrollArea : window,
-            loadDownFn : function(me){
-                page++;
-                $.ajax({
-                    url:"__STATIC__/index/json/more.json",
-                    type:'post',
-                 //   data:{goods_id:95,similarity_score:core,page:page,size:size,t:new Date().getTime()},
-                    dataType:'json',
-                    success: function(data){
-                        var data = data.lists
-						if (data.length>0){
-							var html = dealData(data);
-							//如果获取的数据还没有条数多，表明数据已经没有了
-							if(data.length<size){
-								$('#goodsList').append(html);
-								dropload.lock();
-								dropload.noData();
-								dropload.resetload();
-							}else{
-								setTimeout(function(){
-									$('#goodsList').append(html);
-									// 每次数据加载完，必须重置
-									dropload.resetload();
-								},100);
-							}
-						} else{
-							dropload.lock();
-							dropload.noData();
-							dropload.resetload();
-						}
-                    },
-                    error: function(xhr, type){
-                        console.error('Ajax 请求出错');
-                        // 即使加载出错，也得重置
-                        dropload.lock();
-                        dropload.noData();
-                        dropload.resetload();
->>>>>>> Stashed changes
-                    }
-                    $('#notice').empty().append(html)
-				}
-
-            }
-		})
-    }
-
-</script>
 </body>
 </html>
