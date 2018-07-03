@@ -156,7 +156,7 @@ class Customer extends Controller
                 $scoreitem = $score[$i];
                 for ($j = 0; $j < count($gradeList); $j++) {
                     $gradeitem = $gradeList[$j];
-                    if ($scoreitem['score'] > $gradeitem['score_start'] && $scoreitem['score'] < $gradeitem['score_end']) {
+                    if ($scoreitem['score'] >= $gradeitem['score_start'] && $scoreitem['score'] <= $gradeitem['score_end']) {
                         //插入grade_id
                         $model->update([
                             'grade_id' => $gradeitem['id']
