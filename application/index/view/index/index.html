@@ -95,63 +95,71 @@
 		</ul>
 </div>
 {include file="Public/footer"}
-<script>
-    getNotice();
-    var swiper1= bannerSwiper('header-banner');
-    new Swiper('.announcement-banner', {
-        direction : 'vertical',
-        autoplay: {
-            delay: 5000,
-            stopOnLastSlide: false,
-            disableOnInteraction: false,
-        },
-    });
-    function dealData(data) {
-        var html='';
-        for(var i = 0; i < data.length; i++){
-            console.log(data[i])
-            html +='<li>';
-            html +='	<a href="{:url(\'goods/detail\',array(\'id\'=>$vo[\'id\']))}" >';
-            html +='     <p class="tc"><img class="good-img" src="'+data[i].main_image+'"></p>';
-            html +='     <p class="good-desc ellipsis">'+notEmpty(data[i].name)+' </p>';
-            html +='   </a>';
-            html +='    <div>';
-			html +='  		  <p class="fl">已售'+notEmpty(data[i].buy_num)+'</p>';
-			html +='  		      <p class="fr">';
-			html +='  		      <span class="goods-price">¥'+notEmpty(data[i].basic_price)+'</span>';
-			html +='  				<span class="goods-old-price">¥'+notEmpty(data[i].original_price)+'</span>';
-			html +='  		  </p>';
-            html +='    </div>';
-            html +='  </li>';
+	<script>
+
+        getNotice();
+        var swiper1= bannerSwiper('header-banner');
+        new Swiper('.announcement-banner', {
+            direction : 'vertical',
+            autoplay: {
+                delay: 5000,
+                stopOnLastSlide: false,
+                disableOnInteraction: false,
+            },
+        });
+        function dealData(data) {
+            var html='';
+            for(var i = 0; i < data.length; i++){
+                console.log(data[i])
+                html +='<li>';
+                html +='	<a href="{:url(\'goods/detail\',array(\'id\'=>$vo[\'id\']))}" >';
+                html +='     <p class="tc"><img class="good-img" src="'+data[i].main_image+'"></p>';
+                html +='     <p class="good-desc ellipsis">'+notEmpty(data[i].name)+' </p>';
+                html +='   </a>';
+                html +='    <div>';
+                html +='  		  <p class="fl">已售'+notEmpty(data[i].buy_num)+'</p>';
+                html +='  		      <p class="fr">';
+                html +='  		      <span class="goods-price">¥'+notEmpty(data[i].basic_price)+'</span>';
+                html +='  				<span class="goods-old-price">¥'+notEmpty(data[i].original_price)+'</span>';
+                html +='  		  </p>';
+                html +='    </div>';
+                html +='  </li>';
+            }
+            return html;
         }
-        return html;
-    }
-     pageload({
-		 targetWarp:'dataListWrap',
-         target:'goodsList',
-         page:1,
-         size:10,
-         ajaxData:{
-              url:"{:url('index/goods/getGoodsHotOrOther')}",
-              data:{
-                  show_area:4
-			  },
-          },
-		dealFun:dealData
-     });
-// <<<<<<< Updated upstream
-	function getNotice() {
-		$.ajax({
-			type:'post',
-			data:{page:1, size:2},
-            url:"{:url('index/notice/getNotice')}",
-			success:function (data) {
-			    var data = data.data;
-                var html='';
-			    if(data.code=='200'){
-                    for(var i = 0; i < data.length; i++){
-                        html +=' <li class="swiper-slide"><a class="ellipsis-oneline" href="{:url(\'Notice/detail\',array(\'id\'=>$vo[\'id\']))}" >'+notEmpty(data[i].title)+'</a></li>'
-</script>
+        pageload({
+            targetWarp:'dataListWrap',
+            target:'goodsList',
+            page:1,
+            size:10,
+            ajaxData:{
+                url:"{:url('index/goods/getGoodsHotOrOther')}",
+                data:{
+                    show_area:4
+                },
+            },
+            dealFun:dealData
+        });
+        function getNotice() {
+            $.ajax({
+                type:'post',
+                data:{page:1, size:2},
+                url:"{:url('index/notice/getNotice')}",
+                success:function (data) {
+                    var data = data.data;
+                    var html='';
+                    if(data.code=='200'){
+                        for(var i = 0; i < data.length; i++){
+                            html +=' <li class="swiper-slide"><a class="ellipsis-oneline" href="{:url(\'Notice/detail\',array(\'id\'=>$vo[\'id\']))}" >'+notEmpty(data[i].title)+'</a></li>'
+                        }
+                        $('#notice').empty().append(html)
+                    }
+
+                }
+            })
+        }
+
+	</script>
 
 <!--<script>
 	var pageLoad= function () {
