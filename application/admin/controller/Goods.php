@@ -94,7 +94,7 @@ class Goods extends Controller
     		$goods['goods_class_id'] = $data['goods_class_id'];
     		$goods['goods_brand_id'] = $data['goods_brand_id'];
     		$goods['detail'] = $data['detail'];
-    		$goods['status'] = $data['status'];
+//    		$goods['status'] = $data['status'];
     		$goods['main_image'] = $data['main_image'];
     		$goods['subtitle'] = $data['subtitle'];
     		$goods['create_time'] = $create_time;
@@ -273,7 +273,7 @@ class Goods extends Controller
             $goods['goods_class_id'] = $data['goods_class_id'];
             $goods['goods_brand_id'] = $data['goods_brand_id'];
             $goods['detail'] = $data['detail'];
-            $goods['status'] = $data['status'];
+//            $goods['status'] = $data['status'];
             $goods['main_image'] = $data['main_image'];
             $goods['subtitle'] = $data['subtitle'];
             $goods['create_time'] = $create_time;

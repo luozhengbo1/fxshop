@@ -13,6 +13,10 @@
             parent::__construct();
             $this->model = Db::name('goods_class');
         }
+        public function sort(){
+            $this->assign('titleName', "商品分类");
+            return $this->view->fetch();
+        }
         #查询出所有的一级分类分类
         public  function  getGoodsClass()
         {
@@ -36,3 +40,5 @@
         }
 
 	}
+
+

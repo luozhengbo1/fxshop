@@ -1,0 +1,13 @@
+<td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
+<td>{$vo.title|high_light=$Request.param.title}</td>
+<td><img src="{$vo.pic}" width="100px"></td>
+<td>{$vo.detail}</td>
+<td>{$vo.status|get_status}</td>
+<td><?php  echo \think\Db::name('lottery')->where(['id'=>$vo['lottery_id']])->find()['name']; ?></td>
+<td><?php
+    if($vo['is_send']==1){?>
+    <a href="javascript:;" >已发送</a>
+    <?php }else{ ?>
+    <a href="javascript:;" class="btn" onclick="sendUser({$vo['id']})">发送</a>
+    <?php } ?>
+</td>
