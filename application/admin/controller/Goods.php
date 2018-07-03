@@ -94,7 +94,7 @@ class Goods extends Controller
     		$goods['goods_class_id'] = $data['goods_class_id'];
     		$goods['goods_brand_id'] = $data['goods_brand_id'];
     		$goods['detail'] = $data['detail'];
-    		$goods['status'] = $data['status'];
+//    		$goods['status'] = $data['status'];
     		$goods['main_image'] = $data['main_image'];
     		$goods['subtitle'] = $data['subtitle'];
     		$goods['create_time'] = $create_time;
@@ -106,6 +106,8 @@ class Goods extends Controller
     		#下单减库存类型
     		$goods['store_type'] = $data['store_type'];
             $goods['after_sale'] = $data['after_sale'];
+            #基础价格
+            $goods['basic_price'] = $data['basic_price'];
             #商家编码
             $goods['shop_code'] = $data['shop_code'];
             #销量
@@ -271,7 +273,7 @@ class Goods extends Controller
             $goods['goods_class_id'] = $data['goods_class_id'];
             $goods['goods_brand_id'] = $data['goods_brand_id'];
             $goods['detail'] = $data['detail'];
-            $goods['status'] = $data['status'];
+//            $goods['status'] = $data['status'];
             $goods['main_image'] = $data['main_image'];
             $goods['subtitle'] = $data['subtitle'];
             $goods['create_time'] = $create_time;
@@ -283,6 +285,8 @@ class Goods extends Controller
             #下单减库存类型
             $goods['store_type'] = $data['store_type'];
             $goods['after_sale'] = $data['after_sale'];
+            #基础价格
+            $goods['basic_price'] = $data['basic_price'];
             #商家编码
             $goods['shop_code'] = $data['shop_code'];
             #销量
@@ -426,9 +430,9 @@ class Goods extends Controller
         if($this->request->isAjax()){
             $data = $this->request->post();
             if($data['flag']=="up"){
-                Db::name('goods')->where(['id'=>$data['id']])->update(['status'=>2]);
-            }else{
                 Db::name('goods')->where(['id'=>$data['id']])->update(['status'=>1]);
+            }else{
+                Db::name('goods')->where(['id'=>$data['id']])->update(['status'=>0]);
             }
             return json(['msg'=>'操作成功']);
         }
