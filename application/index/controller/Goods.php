@@ -1,11 +1,10 @@
 <?php
 	namespace app\index\controller;
-	use think\Controller;
 	use think\Db;
 	use think\Cache;
 	use think\Session;
 	
-	Class Goods extends Controller
+	Class Goods extends Mustlogin
 	{
         protected $model;
 		#获取热销商品和其他显示的商品
@@ -21,18 +20,15 @@
                 $goodsList =$this->model->select();
             }else{
                 $goodsList = $this->model
-                    ->where(['show_area'=>$show_area,'status'=>1,'isdelete'=>'0'])#2表示获取上市的商品
+                    ->where(['show_area'=>$show_area,'status'=>1,'isdelete'=>'0'])
                     ->page($page,$size)
                     ->select();
-
             }
             if( empty($goodsList) ) {
                 return ajax_return('','no','500');
             }else{
                 return ajax_return($goodsList,'ok','200');
             }
-
-
         }
         #获取这个商品的详情
         public function detail($id)
@@ -64,13 +60,19 @@
             if( !empty($goods) ){
                 $goods['pic'] =json_decode($goods['pic']);
             }
+//            dump($goods);die;
+            #查询该商品是否有优惠券在这里显示的一定是商品优惠券
+            $lottery = Db::name('lottery')
+                ->where(['goods_id'=>$id,'isdelete'=>0,'status'=>1])
+                ->find();
+
             $this->view->assign('goods',$goods);
             $this->view->assign('skuData',$skuData);
             $this->view->assign('proprety_name',$proprety_name);
             $this->view->assign('proprety_name_val',$proprety_name_val);
+            $this->view->assign('lottery',$lottery);
             $this->view->assign('arr',$arr);
-            #查询该商品是否有优惠券或者通用的优惠券
-            $lottery = Db::name('lottery')->where(['goods_id'=>$id,'isdelete'=>0,'status'=>1])->find();
+
             return $this->view->fetch();
         }
 
@@ -78,6 +80,9 @@
         public function goodsSearch()
         {
             $name = $this->request->param('name');
+            if(empty($name) ){
+                return ajax_return_error('缺少搜索参数');
+            }
             $page = $this->request->param('page');
             $size = $this->request->param('size');
             $goodsList = Db::name('goods')
@@ -97,5 +102,25 @@
                 return ajax_return($goodsList,'ok','200');
             }
         }
+
+        #商品评论
+        function  goodsComment($goodsId,$page=1,$size)
+        {
+            if(!$goodsId){
+                return ajax_return_error('缺少参数id');
+            }
+            $goodsCommnet = Db::name('goods_comment')
+                ->where(['goods_id'=>$goodsId])
+                ->page($page,$size)
+                ->select();
+        }
+
+        #猜你喜欢
+        public function guestYouLike($goodsId)
+        {
+                        
+
+        }
+
 
 	}

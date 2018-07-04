@@ -36,20 +36,20 @@
 
         }
         #未完成待续
-        public function  addCar($goodsId)
+        public function  addCar($goodsId,$skuId)
         {
             if(!$goodsId){
                 return ajax_return_error('缺少商品id');
             }
 
-//            Db::name('car')->where(['goods_id'=>])
+            $this->model->where(['goods_id'=>$goodsId,'openid'=>$this->userInfo['openid'],'sku_id'=>$skuId])->setInc('   goods_num',1);
 //            if(){}
         }
 
         #删除
-        public function  delCar($id,$filter="")
+        public function  delCar($goodsId,$skuId,$filter="")
         {
-            if(!$id){
+            if(!$goodsId){
                 return ajax_return_error('缺少参数id');
             }
             #非真删除
@@ -58,9 +58,19 @@
                     ->where(['openid'=>$this->userInfo['openid']])
                     ->update(['show_status'=>0]);
             }else{
-                $res = $this->model
-                    ->where(['id'=>$id,'openid'=>$this->userInfo['openid']])
-                    ->update(['show_status'=>0]);
+                $carData = $this->model
+                    ->where(['goods_id'=>$goodsId,'openid'=>$this->userInfo['openid'],'sku_id'=>$skuId])
+                    ->find();
+                if($carData['goods_num']==1 ){##减到商品没有就删除
+                    $res = $this->model
+                        ->where(['goods_id'=>$goodsId,'openid'=>$this->userInfo['openid'],'sku_id'=>$skuId])
+                        ->delete();
+                }else{
+                    $res = $this->model
+                        ->where(['goods_id'=>$goodsId,'openid'=>$this->userInfo['openid'],'sku_id'=>$skuId])
+                        ->setDec('   goods_num',1);
+                }
+
             }
             if($res){
                 return ajax_return('','ok','200');
@@ -68,10 +78,6 @@
                 return ajax_return('','no','400');
             }
         }
-
-
-
-
 
 
 
