@@ -181,6 +181,18 @@ body{
 .bg_white{ background: white!important;}
 .bg_orange{ background: orange!important;}
 .yellow{color: #ffe60e!important;}
+
+.radius4{border-radius: 4px;}
+.radius5{border-radius: 5px;}
+.radius6{border-radius: 6px;}
+.radius7{border-radius: 7px;}
+.radius8{border-radius: 8px;}
+.radius9{border-radius: 9px;}
+.radius10{border-radius: 10px;}
+
+
+
+
 .p5{
     padding: 5px!important;
 }

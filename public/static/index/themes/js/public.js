@@ -75,24 +75,28 @@ function alertMsgUrl(msg,url,time){
 * obj Validform表单对象，post_url
 */
 
-function submitForm(obj,post_url){
-	obj.Validform({
-		tiptype:function(msg,o,cssctl){
+function submitForm(id,post_url,return_url){
+	$('#'+id).Validform({
+		tiptype:function(msg,o){
 			if(o.type != 2){
 				layer_msg(msg);
 			}
 		},
 		beforeSubmit:function(curform){
-			$.post(post_url,obj.serialize(),function(msg){
-				alertMsg(msg.msg);
-				if(msg.code){
-					setTimeout(function(){
-						if(msg.url){
-							location.href=msg.url;
-						}
-					},1500);
-				}
-			},'json')
+            $.ajax({
+                url:post_url,
+                type:'post',
+                data:formData(id),
+                dataType:'json',
+                success: function(data){
+                    layer_msg(data.msg);
+                    if(data.code ==200){
+                        setTimeout(function(){
+                            location.href=return_url;
+                        },1500);
+                    }
+                }
+            })
 			return false;
 		},
 	
@@ -245,15 +249,35 @@ function countUpFun(id){
  * @param fun 点击导航执行的函数 s
  */
 function tabSwitch($target,complete) {
-    $target.click(function () {
+    $targe.click(function () {
         $target.removeClass('active')
         $(this).addClass('active');
         complete()
-    })
+    });
+    var firstLi = $target[0];
+    firstLi.click();
 }
 
 function notEmpty(val) {
     if(val==undefined || val =='undefined' || val =='null' || val ==null){
         return ''
     }else return val;
+}
+
+/**
+ *
+ * @param url 请求地址
+ * @param json 拼接参数jsoN
+ * @returns {*}
+ */
+function urlConnect(url,json) {
+    var result = url;
+    result = result.split('.html')[0];
+    if(json){
+        for (var key in json){
+            result +="\\"+key+"\\"+json[key];
+        }
+    }
+    result = result+'.html';
+    return result;
 }

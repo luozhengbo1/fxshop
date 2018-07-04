@@ -33,6 +33,7 @@ Class Notice extends Mustlogin
     #列表
     public function index()
     {
+        $this->assign('titleName', "商城公告");
         $list = $this->model
             ->where(['status'=>'1','isdelete'=>'0'])
             ->order('orderby DESC, create_time desc')
@@ -48,6 +49,7 @@ Class Notice extends Mustlogin
     #详情
     public function detail()
     {
+        $this->assign('titleName', "公告详情");
         $id = $this->request->param('id');
         if(!$id){
             return $this->error('缺少参数id');

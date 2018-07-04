@@ -6,10 +6,11 @@
         line-height: .34rem;
         height: .34rem;
     }
+
 </style>
 <!--商品分类-->
 {include file="Public/header-search"}
-    <div class="pl5 pr5">
+    <div class="p5 radius5 bg_white">
         <p class="module-title">
             <span class="fl">热门推荐</span>
             <!--<span class="fr">查看更多</span>-->
@@ -46,13 +47,6 @@
     $(function () {
         getHotGoods();
         getGoodsClass();
-        //分类导航点击
-       /* var  $sidebarLi =  $('#sidebar li');
-        $sidebarLi.click(function () {
-            $sidebarLi.removeClass('active');
-            $(this).addClass('active');
-            getGoods({id:$(this).data('id')});
-        });*/
         //分类导航距离顶部位置处理
         $(window).scroll(function () {
             var menuTop=168-$(window).scrollTop();//菜单距离顶部的高度  初始高度168-滚动条滚动高度
@@ -89,10 +83,9 @@
         });
     }
     function dealData(data) {
-
         var html='';
         for(var i = 0; i < data.length; i++){
-            html +=' <li class="tc">'
+            html +=' <li class="tc radius4>'
             html +='	<a href="{:url(\'goods/detail\',array(\'id\'=>21))}" >';
             html +='    <img class="good-img" alt="'+data[i].name+'" src="'+data[i].main_image+'">';
             html +='    <span>'+data[i].name+'</span>'
@@ -140,8 +133,12 @@
                     for(var i = 0; i < data.length; i++){
                         html +='<li data-id="'+data[i].id+'" onclick="getGoods({goodsClassId:'+data[i].id+'})" >'+data[i].name+'</li>'
                     }
-                    $('#sidebar ul').empty().append(html)
+                    $('#sidebar ul').empty().append(html);
+                    tabSwitch($('#sidebar li'),getGoods({id:$(this).data('id')}));
+
+                    console.log()
                 }
+
             }
         })
     }
