@@ -37,6 +37,10 @@ Class Notice extends Mustlogin
             ->where(['status'=>'1','isdelete'=>'0'])
             ->order('orderby DESC, create_time desc')
             ->select();
+        foreach ($list as $k=>$v){
+            $list[$k]['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
+            $list[$k]['update_time'] = date('Y-m-d H:i:s',$v['update_time']);
+        }
        $this->assign('list',$list);
         return  $this->view->fetch();
 
