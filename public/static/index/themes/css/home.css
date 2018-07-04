@@ -3739,6 +3739,20 @@ a {
 	background: url(../../images/selected.png) no-repeat 50%!important;
 	background-size: 20px 20px!important;
 }
+.address-list  .opt-btn{
+	position: absolute;
+	right: .12rem;
+	font-size: 20px;
+	font-weight: bold;
+}
+.address-list .edit{
+	top: 30%;
+}
+.address-list .dele{
+	top: 60%;
+	color: #e4393c;
+}
+/*
 .address-list .edit:after {
 	content: "\20";
 	width: 20px;
@@ -3763,6 +3777,7 @@ a {
 	background-repeat: no-repeat;
 	background-size: 100px 100px;
 }
+*/
 /*购物车**********/
 .cart-list li.singer-good{
 	background: white;
