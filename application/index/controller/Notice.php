@@ -20,7 +20,15 @@ Class Notice extends Mustlogin
             ->order('orderby DESC, create_time desc')
             ->page($page,$size)
             ->select();
-        return ajax_return($list,'ok','200');
+        if(empty($list)){
+            return ajax_return('','no','500');
+        }else{
+            foreach ($list as $k=>$v){
+                $list[$k]['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
+                $list[$k]['update_time'] = date('Y-m-d H:i:s',$v['update_time']);
+            }
+            return ajax_return($list,'ok','200');
+        }
     }
     #列表
     public function index()
