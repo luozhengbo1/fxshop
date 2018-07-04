@@ -21,7 +21,7 @@
 	<div class="content fl swiper-container announcement-banner" >
 		<ul class="swiper-wrapper pl10" id="notice"></ul>
 	</div>
-	<div class="more fl"><a href="{:\\think\\Url::build(\'announce\')}">更多<i class="iconfont icon-right-arrow f12 grey"></i></a></div>
+	<div class="more fl"><a href="{:\\think\\Url::build(\'notice/index\')}">更多<i class="iconfont icon-right-arrow f12 grey"></i></a></div>
 </div>
 <!--活动分类-->
 <ul class="module-nav clear">
@@ -145,11 +145,11 @@
                 data:{page:1, size:2},
                 url:"{:url('index/notice/getNotice')}",
                 success:function (data) {
-                    var data = data.data;
+                    var code = data.code, result = data.data;
                     var html='';
-                    if(data.code=='200'){
-                        for(var i = 0; i < data.length; i++){
-                            html +=' <li class="swiper-slide"><a class="ellipsis-oneline" href="{:url(\'Notice/detail\',array(\'id\'=>$vo[\'id\']))}" >'+notEmpty(data[i].title)+'</a></li>'
+                    if(code=='200'){
+                        for(var i = 0; i < result.length; i++){
+                            html +=' <li class="swiper-slide"><a class="ellipsis-oneline" href="index/Notice/detail/id/'+result[i].id+'" >'+notEmpty(result[i].title)+'</a></li>';
                         }
                         $('#notice').empty().append(html)
                     }
