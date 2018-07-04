@@ -41,6 +41,9 @@
             if(!$goodsId){
                 return ajax_return_error('缺少商品id');
             }
+
+//            Db::name('car')->where(['goods_id'=>])
+//            if(){}
         }
 
         #删除
