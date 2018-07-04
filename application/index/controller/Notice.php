@@ -53,6 +53,10 @@ Class Notice extends Mustlogin
             return $this->error('缺少参数id');
         }
         $notice = $this->model->where(['id'=>$id,'status'=>1,'isdelete'=>'0'])->find();
+        if( !empty($notice) ){
+            $notice['create_time'] = date('Y-m-d H:i:s',$notice['create_time']);
+            $notice['update_time'] = date('Y-m-d H:i:s',$notice['update_time']);
+        }
         $this->view->assign('notice',$notice);
         return $this->view->fetch();
     }
