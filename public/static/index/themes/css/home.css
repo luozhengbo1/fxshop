@@ -3212,9 +3212,9 @@ a {
     width: 100%;
 }
 .child_category li{
-    width: 31%;
+    width: 32%;
     float: left;
-    margin-right: 2%;
+    margin-right: 1%;
     text-align: center;
     margin-bottom: .06rem;
     background: white;

@@ -1,7 +1,14 @@
 {include file="Public/header-resource"}
 
-<body>
+<body class="title-top">
 {include file="Public/header-title"}
-    <section>123</section>
+
+    <section class="p5 bg_white pb30" data-id="{$notice.id}">
+        <div class="tc f16 bold pt20 pb10">{$notice.title}</div>
+        <div class="pb10 pt10">{$notice.desc}</div>
+        <div class="clear">
+            <span class="grey fr">{$notice.create_time}</span>
+        </div>
+    </section>
 </body>
 </html>

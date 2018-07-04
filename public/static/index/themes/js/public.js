@@ -245,11 +245,13 @@ function countUpFun(id){
  * @param fun 点击导航执行的函数 s
  */
 function tabSwitch($target,complete) {
-    $target.click(function () {
+    $targe.click(function () {
         $target.removeClass('active')
         $(this).addClass('active');
         complete()
-    })
+    });
+    var firstLi = $target[0];
+    firstLi.click();
 }
 
 function notEmpty(val) {
