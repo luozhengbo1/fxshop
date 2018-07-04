@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no, email=no"/>
+    <meta charset="UTF-8">
+    <title>订单详情</title>
+    <link rel="stylesheet" href="__PUBLIC__/themes/css/core.css">
+    <link rel="stylesheet" href="__PUBLIC__/themes/css/icon.css">
+    <link rel="stylesheet" href="__PUBLIC__/themes/css/home.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="iTunesArtwork@2x.png" sizes="114x114" rel="apple-touch-icon-precomposed">
+</head>
+<body>
+<header class="aui-header-default aui-header-fixed aui-header-bg">
+    <a href="javascript:history.back(-1)" class="aui-header-item">
+        <i class="aui-icon aui-icon-back-white"></i>
+    </a>
+    <div class="aui-header-center aui-header-center-clear">
+        <div class="aui-header-center-logo">
+            <div class="aui-car-white-Typeface">填写订单</div>
+        </div>
+    </div>
+    <a href="#" class="aui-header-item-icon"   style="min-width:0">
+        <i class="aui-icon aui-icon-member"></i>
+    </a>
+</header>
+<section class="aui-address-content">
+    <div class="aui-address-box">
+        <div class="aui-address-box-list">
+            <a href="javascript:;"   class="aui-address-box-default">
+                <notempty name="address">
+                    <li id="address" data-id="{$address['id']}">
+                        <strong>{$address['name']} <?php echo substr($address['mobile'],0,3).'****'.substr($address['mobile'],-4) ?></strong>
+                        <if condition="$address['status']  eq 1" ><span class="aui-tag aui-tag-default" id="aui-default">默认</span></if>
+                    </li>
+                    <li>
+                        <i class="aui-icon aui-icon-address"></i>
+                        {$address['address']}{$address['street']}
+                    </li>
+                    <else />
+                    <li>
+                        <i class="aui-icon aui-icon-address"></i>
+                        <span>请选择地址</span>
+                    </li>
+                </notempty>
+                </ul>
+            </a>
+        </div>
+    </div>
+    <div class="aui-dri"></div>
+    <volist name="data['buy_list']" id="vo">
+        <div class="aui-list-product-float-item">
+            <a href="javascript:;" class="aui-list-product-fl-item">
+                <div class="aui-list-product-fl-img">
+                    <img src="{$vo['logo']}" style="height:auto;" alt="">
+                </div>
+                <div class="aui-list-product-fl-text">
+                    <h3 class="aui-list-product-fl-title">{$vo['name']}</h3>
+                    <div class="aui-list-product-fl-mes">
+                        <div>
+							<span class="aui-list-product-item-price">
+								<em>¥</em>
+								{$vo['real_price']}
+							</span>
+                            <span class="aui-list-product-item-del-price">
+								¥{$vo['price']}
+							</span>
+                        </div>
+                        <div class="aui-btn-purchase">
+                            <span>数量x{$vo['num']?$vo['num']:1}</span>
+                        </div>
+                    </div>
+                    <div class="aui-list-product-fl-bag">
+                        <span><img src="__PUBLIC__/themes/img/icon/bag1.png" alt=""></span>
+                        <span><img src="__PUBLIC__/themes/img/icon/bag2.png" alt=""></span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </volist>
+    <div class="aui-address-well">
+        <!--<a href="#" class="aui-address-cell aui-fl-arrow">-->
+        <!--<div class="aui-address-cell-bd">支持配送</div>-->
+        <!--<div class="aui-address-cell-ft">-->
+        <!--<p>在线支付</p>-->
+        <!--<p>顺丰快递</p>-->
+        <!--<p class="aui-address-text"><i class="aui-icon aui-prompt-sm"></i>11月12日[周五]09:00-15:00</p>-->
+        <!--</div>-->
+        <!--</a>-->
+        <!--<div class="aui-prompt"><i class="aui-icon aui-prompt-sm"></i>您的收货时间为工作日，请您做好收货准备。</div>-->
+        <!--<a href="#" class="aui-address-cell aui-fl-arrow aui-fl-arrow-clear">-->
+        <!--<div class="aui-address-cell-bd">发票</div>-->
+        <!--<div class="aui-address-cell-ft">个人</div>-->
+        <!--&lt;!&ndash;</a>&ndash;&gt;-->
+        <!--<div class="aui-dri"></div>-->
+        <!--<a href="#" class="aui-address-cell aui-fl-arrow aui-fl-arrow-clear">-->
+            <!--<div class="aui-address-cell-bd">-->
+                <!--&lt;!&ndash;运费险&ndash;&gt;-->
+                <!--<p style="color:#888">7天内退货，15天内可换货</p>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;<div class="aui-address-cell-ft">￥0.50&nbsp;&nbsp;&ndash;&gt;-->
+            <!--&lt;!&ndash;<input class="aui-switch" type="checkbox" >&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--</a>-->
+        <div class="aui-dri"></div>
+        <a href="#" class="aui-address-cell aui-fl-arrow aui-fl-arrow-clear">
+        <div class="aui-address-cell-bd">订单状态</div>
+        <div class="aui-address-cell-ft">{$data['pay_status_cn']}</div>
+        </a>
+        <div class="aui-dri"></div>
+        <div class="aui-dri"></div>
+        <if condition="$data['logistics_number'] neq null" >
+        <a href="#" class="aui-address-cell aui-fl-arrow aui-fl-arrow-clear">
+            <div class="aui-address-cell-bd">物流信息：</div>
+            <div class="aui-address-cell-ft">{$data['logistics_name']}</div>
+        </a>
+
+        <div class="aui-dri"></div>
+        <a href="#" class="aui-address-cell aui-fl-arrow aui-fl-arrow-clear">
+            <div class="aui-address-cell-bd">物流单号：</div>
+            <div class="aui-address-cell-ft" style="color: red">{$data['logistics_number']}</div>
+        </a>
+        <div class="aui-dri"></div>
+        <a href="http://www.kuaidi100.com/?from=openv" class="aui-address-cell aui-fl-arrow aui-fl-arrow-clear">
+            <div class="aui-address-cell-bd">物流查询</div>
+            <!--<div class="aui-address-cell-ft" style="color: red">{$data['logistics_number']}</div>-->
+        </a>
+        </if>
+        <div class="aui-dri"></div>
+        <in name="data['pay_status']" value="1,2,3">
+            <div class="aui-list-title-btn" style="text-align: center">
+                <a href="javascript:;"   onclick="refund(<?php echo $data['id'];?>)" class="">
+               退货退款
+                 </a>
+            </div>
+        </in>
+
+
+
+    </div>
+    <!--<div class="aui-payment-bar">-->
+        <!--<div class="shop-total">-->
+            <!--<span class="aui-red aui-size">实付款: <em>￥<?php echo $total ?></em></span>-->
+        <!--</div>-->
+        <!--<a href="javascript:;" id="orderPay" class="settlement">提交订单</a>-->
+    <!--</div>-->
+</section>
+
+</body>
+<script src="__PUBLIC__/themes/js/jquery.min.js"></script>
+<script src="__PUBLIC__/plugins/jquery-weui/lib/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="__PUBLIC__/plugins/layui/layui.js"></script>
+{$themes_css}{$layer_mobile}{$tip}
+<script>
+    layui.use(['form','layer'], function(){
+        var form = layui.form;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+    });
+   function refund(id) {
+    var url ="{:U('Order/refund')}";
+       layer.open({
+           title:'输入退款原因',
+           content: '<textarea id="value" ></textarea>'
+           ,btn: ['确定', '取消']
+           ,yes: function(index, layero){
+               $.ajax({
+                   url:url,
+                   type:'POST',
+                   data:{id:id,customer_refund_reson:$('#value').val()},
+                   dataType:'json',
+                   success:function (res) {
+                        if(res.status==200){
+                            alert('提交成功，将会在三个工作日内处理');
+                            document.location.reload();
+                        }else{
+                            alert(res.data)
+                            document.location.reload();
+                        }
+                   },
+                   error:function (res) {
+                       console.log(res)
+                       alert('服务端错误');
+                   }
+               })
+
+           }
+           ,cancel: function(){
+               //右上角关闭回调
+
+               //return false 开启该代码可禁止点击该按钮关闭
+           }
+       });
+   }
+
+</script>
+</html>

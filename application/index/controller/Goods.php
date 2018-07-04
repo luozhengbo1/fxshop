@@ -86,6 +86,8 @@
             $this->view->assign('proprety_name_val',$proprety_name_val);
             $this->view->assign('lottery',$lottery);
             $this->view->assign('arr',$arr);
+            #获取猜你喜欢的商品
+            $this->view->assign('guestGoods',$this->guestYouLike($id));
 
             return $this->view->fetch();
         }
@@ -133,7 +135,7 @@
                 ->select();
         }
         #猜你喜欢
-        public function guestYouLike($id,$page=1,$size=10)
+        public function guestYouLike($id)
         {
             #取出浏览记录中前10条 不含这个商品
             $broseList = Db::name('goods_browse')
@@ -159,7 +161,6 @@
             if( !empty($goodsId) ){
                 $goodsList = Db::name('goods')
                     ->where(['status'=>1,'isdelete'=>0,'id'=>['in',$goodsId]])
-                    ->page($page,$size)
                     ->select();
             }else{
                $goodsClass = Db::name('goods')
@@ -168,14 +169,9 @@
                    ->find();
                 $goodsList = Db::name('goods')
                    ->where(['status'=>1,'isdelete'=>'0','goods_class_id'=>['=',$goodsClass['goods_class_id'] ]])
-                   ->page($page,$size)
                    ->select();
             }
-            if( !empty($goodsList) ){
-                return ajax_return($goodsList,'ok','200');
-            }else{
-                return ajax_return('','no','500');
-            }
+            return  $goodsList;
 
         }
 
