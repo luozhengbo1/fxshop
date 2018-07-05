@@ -289,11 +289,12 @@ function urlConnect(url,json) {
 
 /**
  *
- * @param type 0 删除
+ * @param type 0 删除  1 修改
  * @param id
  */
 var request_flag = {
     del:true,
+    edit:false,
 }
 function req_opt(type,id){
     if(request_flag.del){//请求完成后才能进行下一次请求
@@ -317,5 +318,27 @@ function req_opt(type,id){
             })
         }
     }
+    if(request_flag.edit){//请求完成后才能进行下一次请求
+        request_flag.edit = false;
+        layerLoad();
+        if(type==0){
+            $.ajax({
+                url:url.editDefaultAddr,
+                type:'post',
+                data:{id:id},
+                dataType:'json',
+                success: function(data){
+                    layer_msg(data.msg);
+                    if(data.code ==200){
+                        setTimeout(function(){
+                            location.href=url.list;
+                            request_flag.edit = true;
+                        },1500);
+                    }
+                }
+            })
+        }
+    }
+
 
 }
