@@ -223,7 +223,7 @@ countCalculate.prototype.init =function () {
 function layerLoad(){
     var html ='<div class="f14"><span class="loading-gif"></span><p>加载中...</p></div>'
     var loading = layer.open({
-        content: html
+         content: html
         ,skin: 'msg'
         ,time: 200000 //2秒后自动关闭
     });
@@ -246,14 +246,19 @@ function countUpFun(id){
 /**
  *
  * @param $target 导航的tab对象
- * @param fun 点击导航执行的函数 s
+ * @param fun 点击导航执行的函数
  */
 function tabSwitch($target,complete) {
-    $targe.click(function () {
-        $target.removeClass('active')
-        $(this).addClass('active');
-        complete()
-    });
+    $target.each(function (index,ele) {
+        $(ele).click(function () {
+            console.log('click')
+            $target.removeClass('active')
+            $(ele).addClass('active');
+            if(complete){
+                complete()
+            }
+        });
+    })
     var firstLi = $target[0];
     firstLi.click();
 }
@@ -280,4 +285,37 @@ function urlConnect(url,json) {
     }
     result = result+'.html';
     return result;
+}
+
+/**
+ *
+ * @param type 0 删除
+ * @param id
+ */
+var request_flag = {
+    del:true,
+}
+function req_opt(type,id){
+    if(request_flag.del){//请求完成后才能进行下一次请求
+        request_flag.del = false;
+        layerLoad();
+        if(type==0){
+            $.ajax({
+                url:url.dele,
+                type:'post',
+                data:{id:id},
+                dataType:'json',
+                success: function(data){
+                    layer_msg(data.msg);
+                    if(data.code ==200){
+                        setTimeout(function(){
+                            location.href=url.list;
+                            request_flag.del = true;
+                        },1500);
+                    }
+                }
+            })
+        }
+    }
+
 }

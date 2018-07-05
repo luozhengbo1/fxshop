@@ -36,7 +36,6 @@
             </ul>
         </div>
     </section>
-
 {include file="Public/footer"}
 <script>
     var url ={
@@ -134,9 +133,7 @@
                         html +='<li data-id="'+data[i].id+'" onclick="getGoods({goodsClassId:'+data[i].id+'})" >'+data[i].name+'</li>'
                     }
                     $('#sidebar ul').empty().append(html);
-                    tabSwitch($('#sidebar li'),getGoods({id:$(this).data('id')}));
-
-                    console.log()
+                    tabSwitch($('#sidebar li'));
                 }
 
             }

@@ -1,7 +1,7 @@
 {include file="Public/header-resource"}
 <body class="title-top footer-boottom">
 <style>
-
+    .dropload-down{display: none}
 </style>
 {include file="Public/header-title"}
     <div id="dataListWrap" class="address-list">
@@ -20,7 +20,7 @@
             </ul>-->
         </div>
     </div>
-    <div class="btn-wrap">
+    <div class="footer-fixed btn-wrap">
         <button onclick="addAddress()" class="btn-dark-red w100p bootstrap-btn">新增收货地址</button>
     </div>
 <script>
@@ -29,9 +29,7 @@
         dele:"{:url('address/delete')}",
         list:"{:url('address/index')}",
     }
-    $(function () {
-        getListData()
-    })
+   getListData()
   function dealData(data) {
       var html='';
       for(var i = 0; i < data.length; i++){
@@ -45,29 +43,13 @@
           html +='    <li>'+data[i].address+data[i].street+'</li>';
           html +='    <li>';
           html +='      <a href='+urlConnect("{:url('address/edit')}",{id:data[i].id})+'><i class="layui-icon opt-btn edit"></i></a>';
-          html +='      <a href="javascript:;" onclick="dele('+data[i].id+')"><i class="layui-icon opt-btn dele"></i></a>';
+          html +='      <a href="javascript:;" onclick="req_opt(0,'+data[i].id+')"><i class="layui-icon opt-btn dele"></i></a>';
           html +='    </li>';
           html +='</ul>';
 
       }
       return html;
   }
-    function dele(id){
-        $.ajax({
-            url:url.dele,
-            type:'post',
-            data:{id:id},
-            dataType:'json',
-            success: function(data){
-                layer_msg(data.msg);
-                if(data.code ==200){
-                    setTimeout(function(){
-                        location.href=url.list;
-                    },1500);
-                }
-            }
-        })
-    }
 
   function getListData() {
       pageload({
@@ -85,6 +67,7 @@
   function addAddress() {
       window.location.href = url.add;
   }
+
 </script>
 </body>
 </html>
