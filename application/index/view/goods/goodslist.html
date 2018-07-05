@@ -16,15 +16,12 @@
         color: black;
     }
 </style>
-<div class="search-history">
+<div class="search-history mb5">
     <p class="lh30 h30">搜索历史：</p>
     <ul class="clear">
-        <li class="fl"><span>衣服</span></li>
-        <li class="fl"><span>衣服</span></li>
-        <li class="fl"><span>衣服</span></li>
-        <li class="fl"><span>衣服</span></li>
-        <li class="fl"><span>衣服</span></li>
-
+        {volist name="searchHistory" id="vo" empty=""}
+        <li class="fl" onclick=" getGoods({goodsName:'{$vo.search}'})"><span>{$vo.search}</span></li>
+        {/volist}
     </ul>
 </div>
 <div class="module-hot-goods">
@@ -47,6 +44,14 @@
 
 {include file="Public/footer"}
 <script>
+    $(window).keyup(function (event) {
+        var e = event || window.event;
+        if (e && e.keyCode == 13) { //回车键的键值为13
+            searchGoods(); //调用登录按钮的登录事件
+            return false;
+        }
+    })
+
     function searchGoods(){
         if(!formEmptyValid('form')){
             return;

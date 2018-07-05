@@ -30,16 +30,18 @@ MyEventDeal.prototype.init = function(options){
                 _this.showHidePopup($('#popupBuyArea'),false);
                 break;
             case 'popupConfirm':
-                // console.log('点击确定按钮');
+                //  console.log('加入购物车');//加入购物车
+                addCar();
                 _this.showHidePopup($('#popupBuyArea'),false)
                 break;
             case 'showChosePup':
             case 'carPage':
-                //  console.log('加入购物车');//加入购物车
+                $('#popupMain').attr('popupType','car')
                 _this.showHidePopup($('#popupBuyArea'),true);
                 break;
             case 'buyPage':
                 // console.log('立即购买');//立即购买
+                $('#popupMain').attr('popupType','buy')
                 _this.showHidePopup($('#popupBuyArea'),true);
                 window.location.href="./affirmOrder";
                 break;
