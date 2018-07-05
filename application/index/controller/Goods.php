@@ -124,7 +124,7 @@
         }
 
         #商品评论
-        function  goodsComment($goodsId,$page=1,$size)
+        function  goodsComment($goodsId,$page=1,$size=10)
         {
             if(!$goodsId){
                 return ajax_return_error('缺少参数id');
@@ -151,13 +151,11 @@
                 ->order('create_time desc')
                 ->limit(10)
                 ->select();
-            if(!empty($broseList) ){
+            if(!empty($broseList) || !empty($searchList) ){
                 $broseData = array_unique(array_column($broseList,'goods_id'));
-            }
-            if(!empty($searchList) ){
                 $searcId =array_unique( array_column($searchList,'goods_id'));
+                $goodsId =join( array_unique(explode(',',join($broseData,',').','.join($searcId,','))),',' );
             }
-            $goodsId =join( array_unique(explode(',',join($broseData,',').','.join($searcId,','))),',' );
             if( !empty($goodsId) ){
                 $goodsList = Db::name('goods')
                     ->where(['status'=>1,'isdelete'=>0,'id'=>['in',$goodsId]])
