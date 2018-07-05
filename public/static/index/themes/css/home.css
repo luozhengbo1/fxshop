@@ -3608,6 +3608,10 @@ a {
 	color: #333;
 	background-color: #f3f2f8;
 }
+.detail_popup .sku_choose .item.active {
+	background-color: #2a7dce;
+	color: white;
+}
 .detail_popup .btns.show {
 	position: absolute;
 	bottom: 0;
@@ -3874,7 +3878,7 @@ a {
 	border: 1px solid hsla(0,0%,100%,.8);
 }
 .btn-wrap{
-	padding: .4rem .06rem
+	padding: .1rem .06rem
 }
 /************************订单管理****************/
 .nav-list-tab{
