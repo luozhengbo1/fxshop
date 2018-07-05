@@ -593,7 +593,7 @@ function BindItemProperty(productid,url) {
                     id = id.substr(0,id.length-1);
                     $("#skuid" +id).val(item.id)
                     $("#price" + id).val(item.price);
-                    $("#pointPrice" + id).val(item.pointPrice);
+                    $("#pointPrice" + id).val(item.point_score);
                     $("#num" + id).val(item.store);
                     $("#code" + id).val(item.goods_code);
                     $("#bar" + id).val(item.bar_code);
@@ -1252,7 +1252,7 @@ function ChangeSku() {
                             var td11 = $("<td id='" + rowid + "' data-value=" + item + " class='hide'><input id=\"proxyprice" + rowid + "\" value=\"0\" class=\"proxyprice width80\" type=\"text\" onchange=\"ChangeSkuValues('" + rowid + "')\"></td>");
                             td11.appendTo(tr);
                         }*/
-                        var td5 = $("<td id='" + rowid + "' data-value='" + item + "' data-skuid='0' data- class='tdrow'><input   id=\"pointPrice" + rowid + "\" class=\"pointPrice width70\" type=\"text\" </td>");
+                        var td5 = $("<td id='" + rowid + "' data-value='" + item + "' data-skuid='0' data- class=''><input   id=\"pointPrice" + rowid + "\" class=\"pointPrice width70\" type=\"text\" </td>");
                         td5.appendTo(tr);
 
                         var td2 = $("<td ><input type='hidden' id=\"skuid" + rowid + "\"><input onkeyup=\"clearNoNum(this)\" onKeyPress=\"return keyNumAll(event);\" id=\"num" + rowid + "\" class=\"salenum width60\" type=\"text\"onchange=\"ChangeSkuValues('" + rowid + "')\"></td>");

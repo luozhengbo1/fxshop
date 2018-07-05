@@ -167,7 +167,12 @@
         getSku:"{:url('index/goods/getSku')}",
     }
     var skuZhuhe={};
-    console.log(detailTag)
+    // skuId goodId num  valId
+    var saveData = {
+        goodsId:'',
+        num :'',
+        skuId:'',
+    }
     $('#goodDetail').append(detailTag)
     $(function () {
         navTab();
@@ -236,8 +241,10 @@
                 }
                 id = id.substr(0,id.length-1);
                // debugger;
+                //console.log(item);
                 if(zhuheId ==id){
-                    console.log(item);
+                    debugger
+                    console.log("idtest:"+item.id);
                     $('#goodPrice').empty().append(item.price);
                     $('#goodChoseSku').empty().append('<span>已选</span> '+zhuheVal+'<i id="showBuyNum"></i>个');
                     $('#buyNum').data('store',item.store);//item.pointPrice  item.id
@@ -248,7 +255,8 @@
 
     }
     function buyNumShow(){
-        $('#showBuyNum').empty().append($('#buyNum').val())
+        var buyNum = $('#buyNum').val();
+        $('#showBuyNum').empty().append();
     }
     //默认选中第一规格
     function choseFirst() {
