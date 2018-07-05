@@ -10,6 +10,21 @@ use think\Db;
 
 class Address extends Controller
 {
+
+    /**
+     * 获取用户id
+     */
+    protected function getUid()
+    {
+        //根据openid查id
+        $user = session('wx_user');
+        $user_data = Db::table('fy_customer')
+            ->field('id')
+            ->where('openid', $user['openid'])
+            ->find();
+        return $user_data['id'];
+    }
+
     /**
      * 获取地址列表
      */
@@ -17,32 +32,14 @@ class Address extends Controller
     {
         $this->assign('titleName', "地址列表");
         if ($this->request->isAjax()) {
-            $data = $this->request->post();
-            $id = $data['id'];
-            //若前端传递了参数id，则将该条地址设为默认地址
-            if ($id) {
-                $data = Db::table('fy_customer_address')->where('id', $id)->find();
-                if ($data['status'] == 0) {
-                    return ajax_return('', '该地址已经是默认地址', 202);
-                } else {
-                    Db::table('fy_customer_address')->where('id', $id)->setField('status', 1);
-                    return ajax_return('', '设置默认地址成功', 200);
-                }
-            } else {
-                //根据openid查id
-                $user = session('wx_user');
-                $user_data = Db::table('fy_customer')
-                    ->field('id')
-                    ->where('openid', $user['openid'])
-                    ->find();
-                //根据uid=id查询所有地址
-                $address_list = Db::table('fy_customer_address')
-                    ->where('uid', $user_data['id'])
-                    ->page($page, $size)
-                    ->select();
-                $this->view->assign('address_list', $address_list);
-                return ajax_return($address_list, 'ok', '200');
-            }
+            $uid = $this->getUid();
+            //根据uid=id查询所有地址
+            $address_list = Db::table('fy_customer_address')
+                ->where('uid', $uid)
+                ->page($page, $size)
+                ->select();
+            $this->view->assign('address_list', $address_list);
+            return ajax_return($address_list, 'ok', '200');
         } else {
             return $this->view->fetch();
         }
@@ -71,15 +68,10 @@ class Address extends Controller
                 return ajax_return('', '保存成功', 200);
             } else {
                 //若前端没有传递参数id，则进行新增操作
-                $user = session('wx_user');
-                //根据openid查id
-                $user_data = Db::table('fy_customer')
-                    ->field('id')
-                    ->where('openid', $user['openid'])
-                    ->find();
+                $uid = $this->getUid();
                 $time = time();
                 $data = [
-                    'uid' => $user_data['id'],
+                    'uid' => $uid,
                     'name' => $data['name'],
                     'mobile' => $data['mobile'],
                     'address' => $data['address'],
@@ -92,7 +84,7 @@ class Address extends Controller
                 return ajax_return('', '新增成功', 200);
             }
         } else {
-            //若前端没有ajax请求，则获取前端的地址id
+            //若只是跳转页面，则获取前端的地址id
             $id = $this->request->param('id');
             //若id不存在，则标题为地址添加
             if (!$id) {
@@ -118,6 +110,33 @@ class Address extends Controller
             }
             Db::table('fy_customer_address')->delete($id);
             return ajax_return('', '删除成功', 200);
+        }
+    }
+
+
+    /**
+     * 设置默认地址
+     */
+    public function setDefault()
+    {
+        if ($this->request->isAjax()) {
+            $uid = $this->getUid();
+            $data = $this->request->post();
+            $id = $data['id'];
+            if (!$id) {
+                return $this->error('缺少参数id');
+            }
+            //若前端传递了参数id，则判断是否已为默认地址，若不是则设为默认地址
+            $data = Db::table('fy_customer_address')->where('id', $id)->find();
+            if ($data['status'] == 1) {
+                return ajax_return('', '该地址已经是默认地址', 200);
+            } else {
+                $time = time();
+                Db::table('fy_customer_address')->where('id', $id)->setField('status', 1);
+                Db::table('fy_customer_address')->where('id', $id)->setField('updatetime', $time);
+                Db::table('fy_customer_address')->where('id', 'not in', $id)->where('uid', $uid)->setField('status', 0);
+                return ajax_return('', '设置默认地址成功', 200);
+            }
         }
     }
 }
