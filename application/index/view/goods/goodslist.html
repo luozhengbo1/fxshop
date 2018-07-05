@@ -1,0 +1,71 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+<!--商品分类-->
+{include file="Public/header-search"}
+<div class="module-hot-goods">
+    <p class="item-title mt10 mb10">搜索结果如下</p>
+    <div id="dataListWrap">
+        <ul class="goods-list list clear" id="goodsList">
+            <!--	<li>
+                    <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
+                     <p class="good-desc ellipsis">Lay’s/乐事薯片清爽酸奶零食 </p>
+                    <div>
+                        <p class="fl">已售3</p>
+                        <p class="fr">
+                            <span class="goods-price">¥45.00</span>
+                            <span class="goods-old-price">¥45.00</span>
+                        </p>
+                    </div>
+                </li>-->
+        </ul>
+    </div>
+</div>
+
+{include file="Public/footer"}
+<script>
+    function searchGoods(){
+        if(!formEmptyValid('form')){
+            return;
+        }else{
+            getGoods(formData('form'))
+        }
+    }
+    function dealData(data) {
+        var html='';
+        for(var i = 0; i < data.length; i++){
+            console.log(data[i])
+            html +='<li>';
+
+            html +='	<a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
+            html +='     <p class="tc"><img class="good-img" src="'+data[i].main_image+'"></p>';
+            html +='     <p class="good-desc ellipsis">'+notEmpty(data[i].name)+' </p>';
+            html +='   </a>';
+            html +='    <div>';
+            html +='  		  <p class="fl">已售'+notEmpty(data[i].buy_num)+'</p>';
+            html +='  		      <p class="fr">';
+            html +='  		      <span class="goods-price">¥'+notEmpty(data[i].basic_price)+'</span>';
+            html +='  				<span class="goods-old-price">¥'+notEmpty(data[i].original_price)+'</span>';
+            html +='  		  </p>';
+            html +='    </div>';
+            html +='  </li>';
+        }
+        return html;
+    }
+    function getGoods(json) {
+        initData('goodsList');
+        pageload({
+            targetWarp:'dataListWrap',
+            target:'goodsList',
+            page:1,
+            size:10,
+            ajaxData:{
+                url:"{:url('index/goods/goodsSearch')}",
+                data:json,
+            },
+            dealFun:dealData
+        });
+    }
+
+</script>
+</body>
+</html>

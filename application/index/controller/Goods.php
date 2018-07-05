@@ -99,7 +99,7 @@
         #商品搜索
         public function goodsSearch()
         {
-            $name = $this->request->param('name');
+            $name = $this->request->param('goodsName');
             if(empty($name) ){
                 return ajax_return_error('缺少搜索参数');
             }
@@ -107,7 +107,7 @@
             $size = $this->request->param('size');
             $goodsList = Db::name('goods')
                 ->where(['status'=>1,'isdelete'=>0,'name'=>['like',"%$name%"] ])
-                ->page('1','10')
+                ->page( $page,$size)
                 ->select();
             #记录搜索词
             $userInfo=[];
@@ -118,13 +118,17 @@
             Db::name('search')->insert($data);
             $searchId = Db::name('search')->getLastInsID();
             if( empty($goodsList) ){
-                return ajax_return_error('什么也没有搜到','400','');
+                return ajax_return_error('什么也没有搜到','500','');
             }else{
                 Db::name('search')
                     ->where(['id'=>$searchId])
                     ->update(['goods_id'=>join(array_column($goodsList,'id'),',')]);
                 return ajax_return($goodsList,'ok','200');
             }
+        }
+        public function goodsList(){
+            $this->assign('titleName', "商品搜索");
+            return $this->view->fetch();
         }
 
         #商品评论
