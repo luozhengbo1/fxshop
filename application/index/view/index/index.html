@@ -111,7 +111,8 @@
             for(var i = 0; i < data.length; i++){
                 console.log(data[i])
                 html +='<li>';
-                html +='	<a href="{:url(\'goods/detail\',array(\'id\'=>$vo[\'id\']))}" >';
+            //    html +='	<a href="{:url(\'goods/detail\',array(\'id\'=>$vo[\'id\']))}" >';
+                html +='	<a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
                 html +='     <p class="tc"><img class="good-img" src="'+data[i].main_image+'"></p>';
                 html +='     <p class="good-desc ellipsis">'+notEmpty(data[i].name)+' </p>';
                 html +='   </a>';

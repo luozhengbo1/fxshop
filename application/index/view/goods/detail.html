@@ -8,12 +8,14 @@
 <!--轮播图-->
 <div class="swiper-container header-banner">
     <ul class="swiper-wrapper" >
+        {volist name="goods['pic']" id="vo"}
         <li class="swiper-slide">
-            <img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg" lazy="loaded">
+            <img src="{$vo}" lazy="loaded" id="test">
         </li>
-        <li class="swiper-slide">
-            <img  src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg" lazy="loaded">
-        </li>
+        {/volist}
+        <!--<li class="swiper-slide">-->
+            <!--<img  src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg" lazy="loaded">-->
+        <!--</li>-->
     </ul>
     <!-- 如果需要分页器 -->
     <div class="swiper-pagination"></div>
@@ -21,26 +23,27 @@
 <!--商品-->
 <a  name="good-detail-content"></a>
 <div class="good-detail-content">
-    <p class="good-price">¥45</p>
-    <p class="good-title">美国superdr2y那那还是的合体育体育</p>
+    <p class="good-price">¥{$goods['basic_price']??''}</p>
+    <p class="good-title">{$goods['name']??''}</p>
     <ul class="clear good-service">
-        <li class="fl">快递22.3</li>
-        <li class="fl tc">月销33</li>
-        <li class="fr tr">江苏杭州</li>
+        <li class="fl">快递¥<?php if($goods['free_type']==1) echo 0;
+                                else echo $goods['postage']; ?></li>
+        <li class="fl tc">销量{$goods['buy_num']??''}</li>
+        <li class="fr tr">{$goods['yieldly']??'贵州贵阳'}</li>
     </ul>
     <p class="mt10 detail-block">
         <span class="title">领券</span>
-        <span class="content"><span class="icon-couple"></span>满20减去19优惠券</span>
+        <span class="content"><span class="icon-couple"></span>{$lottery?$lottery['id']:'无'}</span>
         <i class="detail_footer-icon"></i>
     </p>
     <p class="detail-block">
         <span class="title">促销</span>
-        <span class="content"><span class="icon-point"></span>购买可得159积分</span>
+        <span class="content"><span class="icon-point"></span>购买可得{$goods['return_score']??''}积分</span>
         <i class="detail_footer-icon"></i>
     </p>
     <p class="detail-block">
         <span class="title">服务</span>
-        <span class="content">正品保证.急速退款.七天退换</span>
+        <span class="content">{$goods['after_sale']??''}</span>
         <i class="detail_footer-icon"></i>
     </p>
     <p class="detail-block">
@@ -284,61 +287,6 @@
                             </p>
                         </div>
                     </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -357,9 +305,9 @@
     </ul>
     <div class="good-detail-module">
         <div class="tab-content">
-            <div class="tab-content-item">商品简介</div>
+            <div class="tab-content-item">{$goods['detail']??''}</div>
             <div class="tab-content-item">规格参数</div>
-            <div class="tab-content-item">售后保障</div>
+            <div class="tab-content-item">{$goods['after_sale']??''}</div>
         </div>
     </div>
 </div>
