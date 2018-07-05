@@ -77,7 +77,6 @@ class Address extends Controller
                     ->field('id')
                     ->where('openid', $user['openid'])
                     ->find();
-                $uid = $user_data['id'];
                 $time = time();
                 $data = [
                     'uid' => $user_data['id'],
