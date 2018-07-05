@@ -165,13 +165,16 @@
     detailTag = detailTag.replace(/&gt;/g,">");
     var url = {
         getSku:"{:url('index/goods/getSku')}",
+        addCar:"{:url('index/car/addCar')}",
+        buy:"",
     }
     var skuZhuhe={};
     // skuId goodId num  valId
     var saveData = {
-        goodsId:'',
+        goodsId:"{$goods['id']}",
         num :'',
         skuId:'',
+        val:'',
     }
     $('#goodDetail').append(detailTag)
     $(function () {
@@ -229,7 +232,7 @@
             })
         })
         zhuheId = zhuheId.substr(0,zhuheId.length-1);
-        zhuheVal = zhuheVal.substr(0,zhuheId.length-1);
+        zhuheVal = zhuheVal.substr(0,zhuheVal.length-1);
         console.log(zhuheId);
        // debugger;
         if (skuZhuhe != null) {
@@ -243,11 +246,12 @@
                // debugger;
                 //console.log(item);
                 if(zhuheId ==id){
-                    debugger
-                    console.log("idtest:"+item.id);
+
                     $('#goodPrice').empty().append(item.price);
                     $('#goodChoseSku').empty().append('<span>已选</span> '+zhuheVal+'<i id="showBuyNum"></i>个');
                     $('#buyNum').data('store',item.store);//item.pointPrice  item.id
+                    saveData.skuId = item.id;
+                    saveData.val = zhuheVal;
                     buyNumShow();
                 }
             });
@@ -256,6 +260,7 @@
     }
     function buyNumShow(){
         var buyNum = $('#buyNum').val();
+        saveData.num = buyNum;
         $('#showBuyNum').empty().append();
     }
     //默认选中第一规格
@@ -265,6 +270,25 @@
             if(span.size()>0){
                 var firstSpan = span[0];
                 firstSpan.click();
+            }
+        })
+    }
+    function addCar() {
+        $('#popupMain').attr('popupType','car')
+        var type = $('#popupMain').attr('popupType')
+        var request = '';
+        if(type =='car'){
+            request = url.addCar;
+        }else if(type =='buy'){
+            request = url.buy;
+        }
+        $.ajax({
+            url:request,
+            type:'post',
+            data:saveData,
+            dataType:'json',
+            success: function(data){
+                layer_msg(data.msg);
             }
         })
     }
