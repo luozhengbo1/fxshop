@@ -128,6 +128,14 @@
         }
         public function goodsList(){
             $this->assign('titleName', "商品搜索");
+            $searchHistory = Db::name('search')
+                ->distinct(true)
+                ->field('search')
+                ->where(['openid'=>$this->userInfo['openid']])
+                ->order('create_time desc')
+                ->limit(5)
+                ->select();
+            $this->assign('searchHistory',$searchHistory?$searchHistory:'');
             return $this->view->fetch();
         }
 
