@@ -27,11 +27,11 @@
         </div>
         <div id="dataListWrap" style="width: 70%; float: right">
             <ul class="child_category clear" id="goodsList">
-                <!--<li>
-                    &lt;!&ndash;<div class="title" > <a href="/mobile/index.23php?m=category&amp;a=products&amp;id=1593"><h5>食用油</h5></a></div>&ndash;&gt;
-                    &lt;!&ndash;<ul class="clear">
-                        <li><a href="#"></a><img src="http://scsc.top/images/201709/thumb_img/2912_thumb_G_1505608995337.jpg" alt="花生油"><span>花生油</span></li>
-                    </ul>&ndash;&gt;
+               <!-- <li class="tc radius4">
+                    <a href="">
+                        <img class="good-img" alt="" src="">
+                        <span>小米手机</span>
+                    </a>
                 </li>-->
             </ul>
         </div>
@@ -84,12 +84,12 @@
     function dealData(data) {
         var html='';
         for(var i = 0; i < data.length; i++){
-            html +=' <li class="tc radius4>'
-            html +='	<a href="{:url(\'goods/detail\',array(\'id\'=>21))}" >';
-            html +='    <img class="good-img" alt="'+data[i].name+'" src="'+data[i].main_image+'">';
-            html +='    <span>'+data[i].name+'</span>'
-            html +='   </a>';
-            html +='  </li>';
+            html +='<li class="tc radius4">';
+            html +='    <a class="clear" href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'">';
+            html +='        <img class="good-img" alt="'+data[i].name+'" src="'+data[i].main_image+'">';
+            html +='        <span>'+data[i].name+'</span>';
+            html +='    </a>';
+            html +='</li>';
         }
         return html;
     }

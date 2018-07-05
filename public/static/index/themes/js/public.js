@@ -183,7 +183,7 @@ function bannerSwiper(_class) {
 var countCalculate = function (watchFun) {
     this.init(watchFun);
 };
-countCalculate.prototype.init =function () {
+countCalculate.prototype.init =function (watchFun) {
     var $countWrap =  $('.count-wrap'),
         minus = $countWrap.find('.minus'),
         add = $countWrap.find('.add'),
@@ -280,7 +280,7 @@ function urlConnect(url,json) {
     result = result.split('.html')[0];
     if(json){
         for (var key in json){
-            result +="\\"+key+"\\"+json[key];
+            result +="/"+key+"/"+json[key];
         }
     }
     result = result+'.html';

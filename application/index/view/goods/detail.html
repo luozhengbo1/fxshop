@@ -7,7 +7,7 @@
 
 <!--轮播图-->
 <div class="swiper-container header-banner">
-    <ul class="swiper-wrapper" >
+    <ul class="swiper-wrapper" style="min-height: 2rem" >
         {volist name="goods['pic']" id="vo"}
         <li class="swiper-slide">
             <img src="{$vo}" lazy="loaded" id="test">
@@ -46,11 +46,11 @@
         <span class="content">{$goods['after_sale']??''}</span>
         <i class="detail_footer-icon"></i>
     </p>
-    <p class="detail-block">
+    <!--<p class="detail-block">
         <span class="title">规格</span>
         <span class="content">选择颜色，尺码</span>
         <i class="detail_footer-icon"></i>
-    </p>
+    </p>-->
 </div>
 <!--商品评价-->
 <a name="good-evaluate"></a>
@@ -64,231 +64,28 @@
     <p class="title mt10">猜你喜欢</p>
     <div class="swiper-container love-goods-banner">
         <div class="swiper-wrapper" >
+            {volist name="guestGoods" id="vo"}
             <div class="swiper-slide">
                 <ul class="goods-list clear">
+                    {volist name="vo" id="vol"}
                     <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                              <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
+                        <a class="clear" href="{:url('goods/detail',array('id'=>$vol['id']))}">
+                            <img class="good-img" src="{$vol.main_image}">
+                            <p class="good-desc">{$vol.name} </p>
+                            <div class="mt5">
+                                <p class="fl">已售{$vol.buy_num}</p>
+                                <p class="fr">
+                                    <span class="goods-price">¥{$vol.basic_price}</span>
+                                    <!--  <span class="goods-old-price">¥45.00</span>-->
+                                </p>
+                            </div>
+                        </a>
                     </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
+                    {/volist}
+
                 </ul>
             </div>
-            <div class="swiper-slide">
-                <ul class="goods-list clear">
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="swiper-slide">
-                <ul class="goods-list clear">
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="swiper-slide">
-                <ul class="goods-list clear">
-                    <li>
-                        <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-                        <p class="good-desc">Lay’s/乐事薯片清爽酸奶零食 </p>
-                        <div class="mt5">
-                            <p class="fl">已售3</p>
-                            <p class="fr">
-                                <span class="goods-price">¥45.00</span>
-                                <!--  <span class="goods-old-price">¥45.00</span>-->
-                            </p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+            {/volist}
         </div>
         <!-- 如果需要分页器 -->
         <div class="swiper-pagination"></div>
@@ -305,8 +102,17 @@
     </ul>
     <div class="good-detail-module">
         <div class="tab-content">
-            <div class="tab-content-item">{$goods['detail']??''}</div>
-            <div class="tab-content-item">规格参数</div>
+            <div class="tab-content-item" id="goodDetail"></div>
+            <div class="tab-content-item">
+                {foreach name="$goods['routine']" item="vo" key="k"}
+                    <table class="table">
+                        <tr>
+                            <td>{$k}：</td>
+                            <td>{$vo}</td>
+                        </tr>
+                    </table>
+                {/foreach}
+            </div>
             <div class="tab-content-item">{$goods['after_sale']??''}</div>
         </div>
     </div>
@@ -315,29 +121,30 @@
 <div class="detail_popup" id="popupBuyArea">
     <div class="main" id="popupMain">
         <div class="header">
-            <img alt="商品图" class="avt" id="popupImg" ptag="7001.1.239" src="//m.360buyimg.com/mobilecms/s750x750_jfs/t21361/160/67083062/266022/16b48e62/5af94dd0Na2afc153.png!q80.webp" />
-            <p class="price">&yen;<em>99</em>.00</p>
-            <p class="prop"><span>已选</span> cs10藏青+浅蓝,XL,1个</p>
+            <img alt="商品图" class="avt" id="popupImg"  src="{$goods['main_image']}" />
+            <p class="price">&yen;<em id="goodPrice">{$goods['basic_price']}</em></p>
+            <p class="prop" id="goodChoseSku"><!--<span>已选</span> cs10藏青+浅蓝,XL,1个--></p>
             <i class="close" id="popupClose"></i>
         </div>
         <div class="body">
-            <div id="popupSkuArea" >
-                <div class="sku_kind">颜色</div>
-                <div class="sku_choose clear" id="skuPop1">
-                    <span class="item" no="1" dis="0">cs10白色+藏青</span>
-                    <span class="item" no="1" dis="0">cs10白色+粉红</span>
-                    <span class="item" no="1" dis="0">cs10白色+黑色</span>
-                    <span class="item" no="1" dis="0">cs10白色+天蓝</span>
-                    <span class="item" no="1" dis="0">cs10藏青+黑色</span>
-                    <span class="item" no="1" dis="0">CS55白色+藏青</span>
+            <div id="popupSkuArea" style="min-height: 1rem" >
+                {foreach name="$arr" item="vo" key="k"}
+                {php} $skuName= explode('_',$k); {/php}
+                <div class="sku_kind" data-id="{$skuName[0]}" value="{$skuName[1]}" >{$skuName[1]}</div>
+                <div class="sku_choose clear" id="skuPop{$skuName[0]}">
+                    {foreach name="$vo" item="vo3" key="k1"}
+                    {php} $skuVal= explode('_',$vo3); {/php}
+                     <span class="item" data-realid = "{$k1}" onclick="choseSku(this)" data-pName="{$skuName[0]}_{$skuName[1]}:{$skuVal[0]}" data-id="{$skuVal[0]}" data-pValue="{$skuVal[1]}">{$skuVal[1]}</span>
+                    {/foreach}
                 </div>
+                {/foreach}
             </div>
             <div class="purchase-count clear">
-                <p class="fl">数量</p>
-                <div class="layui-btn-group fr count-wrap">
+                <p class="fl h30 lh30">数量</p>
+                <div class="layui-btn-group fr count-wrap ">
                     <button class="layui-btn layui-btn-primary layui-btn-sm fr24 minus">-</button>
                     <div class="layui-btn layui-btn-primary layui-btn-sm">
-                        <input class="sumInput" type="text" value="1">
+                        <input class="sumInput" type="text" value="1" id="buyNum" onkeyup="buyNumShow();">
                     </div>
                     <button class="layui-btn layui-btn-primary layui-btn-sm fr24 add">+</button>
                 </div>
@@ -353,24 +160,106 @@
 {include file="Public/footer-shop"}
 {include file="Public/footer-quick-nav"}
 <script>
-
+    var detailTag = "{$goods['detail']??''}";
+    detailTag = detailTag.replace(/&lt;/g,"<");
+    detailTag = detailTag.replace(/&gt;/g,">");
+    var url = {
+        getSku:"{:url('index/goods/getSku')}",
+    }
+    var skuZhuhe={};
+    console.log(detailTag)
+    $('#goodDetail').append(detailTag)
     $(function () {
         navTab();
-        eventDeal();//页面点击事件处理
-        new countCalculate()//数字计算
+        eventDeal( );//页面点击事件处理
+        new countCalculate(buyNumShow)//数字计算
+        getSku("{$goods['id']}");
+        var swiper1 = bannerSwiper('header-banner');//顶部banner
+        var swiper2 = bannerSwiper('love-goods-banner');//猜你喜欢 滚动
+        getEvaluate("{$goods['id']}");
     })
-    var swiper1 = bannerSwiper('header-banner');//顶部banner
-    var swiper2 = bannerSwiper('love-goods-banner');//猜你喜欢 滚动
-    $.ajax({
-        url:"{:url('index/index/return_evaluate_json')}",
-        type:'post',
-        data:{size:2}|| {},
-        dataType:'json',
-        success: function(data){
-           $("#evaluateList").empty().append(dealData(data.lists)) ;
-        }
-    })
+    //获取商品评论
+    function getEvaluate(){
+        $.ajax({
+            url:"{:url('index/index/return_evaluate_json')}",
+            type:'post',
+            data:{size:2}|| {},
+            dataType:'json',
+            success: function(data){
+                $("#evaluateList").empty().append(dealData(data.lists)) ;
+            }
+        })
+    }
 
+    //获取sku组合值
+    function getSku(id) {
+        $.ajax({
+            url:url.getSku,
+            type:'post',
+            data:{id:id},
+            dataType:'json',
+            success: function(data){
+                var code = data.code,result = data.data;
+                skuZhuhe= result;
+                choseFirst()//获取到组合sku后选中第一个
+            }
+        })
+    }
+    //选择sku属性值
+    function  choseSku(_this) {
+        var $this = $(_this);
+        var zhuheId = '';
+        var zhuheVal = ''
+        $this.parents('.sku_choose').find('span').removeClass('active');
+        $this.addClass('active');
+        //循环获取id组合
+        $('.sku_choose').each(function (index,ele) {
+            var span = $(ele).find('span');
+            span.each(function (i,span) {
+                if($(span).hasClass('active')){
+                    zhuheId += $(span).data('id')+"_";
+                    zhuheVal+= $(span).data('pvalue')+"+";
+                }
+
+            })
+        })
+        zhuheId = zhuheId.substr(0,zhuheId.length-1);
+        zhuheVal = zhuheVal.substr(0,zhuheId.length-1);
+        console.log(zhuheId);
+       // debugger;
+        if (skuZhuhe != null) {
+            skuZhuhe.forEach(function (item) {
+                var id='';
+                var namearr=(item.attribute_name).split(',');
+                for(var i=0; i<namearr.length; i++){
+                    id += (namearr[i].split(':')[1]).split('_')[0]+'_';
+                }
+                id = id.substr(0,id.length-1);
+               // debugger;
+                if(zhuheId ==id){
+                    console.log(item);
+                    $('#goodPrice').empty().append(item.price);
+                    $('#goodChoseSku').empty().append('<span>已选</span> '+zhuheVal+'<i id="showBuyNum"></i>个');
+                    $('#buyNum').data('store',item.store);//item.pointPrice  item.id
+                    buyNumShow();
+                }
+            });
+        }
+
+    }
+    function buyNumShow(){
+        $('#showBuyNum').empty().append($('#buyNum').val())
+    }
+    //默认选中第一规格
+    function choseFirst() {
+        $('.sku_choose').each(function (index,ele) {
+            var span = $(ele).find('span');
+            if(span.size()>0){
+                var firstSpan = span[0];
+                firstSpan.click();
+            }
+        })
+    }
 </script>
 </body>
 </html>

@@ -65,7 +65,7 @@
             foreach($proprety_name as $k=>$v){
                 foreach ($proprety_name_val as $key=>$val){
                     if($v['id']==$val['pro_id']){
-                        $arr[$v['name']][]=$val['value'];
+                        $arr[$v['name']][$val['id']]=$val['value'];
                     }
                 }
             }
@@ -75,7 +75,7 @@
             if( !empty($goods['routine']) ){
                 $goods['routine'] =json_decode($goods['routine'],true);
             }
-//            dump($goods);die;
+
             #查询该商品是否有优惠券在这里显示的一定是商品优惠券
             $lottery = Db::name('lottery')
                 ->where(['goods_id'=>$id,'isdelete'=>0,'status'=>1])
@@ -87,8 +87,12 @@
             $this->view->assign('lottery',$lottery);
             $this->view->assign('arr',$arr);
             #获取猜你喜欢的商品
+          // dump($arr);
+//           dump($proprety_name_val);
+           //dump($skuData);die;
             $this->view->assign('guestGoods',$this->guestYouLike($id));
-
+//            dump($this->guestYouLike($id));
+//            die;
             return $this->view->fetch();
         }
 
@@ -159,6 +163,7 @@
             if( !empty($goodsId) ){
                 $goodsList = Db::name('goods')
                     ->where(['status'=>1,'isdelete'=>0,'id'=>['in',$goodsId]])
+                    ->limit(24)
                     ->select();
             }else{
                $goodsClass = Db::name('goods')
@@ -167,11 +172,23 @@
                    ->find();
                 $goodsList = Db::name('goods')
                    ->where(['status'=>1,'isdelete'=>'0','goods_class_id'=>['=',$goodsClass['goods_class_id'] ]])
+                    ->limit(24)
                    ->select();
+
             }
-            return  $goodsList;
+            return  array_chunk($goodsList,6,false);
 
         }
+        public function getSku($id){
+            $skuData =  Db::name('goods_attribute')
+                ->where(['goods_id'=>$id])
+                ->select();
+            if(empty($skuData)){
+                return ajax_return('','no',500);
+            }else{
+                return ajax_return($skuData,'ok',200);
+            }
 
+        }
 
 	}

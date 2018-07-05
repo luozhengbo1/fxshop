@@ -28,15 +28,23 @@
         }
 
         #获该分类或者子分类下的所有商品
-        public function  getGoodsClassGoods($goodsClassId)
+        public function  getGoodsClassGoods($goodsClassId,$page=1,$size=20)
         {
             if(!$goodsClassId){
                 return ajax_return_error('缺少参数分类id');
             }
             #查询所有的子分类
             $goodsClassAllChild = getAllChildcateIds($goodsClassId);
-            $goodsList = Db::name('goods')->where(['goods_class_id'=>['in',$goodsClassAllChild],'status'=>1,'isdelete'=>'0'])->select();
-            return ajax_return($goodsList,'ok','200');
+            $goodsList = Db::name('goods')
+                ->where(['goods_class_id'=>['in',$goodsClassAllChild],'status'=>1,'isdelete'=>'0'])
+                ->page($page,$size)
+                ->select();
+            if( empty($goodsList) ){
+                return ajax_return('','ok','200');
+            }else{
+                return ajax_return($goodsList,'ok','200');
+
+            }
         }
 
 	}
