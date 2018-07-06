@@ -3733,9 +3733,9 @@ a {
 	width: 20px;
 	height: 20px;
 	position: absolute;
-	top: 50%;
+	/*top: 50%;
 	left: 10px;
-	margin-top: -10px;
+	margin-top: -10px;*/
 	background: url(../../images/noselected.png) no-repeat 50%;
 	background-size: 20px 20px;
 }
@@ -3795,6 +3795,7 @@ a {
 	height: .3rem;
 	display: inline-block;
 	float: left;
+	margin-top: .2rem;
 }
 .cart-list .image-info{
 	width: 28%;
@@ -3833,20 +3834,24 @@ a {
 }
 .settle-accounts{
 	position: fixed;
-	bottom:.4rem;
+	bottom: .5rem;
 	left: 0;
 	width: 100%;
 	padding-top: .1rem;
 	background: white;
-	padding-bottom: .04rem;
+	padding-bottom: .1rem;
 }
 .settle-accounts .chose{
 	float: left;
 	padding-left: .4rem;
 	position: relative;
-	width: 20%;
 	line-height: .3rem;
 	height: .3rem;
+}
+.settle-accounts .chose-all{
+	position: absolute;
+	left: 10px;
+	top: 4px;
 }
 /*****会员中心*********/
 .signin-btn {
