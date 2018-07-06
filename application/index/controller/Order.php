@@ -32,7 +32,7 @@
                     exit;
                 }
                 foreach ($storeData as $k=>$v){
-                   $storeData[$k][] = Db::name('goods')->where(['id'=>$v['goodsId']])->find();
+                    $storeData[$k] = array_merge($storeData[$k], Db::name('goods')->where(['id'=>$v['goodsId']])->find());
                 }
                 #如果有地址就取出地址
                 $address = Db::name('customer_address')->alias('ca')
@@ -43,6 +43,8 @@
 //                dump($address);die;
                 $this->view->assign('address',$address?$address:'');
                 $this->view->assign('storeData',$storeData);
+           //    dump($address);
+               //dump($storeData);
                 return $this->view->fetch();
             }
         }
@@ -55,10 +57,10 @@
                 Session::set('storeData '.$this->userInfo['openid'],$storeData);
 //                dump(  Session::get('storeData '.$this->userInfo['openid']));die;
 //                $res = Db::name('order_confirm')->insert($data);
-                if( empty($storeData)){
-                    return ajax_return('','no','500');
+                if( !empty($storeData) ){
+                    return ajax_return('','提交成功','200');
                 }else{
-                    return ajax_return('','ok','200');
+                    return ajax_return('','提交失败','500');
                 }
             }
         }
