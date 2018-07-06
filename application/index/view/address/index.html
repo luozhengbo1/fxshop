@@ -44,15 +44,15 @@
       for(var i = 0; i < data.length; i++){
           console.log(data[i])
           html +='<ul>';
-          html +='  <li class="chose-btn">';
+          html +='  <li class="chose-btn" onclick="editAddr('+data[i].id+')" >';
           if(data[i].status ==1){  //1表示默认选中地址
-              html +=' <i class="selected-icon no-selected-icon" onclick="editAddr('+data[i].id+')" ></i>';
+              html +=' <i class="selected-icon no-selected-icon" ></i>';
           }else{
-              html +=' <i class="no-selected-icon" onclick="editAddr('+data[i].id+')"></i>';
+              html +=' <i class="no-selected-icon" ></i>';
           }
           html +='  </li>';
-          html +='    <li class="bold user">'+data[i].name+"  "+data[i].mobile+'</li>';
-          html +='    <li>'+data[i].address+data[i].street+'</li>';
+          html +='    <li class="bold user" onclick="editAddr('+data[i].id+')" >'+data[i].name+"  "+data[i].mobile+'</li>';
+          html +='    <li onclick="editAddr('+data[i].id+')" >'+data[i].address+data[i].street+'</li>';
           html +='    <li>';
           html +='      <a href='+urlConnect("{:url('address/edit')}",{id:data[i].id})+'><i class="layui-icon opt-btn edit"></i></a>';
           html +='      <a href="javascript:;" onclick="req_opt(0,{id:'+data[i].id+'})"><i class="layui-icon opt-btn dele"></i></a>';
