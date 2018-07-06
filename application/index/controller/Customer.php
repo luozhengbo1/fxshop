@@ -97,7 +97,7 @@ class Customer extends Controller
                 $save = [
                     'addtime' => $time,
                     'uid' => $userData['id'],
-                    'score' => 1,
+                    'score' => 2,
                     'reward_score' => 0
                 ];
                 //判断用户是否第一次签到?continue_day=1，score+1插入customer表,addtime，uid，score=1,reward_score=0 插入sign表
@@ -132,16 +132,13 @@ class Customer extends Controller
                         //判断今天签到后是否满足奖励条件
                         switch ($userData['continuity_day']) {
                             case '2':
-                                $score = 2;
+                                $score = 5;
                                 break;
                             case '6':
-                                $score = 8;
+                                $score = 15;
                                 break;
                             case '14':
-                                $score = 20;
-                                break;
-                            case '29':
-                                $score = 50;
+                                $score = 30;
                                 break;
                         }
                         //满足奖励条件：continue_day+1，score+1+reward_score更新到customer表，score=1,reward_score=相应的奖励积分插入到customer_sign表
@@ -151,13 +148,13 @@ class Customer extends Controller
                             $newSave = [
                                 'addtime' => $time,
                                 'uid' => $userData['id'],
-                                'score' => 1,
+                                'score' => 2,
                                 'reward_score' => $score
                             ];
                             Db::table('fy_customer_sign')->insert($newSave);
                         } else {
                             //是否已达到最大连续签到天数？continue_day重置为1
-                            if ($userData['continuity_day'] == 30) {
+                            if ($userData['continuity_day'] == 15) {
                                 Db::table('fy_customer')->where('openid', $user['openid'])->setField('continuity_day', 1);
                             } else {
                                 Db::table('fy_customer')->where('openid', $user['openid'])->setInc('continuity_day', 1);
