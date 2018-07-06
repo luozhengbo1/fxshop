@@ -14,12 +14,12 @@
             <label class="form-label col-xs-3 col-sm-3">性别：</label>
             <div class="formControls col-xs-6 col-sm-6 skin-minimal">
                 <div class="radio-box">
-                    <input type="radio" name="sex" id="sex-" value="1" onclick="return false;">
-                    <label for="sex-">男</label>
+                    <input type="radio" name="sex" id="sex-1" value="1" onclick="return false;">
+                    <label for="sex-1">男</label>
                 </div>
                 <div class="radio-box">
-                    <input type="radio" name="sex" id="sex-" value="2" onclick="return false;">
-                    <label for="sex-">女</label>
+                    <input type="radio" name="sex" id="sex-2" value="2" onclick="return false;">
+                    <label for="sex-2">女</label>
                 </div>
             </div>
             <div class="col-xs-3 col-sm-3"></div>
@@ -56,6 +56,13 @@
             <label class="form-label col-xs-3 col-sm-3">积分：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <input type="text" class="input-text" name="score" value="{$vo.score ?? ''}" disabled="disabled">
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3">经验值：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" name="experience" value="{$vo.experience ?? ''}" disabled="disabled">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
