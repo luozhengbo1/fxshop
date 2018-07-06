@@ -213,13 +213,17 @@ countCalculate.prototype.init =function (watchFun) {
         }
     });
     sumInput.keydown(function(){
-        console.log('123ss'.replace(/D/g,''))
+       // console.log('123ss'.replace(/D/g,''))
         $(this).val( ($(this).val()).replace(/D/g,''))
         if($(this).val()<1){
             $(this).val(1)
         }
-
-    })
+    });
+    sumInput.keyup(function () {
+        if(watchFun){
+            watchFun();
+        }
+    });
 }
 function validBuyNum() {
     var falg = true;
