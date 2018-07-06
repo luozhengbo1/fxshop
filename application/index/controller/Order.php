@@ -5,6 +5,7 @@
     Class Order extends Mustlogin
     {
         protected  $userInfo;
+        protected  $storeData;
         public  function  __construct()
         {
             $this->userInfo = Session::get('wx_user');
@@ -22,19 +23,36 @@
         public function affirmOrder()
         {
             $this->assign('titleName', "确认订单");
-            $data = $this->request->post();
+
             if($this->request->isGet()){
+                if(empty($this->storeData) ){
+                    $this->error('什么也没有');
+                    exit;
+                }
                 #如果有地址就取出地址
                 $address = Db::name('address')
                     ->where(['openid'=>$this->userInfo['openid'],'statu'=>1 ])
                     ->find();
-                if($address){
-                    $this->view->assign('address',$address);
-                }
-//                $goods = Db::name('goods')->where([''])->
+                $this->view->assign('address',$address);
+                dump($this->storeData);die;
+//                $goodsList = Db::name('goods')->where([''])->
                 return $this->view->fetch();
             }
         }
+
+        public function  affirmOrderApi()
+        {
+            if($this->request->isAjax()){
+                $this->storeData = $this->request->post();
+//                dump($this->storeData);die;
+                if( empty( $this->storeData )){
+                    return ajax_return('','no','500');
+                }else{
+                    return ajax_return('','ok','200');
+                }
+            }
+        }
+
 
         #生成订单，订单支付处理
         public function pay()
