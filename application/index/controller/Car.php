@@ -75,11 +75,11 @@
                         'goods_id'=>$data['goodsId'],
                         'openid'=>$this->userInfo['openid'],
                         'sku_id'=>$data['skuId']
-                    ])->setInc('goods_num', $data['num']);
+                    ])->setInc('goods_num', ($data['num']!=0)?$data['num']:'1');
             }else{
                 $res = Db::name('car')
                     ->insert([
-                        'goods_num'=>$data['num'],
+                        'goods_num'=>$data['num']?$data['num']:'1',
                         'update_time'=>$time,
                         'create_time'=>$time,
                         'goods_id'=>$data['goodsId'],

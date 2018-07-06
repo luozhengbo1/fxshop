@@ -37,8 +37,8 @@ Class MustLogin extends Controller
             //判断时间差是否为偶数
             if (!$result) {
                 Db::table('fy_customer')->where('id', $id)->setField('score', 0);
-                echo $customer_data['nickname'] . '积分已经清零';
-                die;
+//                echo $customer_data['nickname'] . '积分已经清零';
+//                die;
             }
         }
     }
