@@ -4,89 +4,97 @@
 
 <section class="affirm-order">
     <div class="aui-address-box-default">
-           <a class="show-address" href="{:\\think\\Url::build(\'address/index\')}">
-               <p class="bold f14">江永飛 183**13273</p>
-               <p>北京密云区城区</p>
-           </a>
 
-          <!--<a class="add-address" href="">
-              <span>还没有地址去添加吧</span>
-          </a>-->
+        {if condition="$address  neq 0 "}
+        <a class="show-address" href="{:\\think\\Url::build(\'address/index\')}">
+            <p class="bold f14">{$address['name']??''}  &nbsp;&nbsp; {$address['mobile']}</p>
+            <p>{$address['address']??''}&nbsp;&nbsp;&nbsp;&nbsp; {$address['street']??''}</p>
+        </a>
+        {else /}
+        <a class="add-address" href=""><span>还没有地址去添加吧</span></a>
+        {/if}
     </div>
-    <div class="clear pt10 goods-info-wrap">
-        <div class="fl image">
-            <img width="100%" src="//img10.360buyimg.com/n4/jfs/t21361/160/67083062/266022/16b48e62/5af94dd0Na2afc153.png">
-        </div>
-        <div class="fr goods-info">
-            <p class="ellipsis title">【 99元3件 买一送二】2018夏季新款短袖衬衫男修身休闲商务男装衣服衬衣 cs10藏青+浅蓝 XL</p>
-            <p>cs10藏青+浅蓝，XL</p>
-            <div class="clear mt10">
-                <span class="fl red f16">¥<em id="goodPrice">99.00</em></span>
-                <span class="fr"><em id="purchaseNum">1</em>件</span>
+    {volist name="storeData" id="vo" empty=""}
+
+    <div class="mb5 orderWrap">
+        <input type="hidden"
+               class="goodsData"
+               data-goodsid="{$vo['goodsId']}"
+               data-num="{$vo['num']}"
+               data-sku="{$vo['skuId']}"
+               data-val="{$vo['val']}"
+               data-val="{$vo['val']}"
+               data-price="{$vo['price']}"
+               data-card="{$vo['carId']}"
+               data-postage="{$vo['postage']}"
+        >
+        <div class="clear pt10 goods-info-wrap">
+            <div class="fl image">
+                <img width="100%" src="{$vo['main_image']}">
             </div>
-        </div>
-    </div>
-    <ul class="service-info">
-        <li class="clear">
-            <span class="fl">购买数量</span>
-            <div class="layui-btn-group fr count-wrap">
-                <button class="layui-btn layui-btn-primary layui-btn-sm fr24 minus">-</button>
-                <div class="layui-btn layui-btn-primary layui-btn-sm">
-                    <input class="sumInput" type="text" id="purchaseNumInput" value="1">
+            <div class="fr goods-info">
+                <p class="ellipsis title">{$vo['name']}</p>
+                <p>{$vo['val']}</p>
+                <div class="clear mt10">
+                    <span class="fl red f16">¥<em id="goodPrice">{$vo['price']}</em></span>
+                    <span class="fr"><em id="purchaseNum">{$vo['num']}</em>件</span>
                 </div>
-                <button class="layui-btn layui-btn-primary layui-btn-sm fr24 add">+</button>
             </div>
-        </li>
-        <li class="clear">
-            <span class="fl">服务信息</span>
-            <span class="fr">
-                <img width="20px"  src="__STATIC__/index/images/day7.png">支持7天无理由退货
-                <a href="javascript:;" onclick="showServiceInfo()">
-                     <img width="20px"  src="__STATIC__/index/images/info.png">价格说明
-                </a>
-            </span>
-        </li>
-        <li class="clear">
-            <span class="fl">店铺优惠</span>
-            <span class="fr">2件包邮</span>
-        </li>
-        <li class="clear">
-            <span class="fl">配送方式</span>
-            <span class="fr">快递包邮</span>
-        </li>
-        <li class="clear">
-            <span class="fl">运费险</span>
-            <span class="fr">卖家送，确认收货前退货可赔</span>
-        </li>
-        <li class="clear">
-            <span class="fl">卖家留言：</span>
-            <input type="text" class="fr words" placeholder="选填：填写内容已和卖家协商确定">
-        </li>
-        <li class="clear">
-            <span class="fl">商品金额</span>
-            <input type="text" class="fr words" placeholder="选填：填写内容已和卖家协商确定">
-        </li>
-    </ul>
+        </div>
+        <ul class="service-info">
+            <li class="clear">
+                <span class="fl">服务信息</span>
+                <span class="fr">
+                    <!--<img width="20px"  src="__STATIC__/index/images/day7.png">支持7天无理由退货
+                    <a href="javascript:;" onclick="showServiceInfo()">
+                         <img width="20px"  src="__STATIC__/index/images/info.png">价格说明
+                    </a>-->
+                    {$vo['after_sale']}
+                 </span>
+            </li>
+            <li class="clear">
+                <span class="fl">快递</span>
+                <span class="fr">
+                    {if condition="$vo['free_type']  neq 1 "}
+                        包邮
+                    {else /}
+                        {$vo['postage']??'0'} 元邮费
+                    {/if}
+                </span>
+            </li>
+            <!--<li class="clear">
+                <span class="fl">配送方式</span>
+                <span class="fr">快递包邮</span>
+            </li>
+            <li class="clear">
+                <span class="fl">运费险</span>
+                <span class="fr">卖家送，确认收货前退货可赔</span>
+            </li>-->
+            <li class="clear">
+                <span class="fl">卖家留言：</span>
+                <input type="text" class="fr words" placeholder="选填：填写内容已和卖家协商确定">
+            </li>
+        </ul>
+    </div>
+
+    {/volist}
+
     <div class="aui-payment-bar">
         <div class="shop-total">
             <span class="aui-red aui-size">实付款: <em id="showPrice" class="bold f18"></em>￥</span>
         </div>
-        <a href="javascript:;" id="singlePay" class="settlement">提交订单</a>
+        <a href="javascript:;" id="singlePay" class="settlement" onclick="saveOrder()">提交订单</a>
     </div>
 </section>
 <script>
-   countCalculate(changeInfo);
-   changeInfo();
+    var url = {
+        pay:"{:url('index/order/pay')}",
+    }
+   var saveData = new Array();
    $('#singlePay').click(function () {
        console.log();
    });
 
-  // $("#showPrice").html(1234)
-   function changeInfo(){
-       var num = $('#purchaseNumInput').val()
-       $('#purchaseNum').empty().text(num);
-       $("#showPrice").empty().text(parseInt($("#goodPrice").text())*num)
-   }
    function showServiceInfo(){
       layer.open({
            title:'价格说明'
@@ -97,7 +105,41 @@
            }
        });
    }
-
+   function saveOrder() {
+       saveData = new Array()//初始化数组
+       $('.goodsData').each(function (index,ele) {
+           var $ele = $(ele);
+           var thisData = {
+               goodsId:$ele.data('goodsid'),
+               num:$ele.data('num'),
+               skuId:$ele.data('sku'),
+               val:$ele.data('val'),
+               price:$ele.data('price'),
+               carId:$ele.data('carid'),
+               words:$ele.parents('.orderWrap').find('.words').val(),
+           };
+           saveData.push(thisData);
+       })
+       pub_save({
+           url:url.pay,
+           return_url:url.orderIndex,
+           data:{arr:JSON.stringify(saveData)},
+       })
+   }
+    showData()
+    function showData() {
+       var totalNum = 0;
+        $('.goodsData').each(function (index,ele) {
+            var $ele =$(ele);
+            var num =$ele.data('num') , price =$ele.data('price'),postage =parseInt($ele.data('postage'));
+            totalNum += parseInt(num)*parseInt(price);
+           // console.log('test'+isNaN(23))
+            if(!isNaN(postage)){
+                totalNum += totalNum;//加上邮费
+            }
+        })
+        $('#showPrice').html(totalNum)
+    }
 </script>
 </body>
 </html>

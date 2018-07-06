@@ -191,7 +191,7 @@ countCalculate.prototype.init =function (watchFun) {
     minus.click(function () {
         var input = $(this).parents('.count-wrap').find('.sumInput');
         if(input.val() ==1 || input.val() <1){
-            layer_msg('数据最小为1');
+            layer_msg('数量最小为1');
             input.val(1);
         }else{
             input.val(parseInt(input.val())-1);
@@ -202,21 +202,47 @@ countCalculate.prototype.init =function (watchFun) {
     });
     add.click(function () {
         var input = $(this).parents('.count-wrap').find('.sumInput');
-        input.val(parseInt(input.val())+1);
+        var maxNum = input.data('store')<200 ? input.data('store'):200;//数量最多不超过200
+        if(input.val() >=maxNum){
+            layer_msg('数量最多不超过200');
+        }else{
+            input.val(parseInt(input.val())+1);
+        }
         if(watchFun){
             watchFun();
         }
     });
     sumInput.keydown(function(){
-        console.log('123ss'.replace(/D/g,''))
+       // console.log('123ss'.replace(/D/g,''))
         $(this).val( ($(this).val()).replace(/D/g,''))
         if($(this).val()<1){
             $(this).val(1)
         }
-
-    })
+    });
+    sumInput.keyup(function () {
+        if(watchFun){
+            watchFun();
+        }
+    });
 }
-
+function validBuyNum() {
+    var falg = true;
+    $('.sumInput').each(function (index,ele) {
+        var maxNum = $(ele).data('store')<200 ? $(ele).data('store'):200;//数量最多不超过200
+        var minNum = 1
+        if($(ele).val()>maxNum){
+            layer_msg('数量最多不超过200');
+            $(ele).focus();
+            falg = false;
+        }
+        if($(ele).val()<minNum){
+            layer_msg('数量最小为1');
+            $(ele).focus();
+            falg = false;
+        }
+    });
+    return falg;
+}
 
 //加载函数
 //

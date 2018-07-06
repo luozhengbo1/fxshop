@@ -39,8 +39,8 @@
                     ->page($page,$size)
                     ->order('c.create_time desc')
                     ->select();
-
-              //  dump($carList);
+//                echo   Db::name('car')->getLastSql();die;
+//                dump($carList);
                 if(!empty($carList )){
                     return ajax_return($carList,'ok','200');
                 }else{
@@ -75,7 +75,7 @@
                         'goods_id'=>$data['goodsId'],
                         'openid'=>$this->userInfo['openid'],
                         'sku_id'=>$data['skuId']
-                    ])->update(['goods_num'=>'goods_num'+$data['num'],'update_time'=>$time]);
+                    ])->setInc('goods_num', $data['num']);
             }else{
                 $res = Db::name('car')
                     ->insert([

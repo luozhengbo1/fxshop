@@ -144,7 +144,7 @@
                 <div class="layui-btn-group fr count-wrap ">
                     <button class="layui-btn layui-btn-primary layui-btn-sm fr24 minus">-</button>
                     <div class="layui-btn layui-btn-primary layui-btn-sm">
-                        <input class="sumInput" type="text" value="1" id="buyNum" onkeyup="buyNumShow();">
+                        <input class="sumInput" type="text" data-store ="1" value="1" id="buyNum" onkeyup="buyNumShow();">
                     </div>
                     <button class="layui-btn layui-btn-primary layui-btn-sm fr24 add">+</button>
                 </div>
@@ -245,11 +245,11 @@
                 id = id.substr(0,id.length-1);
                // debugger;
                 //console.log(item);
+                //匹配id修改页面显示变量
                 if(zhuheId ==id){
-
                     $('#goodPrice').empty().append(item.price);
                     $('#goodChoseSku').empty().append('<span>已选</span> '+zhuheVal+'<i id="showBuyNum"></i>个');
-                    $('#buyNum').data('store',item.store);//item.pointPrice  item.id
+                    $('#buyNum').attr('data-store',item.store);//item.pointPrice  item.id
                     saveData.skuId = item.id;
                     saveData.val = zhuheVal;
                     buyNumShow();

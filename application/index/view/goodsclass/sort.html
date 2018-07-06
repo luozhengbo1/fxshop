@@ -48,7 +48,7 @@
         getGoodsClass();
         //分类导航距离顶部位置处理
         $(window).scroll(function () {
-            var menuTop=168-$(window).scrollTop();//菜单距离顶部的高度  初始高度168-滚动条滚动高度
+            var menuTop=150-$(window).scrollTop();//菜单距离顶部的高度  初始高度168-滚动条滚动高度
             if(menuTop>48){
                 $('.menu-left').css('top',menuTop);
             }else if(menuTop<48){
