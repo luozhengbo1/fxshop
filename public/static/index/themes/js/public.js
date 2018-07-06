@@ -296,7 +296,8 @@ var request_flag = {
     del:true,
     edit:false,
 }
-function req_opt(type,id){
+function req_opt(type,json){
+    debugger
     if(request_flag.del){//请求完成后才能进行下一次请求
         request_flag.del = false;
         layerLoad();
@@ -304,7 +305,7 @@ function req_opt(type,id){
             $.ajax({
                 url:url.dele,
                 type:'post',
-                data:{id:id},
+                data:json ||{},
                 dataType:'json',
                 success: function(data){
                     layer_msg(data.msg);
