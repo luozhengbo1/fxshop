@@ -25,22 +25,25 @@
                data-val="{$vo['val']}"
                data-val="{$vo['val']}"
                data-price="{$vo['price']}"
-               data-card="{$vo['carId']}"
+               data-carid="{$vo['carId']}"
                data-postage="{$vo['postage']}"
         >
-        <div class="clear pt10 goods-info-wrap">
-            <div class="fl image">
-                <img width="100%" src="{$vo['main_image']}">
-            </div>
-            <div class="fr goods-info">
-                <p class="ellipsis title">{$vo['name']}</p>
-                <p>{$vo['val']}</p>
-                <div class="clear mt10">
-                    <span class="fl red f16">¥<em id="goodPrice">{$vo['price']}</em></span>
-                    <span class="fr"><em id="purchaseNum">{$vo['num']}</em>件</span>
+        <a href="{:url('goods/detail',array('id'=>$vo['goodsId']))}">
+            <div class="clear pt10 goods-info-wrap">
+                <div class="fl image">
+                    <img width="100%" src="{$vo['main_image']}">
+                </div>
+                <div class="fr goods-info">
+                    <p class="ellipsis title">{$vo['name']}</p>
+                    <p>{$vo['val']}</p>
+                    <div class="clear mt10">
+                        <span class="fl red f16">¥<em id="goodPrice">{$vo['price']}</em></span>
+                        <span class="fr"><em id="purchaseNum">{$vo['num']}</em>件</span>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
+
         <ul class="service-info">
             <li class="clear">
                 <span class="fl">服务信息</span>
