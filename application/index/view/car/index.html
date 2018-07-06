@@ -90,6 +90,8 @@
     var url = {
         list:"{:url('index/car/index')}",//获取car列表
         dele:"{:url('index/car/delCar')}",//删除单个商品
+        affirmOrder:"{:url('index/order/affirmOrderApi')}",
+        orderIndex:"{:url('index/order/affirmOrder')}",
     }
 
     var saveData =new Array();
@@ -188,8 +190,13 @@
         var data = getData();
         if(data && data.length<1){
             layer_msg('请选择要结算的商品！');
+            return;
         }
-        console.log(data)
+        pub_save({
+            url:url.affirmOrder,
+            return_url:url.orderIndex,
+            data:{arr:JSON.stringify(data)},
+        })
     }
     //任何按钮操作都要显示数据变化
 
