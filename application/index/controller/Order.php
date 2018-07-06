@@ -2,11 +2,14 @@
     namespace  app\index\controller;
     use think\Db;
     use think\Session;
+    use think\View;
+    use think\Request;
     Class Order extends Mustlogin
     {
         protected  $userInfo;
         public  function  __construct()
         {
+            parent::__construct();
             $this->userInfo = Session::get('wx_user');
         }
 
@@ -21,20 +24,45 @@
         #订单确认页面
         public function affirmOrder()
         {
-            $this->assign('titleName', "确认订单");
-            $data = $this->request->post();
+            $this->view->assign('titleName', "确认订单");
             if($this->request->isGet()){
-                #如果有地址就取出地址
-                $address = Db::name('address')
-                    ->where(['openid'=>$this->userInfo['openid'],'statu'=>1 ])
-                    ->find();
-                if($address){
-                    $this->view->assign('address',$address);
+                $storeData =  Session::get('storeData '.$this->userInfo['openid']);
+                if(empty($storeData) ){
+                    $this->error('什么也没有','index/index/index');
+                    exit;
                 }
-//                $goods = Db::name('goods')->where([''])->
+                foreach ($storeData as $k=>$v){
+                   $storeData[$k][] = Db::name('goods')->where(['id'=>$v['goodsId']])->find();
+                }
+                #如果有地址就取出地址
+                $address = Db::name('customer_address')->alias('ca')
+                    ->field('ca.*')
+                    ->join('fy_customer','fy_customer.id=ca.uid')
+                    ->where(['fy_customer.openid'=>$this->userInfo['openid'],'ca.status'=>1 ])
+                    ->find();
+//                dump($address);die;
+                $this->view->assign('address',$address?$address:'');
+                $this->view->assign('storeData',$storeData);
                 return $this->view->fetch();
             }
         }
+
+        #订单确认中间表
+        public function  affirmOrderApi()
+        {
+            if($this->request->isAjax()){
+                $storeData = json_decode(str_replace('&quot;','"', $this->request->post()['arr']),true);
+                Session::set('storeData '.$this->userInfo['openid'],$storeData);
+//                dump(  Session::get('storeData '.$this->userInfo['openid']));die;
+//                $res = Db::name('order_confirm')->insert($data);
+                if( empty($storeData)){
+                    return ajax_return('','no','500');
+                }else{
+                    return ajax_return('','ok','200');
+                }
+            }
+        }
+
 
         #生成订单，订单支付处理
         public function pay()
