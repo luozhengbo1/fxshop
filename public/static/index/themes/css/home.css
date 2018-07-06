@@ -3729,6 +3729,10 @@ a {
 	color: #4b9bfb;
 	border: 1px solid #4b9bfb;
 }
+.address-list .chose-btn{
+	position: absolute;; top: 20px; left: 10px;
+	z-index: 999;
+}
 
 .no-selected-icon:before {
 	content: "\20";
