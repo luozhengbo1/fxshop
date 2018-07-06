@@ -4,7 +4,7 @@
 	use think\Db;
 	use think\Cache;
 	use think\Session;
-	
+
 	Class Car extends Controller
 	{
         protected $userInfo;
@@ -22,19 +22,33 @@
         #取出没有结算，并且没有过期的商品
         public function index()
         {
-            $time=time()-3600*24*30;
-//            $time2 + 3600*24*30<time();#过期
-            $carList =    Db::name('car')
-                ->where([
-                    'openid'=>$this->userInfo['openid'],
-                    'update_time'=>['<',$time],
-                    'status'=>1,
-                ] )
-                ->select();
-            if($carList){
-                return ajax_return($carList,'ok','200');
+            if($this->request->isAjax()){
+                //$time2 + 3600*24*30<time();#过期
+                // $time=time()-3600*24*30;
+                $page = $this->request->param('page')?$this->request->param('page'):'1';
+                $size =  $this->request->param('size')?$this->request->param('size'):'10';
+                $carList =    Db::name('car')->alias('c')
+                    ->field('fy_goods.*,c.goods_num,c.id as carId,c.val,c.sku_id,c.goods_id,c.create_time,c.id,fy_goods_attribute.store,fy_goods_attribute.price as price1')
+                    ->join('fy_goods','fy_goods.id=c.goods_id')
+                    ->join('fy_goods_attribute','fy_goods_attribute.id=c.sku_id')
+                    ->where([
+                        'c.openid'=>$this->userInfo['openid'],
+                        //  'update_time'=>['<',$time],
+                        'c.status'=>1,
+                    ] )
+                    ->page($page,$size)
+                    ->order('c.create_time desc')
+                    ->select();
+
+              //  dump($carList);
+                if(!empty($carList )){
+                    return ajax_return($carList,'ok','200');
+                }else{
+                    return ajax_return($carList,'no','400');
+                }
             }else{
-                return ajax_return($carList,'no','400');
+                $this->view->assign('titleName','购物车');
+                return $this->view->fetch();
             }
 
         }
@@ -75,9 +89,9 @@
                     ]);
             }
             if($res){
-                return ajax_return('','ok','200');
+                return ajax_return('','添加成功','200');
             }else{
-                return ajax_return('','no','500');
+                return ajax_return('','添加失败','500');
             }
 
         }

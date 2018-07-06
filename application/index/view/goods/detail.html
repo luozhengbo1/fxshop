@@ -273,12 +273,12 @@
             }
         })
     }
-    function addCar() {
+    function saveGoods() {
         $('#popupMain').attr('popupType','car')
         var type = $('#popupMain').attr('popupType')
         var request = '';
         if(type =='car'){
-            request = url.addCar;
+            request = url.addCar;//加入购物车
         }else if(type =='buy'){
             request = url.buy;
         }
