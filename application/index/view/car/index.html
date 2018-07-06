@@ -88,13 +88,15 @@
 {include file="Public/footer"}
 <script>
     var url = {
-        carList:"{:url('index/car/index')}",//获取car列表
+        list:"{:url('index/car/index')}",//获取car列表
+        dele:"{:url('index/car/delCar')}",//删除单个商品
+        affirmOrder:"{:url('index/order/affirmOrderApi')}",
+        orderIndex:"{:url('index/order/affirmOrder')}",
     }
-    getlist()
+
     var saveData =new Array();
-    //自定义标题风格
-    //var loading = layerLoad();//layer.close(loading)
     eventDeal();//页面点击事件处理
+    getlist()
    function delGood(){
        layer.open({
            content: '是否确认删除此商品？'
@@ -114,7 +116,7 @@
             page:1,
             size:10,
             ajaxData:{
-                url:url.carList,
+                url:url.list,
                 data:{},
             },
             dealFun:dealData,
@@ -145,13 +147,13 @@
             html +='            <div class="layui-btn-group fr count-wrap">';
             html +='                <button class="layui-btn layui-btn-primary layui-btn-xs fr24 minus">-</button>';
             html +='                <div class="layui-btn layui-btn-primary layui-btn-xs">';
-            html +='                    <input class="sumInput" data-goodsid="'+data[i].goods_id+'" data-carId="'+data[i].carId+'"  data-price="'+data[i].price1+'" data-skuid="'+data[i].sku_id+'" data-skuval="'+data[i].val+'" id="buyNum" type="text" value="'+data[i].goods_num+'">';
+            html +='                    <input class="sumInput" data-goodsid="'+data[i].goods_id+'" data-carid="'+data[i].carId+'"  data-price="'+data[i].price1+'" data-skuid="'+data[i].sku_id+'" data-skuval="'+data[i].val+'" id="buyNum" type="text" value="'+data[i].goods_num+'">';
             html +='                </div>';
             html +='                <button class="layui-btn layui-btn-primary layui-btn-xs fr24 add">+</button>';
             html +='            </div>';
             html +='        </div>';
             html +='        <div class="tr mt10">';
-            html +='            <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="delGood('+data[i].goods_id+')">删除</button>';
+            html +='            <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="req_opt(0,{carId:'+data[i].carId+'})">删除</button>';
             html +='        </div>';
             html +='    </div>';
             html +='</li>';
@@ -176,7 +178,7 @@
                     skuId:$buyNum.data('skuid'),
                     val:$buyNum.data('skuval'),
                     price:$buyNum.data('price'),
-                    carId:$buyNum.data('carId')
+                    carId:$buyNum.data('carid')
                 }
                 saveData.push(thisData);
             }
@@ -188,7 +190,13 @@
         var data = getData();
         if(data && data.length<1){
             layer_msg('请选择要结算的商品！');
+            return;
         }
+        pub_save({
+            url:url.affirmOrder,
+            return_url:url.orderIndex,
+            data:{arr:JSON.stringify(data)},
+        })
     }
     //任何按钮操作都要显示数据变化
 
@@ -254,6 +262,7 @@
         }
         showData();
     }
+
 </script>
 </body>
 </html>

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no, email=no"/>
+    <meta charset="UTF-8">
+    <title>我的订单</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="iTunesArtwork@2x.png" sizes="114x114" rel="apple-touch-icon-precomposed">
+    <link rel="stylesheet" href="__PUBLIC__/plugins/layui-v2.3.0/css/layui.css" media="all" />
+    {$themes_css}
+    <style>
+        .aui-list-product-fl-item{
+            background:#f7f6f6;
+            min-height: 80px;
+        }
+        .aui-list-product-fl-text{
+            background: #f7f6f6;
+        }
+        .aui-list-product-desc{
+            font-size: 14px;
+            font-weight: bold; text-align: right; line-height: 30px;
+        }
+        .aui-list-product-desc span{
+            margin-right: 10px;
+        }
+        .aui-list-product-a{
+            width: 100%;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<header class="aui-header-default aui-header-fixed aui-header-bg">
+    <a href="javascript:history.back(-1)" class="aui-header-item">
+        <i class="aui-icon aui-icon-back-white"></i>
+    </a>
+    <div class="aui-header-center aui-header-center-clear">
+        <div class="aui-header-center-logo">
+            <div class="aui-car-white-Typeface">我的订单</div>
+        </div>
+    </div>
+    <a href="#" class="aui-header-item-icon"   style="min-width:0">
+        <i class="aui-icon aui-icon-search"></i>
+    </a>
+</header>
+
+<section class="aui-myOrder-content">
+    <div class="m-tab demo-small-pitch" data-ydui-tab>
+        <div class="aui-myOrder-fix">
+            <ul class="tab-nav">
+                <li class="tab-nav-item tab-active"><a href="javascript:;">全部</a></li>
+                <li class="tab-nav-item" id="flag1"><a href="javascript:;">待付款</a></li>
+                <li class="tab-nav-item" id="flag2"><a href="javascript:;">待发货</a></li>
+                <li class="tab-nav-item" id="flag3"><a href="javascript:;">待收货</a></li>
+                <li class="tab-nav-item" id="flag4"><a href="javascript:;">评价</a></li>
+            </ul>
+        </div>
+        <!--<div class="aui-prompt"><i class="aui-icon aui-prompt-sm"></i>双十一期间发货及物流时效公告</div>-->
+        <div class="tab-panel">
+            <div class="tab-panel-item tab-active">
+                <volist name="lists" id="vo">
+                <ul>
+                    <li>
+                        <div class="aui-list-title-info">
+                            <a href="#" class="aui-well ">
+                                <div class="aui-well-bd">{$vo['create_time']}</div>
+                                <div class="aui-well-ft">{$vo['pay_status_cn']}</div>
+                            </a>
+                                <?php if( count($vo['buy_list']) != count($vo['buy_list'], 1) ){ ?>
+                            <volist name="vo['buy_list']" id="vol">
+                            <a href="{:U('Goods/index', array('id'=>$vol['id'] ))}" class="aui-list-product-fl-item">
+                                <div class="aui-list-product-fl-img">
+                                    <img src="{$vol['logo']}" alt="">
+                                </div>
+                                <div class="aui-list-product-fl-text">
+                                    <h3 class="aui-list-product-fl-title">{$vol['name']}</h3>
+                                    <div class="aui-list-product-fl-mes">
+                                        <div>
+									<span class="aui-list-product-item-price">
+										<em>¥</em>
+										{$vol['real_price']}
+									</span>
+                                            <span class="aui-list-product-item-del-price">
+										¥{$vol['price']}
+									</span>
+                                        </div>
+                                        <div class="aui-btn-purchase">
+                                            x{$vol['num']}
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            </volist>
+                            <?php }else{ ?>
+                            <a href="{:U('Goods/index', array('id'=>$vo['buy_list']['id'] ))}" class="aui-list-product-fl-item">
+                                <div class="aui-list-product-fl-img">
+                                    <img src="{$vo['buy_list']['logo']}" alt="">
+                                </div>
+                                <div class="aui-list-product-fl-text">
+                                    <h3 class="aui-list-product-fl-title">{$vo['buy_list']['name']}</h3>
+                                    <div class="aui-list-product-fl-mes">
+                                        <div>
+									<span class="aui-list-product-item-price">
+										<em>¥</em>
+										{$vo['buy_list']['real_price']}
+									</span>
+                                            <span class="aui-list-product-item-del-price">
+										¥{$vo['buy_list']['price']}
+									</span>
+                                        </div>
+                                        <div class="aui-btn-purchase">
+                                            x1
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <?php } ?>
+                        </div>
+                        <div class="aui-list-title-btn">
+                            <a href="{:U('Order/orderDetail',array('id'=>$vo['id']))}">订单详情</a>
+                            <?php if( ($vo['pay_status']==0) && ($vo['create_time']>date('Y-m-d H:i:s',time()-1800)) ){ ?>
+                            <a href="javascript:;" onclick="pay(<?php echo $vo['id'];?>)" class="red-color">立即付款</a>
+                            <?php } elseif($vo['pay_status']==1){?>
+                            <a href="javascript:;" class="red-color">待发货</a>
+                            <?php } elseif($vo['pay_status']==2){?>
+                            <a href="javascript:;" onclick="confirmGetGoods(<?php echo $vo['id'] ?>)" class="red-color">确认收货</a>
+                            <?php } elseif($vo['pay_status']==3){?>
+                            <a href="javascript:;" onclick="" class="red-color">去评价</a>
+                            <?php  }else{ ?>
+                            <a href="javascript:;" class="red-color">订单已关闭</a>
+                            <?php } ?>
+                        </div>
+                        <div class="aui-dri"></div>
+                    </li>
+                </ul>
+                </volist>
+            </div>
+            <div class="tab-panel-item">
+                <volist name="lists0" id="vo">
+                <ul>
+                    <li>
+                        <div class="aui-list-title-info">
+                            <a href="#" class="aui-well ">
+                                <div class="aui-well-bd">{$vo['create_time']}</div>
+                                <div class="aui-well-ft">待付款</div>
+                            </a>
+                            <?php if( count($vo['buy_list']) != count($vo['buy_list'], 1) ){ ?>
+                            <volist name="vo['buy_list']" id="vol">
+                                <a href="{:U('Goods/index',array('id'=>$vol['id']))}" class="aui-list-product-fl-item">
+                                    <div class="aui-list-product-fl-img">
+                                        <img src="{$vol['logo']}" alt="">
+                                    </div>
+                                    <div class="aui-list-product-fl-text">
+                                        <h3 class="aui-list-product-fl-title">{$vol['name']}</h3>
+                                        <div class="aui-list-product-fl-mes">
+                                            <div>
+                                        <span class="aui-list-product-item-price">
+                                            <em>¥</em>
+                                           {$vol['real_price']}
+                                        </span>
+                                                <span class="aui-list-product-item-del-price">
+                                            ¥{$vol['price']}
+                                        </span>
+                                            </div>
+                                            <div class="aui-btn-purchase">
+                                                x{$vol['num']}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </volist>
+                            <?php }else{ ?>
+                            <a href="{:U('Goods/index', array('id'=>$vo['buy_list']['id'] ))}" class="aui-list-product-fl-item">
+                                <div class="aui-list-product-fl-img">
+                                    <img src="{$vo['buy_list']['logo']}" alt="">
+                                </div>
+                                <div class="aui-list-product-fl-text">
+                                    <h3 class="aui-list-product-fl-title">{$vo['buy_list']['name']}</h3>
+                                    <div class="aui-list-product-fl-mes">
+                                        <div>
+									<span class="aui-list-product-item-price">
+										<em>¥</em>
+										{$vo['buy_list']['real_price']}
+									</span>
+                                            <span class="aui-list-product-item-del-price">
+										¥{$vo['buy_list']['price']}
+									</span>
+                                        </div>
+                                        <div class="aui-btn-purchase">
+                                            x1
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <?php } ?>
+                        </div>
+                        <div class="aui-list-title-btn">
+                            <a href="{:U('Order/orderDetail',array('id'=>$vo['id']))}">订单详情</a>
+                            <?php if($vo['pay_status']==0 && $vo['create_time']>date('Y-m-d H:i:s',time()-1800) ){ ?>
+                            <a href="javascript:;" onclick="pay(<?php echo $vo['id'];?>)" class="red-color">立即付款</a>
+                            <?php }else{?>
+                            <a href="javascript:;" class="red-color">订单已关闭</a>
+                            <?php  } ?>
+                        </div>
+                        <div class="aui-dri"></div>
+                    </li>
+                </ul>
+                </volist>
+            </div>
+            <div class="tab-panel-item">
+                <volist name="lists1" id="vo">
+                    <ul>
+                        <li>
+                            <div class="aui-list-title-info">
+                                <a href="#" class="aui-well ">
+                                    <div class="aui-well-bd">{$vo['create_time']}</div>
+                                    <div class="aui-well-ft">待发货</div>
+                                </a>
+                                <?php if( count($vo['buy_list']) != count($vo['buy_list'], 1) ){ ?>
+                                <volist name="vo['buy_list']" id="vol">
+                                    <a href="{:U('Goods/index',array('id'=>$vol['id']))}" class="aui-list-product-fl-item">
+                                        <div class="aui-list-product-fl-img">
+                                            <img src="{$vol['logo']}" alt="">
+                                        </div>
+                                        <div class="aui-list-product-fl-text">
+                                            <h3 class="aui-list-product-fl-title">{$vol['name']}</h3>
+                                            <div class="aui-list-product-fl-mes">
+                                                <div>
+                                        <span class="aui-list-product-item-price">
+                                            <em>¥</em>
+                                           {$vol['real_price']}
+                                        </span>
+                                                    <span class="aui-list-product-item-del-price">
+                                            ¥{$vol['price']}
+                                        </span>
+                                                </div>
+                                                <div class="aui-btn-purchase">
+                                                    x{$vol['num']}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </volist>
+                                <?php }else{?>
+                                <a href="{:U('Goods/index', array('id'=>$vo['buy_list']['id'] ))}" class="aui-list-product-fl-item">
+                                    <div class="aui-list-product-fl-img">
+                                        <img src="{$vo['buy_list']['logo']}" alt="">
+                                    </div>
+                                    <div class="aui-list-product-fl-text">
+                                        <h3 class="aui-list-product-fl-title">{$vo['buy_list']['name']}</h3>
+                                        <div class="aui-list-product-fl-mes">
+                                            <div>
+									<span class="aui-list-product-item-price">
+										<em>¥</em>
+										{$vo['buy_list']['real_price']}
+									</span>
+                                                <span class="aui-list-product-item-del-price">
+										¥{$vo['buy_list']['price']}
+									</span>
+                                            </div>
+                                            <div class="aui-btn-purchase">
+                                                x1
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <?php } ?>
+                            </div>
+                            <div class="aui-list-title-btn">
+                                <a href="{:U('Order/orderDetail',array('id'=>$vo['id']))}">订单详情</a>
+                                <a href="#"  class="red-color">取消订单</a>
+                            </div>
+                            <div class="aui-dri"></div>
+                        </li>
+                    </ul>
+                </volist>
+            </div>
+            <div class="tab-panel-item">
+                <volist name="lists2" id="vo">
+                    <ul>
+                        <li>
+                            <div class="aui-list-title-info">
+                                <a href="#" class="aui-well ">
+                                    <div class="aui-well-bd">{$vo['create_time']}</div>
+                                    <div class="aui-well-ft">待收货</div>
+                                </a>
+                                <?php if( count($vo['buy_list']) != count($vo['buy_list'], 1) ){ ?>
+                                <volist name="vo['buy_list']" id="vol">
+                                    <a href="{:U('Goods/index',array('id'=>$vol['id']))}" class="aui-list-product-fl-item">
+                                        <div class="aui-list-product-fl-img">
+                                            <img src="{$vol['logo']}" alt="">
+                                        </div>
+                                        <div class="aui-list-product-fl-text">
+                                            <h3 class="aui-list-product-fl-title">{$vol['name']}</h3>
+                                            <div class="aui-list-product-fl-mes">
+                                                <div>
+                                                <span class="aui-list-product-item-price">
+                                                    <em>¥</em>
+                                                   {$vol['real_price']}
+                                                </span>
+                                                    <span class="aui-list-product-item-del-price">   ¥{$vol['price']}
+                                                     </span>
+                                                </div>
+                                                <div class="aui-btn-purchase">
+                                                    x{$vol['num']}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </volist>
+                                <?php }else{?>
+                                <a href="{:U('Goods/index', array('id'=>$vo['buy_list']['id'] ))}" class="aui-list-product-fl-item">
+                                    <div class="aui-list-product-fl-img">
+                                        <img src="{$vo['buy_list']['logo']}" alt="">
+                                    </div>
+                                    <div class="aui-list-product-fl-text">
+                                        <h3 class="aui-list-product-fl-title">{$vo['buy_list']['name']}</h3>
+                                        <div class="aui-list-product-fl-mes">
+                                            <div>
+									<span class="aui-list-product-item-price">
+										<em>¥</em>
+										{$vo['buy_list']['real_price']}
+									</span>
+                                                <span class="aui-list-product-item-del-price">
+										¥{$vo['buy_list']['price']}
+									</span>
+                                            </div>
+                                            <div class="aui-btn-purchase">
+                                                x1
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <?php } ?>
+                            </div>
+                            <div class="aui-list-title-btn">
+                                <!--<a href="{:U('Order/logistics',array('id'=>$vo['id']))}">物流查询</a>-->
+                                <a href="{:U('Order/orderDetail',array('id'=>$vo['id']))}">订单详情</a>
+                                <a href="#" onclick="confirmGetGoods(<?php echo $vo['id'] ?>)" class="red-color">确认收货</a>
+                            </div>
+                            <div class="aui-dri"></div>
+                        </li>
+                    </ul>
+                </volist>
+            </div>
+            <div class="tab-panel-item">
+                <volist name="lists3" id="vo">
+                    <ul>
+                        <li>
+                            <div class="aui-list-title-info">
+                                <a href="#" class="aui-well ">
+                                    <div class="aui-well-bd">{$vo['create_time']}</div>
+                                    <div class="aui-well-ft">待评价</div>
+                                </a>
+                                <?php if( count($vo['buy_list']) != count($vo['buy_list'], 1) ){ ?>
+                                <volist name="vo['buy_list']" id="vol">
+                                    <div  class="aui-list-product-fl-item">
+                                        <a  href="{:U('Goods/index',array('id'=>$vol['id']))}">
+                                            <div class="aui-list-product-fl-img">
+                                                <img src="{$vol['logo']}" alt="">
+                                            </div>
+                                        </a>
+
+                                        <div class="aui-list-product-fl-text">
+                                            <div  class="clear">
+                                                <a  href="{:U('Goods/index',array('id'=>$vol['id']))}">
+                                                    <h3 class="aui-list-product-fl-title fl">{$vol['name']}</h3>
+                                                </a>
+                                                <div class="fr" >
+                                                    <a  href="{:U('Order/goodEvaluate',array('id'=>$vol['id']))}"
+                                                        class="layui-btn layui-btn-danger layui-btn-radius lh20 h20">评价</a>
+                                                </div>
+                                            </div>
+                                            <div class="aui-list-product-fl-mes">
+                                                <a  href="{:U('Goods/index',array('id'=>$vol['id']))}" class="aui-list-product-a clear">
+                                                    <div class="fl">
+                                                        <span class="aui-list-product-item-price">
+                                                            <em>¥</em>
+                                                           {$vol['real_price']}
+                                                        </span>
+                                                            <span class="aui-list-product-item-del-price">
+                                                              ¥{$vol['price']}
+                                                          </span>
+                                                    </div>
+                                                    <div class="aui-btn-purchase fr"> x{$vol['num']}</div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </volist>
+                                <?php }else{?>
+                                <div  class="aui-list-product-fl-item">
+                                    <div class="aui-list-product-fl-img">
+                                        <a href="{:U('Goods/index', array('id'=>$vo['buy_list']['id'] ))}"><img src="{$vo['buy_list']['logo']}" alt=""></a>
+                                    </div>
+                                    <div class="aui-list-product-fl-text">
+                                        <div class="clear">
+                                            <a href="{:U('Goods/index', array('id'=>$vo['buy_list']['id'] ))}">
+                                                <h3 class="aui-list-product-fl-title fl">{$vo['buy_list']['name']}</h3>
+                                            </a>
+                                            <div class="fr" >
+                                                <a  href="{:U('Order/goodEvaluate', array('id'=>$vol['id']))}"
+                                                    class="layui-btn layui-btn-danger layui-btn-radius lh20 h20">评价</a>
+                                            </div>
+                                        </div>
+                                        <div class="aui-list-product-fl-mes clear">
+                                            <a href="{:U('Goods/index', array('id'=>$vo['buy_list']['id'] ))}" class="aui-list-product-a">
+                                                 <div class="fl">
+                                                        <span class="aui-list-product-item-price">
+                                                            <em>¥</em>
+                                                            {$vo['buy_list']['real_price']}
+                                                        </span>
+                                                         <span class="aui-list-product-item-del-price">
+                                                            ¥{$vo['buy_list']['price']}
+                                                        </span>
+                                                 </div>
+                                                <div class="aui-btn-purchase fr">x1</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php } ?>
+                            </div>
+                            <div class="aui-list-product-desc" style="">
+                                <span>共1件商品</span>
+                                <span>合计<em>¥</em>20元</span>
+                                <span>含运费 <em>¥</em>20元</span>
+                            </div>
+                            <div class="aui-list-title-btn">
+                                <a href="{:U('Order/orderDetail',array('id'=>$vo['id']))}">订单详情</a>
+                               <!-- <a href="#" class="red-color">去评价</a>-->
+                                <a href="#">售后服务</a>
+                            </div>
+                            <div class="aui-dri"></div>
+                        </li>
+                    </ul>
+                </volist>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript" src="__PUBLIC__/themes/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/themes/js/aui.js"></script>
+<script type="text/javascript" >
+    /**
+     * Javascript API调用Tab
+     */
+    !function ($) {
+        var a = "{$flag}"
+        if("{$flag}"){
+            setTimeout(function () {
+                $("#flag"+a).click()
+            },100)
+
+        }
+        var $tab = $('#J_Tab');
+
+        $tab.tab({
+            nav: '.tab-nav-item',
+            panel: '.tab-panel-item',
+            activeClass: 'tab-active'
+        });
+
+        /*
+         $tab.find('.tab-nav-item').on('open.ydui.tab', function (e) {
+         console.log('索引：%s - [%s]正在打开', e.index, $(this).text());
+         });
+         */
+
+        $tab.find('.tab-nav-item').on('opened.ydui.tab', function (e) {
+            console.log('索引：%s - [%s]已经打开了', e.index, $(this).text());
+        });
+
+    }(jQuery);
+
+
+
+     function  pay(id) {
+         if(!id){
+             alert('缺少必要参数')
+             return false;
+         }
+            $.ajax({
+                url:"{:U('Car/orderNotPayAgainPay')}",
+                type:'post',
+                data:{id:id},
+                // dataType:'json',
+                success:function (res) {
+                    if(res.status=200){
+                        // console.log(res.data)
+                        document.location.href="{:U('WxPay/index')}?js_api_parameters="+res.data
+                    }else {
+                        alert('失败')
+                    }
+                },
+                error:function (res) {
+                    alert('服务端错误');
+                }
+            })
+     }
+
+     function confirmGetGoods(id) {
+         $.ajax({
+             url:"{:U('Order/confirmGetGoods')}",
+             type:'post',
+             data:{id:id},
+             success:function (res) {
+                 if(res.status==200){
+                        alert('确认成功');
+                        document.location.reload();
+                 }else{
+                     alert(res.msg)
+                 }
+             }
+         })
+     }
+</script>
+
+</body>
+</html>

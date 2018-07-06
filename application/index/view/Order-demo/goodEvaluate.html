@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui"/>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<meta name="format-detection" content="telephone=no, email=no"/>
+	<meta charset="UTF-8">
+	<title>发表评价</title>
+	<link rel="stylesheet" href="__PUBLIC__/themes/css/core.css">
+	<link rel="stylesheet" href="__PUBLIC__/themes/css/icon.css">
+	<link rel="stylesheet" href="__PUBLIC__/themes/css/home.css">
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+	<link href="iTunesArtwork@2x.png" sizes="114x114" rel="apple-touch-icon-precomposed">
+	<link rel="stylesheet" href="__PUBLIC__/plugins/layui-v2.3.0/css/layui.css" media="all" />
+	<link rel="stylesheet" href="__PUBLIC__/css/main.css" media="all">
+    <link rel="stylesheet" href="__PUBLIC__/css/base.css" media="all">
+	<link rel="stylesheet" href="__PUBLIC__/plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/aui.css">
+    <style>
+        body{
+            background: #e8e8e8;
+            font-size: 12px;
+            color: gray;
+        }
+        .layui-rate .layui-inline{
+            margin-right: 14px;
+        }
+        .section-group{
+            background: white;
+        }
+        .border-bottoom{
+            border-bottom: 2px solid #e6e6e6;
+        }
+
+    </style>
+</head>
+<header class="aui-header-default aui-header-fixed aui-header-bg">
+    <a href="javascript:history.back(-1)" class="aui-header-item">
+        <i class="aui-icon aui-icon-back-white"></i>
+    </a>
+    <div class="aui-header-center aui-header-center-clear">
+        <div class="aui-header-center-logo">
+            <div class="aui-car-white-Typeface">发表评价</div>
+        </div>
+    </div>
+    <a href="#" class="aui-header-item-icon"   style="min-width:0">
+        <i class="aui-icon aui-icon-share-pd"></i>
+    </a>
+</header>
+<div class="f12 mt50">
+    <form role="form" id="form">
+        <!--<input type="hidden" name="goods_id" value="{$goods_id}" >-->
+        <section class="section-group p10 border-bottoom">
+            <span >描述相符<input type="hidden"  data-text="描述相符"  id="descript" name="similarity_score"></span>
+            <div id="test4"></div>
+        </section>
+        <section class="section-group p10">
+            <textarea style="border: none" name="desc"  data-text="商品描述" placeholder="宝贝满足你的期待吗？说说它的优点和美中不足的地方吧。" class="layui-textarea "></textarea>
+        </section>
+        <section class="section-group p10 mt20">
+            <p>店铺评分</p>
+            <div>
+                <span >物流服务<input  data-text="物流服务" type="hidden" name="logistics_score" id="wlService"></span>
+                <div id="test5"></div>
+            </div>
+            <div>
+                <span >服务态度<input type="hidden"  data-text="服务态度" id="serviceAtti" name="service_score"></span>
+                <div id="test6"></div>
+            </div>
+        </section>
+
+
+    </form>
+    <section class="mt40 pr10 pl10">
+        <button class="layui-btn layui-btn-danger w100p h40 lh40"  onclick="save()" >发表评价</button>
+    </section>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/themes/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/plugins/layui-v2.3.0/layui.js"></script>
+<script type="text/javascript" src="__PUBLIC__/themes/js/Validform_v5.3.2.js"></script>
+<script type="text/javascript" src="__PUBLIC__/themes/js/public.js"></script>
+<script type="text/javascript" src="__PUBLIC__/themes/js/api.js" ></script>
+<script type="text/javascript" src="__PUBLIC__/themes/js/aui-toast.js" ></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    apiready = function(){
+        api.parseTapmode();
+    }
+    var toast = new auiToast();
+    layui.use(['rate'], function(){
+        var rateNum ={
+            '0': ''
+            ,'0.5': '极差'
+            ,'1': '很差'
+            ,'1.5': '差'
+            ,'2': '有点差'
+            ,'2.5': '中下等'
+            ,'3': '中等'
+            ,'3.5': '中上等'
+            ,'4': '好'
+            ,'4.5': '很好'
+            ,'5': '极好'
+        }
+        var rate = layui.rate;
+        rateFun('#test4','#descript');
+        rateFun('#test5','#wlService');
+        rateFun('#test6','#serviceAtti')
+        function  rateFun(id,inputId) {
+            //半星效果
+            rate.render({
+                elem:id
+                ,value: 5
+                ,half: true
+                ,text: true
+                ,theme: '#FF5722'
+                ,setText: function(value) { //自定义文本的回调
+                    var arrs = rateNum;
+                    this.span.text(arrs[value] ||"");
+                    $(inputId).val(value);
+                    // this.span.text(arrs[value] || (value + "星"));
+                }
+            })
+        }
+    });
+    function save(){
+
+//        if(!formEmptyValid('form')) return false;
+
+        var data = formData('form');
+
+        data.goods_id='{$goods_id}';
+        console.log(data)
+        $.ajax({
+            url:"{:U('Order/goodevaluate')}",
+            type:'post',
+            data:data,
+            dataType:'json',
+            success:function (res) {
+                if(res.status=='200'){
+                    setTimeout(function(){
+                        window.history.back(-1);
+                    },2500);
+                    toast.custom({
+                        title:res.msg,
+                        html:'<i class="aui-iconfont aui-icon-laud"></i>',
+                        duration:2000
+                    });
+                }
+            },
+        })
+    }
+
+</script>
+
+</body>
+</html>
+</html>

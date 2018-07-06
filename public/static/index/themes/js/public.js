@@ -295,8 +295,9 @@ function urlConnect(url,json) {
 var request_flag = {
     del:true,
     edit:true,
+    save:true,
 }
-function req_opt(type,id){
+function req_opt(type,json){
     if(request_flag.del){//请求完成后才能进行下一次请求
         request_flag.del = false;
         layerLoad();
@@ -304,7 +305,7 @@ function req_opt(type,id){
             $.ajax({
                 url:url.dele,
                 type:'post',
-                data:{id:id},
+                data:json ||{},
                 dataType:'json',
                 success: function(data){
                     layer_msg(data.msg);
@@ -339,6 +340,34 @@ function req_opt(type,id){
             })
         }
     }
+}
 
-
+/**
+ *
+ * @param json{
+ *  url:"",
+ *  data:"",
+ *  return_url:"",
+ * }
+ */
+function pub_save(json){
+    if(request_flag.save){//请求完成后才能进行下一次请求
+        request_flag.save = false;
+        layerLoad();
+        $.ajax({
+            url:json.url,
+            type:'post',
+            data:json.data,
+            dataType:'json',
+            success: function(data){
+                layer_msg(data.msg);
+                if(data.code ==200){
+                    setTimeout(function(){
+                        location.href=json.return_url;
+                        request_flag.save = true;
+                    },1500);
+                }
+            }
+        })
+    }
 }

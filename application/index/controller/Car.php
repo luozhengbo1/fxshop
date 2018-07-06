@@ -101,27 +101,16 @@
         {
             if($this->request->isAjax()){
                 $data = $this->request->post();
-                if(!$data['goodsId']){
-                    return ajax_return_error('缺少商品id');
+                if(!$data['carId']){
+                    return ajax_return_error('缺少参数id');
                 }
             }
-
-            $carData = Db::name('car')
-                ->where(['goods_id'=>$data['goodsId'],'openid'=>$this->userInfo['openid'],'sku_id'=>$data['skuId']])
-                ->find();
-            if($carData['goods_num']==1 ){##减到商品没有就删除
-                $res = $this->model
-                    ->where(['goods_id'=>$data['goodsId'],'openid'=>$this->userInfo['openid'],'sku_id'=>$data['skuId']])
-                    ->delete();
-            }else{
-                $res = $this->model
-                    ->where(['goods_id'=>$data['goodsId'],'openid'=>$this->userInfo['openid'],'sku_id'=>$data['skuId']])
-                    ->setDec('   goods_num',$data['num']);
-            }
+            $res = Db::name('car')->where(['id'=>$data['carId']])->update(['status'=>0]);
             if($res){
-                return ajax_return('','ok','200');
-            }else{
-                return ajax_return('','no','400');
+                return ajax_return('','删除成功','200');
+            }
+            else{
+                return ajax_return('','删除失败','400');
             }
         }
 

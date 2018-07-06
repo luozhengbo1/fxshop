@@ -49,7 +49,7 @@
           html +='    <li>'+data[i].address+data[i].street+'</li>';
           html +='    <li>';
           html +='      <a href='+urlConnect("{:url('address/edit')}",{id:data[i].id})+'><i class="layui-icon opt-btn edit"></i></a>';
-          html +='      <a href="javascript:;" onclick="req_opt(0,'+data[i].id+')"><i class="layui-icon opt-btn dele"></i></a>';
+          html +='      <a href="javascript:;" onclick="req_opt(0,{id:'+data[i].id+'})"><i class="layui-icon opt-btn dele"></i></a>';
           html +='    </li>';
           html +='</ul>';
 
