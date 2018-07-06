@@ -34,9 +34,10 @@
         dele:"{:url('address/delete')}",
         list:"{:url('address/index')}",
         editDefaultAddr:"{:url('address/setDefault')}",
+        orderIndex:"{:url('index/order/affirmOrder')}",
     }
 
-   getListData()
+   getListData();
 
   function dealData(data) {
       var html='';
@@ -45,9 +46,9 @@
           html +='<ul>';
           html +='  <li class="chose-btn">';
           if(data[i].status ==1){  //1表示默认选中地址
-              html +=' <i class="selected-icon no-selected-icon" onclick="req_opt(1,{id:'+data[i].id+'})" ></i>';
+              html +=' <i class="selected-icon no-selected-icon" onclick="editAddr('+data[i].id+')" ></i>';
           }else{
-              html +=' <i class="no-selected-icon" onclick="req_opt(1,{id:'+data[i].id+'})"></i>';
+              html +=' <i class="no-selected-icon" onclick="editAddr('+data[i].id+')"></i>';
           }
           html +='  </li>';
           html +='    <li class="bold user">'+data[i].name+"  "+data[i].mobile+'</li>';
@@ -77,6 +78,13 @@
   }
   function addAddress() {
       window.location.href = url.add;
+  }
+  function editAddr(id) {
+      pub_save({
+          url:url.editDefaultAddr,
+          return_url:url.orderIndex,
+          data:{id:id},
+      })
   }
   // function editDefaultAddr(){
   //     alert()
