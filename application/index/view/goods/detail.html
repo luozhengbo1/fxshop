@@ -144,7 +144,7 @@
                 <div class="layui-btn-group fr count-wrap ">
                     <button class="layui-btn layui-btn-primary layui-btn-sm fr24 minus">-</button>
                     <div class="layui-btn layui-btn-primary layui-btn-sm">
-                        <input class="sumInput" type="text" data-store ="1" value="1" id="buyNum" onkeyup="buyNumShow();">
+                        <input class="sumInput" type="text" data-store ="1" value="1" id="buyNum"  onkeyup="buyNumShow();">
                     </div>
                     <button class="layui-btn layui-btn-primary layui-btn-sm fr24 add">+</button>
                 </div>
@@ -258,6 +258,7 @@
         }
 
     }
+    //显示购买数量 根据
     function buyNumShow(){
         var buyNum = $('#buyNum').val();
         saveData.num = buyNum;
@@ -282,6 +283,7 @@
         }else if(type =='buy'){
             request = url.buy;
         }
+        saveData.num = $('#buyNum').val();
         $.ajax({
             url:request,
             type:'post',

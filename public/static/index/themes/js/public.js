@@ -203,8 +203,10 @@ countCalculate.prototype.init =function (watchFun) {
     add.click(function () {
         var input = $(this).parents('.count-wrap').find('.sumInput');
         var maxNum = input.data('store')<200 ? input.data('store'):200;//数量最多不超过200
-        if(input.val() >=maxNum){
+        if(input.val() >=200){
             layer_msg('数量最多不超过200');
+        }else if(input.val() >input.data('store')){
+            layer_msg('库存不足');
         }else{
             input.val(parseInt(input.val())+1);
         }
@@ -213,13 +215,17 @@ countCalculate.prototype.init =function (watchFun) {
         }
     });
     sumInput.keydown(function(){
+
        // console.log('123ss'.replace(/D/g,''))
-        $(this).val( ($(this).val()).replace(/D/g,''))
-        if($(this).val()<1){
+        //$(this).val( ($(this).val()).replace(/D/g,''))
+        /*if($(this).val()<1){
             $(this).val(1)
-        }
+        }*/
     });
     sumInput.keyup(function () {
+        var value =$(this).val();
+        value=(parseInt((value=value.replace(/\D/g,''))==''?'0':value,10));
+        $(this).val(value)
         if(watchFun){
             watchFun();
         }
@@ -228,11 +234,15 @@ countCalculate.prototype.init =function (watchFun) {
 function validBuyNum() {
     var falg = true;
     $('.sumInput').each(function (index,ele) {
-        var maxNum = $(ele).data('store')<200 ? $(ele).data('store'):200;//数量最多不超过200
+        var store = $(ele).data('store');
+        var maxNum = 200;//数量最多不超过200
         var minNum = 1
         if($(ele).val()>maxNum){
             layer_msg('数量最多不超过200');
             $(ele).focus();
+            falg = false;
+        } else if($(ele).val() >store){
+            layer_msg('库存不足');
             falg = false;
         }
         if($(ele).val()<minNum){
