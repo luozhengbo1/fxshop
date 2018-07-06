@@ -106,55 +106,25 @@ class Customer extends Controller
                 $this->filter($map);
             }
 
-            //  根据经验值自动更新grade
-            $experience = $model->where('isdelete', '0')->select();
-            $gradeList = Model('CustomerGrade')->field('id ,name,experience_start,experience_end')->order('id ')->where('isdelete', 0)->select();
-            for ($i = 0; $i < count($experience); $i++) {
-                $count = 0;
-                $experience_item = $experience[$i];
-                for ($j = 0; $j < count($gradeList); $j++) {
-                    $grade_item = $gradeList[$j];
-                    if ($experience_item['experience'] > $grade_item['experience_start'] && $experience_item['experience'] < $grade_item['experience_end']) {
-                        //插入grade_id
-                        $model->update([
-                            'grade_id' => $grade_item['id']
-                        ], ['id' => $experience_item['id']]);
-                        $gradelist[$i] = [
-                            'name' => $grade_item['name']
-                        ];
-                    } else {
-                        $count += 1;
+            $customer_data = $model->where('isdelete', '0')->select();
+            //根据当前时间与会员创建时间的时间差是否为偶数年清零积分
+            $now_time = time();
+            for ($i = 0; $i < count($customer_data); $i++) {
+                $create_time = $customer_data[$i]['create_time'];
+                $time_difference = ($now_time - strtotime($create_time)) / (60 * 60 * 24 * 365);
+                $result = $time_difference % 2;
+                //判断创建时间是否为过去的某一天
+                if ($time_difference >= 0) {
+                    //判断时间差是否为偶数
+                    if (!$result) {
+                        $model->update(['score' => 0], ['id' => $customer_data[$i]['id']]);
                     }
                 }
-                if ($count == count($gradeList)) {
-                    $model->update([
-                        'grade_id' => 0
-                    ], ['id' => $experience_item['id']]);
-                }
-            }
-            $this->datalist($model, $map);
-            $this->view->assign('gradelist', $gradeList);
-            return $this->view->fetch();
-        } else {
-            //初始化列表数据
-            $model = $this->getModel();
-            // 列表过滤器，生成查询Map对象
-            $map = $this->search($model, [$this->fieldIsDelete => $this::$isdelete]);
-
-            // 特殊过滤器，后缀是方法名的
-            $actionFilter = 'filter' . $this->request->action();
-            if (method_exists($this, $actionFilter)) {
-                $this->$actionFilter($map);
-            }
-            // 自定义过滤器
-            if (method_exists($this, 'filter')) {
-                $this->filter($map);
             }
 
-            //  根据积分自动更新grade
-            $customer_data = $model->where('isdelete', '0')->select();
+            //  根据经验值自动更新grade
             $gradeList = Model('CustomerGrade')->field('id ,name,experience_start,experience_end')->order('id ')->where('isdelete', 0)->select();
-           //循环对比每个会员的经验值是否在等级经验值区间内
+            //循环对比每个会员的经验值是否在等级经验值区间内
             for ($i = 0; $i < count($customer_data); $i++) {
                 $count = 0;
                 $customer_item = $customer_data[$i];
@@ -182,7 +152,68 @@ class Customer extends Controller
             $this->datalist($model, $map);
             $this->view->assign('gradelist', $gradeList);
             return $this->view->fetch();
-        }
-    }
+        } else {
+            //初始化列表数据
+            $model = $this->getModel();
+            // 列表过滤器，生成查询Map对象
+            $map = $this->search($model, [$this->fieldIsDelete => $this::$isdelete]);
 
+            // 特殊过滤器，后缀是方法名的
+            $actionFilter = 'filter' . $this->request->action();
+            if (method_exists($this, $actionFilter)) {
+                $this->$actionFilter($map);
+            }
+            // 自定义过滤器
+            if (method_exists($this, 'filter')) {
+                $this->filter($map);
+            }
+
+            $customer_data = $model->where('isdelete', '0')->select();
+            //根据当前时间与会员创建时间的时间差是否为偶数年清零积分
+            $now_time = time();
+            for ($i = 0; $i < count($customer_data); $i++) {
+                $create_time = $customer_data[$i]['create_time'];
+                $time_difference = ($now_time - strtotime($create_time)) / (60 * 60 * 24 * 365);
+                $result = $time_difference % 2;
+                //判断创建时间是否为过去的某一天
+                if ($time_difference >= 0) {
+                    //判断时间差是否为偶数
+                    if (!$result) {
+                        $model->update(['score' => 0], ['id' => $customer_data[$i]['id']]);
+                    }
+                }
+            }
+        }
+
+        //  根据经验值自动更新grade
+        $gradeList = Model('CustomerGrade')->field('id ,name,experience_start,experience_end')->order('id ')->where('isdelete', 0)->select();
+        //循环对比每个会员的经验值是否在等级经验值区间内
+        for ($i = 0; $i < count($customer_data); $i++) {
+            $count = 0;
+            $customer_item = $customer_data[$i];
+            for ($j = 0; $j < count($gradeList); $j++) {
+                $grade_item = $gradeList[$j];
+                if ($customer_item['experience'] >= $grade_item['experience_start'] && $customer_item['experience'] <= $grade_item['experience_end']) {
+                    //若在区间内插入grade_id
+                    $model->update([
+                        'grade_id' => $grade_item['id']
+                    ], ['id' => $customer_item['id']]);
+                    $gradelist[$i] = [
+                        'name' => $grade_item['name']
+                    ];
+                } else {
+                    $count += 1;
+                }
+            }
+            //若不在区间内的次数等于gradeList的长度，表示该会员的经验值不在已有经验值区间中
+            if ($count == count($gradeList)) {
+                $model->update([
+                    'grade_id' => 0
+                ], ['id' => $customer_item['id']]);
+            }
+        }
+        $this->datalist($model, $map);
+        $this->view->assign('gradelist', $gradeList);
+        return $this->view->fetch();
+    }
 }
