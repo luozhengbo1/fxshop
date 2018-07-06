@@ -352,7 +352,7 @@ function req_opt(type,json){
             $.ajax({
                 url:url.editDefaultAddr,
                 type:'post',
-                data:{id:id},
+                data:json ||{},
                 dataType:'json',
                 success: function(data){
                     layer_msg(data.msg);
