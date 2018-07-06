@@ -2932,7 +2932,9 @@ span.pink-bg {
 	float: left;
 	background: white;
 	padding: .04rem;
-	margin-bottom: .02rem;
+	margin-bottom: .04rem;
+	border-radius: 10px;
+
 }
 .module-hot-goods .goods-list li:nth-of-type(odd){
 	/*奇数行*/
