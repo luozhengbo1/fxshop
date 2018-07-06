@@ -94,7 +94,7 @@ class Goods extends Controller
     		$goods['goods_class_id'] = $data['goods_class_id'];
     		$goods['goods_brand_id'] = $data['goods_brand_id'];
     		$goods['detail'] = $data['detail'];
-//    		$goods['status'] = $data['status'];
+    		$goods['status'] = 0;
     		$goods['main_image'] = $data['main_image'];
     		$goods['subtitle'] = $data['subtitle'];
     		$goods['create_time'] = $create_time;
@@ -167,7 +167,7 @@ class Goods extends Controller
                     $skuData[$k]['price']=$v['price'];
                     $skuData[$k]['store']=$v['num'];
                     $skuData[$k]['goods_code']=$v['code'];
-                    $skuData[$k]['point_score']=$v['point_score'];
+                    $skuData[$k]['point_score']=$v['pointPrice'];
                     #条形码
                     $skuData[$k]['bar_code']=$v['bar'];
                     $skuData[$k]['goods_id']= $goods_id;
@@ -275,7 +275,7 @@ class Goods extends Controller
             $goods['goods_class_id'] = $data['goods_class_id'];
             $goods['goods_brand_id'] = $data['goods_brand_id'];
             $goods['detail'] = $data['detail'];
-//            $goods['status'] = $data['status'];
+            $goods['status'] = 0;
             $goods['main_image'] = $data['main_image'];
             $goods['subtitle'] = $data['subtitle'];
             $goods['create_time'] = $create_time;
@@ -351,7 +351,7 @@ class Goods extends Controller
                     $skuData[$k]['price']=$v['price'];
                     $skuData[$k]['store']=$v['num'];
                     $skuData[$k]['goods_code']=$v['code'];
-                    $skuData[$k]['point_score']=$v['point_score'];
+                    $skuData[$k]['point_score']=$v['pointPrice'];
                     #条形码
                     $skuData[$k]['bar_code']=$v['bar'];
                     $skuData[$k]['goods_id']= $data['id'];

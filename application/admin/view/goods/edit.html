@@ -447,7 +447,7 @@
 
 {/block}
 {block name="script"}
-<!--<script type="text/javascript" src="__LIB__/showdown/1.4.2/showdown.min.js"></script>-->
+<script type="text/javascript" src="__LIB__/showdown/1.4.2/showdown.min.js"></script>
 <!--<script>window.UEDITOR_HOME_URL = '__LIB__/ueditor/1.4.3/'</script>-->
 <!--<script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/ueditor.config.js"></script>-->
 <!--<script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/ueditor.all.min.js"> </script>-->
@@ -456,6 +456,7 @@
 <script type="text/javascript" src="__UEDITOR__/ueditor.config.js"></script>
 <!--编辑器源码文件-->
 <script type="text/javascript" src="__UEDITOR__/ueditor.all.js"></script>
+<script type="text/javascript" src="__STATIC__/js/setProductInfo.js"></script>
 <!--实例化编辑器并设置toolbar的按钮-->
 <script type="text/javascript">
     var ue = UE.getEditor('container', {
@@ -568,9 +569,9 @@
         return flag;
     }
 
-     var ue = UE.getEditor('editor',{
+    /* var ue = UE.getEditor('editor',{
             serverUrl:'{:\\think\\Url::build("Ueditor/index")}'
-        });
+        });*/
  /*   var htmlStr = $("#editor").val();
     console.log("=========="+"{$vo.detail ?? ''}")
     ue.setContent(htmlStr, false);*/
@@ -579,7 +580,7 @@
                 text      = $("#markdown_tpl").html();
         $("#markdown").html(converter.makeHtml(text));
     })
-    ue.execCommand("<?php echo isset($vo['detail'])?$vo['detail']:'';?>");
+    //ue.execCommand("<?php echo isset($vo['detail'])?$vo['detail']:'';?>");
 
 
     // 属性表格js
@@ -601,7 +602,6 @@
 <script type="text/javascript" src="__LIB__/Validform/5.3.2/Validform.min.js"></script>
 <script src="__LIB__/lightbox2/js/lightbox.min.js"></script>
 <script type="text/javascript" src="__LIB__/My97DatePicker/WdatePicker.js"></script>
-<script type="text/javascript" src="__STATIC__/js/setProductInfo.js"></script>
 
 <script>
 
@@ -682,7 +682,9 @@
                     var sku =salelist;
                     data += ('&skuZuheData='+ JSON.stringify(sku));
                     data += ('&propty_name_val='+  JSON.stringify(arrayInforList));
+                    console.log('test=========================');
                     console.log(data);
+                    debugger;
                     $.ajax({
                         type:'post',
                         data:data,//$form.serialize(),

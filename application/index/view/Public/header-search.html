@@ -1,9 +1,10 @@
 <header class="header-search">
 	<section  class="input" style="color: rgb(255, 255, 255);">
 		<i  class="iconfont icon-search" onclick="searchGoods()"></i>
-		<form id="form" class="w100p">
-			<input type="text" name="goodName" data-text="商品不为空" placeholder="商品搜索">
-		</form>
+		<div id="form" class="w100p">
+			<input type="text" name="goodsName" id="goodsNameSearch" data-text="商品不为空" placeholder="商品搜索">
+		</div>
+
 	</section>
 	<div class="fr  ml10">
 		<a href="{:\\think\\Url::build(\'message\')}" class="message">
