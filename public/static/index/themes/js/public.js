@@ -294,7 +294,7 @@ function urlConnect(url,json) {
  */
 var request_flag = {
     del:true,
-    edit:false,
+    edit:true,
 }
 function req_opt(type,json){
     debugger
@@ -322,7 +322,7 @@ function req_opt(type,json){
     if(request_flag.edit){//请求完成后才能进行下一次请求
         request_flag.edit = false;
         layerLoad();
-        if(type==0){
+        if(type==1){
             $.ajax({
                 url:url.editDefaultAddr,
                 type:'post',

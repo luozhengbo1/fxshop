@@ -29,19 +29,21 @@
         add:"{:url('address/edit')}",
         dele:"{:url('address/delete')}",
         list:"{:url('address/index')}",
-        editDefaultAddr:"{:url('address/index')}",
+        editDefaultAddr:"{:url('address/setDefault')}",
     }
+
    getListData()
+
   function dealData(data) {
       var html='';
       for(var i = 0; i < data.length; i++){
           console.log(data[i])
           html +='<ul class="no-selected-icon">';
           if(data[i].status ==1){  //1表示默认选中地址
-              html +=' <li class="selected-icon no-selected-icon" onclick="editDefaultAddr('+data[i].id+')"></li>';
+              html +=' <li class="selected-icon no-selected-icon" onclick="req_opt(1,'+data[i].id+')"></li>';
           }else{
 
-              html +=' <li class="no-selected-icon" onclick="editDefaultAddr('+data[i].id+')"></li>';
+              html +=' <li class="no-selected-icon" onclick="req_opt(1,'+data[i].id+')"></li>';
           }
           html +='    <li class="bold user">'+data[i].name+"  "+data[i].mobile+'</li>';
           html +='    <li>'+data[i].address+data[i].street+'</li>';
@@ -71,9 +73,9 @@
   function addAddress() {
       window.location.href = url.add;
   }
-  function editDefaultAddr(){
-      alert()
-  }
+  // function editDefaultAddr(){
+  //     alert()
+  // }
 
 </script>
 </body>

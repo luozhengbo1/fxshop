@@ -51,8 +51,11 @@ class Customer extends Controller
     public function excel()
     {
         if ($this->request->isPost()) {
-            $header = ['用户名', '昵称', '性别', '生日', '手机号', '邮箱', '积分', '等级', '头像', '微信ID', '登录IP', '创建时间'];
-            $data = \think\Db::name("customer")->field("username,nickname,sex,birthday,mobile,email,score,grade,headimgurl,openid,login_ip,create_time")->order("id desc")->select();
+            $header = ['用户名', '昵称', '性别', '生日', '手机号', '邮箱', '积分', '连续签到天数',
+                '经验值', '等级', '头像', '微信ID', '登录IP', '国家', '省份', '城市', '创建时间'];
+            $data = \think\Db::name("customer")->field("username,nickname,sex,birthday,mobile,email,
+            score,continuity_day,experience,grade,headimgurl,openid,login_ip,countty,province,city,create_time")
+                ->order("id desc")->select();
             if ($error = \Excel::export($header, $data, "会员信息表", '2007')) {
                 throw new Exception($error);
             }
@@ -103,21 +106,21 @@ class Customer extends Controller
                 $this->filter($map);
             }
 
-            //  根据积分自动更新grade
-            $score = $model->where('isdelete', '0')->select();
-            $gradeList = Model('CustomerGrade')->field('id ,name,score_start,score_end')->order('id ')->where('isdelete', 0)->select();
-            for ($i = 0; $i < count($score); $i++) {
+            //  根据经验值自动更新grade
+            $experience = $model->where('isdelete', '0')->select();
+            $gradeList = Model('CustomerGrade')->field('id ,name,experience_start,experience_end')->order('id ')->where('isdelete', 0)->select();
+            for ($i = 0; $i < count($experience); $i++) {
                 $count = 0;
-                $scoreitem = $score[$i];
+                $experience_item = $experience[$i];
                 for ($j = 0; $j < count($gradeList); $j++) {
-                    $gradeitem = $gradeList[$j];
-                    if ($scoreitem['score'] > $gradeitem['score_start'] && $scoreitem['score'] < $gradeitem['score_end']) {
+                    $grade_item = $gradeList[$j];
+                    if ($experience_item['experience'] > $grade_item['experience_start'] && $experience_item['experience'] < $grade_item['experience_end']) {
                         //插入grade_id
                         $model->update([
-                            'grade_id' => $gradeitem['id']
-                        ], ['id' => $scoreitem['id']]);
+                            'grade_id' => $grade_item['id']
+                        ], ['id' => $experience_item['id']]);
                         $gradelist[$i] = [
-                            'name' => $gradeitem['name']
+                            'name' => $grade_item['name']
                         ];
                     } else {
                         $count += 1;
@@ -126,7 +129,7 @@ class Customer extends Controller
                 if ($count == count($gradeList)) {
                     $model->update([
                         'grade_id' => 0
-                    ], ['id' => $scoreitem['id']]);
+                    ], ['id' => $experience_item['id']]);
                 }
             }
             $this->datalist($model, $map);
@@ -149,29 +152,31 @@ class Customer extends Controller
             }
 
             //  根据积分自动更新grade
-            $score = $model->where('isdelete', '0')->select();
-            $gradeList = Model('CustomerGrade')->field('id ,name,score_start,score_end')->order('id ')->where('isdelete', 0)->select();
-            for ($i = 0; $i < count($score); $i++) {
+            $customer_data = $model->where('isdelete', '0')->select();
+            $gradeList = Model('CustomerGrade')->field('id ,name,experience_start,experience_end')->order('id ')->where('isdelete', 0)->select();
+           //循环对比每个会员的经验值是否在等级经验值区间内
+            for ($i = 0; $i < count($customer_data); $i++) {
                 $count = 0;
-                $scoreitem = $score[$i];
+                $customer_item = $customer_data[$i];
                 for ($j = 0; $j < count($gradeList); $j++) {
-                    $gradeitem = $gradeList[$j];
-                    if ($scoreitem['score'] >= $gradeitem['score_start'] && $scoreitem['score'] <= $gradeitem['score_end']) {
-                        //插入grade_id
+                    $grade_item = $gradeList[$j];
+                    if ($customer_item['experience'] >= $grade_item['experience_start'] && $customer_item['experience'] <= $grade_item['experience_end']) {
+                        //若在区间内插入grade_id
                         $model->update([
-                            'grade_id' => $gradeitem['id']
-                        ], ['id' => $scoreitem['id']]);
+                            'grade_id' => $grade_item['id']
+                        ], ['id' => $customer_item['id']]);
                         $gradelist[$i] = [
-                            'name' => $gradeitem['name']
+                            'name' => $grade_item['name']
                         ];
                     } else {
                         $count += 1;
                     }
                 }
+                //若不在区间内的次数等于gradeList的长度，表示该会员的经验值不在已有经验值区间中
                 if ($count == count($gradeList)) {
                     $model->update([
                         'grade_id' => 0
-                    ], ['id' => $scoreitem['id']]);
+                    ], ['id' => $customer_item['id']]);
                 }
             }
             $this->datalist($model, $map);
