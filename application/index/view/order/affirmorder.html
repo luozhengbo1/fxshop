@@ -139,7 +139,7 @@
             totalNum += parseInt(num)*parseInt(price);
            // console.log('test'+isNaN(23))
             if(!isNaN(postage)){
-                totalNum += totalNum;//加上邮费
+                totalNum += postage;//加上邮费
             }
         })
         $('#showPrice').html(totalNum)

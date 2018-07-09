@@ -3319,7 +3319,7 @@ a {
 	background: white;
 	padding: 0 .08rem;
 	line-height: .22rem;
-	height:.22rem;
+	/*height:.22rem;*/
 }
 .good-detail-content .good-price{
 	color: red;
@@ -3330,10 +3330,10 @@ a {
 	font-size: .14rem;
 }
 .good-detail-content .good-service li{
-	width: 20%;
+	width: 40%;
 }
 .good-detail-content .good-service li:nth-child(2){
-	width: 60%;
+	width: 30%;
 }
 .good-detail-content .detail-block {
 	background: white;
