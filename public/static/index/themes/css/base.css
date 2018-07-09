@@ -1,6 +1,7 @@
 /* Write your styles */
 address, blockquote, dl, fieldset, figure, hr, ol, p, pre, ul {
     margin: 0 0 0 0 ; padding: 0}
+::-webkit-scrollbar,.menu-right::-webkit-scrollbar{width:0;}
 li{
     list-style: none
 ;
