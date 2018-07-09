@@ -27,6 +27,7 @@
             $this->view->assign('titleName', "确认订单");
             if($this->request->isGet()){
                 $storeData =  Session::get('storeData '.$this->userInfo['openid']);
+//                dump($storeData);die;
                 if(empty($storeData) ){
                     $this->error('什么也没有','index/index/index');
                     exit;
@@ -34,7 +35,6 @@
                 foreach ($storeData as $k=>$v){
                     $storeData[$k] = array_merge($storeData[$k], Db::name('goods')->where(['id'=>$v['goodsId']])->find());
                 }
-//                DUMP($storeData);DIE;
                 #如果有地址就取出地址
                 $address = Db::name('customer_address')->alias('ca')
                     ->field('ca.*')
@@ -44,8 +44,8 @@
 //                dump($address);die;
                 $this->view->assign('address',$address?$address:'');
                 $this->view->assign('storeData',$storeData);
-           //    dump($address);
-               //dump($storeData);
+//               dump($address);
+//               dump($storeData);
                 return $this->view->fetch();
             }
         }
@@ -95,6 +95,7 @@
                 $orderId = \WxPayConfig::MCHID.date("YmdHis");
                 $orderRow = array(
                     "order_id" => $orderId,
+                    "address_id" => $data[0]['addressId'],
                     "openid" => $this->userInfo['openid'],
                     "customer_name" => $this->userInfo['nickname'],
                     "total_price" => $price * 100,
@@ -138,7 +139,7 @@
                     # 清空购物车
                     foreach ($data as $k =>$v){
                         if($v['carId']){
-                            Db::name('car')->where(['id'=>$v['carId']])->update(['status'=>0]);
+                            Db::name('car')->where(['id'=>$v['carId']])->delete();
                         }
                     }
 
