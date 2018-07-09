@@ -11,7 +11,8 @@
               url:"__STATIC__/index/json/more.json",
               data:{},
           },
-		dealFun:dealData
+		dealFun:dealData,
+		complete:fun,数据加载完成后调用函数
      });
  */
 var pageload = function(options){
