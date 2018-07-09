@@ -4,7 +4,6 @@
 
 <section class="affirm-order">
     <div class="aui-address-box-default">
-
         {if condition="$address  neq 0 "}
         <a class="show-address" href="{:\\think\\Url::build(\'address/index\')}">
             <p class="bold f14">{$address['name']??''}  &nbsp;&nbsp; {$address['mobile']}</p>
@@ -126,7 +125,7 @@
        })
        pub_save({
            url:url.pay,
-           return_url:url.orderIndex,
+           return_url:url.redirect,
            data:{arr:JSON.stringify(saveData)},
        })
    }

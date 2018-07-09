@@ -69,17 +69,18 @@
                     ])
                 ->find();
             $time =time();
+//            dump($carData);die;
             if($carData){
                 $res = Db::name('car')
                     ->where([
                         'goods_id'=>$data['goodsId'],
                         'openid'=>$this->userInfo['openid'],
                         'sku_id'=>$data['skuId']
-                    ])->setInc('goods_num', $data['num']);
+                    ])->setInc('goods_num', ($data['num']!=0)?$data['num']:'1');
             }else{
                 $res = Db::name('car')
                     ->insert([
-                        'goods_num'=>$data['num'],
+                        'goods_num'=>$data['num']?$data['num']:'1',
                         'update_time'=>$time,
                         'create_time'=>$time,
                         'goods_id'=>$data['goodsId'],
@@ -105,7 +106,7 @@
                     return ajax_return_error('缺少参数id');
                 }
             }
-            $res = Db::name('car')->where(['id'=>$data['carId']])->update(['status'=>0]);
+            $res = Db::name('car')->where(['id'=>$data['carId']])->delete();
             if($res){
                 return ajax_return('','删除成功','200');
             }

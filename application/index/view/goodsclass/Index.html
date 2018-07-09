@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui"/>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<meta name="format-detection" content="telephone=no, email=no"/>
+	<meta charset="UTF-8">
+	<title>{$titleName}</title>
+	<link rel="icon" type="image/x-icon" href="__PUBLIC__/themes/logo_fy.png">
+	<link href="__PUBLIC__/themes/logo_fy@2x.png" sizes="114x114" rel="apple-touch-icon-precomposed">
+</head>
+<body>
+	<include file="./Application/Index/View/Public/header.html" />
+	<section class="aui-contents">
+		<div class="aui-scroll-box" data-ydui-scrolltab>
+			<div class="aui-scroll-nav">
+				<volist name="goodsClassList" id="vo">
+					<a href="#" class="aui-scroll-item aui-crt">
+						<div class="aui-scroll-item-icon"></div>
+						<div class="aui-scroll-item-text">{$vo.name}</div>
+					</a>
+				</volist>
+			</div>
+			<div class="aui-scroll-content">
+				<volist name="allGoodsClassData" key="k" id="vo">
+					<div class="aui-scroll-content-item">
+						<div class="aui-class-img">
+							<img src="<?php echo $goodsClassList[$k-1]['logo']?>" alt="">
+							<h2 class="aui-content-title"><?php echo $goodsClassList[$k-1]['name']?></h2>
+						</div>
+						<section class="aui-grid-content">
+							<div class="aui-grid-row aui-grid-row-clear">
+								<volist name="vo" id="vol">
+									<a href="{:U('Goods/index',array('id'=>$vol['id']))}" class="aui-grid-row-item">
+										<i class="aui-icon-large aui-icon-sign"><img src="{$vol.logo}" alt=""></i>
+										<p class="aui-grid-row-label">{$vol.name}</p>
+										<!-- 后面加的 -->
+										<p class="aui-grid-row-label">￥<del style="color:#333;">{$vol.price}</del></p>
+										<p class="aui-grid-row-label" style="color:red;">￥{$vol.real_price}</p>
+									</a>
+								</volist>
+							</div>
+						</section>
+					</div>
+				</volist>
+			</div>
+		</div>
+	</section>
+	<!-- 加在footer -->
+	<include file="./Application/Index/View/Public/footer.html" />
+</body>
+</html>

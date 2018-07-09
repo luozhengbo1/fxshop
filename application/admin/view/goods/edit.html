@@ -244,6 +244,20 @@
             </div>
             <div class="col-xs-3 col-sm-2"></div>
         </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>是否支持评论：</label>
+            <div class="formControls col-xs-6 col-sm-7 skin-minimal">
+                <div class="radio-box">
+                    <input type="radio" name="is_comment"  checked id="is_comment-1" {$vo.is_comment?'checked':''} value="1" datatype="*" nullmsg="请选择" errormsg="请选择">
+                    <label for="is_real-1">是</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="is_comment" id="is_comment-0" value="0" {$vo.is_comment?'':'checked'} datatype="*" nullmsg="请选择" errormsg="请选择">
+                    <label for="is_real-0">否</label>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
          <div class="row cl">
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>售后保障信息：</label>
             <div class="formControls col-xs-6 col-sm-7 skin-minimal">

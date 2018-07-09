@@ -114,6 +114,7 @@ class Goods extends Controller
             $goods['buy_num'] = $data['buy_num'];
             #商品条形码
             $goods['bar_code'] = $data['bar_code'];
+            $goods['is_comment'] = $data['is_comment'];
             #商品生产地
             $goods['yieldly'] = $data['yieldly'];
             #所属商户
@@ -297,6 +298,7 @@ class Goods extends Controller
             $goods['bar_code'] = $data['bar_code'];
             #商品生产地
             $goods['yieldly'] = $data['yieldly'];
+            $goods['is_comment'] = $data['is_comment'];
             #所属商户
             $goods['user_id'] = $data['user_id'];
             $goods['is_return_goods'] = $data['is_return_goods'];

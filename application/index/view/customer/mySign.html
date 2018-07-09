@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>签到</title>
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<link href="logo_fy@2x.png" sizes="114x114" rel="apple-touch-icon-precomposed">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/themes/css/core.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/themes/css/icon.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/themes/css/home.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/themes/css/mui.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/aui.css">
+	<link rel="stylesheet" href="__PUBLIC__/css/view/SignIn.css" />
+
+	<body class="mui-ios mui-ios-9 mui-ios-9-1">
+		<div id="nTalk_post_hiddenElement" style="left: -10px; top: -10px; visibility: hidden; display: none; width: 1px; height: 1px;"></div>
+		<!--内容区域-->
+		<div id="app" class="wrapper" style="background-color: rgb(0, 166, 153);">
+			<!---->
+			<div class="hd">
+				<img src="{$user['headimgurl']}" width="60" height="60" class="user-avatar" />
+				<div class="user-info">
+					<div class="user-name">
+						{$user['nickname']}
+					</div>
+					<div class="user-link">
+						<span class="user-integral">积分 {$user['score']?$user['score']:0}</span>
+						<a href="javascript:" class="f14" onclick="openDialog()">活动规则<i class="iconfont icon-iconarrow"></i></a>
+					</div>
+				</div>
+			</div>
+			<div class="bd">
+				<div class="water-box">
+					<div class="water water1"></div>
+					<div class="water water2"></div>
+					<div class="water water3"></div>
+				</div>
+				<div class="cricle">
+					<div class="text">
+						已经连续签到
+					</div>
+					<div class="count">
+						<span>{$user['continuity_day']?$user['continuity_day']:0}</span>天
+					</div>
+				</div>
+				<a href="javascript:" flag="1" class="btn sign <?php echo ($flag==1)?'disabled': ''; ?>" disabled="">
+					{$flag?'已签到':'立即签到'}
+				</a>
+			</div>
+		</div>
+		<script type="text/javascript" src="__PUBLIC__/themes/js/jquery.min.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/themes/js/api.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/themes/js/aui-dialog.js" ></script>
+		<script type="text/javascript">
+            apiready = function () {
+                api.parseTapmode();
+            }
+            var dialog = new auiDialog();
+
+            function openDialog(){
+                var msg = '<p class="mui-text-left mt10">1.每天只能签到一次,每次获得奖励1积分</p>'
+					msg += '<p class="mui-text-left mt10">2.连续签到3天，一次性奖励2积分。</p>';
+					msg += '<p class="mui-text-left mt10">3.连续签到7天，一次性奖励8积分。</p>'
+					msg += '<p class="mui-text-left mt10">4.连续签到15天，一次性奖励20积分。</p>'
+					msg += '<p class="mui-text-left mt10">5.连续签到30天，一次性奖励50积分。</p>'
+					dialog.alert({
+						title:"活动规则",
+						msg:msg,
+						buttons:['确定']
+					});
+            }
+            $('.sign').on('click',function () {
+                if( $('.sign').attr('flag')==1 ){
+                    $.ajax({
+                        url:"{:U('Customer/mySign')}",
+                        type:'post',
+                        data:{flag:1},
+                        dataType:'json',
+                        success:function (res) {
+                            console.log(res)
+                            if(res.status==501){
+                                $('.sign').addClass('disabled').attr('flag','0');
+                            }
+							dialog.alert({
+                                title:"提示",
+                                msg:res.msg,
+                                buttons:['关闭']
+                            },function(){
+                                location.reload();
+                            });
+                        },
+                        error:function (res) {
+                            console.log
+                        }
+                    })
+				}
+            })
+		</script>
+		<include file="./Application/Index/View/Public/footer.html" />
+	</body>
+</html>
