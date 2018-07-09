@@ -398,10 +398,16 @@ function pub_save(json){
             success: function(data){
                 layer_msg(data.msg);
                 if(data.code ==200){
-                    setTimeout(function(){
-                        location.href=json.return_url;
+                    if(data.redirect && data.redirect!="undefined"){
+                        location.href=data.redirect;
                         request_flag.save = true;
-                    },1500);
+                    }else {
+                        setTimeout(function(){
+                            location.href=json.return_url;
+                            request_flag.save = true;
+                        },1500);
+                    }
+
                 }
             }
         })

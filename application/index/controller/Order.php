@@ -19,6 +19,7 @@
             $orderList = Db::name('order')
                 ->where(['openid'=>$this->userInfo['openid']])
                 ->select();
+            return $this->view->fetch('orderList');
         }
 
         #订单确认页面
@@ -134,7 +135,7 @@
                     $arr[$k]['goods_detail'] = json_encode($goodsData);
                     $arr[$k]['words'] = $v['words'];
                 }
-
+                
                 if ($addId > 0) {
                     # 清空购物车
                     foreach ($data as $k =>$v){
@@ -145,7 +146,7 @@
 
                     # 成功就跳转到支付。参数必须使用？拼接。否则调不起微信支付，因为商户平台的支付授权目录的配置导致。聚能坑....
                     $jsApiParameters = base64_encode($jsApiParameters);
-                    $backData = array("msg" => "呼起支付", 'status' => 1, 'redirect' => url("WxPay/index")."?js_api_parameters={$jsApiParameters}&id={$addId}");
+                    $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$addId}");
                     die(json_encode($backData));
                 }
             }
