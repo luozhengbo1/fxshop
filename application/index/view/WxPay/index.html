@@ -14,6 +14,9 @@
         .button{ color:#fff; font-size:16px; background:#0C3; border-radius:5px; padding:12px 0; text-align:center; display:block; margin:20px; -webkit-appearance:none; border:none; text-decoration:none;}
         .failMsg{ padding:15px; margin:20px; background:#FFC; text-align:left; color:red;}
     </style>
+    {php}
+    $js_api_parameters = base64_decode($_GET['js_api_parameters']);
+    {/php}
     正在呼起微信支付...
     <script type="text/javascript">
 
@@ -30,7 +33,7 @@
                         //document.getElementById('payDom').style.display='none';
                         //document.getElementById('successDom').style.display='block';
 // 	 					setTimeout(function(){
-                        window.location.href = '{:U("Customer/lists")}';
+                        window.location.href = '{:url("Customer/lists")}';
 // 	 					},2000);
                     }else{
                         //document.getElementById('payDom').style.display='none';

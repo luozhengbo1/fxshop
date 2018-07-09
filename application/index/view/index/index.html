@@ -80,9 +80,9 @@
 <div class="module-hot-goods">
 	<p class="item-title mt10 mb10">热销商品</p>
 	<div id="dataListWrap">
-		<ul class="goods-list list clear" id="goodsList">
-		<!--	<li>
-				<img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
+		<ul class="goods-list list clear grid" id="goodsList">
+			<!--<li class="grid-item">
+				<img class="grid-item-image" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
 				 <p class="good-desc ellipsis">Lay’s/乐事薯片清爽酸奶零食 </p>
 				<div>
 					<p class="fl">已售3</p>
@@ -97,6 +97,7 @@
 {include file="Public/footer"}
 	<script>
         getNotice();
+        loadGoodsData();
         var swiper1= bannerSwiper('header-banner');
         new Swiper('.announcement-banner', {
             direction : 'vertical',
@@ -110,12 +111,12 @@
             var html='';
             for(var i = 0; i < data.length; i++){
                 console.log(data[i])
-                html +='<li>';
+                html +='<li class="grid-item">';
             //    html +='	<a href="{:url(\'goods/detail\',array(\'id\'=>$vo[\'id\']))}" >';
                 html +='	<a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
-                html +='     <p class="tc"><img class="good-img" src="'+data[i].main_image+'"></p>';
+                html +='     <p class="tc"><img class="grid-item-image" src="'+data[i].main_image+'"></p>';
                 html +='     <p class="good-desc ellipsis">'+notEmpty(data[i].name)+' </p>';
-                html +='   </a>';
+                html +='    </a>';
                 html +='    <div>';
                 html +='  		  <p class="fl">已售'+notEmpty(data[i].buy_num)+'</p>';
                 html +='  		      <p class="fr">';
@@ -126,20 +127,26 @@
                 html +='  </li>';
             }
             return html;
+
         }
-        pageload({
-            targetWarp:'dataListWrap',
-            target:'goodsList',
-            page:1,
-            size:10,
-            ajaxData:{
-                url:"{:url('index/goods/getGoodsHotOrOther')}",
-                data:{
-                    show_area:4
+        function loadGoodsData(){
+            initData('goodsList');
+            pageload({
+                targetWarp:'dataListWrap',
+                target:'goodsList',
+                page:1,
+                size:10,
+                ajaxData:{
+                    url:"{:url('index/goods/getGoodsHotOrOther')}",
+                    data:{
+                        show_area:4
+                    },
                 },
-            },
-            dealFun:dealData
-        });
+                dealFun:dealData,
+				complete:masonryShow,
+            });
+        }
+
         function getNotice() {
             $.ajax({
                 type:'post',
@@ -158,6 +165,11 @@
                 }
             })
         }
+        //瀑布流显示商品\
+       var container = document.querySelector('.grid');
+       function masonryShow() {
+          new Masonry( container);
+       }
 
 	</script>
 </body>

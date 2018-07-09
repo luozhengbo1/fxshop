@@ -105,9 +105,13 @@ class Index extends Mustlogin
     }
 
     public function demo(){
+        $this->assign('titleName', "demo");
         return $this->view->fetch();
     }
-
+    public function wxpay(){
+        $this->assign('titleName', "微信支付");
+        return $this->view->fetch();
+    }
 }
 
 

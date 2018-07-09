@@ -16,9 +16,42 @@
         #订单列表页面
         public function  index()
         {
+            $this->view->assign('titleName', "订单主页");
             $orderList = Db::name('order')
+                ->alias('o')
+                ->join('fy_order_goods','fy_order_goods.order_id=o.order_id')
                 ->where(['openid'=>$this->userInfo['openid']])
+                ->order('o.create_time desc')
                 ->select();
+            foreach ($orderList as $k=>$v ){
+                $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
+            }
+            $this->view->assign('orderList',$orderList);
+//            dump($orderList);
+            return $this->view->fetch('orderList');
+        }
+        #获取订单商品接口
+        public function  getOrderListApi()
+        {
+            if($this->request->isAjax()){
+                $data = $this->request->post();
+                $status = "";
+                $orderList = Db::name('order')
+                ->alias('o')
+                    ->join('fy_order_goods','fy_order_goods.order_id=o.order_id')
+                    ->where(['openid'=>$this->userInfo['openid'],'fy_order.status'=>$data['status']])
+                    ->order('o.create_time desc')
+                    ->select();
+                foreach ($orderList as $k=>$v ){
+                    $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
+                }
+                if(!empty($orderList) ){
+                    return ajax_return($orderList,'ok','200');
+                }else{
+                    return ajax_return('','no','500');
+                }
+
+            }
         }
 
         #订单确认页面
@@ -27,6 +60,7 @@
             $this->view->assign('titleName', "确认订单");
             if($this->request->isGet()){
                 $storeData =  Session::get('storeData '.$this->userInfo['openid']);
+//                dump($storeData);die;
                 if(empty($storeData) ){
                     $this->error('什么也没有','index/index/index');
                     exit;
@@ -34,7 +68,7 @@
                 foreach ($storeData as $k=>$v){
                     $storeData[$k] = array_merge($storeData[$k], Db::name('goods')->where(['id'=>$v['goodsId']])->find());
                 }
-//                DUMP($storeData);DIE;
+
                 #如果有地址就取出地址
                 $address = Db::name('customer_address')->alias('ca')
                     ->field('ca.*')
@@ -44,8 +78,8 @@
 //                dump($address);die;
                 $this->view->assign('address',$address?$address:'');
                 $this->view->assign('storeData',$storeData);
-           //    dump($address);
-               //dump($storeData);
+//               dump($address);
+//               dump($storeData);
                 return $this->view->fetch();
             }
         }
@@ -95,6 +129,7 @@
                 $orderId = \WxPayConfig::MCHID.date("YmdHis");
                 $orderRow = array(
                     "order_id" => $orderId,
+                    "address_id" => $data[0]['addressId'],
                     "openid" => $this->userInfo['openid'],
                     "customer_name" => $this->userInfo['nickname'],
                     "total_price" => $price * 100,
@@ -114,7 +149,7 @@
                 $input->SetTime_start(date("YmdHis"));
                 $input->SetTime_expire(date("YmdHis", time() + 600));
                 $input->SetGoods_tag("");
-                $input->SetNotify_url("http://".$_SERVER['HTTP_HOST']."/index.php/WxPay/notify");
+                $input->SetNotify_url("http://".$_SERVER['HTTP_HOST']."/index.php/index/wechatpay/notify");
                 $input->SetTrade_type("JSAPI");
                 $input->SetOpenid($this->userInfo['openid']);
                 $unifiedOrder = \WxPayApi::unifiedOrder($input);
@@ -124,6 +159,7 @@
                 # 插入订单数据
                 $addId =Db::name("order")->insert($orderRow);
                 $arr =[];
+//                dump($data);die;
                 foreach ($data as $k=>$v){
                     $goodsData = Db::name('goods')->where(['id'=>$v['goodsId']])->find();
                     $arr[$k]['goods_id'] = $v['goodsId'];
@@ -132,19 +168,23 @@
                     $arr[$k]['user_id'] = $goodsData['user_id'];
                     $arr[$k]['goods_detail'] = json_encode($goodsData);
                     $arr[$k]['words'] = $v['words'];
+                    $arr[$k]['sku_val'] = $v['val'];
+                    #购买数量
+                    $arr[$k]['goods_num'] =  $v['num'];
                 }
-
+                Db::name('order_goods')->insertAll($arr);
                 if ($addId > 0) {
                     # 清空购物车
                     foreach ($data as $k =>$v){
                         if($v['carId']){
-                            Db::name('car')->where(['id'=>$v['carId']])->update(['status'=>0]);
+                            $res = Db::name('car')->where(['id'=>$v['carId']])->delete();
+//                            dump($res);die;
                         }
                     }
 
                     # 成功就跳转到支付。参数必须使用？拼接。否则调不起微信支付，因为商户平台的支付授权目录的配置导致。聚能坑....
                     $jsApiParameters = base64_encode($jsApiParameters);
-                    $backData = array("msg" => "呼起支付", 'status' => 1, 'redirect' => url("WxPay/index")."?js_api_parameters={$jsApiParameters}&id={$addId}");
+                    $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$addId}");
                     die(json_encode($backData));
                 }
             }

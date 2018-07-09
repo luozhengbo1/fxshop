@@ -69,6 +69,7 @@
                     ])
                 ->find();
             $time =time();
+//            dump($carData);die;
             if($carData){
                 $res = Db::name('car')
                     ->where([
@@ -105,7 +106,7 @@
                     return ajax_return_error('缺少参数id');
                 }
             }
-            $res = Db::name('car')->where(['id'=>$data['carId']])->update(['status'=>0]);
+            $res = Db::name('car')->where(['id'=>$data['carId']])->delete();
             if($res){
                 return ajax_return('','删除成功','200');
             }
