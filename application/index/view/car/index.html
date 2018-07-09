@@ -90,8 +90,8 @@
     var url = {
         list:"{:url('index/car/index')}",//获取car列表
         dele:"{:url('index/car/delCar')}",//删除单个商品
-        affirmOrder:"{:url('index/order/affirmOrderApi')}",
-        orderIndex:"{:url('index/order/affirmOrder')}",
+        affirmOrderApi:"{:url('index/order/affirmOrderApi')}",//传递订单相关数据
+        affirmOrder:"{:url('index/order/affirmOrder')}",//确定订单页面
     }
 
     var saveData =new Array();
@@ -197,8 +197,8 @@
         }
         if(!validBuyNum()) return;
         pub_save({
-            url:url.affirmOrder,
-            return_url:url.orderIndex,
+            url:url.affirmOrderApi,
+            return_url:url.affirmOrder,
             data:{arr:JSON.stringify(data)},
         })
     }

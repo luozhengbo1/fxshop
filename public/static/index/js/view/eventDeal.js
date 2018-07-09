@@ -44,7 +44,6 @@ MyEventDeal.prototype.init = function(options){
                 // console.log('立即购买');//立即购买
                 $('#popupMain').attr('popupType','buy')
                 _this.showHidePopup($('#popupBuyArea'),true);
-                window.location.href="./affirmOrder";
                 break;
             case 'cancel':
             case 'addressSelectWrapper':

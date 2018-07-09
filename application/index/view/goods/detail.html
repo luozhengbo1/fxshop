@@ -166,12 +166,14 @@
     var url = {
         getSku:"{:url('index/goods/getSku')}",
         addCar:"{:url('index/car/addCar')}",
-        buy:"",
+        affirmOrderApi:"{:url('index/order/affirmOrderApi')}",//传递订单相关数据
+        affirmOrder:"{:url('index/order/affirmOrder')}",//确定订单页面
     }
     var skuZhuhe={};
     // skuId goodId num  valId
     var saveData = {
         goodsId:"{$goods['id']}",
+        price:"{$goods['basic_price']}",
         num :'',
         skuId:'',
         val:'',
@@ -275,24 +277,30 @@
         })
     }
     function saveGoods() {
-        $('#popupMain').attr('popupType','car')
+        debugger
         var type = $('#popupMain').attr('popupType')
-        var request = '';
-        if(type =='car'){
-            request = url.addCar;//加入购物车
-        }else if(type =='buy'){
-            request = url.buy;
-        }
         saveData.num = $('#buyNum').val();
-        $.ajax({
-            url:request,
-            type:'post',
-            data:saveData,
-            dataType:'json',
-            success: function(data){
-                layer_msg(data.msg);
-            }
-        })
+        if(type =='car'){
+            $.ajax({
+                url:url.addCar,//加入购物车
+                type:'post',
+                data:saveData,
+                dataType:'json',
+                success: function(data){
+                    layer_msg(data.msg);
+                }
+            })
+        }else if(type =='buy'){
+            var tempData = new Array();
+            tempData.push(saveData)
+            pub_save({
+                url:url.affirmOrderApi,
+                return_url:url.affirmOrder,
+                data:{arr:JSON.stringify(tempData)},
+            })
+        }
+
+
     }
 </script>
 </body>

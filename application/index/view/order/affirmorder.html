@@ -20,13 +20,13 @@
         <input type="hidden"
                class="goodsData"
                data-goodsid="{$vo['goodsId']}"
-               data-num="{$vo['num']}"
+               data-num="{$vo['num']??''}"
                data-sku="{$vo['skuId']}"
-               data-val="{$vo['val']}"
-               data-val="{$vo['val']}"
-               data-price="{$vo['price']}"
-               data-carid="{$vo['carId']}"
-               data-postage="{$vo['postage']}"
+               data-val="{$vo['val']??''}"
+               data-price="{$vo['price']??''}"
+               data-carid="{$vo['carId']??''}"
+               data-freetype="{$vo['free_type']??''}"
+               data-postage="{$vo['postage']??''}"
         >
         <a href="{:url('goods/detail',array('id'=>$vo['goodsId']))}">
             <div class="clear pt10 goods-info-wrap">
@@ -37,7 +37,7 @@
                     <p class="ellipsis title">{$vo['name']}</p>
                     <p>{$vo['val']}</p>
                     <div class="clear mt10">
-                        <span class="fl red f16">¥<em id="goodPrice">{$vo['price']}</em></span>
+                        <span class="fl red f16">¥<em id="goodPrice">{$vo['price']??''}</em></span>
                         <span class="fr"><em id="purchaseNum">{$vo['num']}</em>件</span>
                     </div>
                 </div>
@@ -135,10 +135,11 @@
        var totalNum = 0;
         $('.goodsData').each(function (index,ele) {
             var $ele =$(ele);
-            var num =$ele.data('num') , price =$ele.data('price'),postage =parseInt($ele.data('postage'));
+            var num =$ele.data('num') , price =$ele.data('price'),postage =parseInt($ele.data('postage')),freetype =$ele.data('freetype') ;
             totalNum += parseInt(num)*parseInt(price);
            // console.log('test'+isNaN(23))
-            if(!isNaN(postage)){
+            //freetype=1不包邮
+            if(freetype==1 && !isNaN(postage)){
                 totalNum += postage;//加上邮费
             }
         })
