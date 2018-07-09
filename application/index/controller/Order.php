@@ -34,6 +34,7 @@
                 foreach ($storeData as $k=>$v){
                     $storeData[$k] = array_merge($storeData[$k], Db::name('goods')->where(['id'=>$v['goodsId']])->find());
                 }
+//                DUMP($storeData);DIE;
                 #如果有地址就取出地址
                 $address = Db::name('customer_address')->alias('ca')
                     ->field('ca.*')
