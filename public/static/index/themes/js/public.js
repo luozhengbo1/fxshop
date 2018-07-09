@@ -429,3 +429,10 @@ function pub_edit(json){
         })
     }
 }
+//瀑布流显示商品\
+function masonryShow() {
+    var container = document.querySelector('.grid');
+    setTimeout(function () {
+        new Masonry( container);
+    },200)
+}

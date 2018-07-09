@@ -116,7 +116,12 @@
             me._scrollTop = me.$scrollArea.scrollTop();
 
             // 滚动页面触发加载数据
-            if(me.opts.loadDownFn != '' && !me.loading && !me.isLockDown && (me._scrollContentHeight - me._threshold) <= (me._scrollWindowHeight + me._scrollTop)){
+            /*if(me.opts.loadDownFn != '' && !me.loading && !me.isLockDown && (me._scrollContentHeight - me._threshold) <= (me._scrollWindowHeight + me._scrollTop)){
+                loadDown(me);
+            }*/
+
+            //modify by jiangyongfei 2017/7/9
+            if(me.opts.loadDownFn != '' && !me.loading && !me.isLockDown && document.getElementsByClassName("dropload-down")[0].getBoundingClientRect().top<$(window).height()){
                 loadDown(me);
             }
         });

@@ -26,7 +26,7 @@
 </div>
 <div class="module-hot-goods">
     <div id="dataListWrap">
-        <ul class="goods-list list clear" id="goodsList">
+        <ul class="goods-list list clear  grid pb40" id="goodsList">
             <!--	<li>
                     <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
                      <p class="good-desc ellipsis">Lay’s/乐事薯片清爽酸奶零食 </p>
@@ -63,13 +63,13 @@
         var html='';
         for(var i = 0; i < data.length; i++){
             console.log(data[i])
-            html +='<li>';
+            html +='<li  class="grid-item">';
 
             html +='	<a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
-            html +='     <p class="tc"><img class="good-img" src="'+data[i].main_image+'"></p>';
+            html +='     <p class="tc"><img class="grid-item-image" src="'+data[i].main_image+'"></p>';
             html +='     <p class="good-desc ellipsis">'+notEmpty(data[i].name)+' </p>';
             html +='   </a>';
-            html +='    <div>';
+            html +='    <div class="p5">';
             html +='  		  <p class="fl">已售'+notEmpty(data[i].buy_num)+'</p>';
             html +='  		      <p class="fr">';
             html +='  		      <span class="goods-price">¥'+notEmpty(data[i].basic_price)+'</span>';
@@ -91,7 +91,8 @@
                 url:"{:url('index/goods/goodsSearch')}",
                 data:json,
             },
-            dealFun:dealData
+            dealFun:dealData,
+            complete:masonryShow,
         });
     }
 
