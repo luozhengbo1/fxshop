@@ -81,8 +81,8 @@
 	<p class="item-title mt10 mb10">热销商品</p>
 	<div id="dataListWrap">
 		<ul class="goods-list list clear grid" id="goodsList">
-			<li class="grid-item">
-				<img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
+			<!--<li class="grid-item">
+				<img class="grid-item-image" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
 				 <p class="good-desc ellipsis">Lay’s/乐事薯片清爽酸奶零食 </p>
 				<div>
 					<p class="fl">已售3</p>
@@ -91,40 +91,7 @@
 						<span class="goods-old-price">¥45.00</span>
 					</p>
 				</div>
-			</li>
-			<li class="grid-item">
-				<img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-				<p class="good-desc ellipsis">Lay’s/乐事薯片清爽酸奶零食 </p>
-				<div>
-					<p class="fl">已售3</p>
-					<p class="fr">
-						<span class="goods-price">¥45.00</span>
-						<span class="goods-old-price">¥45.00</span>
-					</p>
-				</div>
-			</li>
-			<li class="grid-item">
-				<img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-				<p class="good-desc ellipsis">Lay’s/乐事薯片清爽酸奶零食 </p>
-				<div>
-					<p class="fl">已售3</p>
-					<p class="fr">
-						<span class="goods-price">¥45.00</span>
-						<span class="goods-old-price">¥45.00</span>
-					</p>
-				</div>
-			</li>
-			<li class="grid-item">
-				<img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
-				<p class="good-desc ellipsis">Lay’s/乐事薯片清爽酸奶零食 </p>
-				<div>
-					<p class="fl">已售3</p>
-					<p class="fr">
-						<span class="goods-price">¥45.00</span>
-						<span class="goods-old-price">¥45.00</span>
-					</p>
-				</div>
-			</li>
+			</li>-->
 		</ul>
 </div>
 {include file="Public/footer"}
@@ -147,9 +114,9 @@
                 html +='<li class="grid-item">';
             //    html +='	<a href="{:url(\'goods/detail\',array(\'id\'=>$vo[\'id\']))}" >';
                 html +='	<a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
-                html +='     <p class="tc"><img class="good-img" src="'+data[i].main_image+'"></p>';
+                html +='     <p class="tc"><img class="grid-item-image" src="'+data[i].main_image+'"></p>';
                 html +='     <p class="good-desc ellipsis">'+notEmpty(data[i].name)+' </p>';
-                html +='   </a>';
+                html +='    </a>';
                 html +='    <div>';
                 html +='  		  <p class="fl">已售'+notEmpty(data[i].buy_num)+'</p>';
                 html +='  		      <p class="fr">';
@@ -198,13 +165,12 @@
                 }
             })
         }
-        //瀑布流显示商品
+        //瀑布流显示商品\
+       var container = document.querySelector('.grid');
+       function masonryShow() {
+          new Masonry( container);
+       }
 
-		function masonryShow() {
-            $('.grid').masonry({
-                itemSelector: '.grid-item'
-            });
-        }
 	</script>
 </body>
 </html>
