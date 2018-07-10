@@ -61,14 +61,14 @@
 <!--商品推荐-->
 <a name="guess-your-love"></a>
 <div class="module-hot-goods guess-your-love">
-    <p class="title mt10">猜你喜欢</p>
+    <p class="item-title mt10">猜你喜欢</p>
     <div class="swiper-container love-goods-banner">
         <div class="swiper-wrapper" >
             {volist name="guestGoods" id="vo"}
             <div class="swiper-slide">
                 <ul class="goods-list clear">
                     {volist name="vo" id="vol"}
-                    <li>
+                    <li style="padding: 2px">
                         <a class="clear" href="{:url('goods/detail',array('id'=>$vol['id']))}">
                             <img class="good-img" src="{$vol.main_image}">
                             <p class="good-desc">{$vol.name} </p>
@@ -182,7 +182,7 @@
     $(function () {
         navTab();
         eventDeal( );//页面点击事件处理
-        new countCalculate(buyNumShow)//数字计算
+        new countCalculate(buyNumShow);//数字计算
         getSku("{$goods['id']}");
         var swiper1 = bannerSwiper('header-banner');//顶部banner
         var swiper2 = bannerSwiper('love-goods-banner');//猜你喜欢 滚动
@@ -250,7 +250,7 @@
                 //匹配id修改页面显示变量
                 if(zhuheId ==id){
                     $('#goodPrice').empty().append(item.price);
-                    $('#goodChoseSku').empty().append('<span>已选</span> '+zhuheVal+'<i id="showBuyNum"></i>个');
+                    $('#goodChoseSku').empty().append('<span>已选</span> '+zhuheVal+'<i class="ml10" id="showBuyNum"></i>个');
                     $('#buyNum').attr('data-store',item.store);//item.pointPrice  item.id
                     saveData.skuId = item.id;
                     saveData.val = zhuheVal;
@@ -264,7 +264,7 @@
     function buyNumShow(){
         var buyNum = $('#buyNum').val();
         saveData.num = buyNum;
-        $('#showBuyNum').empty().append();
+        $('#showBuyNum').empty().append(buyNum);
     }
     //默认选中第一规格
     function choseFirst() {
@@ -277,7 +277,7 @@
         })
     }
     function saveGoods() {
-        debugger
+        if(!validBuyNum()) return false;
         var type = $('#popupMain').attr('popupType')
         saveData.num = $('#buyNum').val();
         if(type =='car'){
@@ -299,8 +299,7 @@
                 data:{arr:JSON.stringify(tempData)},
             })
         }
-
-
+        return true;
     }
 </script>
 </body>

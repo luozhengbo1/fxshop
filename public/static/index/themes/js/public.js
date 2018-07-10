@@ -153,7 +153,7 @@ Date.prototype.Format = function (fmt) { //author: meizz
 };
 //tab导航
 function navTab(){
-    var $tabNavItem= $('.tab-nav .tab-nav-item')
+    var $tabNavItem= $('.tab-nav .tab-nav-item');
     $tabNavItem.click(function () {
         $tabNavItem.removeClass('active');
         $(this).addClass('active');
@@ -202,13 +202,18 @@ countCalculate.prototype.init =function (watchFun) {
     });
     add.click(function () {
         var input = $(this).parents('.count-wrap').find('.sumInput');
-        var maxNum = input.data('store')<200 ? input.data('store'):200;//数量最多不超过200
-        if(input.val() >=200){
-            layer_msg('数量最多不超过200');
-        }else if(input.val() >input.data('store')){
+        var value = parseInt(input.val());
+        var store = parseInt(input.attr('data-store'));
+
+        //点击的时候是先校验 再执行数据操作  故+1
+        if((value+1) >store){
             layer_msg('库存不足');
+        //    input.val(store)
+        }else if((value+1) >200){
+                layer_msg('数量最多不超过200');
+             //   input.val(200)
         }else{
-            input.val(parseInt(input.val())+1);
+            input.val(value+1);
         }
         if(watchFun){
             watchFun();
@@ -224,8 +229,8 @@ countCalculate.prototype.init =function (watchFun) {
     });
     sumInput.keyup(function () {
         var value =$(this).val();
-        value=(parseInt((value=value.replace(/\D/g,''))==''?'0':value,10));
-        $(this).val(value)
+        value=(parseInt((value=value.replace(/\D/g,''))==''?'1':value,10));
+        $(this).val(value);
         if(watchFun){
             watchFun();
         }
@@ -234,15 +239,19 @@ countCalculate.prototype.init =function (watchFun) {
 function validBuyNum() {
     var falg = true;
     $('.sumInput').each(function (index,ele) {
-        var store = $(ele).data('store');
+        var store = parseInt($(ele).attr('data-store'));
         var maxNum = 200;//数量最多不超过200
         var minNum = 1
-        if($(ele).val()>maxNum){
+        //直接进行相关校验
+        if($(ele).val() >store){
+            layer_msg('库存不足');
+        //    $(ele).val(store)
+            falg = false;
+        }
+        else if($(ele).val()>maxNum){
             layer_msg('数量最多不超过200');
             $(ele).focus();
-            falg = false;
-        } else if($(ele).val() >store){
-            layer_msg('库存不足');
+         //   $(ele).val(200)
             falg = false;
         }
         if($(ele).val()<minNum){
@@ -433,5 +442,21 @@ function pub_edit(json){
                 }
             }
         })
+    }
+}
+//瀑布流显示商品
+var msnry_destory = false;// true 表示可以删除了
+var msnry;//瀑布流对象
+function masonryShow() {
+    var container = document.querySelector('.grid');
+    setTimeout(function () {
+        msnry = new Masonry( container);
+        msnry_destory = true;//表示创建masonry完成
+    },200)
+}
+function destoryMasonry() {
+    if(msnry_destory){
+        msnry_destory = false;
+        msnry.destroy();
     }
 }

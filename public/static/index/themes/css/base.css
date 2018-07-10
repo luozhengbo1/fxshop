@@ -22,7 +22,8 @@ a,a:hover,a:active,a:visited,a:link,a:focus{
     text-decoration: none;
 }
 body{
-    background-color: rgb(241, 241, 241);
+    /*background-color: rgb(241, 241, 241);*/
+    background: #e3e3e3;
     font-size: 1.2rem!important;
     padding-bottom: 50px;
     font-family: -apple-system,Helvetica,sans-serif;
