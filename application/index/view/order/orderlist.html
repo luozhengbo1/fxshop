@@ -12,7 +12,7 @@
    </ul>
     <div id="dataListWrap">
         <ul id="orderList" class="product-order-list mt50">
-           <li>
+          <!-- <li>
                 <div class="item-list pt10 module clear bg_lightgrey">
                     <div class="item-img">
                         <p> <img class="" src="//img.alicdn.com/bao/uploaded/i3/25555523/TB29PxDaZj_B1NjSZFHXXaDWpXa_!!25555523.jpg_200x200.jpg" /> </p>
@@ -50,16 +50,20 @@
                 </div>
                 <div class="module clear tr mt10 pr10" >
                     <button class="layui-btn layui-btn-primary layui-btn-sm">付款</button>
-                    <button class="layui-btn layui-btn-primary layui-btn-sm">取消订单</button>
+                    <button class="layui-btn layui-btn-primary layui-btn-sm">取1消订单</button>
                     <button class="layui-btn layui-btn-primary layui-btn-sm">联系卖家</button>
                     <button class="layui-btn layui-btn-primary layui-btn-sm">朋友代付</button>
                 </div>
                 <div class="bottomLine"></div>
-            </li>
+            </li>-->
         </ul>
     </div>
 </section>
 <script>
+    var url = {
+        orderList:"{:url('index/order/getOrderListApi')}",
+        pay:"{:url('index/order/pay')}",
+    }
     tabSwitch($('.nav-list-tab li'),loadOrderData)
     function loadOrderData(){
         var status = $('#navListTab').find('.active').data('status');
@@ -70,7 +74,7 @@
             page:1,
             size:4,
             ajaxData:{
-                url:"{:url('index/order/getOrderListApi')}",
+                url:url.orderList,
                 data:{status:status},
             },
             dealFun:dealData
@@ -80,8 +84,9 @@
         var html='';
         for(var i = 0; i < data.length; i++){
             var detail=data[i].goods_detail;
-            console.log(detail)
+            console.log(data[i])
             html +='<li>';
+            html +=' <input type="hidden" class="goodsData" data-goodsid="'+data[i].goods_id+'"  data-num="'+data[i].goods_num+'"  data-price="'+data[i].basic_price+'">';
             html +='    <div class="item-list pt10 module clear bg_lightgrey">';
             html +='        <div class="item-img">';
             html +='            <p> <img class="" src="'+detail.main_image+'" /> </p>';
@@ -132,6 +137,13 @@
         }
         return html;
     }
+<<<<<<< HEAD
+    function pay(orderid) {
+        pub_save({
+            url:url.pay,
+            return_url:"#",
+            data:{id:2134567},
+=======
     function pay(id) {
         $.ajax({
             url:"{:url('order/againPay')}",
@@ -141,6 +153,7 @@
                 console.log(res)
             }
 
+>>>>>>> upstream/master
         })
     }
 </script>
