@@ -31,8 +31,9 @@ MyEventDeal.prototype.init = function(options){
                 break;
             case 'popupConfirm':
                 //  console.log('加入购物车');//加入购物车
-                if(!validBuyNum()) return;
-                saveGoods();
+                if(!saveGoods()){
+                    return;
+                };
                 _this.showHidePopup($('#popupBuyArea'),false)
                 break;
             case 'showChosePup':

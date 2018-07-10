@@ -3,16 +3,16 @@
 {include file="Public/header-title"}
 <section>
    <ul class="product-order-list-tab nav-list-tab" id="navListTab">
-       <li  class="active"><a href="javascript:;">全部</a></li>
-       <li><a href="javascript:;">待付款</a></li>
-       <li><a href="javascript:;">待发货</a></li>
-       <li><a href="javascript:;">待收货</a></li>
-       <li><a href="javascript:;">待退款</a></li>
-       <li><a href="javascript:;">待评价</a></li>
+       <li  class="active"  data-status="all"><a href="javascript:;">全部</a></li>
+       <li data-status="0"><a href="javascript:;"  >待付款</a></li>
+       <li data-status="1"><a href="javascript:;"  >待发货</a></li>
+       <li data-status="2"><a href="javascript:;"  >待收货</a></li>
+       <li data-status="3"><a href="javascript:;"  >待退款</a></li>
+       <li data-status="4"><a href="javascript:;"  >待评价</a></li>
    </ul>
     <div id="dataListWrap">
         <ul id="orderList" class="product-order-list mt50">
-           <!-- <li>
+           <li>
                 <div class="item-list pt10 module clear bg_lightgrey">
                     <div class="item-img">
                         <p> <img class="" src="//img.alicdn.com/bao/uploaded/i3/25555523/TB29PxDaZj_B1NjSZFHXXaDWpXa_!!25555523.jpg_200x200.jpg" /> </p>
@@ -48,21 +48,21 @@
                         <span class="f14">(含运费<b>￥12.00</b>)</span>
                     </div>
                 </div>
-                <div class="module clear tr mt10" >
+                <div class="module clear tr mt10 pr10" >
                     <button class="layui-btn layui-btn-primary layui-btn-sm">付款</button>
                     <button class="layui-btn layui-btn-primary layui-btn-sm">取消订单</button>
                     <button class="layui-btn layui-btn-primary layui-btn-sm">联系卖家</button>
                     <button class="layui-btn layui-btn-primary layui-btn-sm">朋友代付</button>
                 </div>
                 <div class="bottomLine"></div>
-            </li>-->
+            </li>
         </ul>
     </div>
 </section>
 <script>
     tabSwitch($('.nav-list-tab li'),loadOrderData)
-    loadOrderData()
     function loadOrderData(){
+        var status = $('#navListTab').find('.active').data('status');
         initData('orderList');
         pageload({
             targetWarp:'dataListWrap',
@@ -70,8 +70,8 @@
             page:1,
             size:4,
             ajaxData:{
-                url:"{:url('index/index/return_json')}",
-                data:{},
+                url:"{:url('index/order/getOrderListApi')}",
+                data:{status:status},
             },
             dealFun:dealData
         });
@@ -79,54 +79,61 @@
     function dealData(data) {
         var html='';
         for(var i = 0; i < data.length; i++){
+            var detail=data[i].goods_detail;
+            console.log(detail)
             html +='<li>';
             html +='    <div class="item-list pt10 module clear bg_lightgrey">';
             html +='        <div class="item-img">';
-            html +='            <p> <img class="" src="//img.alicdn.com/bao/uploaded/i3/25555523/TB29PxDaZj_B1NjSZFHXXaDWpXa_!!25555523.jpg_200x200.jpg" /> </p>';
+            html +='            <p> <img class="" src="'+detail.main_image+'" /> </p>';
             html +='        </div>';
             html +='        <div class="item-info">';
-            html +='            <h3 class="title ellipsis">耐克男鞋2018新款正品女鞋情侣鞋夏季透气网面运动鞋跑步鞋812654 耐克男鞋2018新款正品女鞋情侣鞋夏季透气网面运动鞋跑步鞋812654</h3>';
-            html +='            <p class="sku f12 grey">颜色分类:女812655-011;鞋码:35.5</p>';
-            html +='            <ul class="order-serviceinfo">   <li>七天退换</li>   </ul>';
+            html +='            <h3 class="title ellipsis">'+detail.name+'</h3>';
+            html +='            <p class="sku f12 grey">'+data[i].sku_val+'</p>';
+            html +='            <ul class="order-serviceinfo">   <li>'+detail.after_sale+'</li>   </ul>';
             html +='        </div>';
             html +='        <div class="item-pay">';
             html +='            <div class="item-pay-data">';
-            html +='                <p class="price f14"> ￥349.00 </p>';
-            html +='                <p class="nums">x1</p>';
+            html +='                <p class="price f14"> ￥'+detail.basic_price+' </p>';
+            html +='                <p class="nums">x'+data[i].goods_num+'</p>';
             html +='            </div>';
             html +='        </div>';
             html +='    </div>';
-            html +='    <div class="module item clear bg_lightgrey p5" >';
-            html +='        <div class="item-info">';
-            html +='            <h3 class="title">保险服务 </h3>';
-            html +='            <p class="sku"></p>';
-            html +='        </div>';
-            html +='        <div class="fr pr10">';
-            html +='            <div class="item-pay-data">';
-            html +='                <p class="price f14"> ￥0.00 </p>';
-            html +='                <p class="nums">x1</p>';
-            html +='            </div>';
-            html +='        </div>';
-            html +='    </div>';
+         //   html +='    <div class="module item clear bg_lightgrey p5" >';
+         //   html +='        <div class="item-info">';
+         //   html +='            <h3 class="title">保险服务 </h3>';
+         //   html +='            <p class="sku"></p>';
+         //   html +='        </div>';
+         //   html +='        <div class="fr pr10">';
+         //   html +='            <div class="item-pay-data">';
+         //   html +='                <p class="price f14"> ￥0.00 </p>';
+         //   html +='                <p class="nums">x1</p>';
+         //   html +='            </div>';
+         //   html +='        </div>';
+         //   html +='    </div>';
             html +='    <div class="module  clear pr10 pt5" >';
             html +='        <div class="cont tr">';
-            html +='            <span class="f14">共<b>1</b>件商品</span>';
-            html +='            <span class="f14">合计:<b>￥71.90</b></span>';
-            html +='            <span class="f14">(含运费<b>￥12.00</b>)</span>';
+            html +='            <span class="f14">共<b>'+data[i].goods_num+'</b>件商品</span>';
+            html +='            <span class="f14">合计:<b>￥'+data[i].total_price+'</b></span>';
+            html +='            <span class="f14">(含运费<b>￥'+detail.postage+'</b>)</span>';
             html +='        </div>';
             html +='    </div>';
-            html +='    <div class="module clear tr mt10 mb10" >';
-            html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">付款</button>';
-            html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">取消订单</button>';
-           // html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">联系卖家</button>';
-            //html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">朋友代付</button>';
-            html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">申请售后</button>';
-            html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">评价</button>';
+            html +='    <div class="module clear tr mt10 mb10 pr10" >';
+            if(data[i].order_status ==0)//代付款
+                html +='        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="pay('+data[i].goods_id+')">付款</button>';
+            else if(data[i].order_status ==1 || detail.order_status ==2)// 代发货
+                html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">联系卖家</button>';
+            else if(data[i].order_status ==3)// 待退款
+                html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">申请售后</button>';
+            else if(data[i].order_status ==4)//待评价
+                html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">评价</button>';
             html +='    </div>';
             html +='     <div class="bottomLine"></div>';
             html +='</li>';
         }
         return html;
+    }
+    function pay(id) {
+
     }
 </script>
 {include file="Public/footer"}

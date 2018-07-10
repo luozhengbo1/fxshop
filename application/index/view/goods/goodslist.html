@@ -82,6 +82,7 @@
     }
     function getGoods(json) {
         initData('goodsList');
+        destoryMasonry();
         pageload({
             targetWarp:'dataListWrap',
             target:'goodsList',

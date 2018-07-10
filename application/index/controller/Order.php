@@ -14,7 +14,7 @@
         }
 
         #订单列表页面
-        public function  index()
+        public function  index($page=1,$size=10)
         {
             $this->view->assign('titleName', "订单主页");
             $orderList = Db::name('order')
@@ -22,6 +22,7 @@
                 ->join('fy_order_goods','fy_order_goods.order_id=o.order_id')
                 ->where(['openid'=>$this->userInfo['openid']])
                 ->order('o.create_time desc')
+                ->limit($page,$size)
                 ->select();
             foreach ($orderList as $k=>$v ){
                 $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
@@ -31,17 +32,26 @@
             return $this->view->fetch('orderList');
         }
         #获取订单商品接口
-        public function  getOrderListApi()
+        public function  getOrderListApi($page=1,$size=10)
         {
             if($this->request->isAjax()){
                 $data = $this->request->post();
-                $status = "";
-                $orderList = Db::name('order')
-                ->alias('o')
-                    ->join('fy_order_goods','fy_order_goods.order_id=o.order_id')
-                    ->where(['openid'=>$this->userInfo['openid'],'fy_order.status'=>$data['status']])
-                    ->order('o.create_time desc')
-                    ->select();
+                if($data['status']=='all'){
+                    $orderList = Db::name('order')
+                        ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
+                        ->where(['openid'=>$this->userInfo['openid']])
+                        ->order('fy_order.create_time desc')
+                        ->limit($page,$size)
+                        ->select();
+                }else{
+                    $orderList = Db::name('order')
+                        ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
+                        ->where(['openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status']])
+                        ->order('fy_order.create_time desc')
+                        ->limit($page,$size)
+                        ->select();
+                }
+
                 foreach ($orderList as $k=>$v ){
                     $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
                 }
