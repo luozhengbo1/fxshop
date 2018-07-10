@@ -165,7 +165,7 @@ function navTab(){
 function bannerSwiper(_class) {
     new Swiper('.'+_class, {
        /* autoplay: {
-           // delay: 6000,
+            delay: 6000,
             stopOnLastSlide: false,
             disableOnInteraction: false,
         },*/

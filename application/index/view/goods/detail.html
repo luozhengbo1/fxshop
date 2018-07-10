@@ -1,6 +1,7 @@
 {include file="Public/header-resource"}
 
-
+<link rel="stylesheet" type="text/css" href="__STATIC__/index//plugins/swiper3/css/swiper.css">
+<script src="__STATIC__/index//plugins/swiper.js"></script>
 <body class="title-top footer-boottom">
 {include file="Public/header-shop-title"}
 <!--商品图片轮播-->
@@ -71,8 +72,8 @@
                     <li style="padding: 2px">
                         <a class="clear" href="{:url('goods/detail',array('id'=>$vol['id']))}">
                             <img class="good-img" src="{$vol.main_image}">
-                            <p class="good-desc">{$vol.name} </p>
-                            <div class="mt5">
+                            <p class="good-desc ellipsis-oneline lh20">{$vol.name} </p>
+                            <div class="pl5">
                                 <p class="fl">已售{$vol.buy_num}</p>
                                 <p class="fr">
                                     <span class="goods-price">¥{$vol.basic_price}</span>

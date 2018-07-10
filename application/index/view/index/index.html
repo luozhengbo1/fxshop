@@ -1,6 +1,8 @@
 {include file="Public/header-resource"}
 <body class="footer-boottom">
 {include file="Public/header"}
+<link href="__STATIC__/index/plugins/swiper3.4/css/swiper.min.css">
+<script type="text/javascript"  src="__STATIC__/index/plugins/swiper3.4/js/swiper.js"></script>
 <!--轮播图1-->
 <div class="swiper-container header-banner">
 	<ul class="swiper-wrapper" >
@@ -98,15 +100,11 @@
 	<script>
         getNotice();
         loadGoodsData();
-        var swiper1= bannerSwiper('header-banner');
-        new Swiper('.announcement-banner', {
-            direction : 'vertical',
-            autoplay: {
-                delay: 5000,
-                stopOnLastSlide: false,
-                disableOnInteraction: false,
-            },
-        });
+        var headerBanner = new Swiper('.header-banner', {
+            autoplay: 6000,//可选选项，自动滑动
+            pagination : '.swiper-pagination',
+        })
+
         function dealData(data) {
             var html='';
             for(var i = 0; i < data.length; i++){
@@ -157,9 +155,15 @@
                     var html='';
                     if(code=='200'){
                         for(var i = 0; i < result.length; i++){
-                            html +=' <li class="swiper-slide"><a class="ellipsis-oneline" href="index/Notice/detail/id/'+result[i].id+'" >'+notEmpty(result[i].title)+'</a></li>';
+                            html +=' <li class="swiper-slide"><a class="ellipsis-oneline" href="'+urlConnect("{:url('Notice/detail')}",{id:result[i].id})+'" >'+notEmpty(result[i].title)+'</a></li>';
                         }
-                        $('#notice').empty().append(html)
+                        $('#notice').empty().append(html);
+                        setTimeout(function () {
+                            var mySwiper = new Swiper('.announcement-banner',{
+                                direction : 'vertical',
+                                autoplay: 2000,//可选选项，自动滑动
+                            })
+                        },100)
                     }
 
                 }

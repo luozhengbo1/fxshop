@@ -17,10 +17,11 @@
         function dealData(result) {
             var html='';
             for(var i = 0; i < result.length; i++){
+               // alert(result[i].create_time)
                 html +='<li class="mt10">';
                 html +='    <a href="'+urlConnect("{:url('notice/detail')}",{id:result[i].id}) +'">'
-                html +='        <p class="grey tc h50 lh50">'+new Date(result[i].create_time).Format("yyyy-MM-dd hh:mm:ss")+'</p>';
-                html +='        <p class="grey h40 lh40 bg_white">【公告】'+result[i].title+'！</p>';
+                html +='        <p class="grey tc h50 lh50">'+result[i].create_time+'</p>';
+                html +='        <p class="grey h40 lh40 bg_white">【公告】'+result[i].title+'</p>';
                 html +='    </a>';
                 html +='</li>';
             }
