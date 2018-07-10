@@ -119,7 +119,7 @@
             html +='    </div>';
             html +='    <div class="module clear tr mt10 mb10 pr10" >';
             if(data[i].order_status ==0)//代付款
-                html +='        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="pay('+data[i].goods_id+')">付款</button>';
+                html +='        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="pay('+data[i].order_id+')">付款</button>';
             else if(data[i].order_status ==1 || detail.order_status ==2)// 代发货
                 html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">联系卖家</button>';
             else if(data[i].order_status ==3)// 待退款
@@ -133,7 +133,15 @@
         return html;
     }
     function pay(id) {
+        $.ajax({
+            url:"{:url('order/againPay')}",
+            type:'post',
+            data:{order_id:id},
+            success:function (res) {
+                console.log(res)
+            }
 
+        })
     }
 </script>
 {include file="Public/footer"}

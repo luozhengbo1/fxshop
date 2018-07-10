@@ -36,7 +36,6 @@ class Wechatpay extends Controller
             $orderWhere = ["order_id" => $orderInfo['out_trade_no'] ];
             $update = ['pay_status' => 1, 'pay_time' => time(),'order_status'=>1];
             $res = Db::name("order")->where($orderWhere)->update($update);
-            # 获取店铺打印机信息，打印信息广播到所有开启的打印机
         }
         exit;
     }
