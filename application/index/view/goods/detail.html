@@ -61,14 +61,14 @@
 <!--商品推荐-->
 <a name="guess-your-love"></a>
 <div class="module-hot-goods guess-your-love">
-    <p class="title mt10">猜你喜欢</p>
+    <p class="item-title mt10">猜你喜欢</p>
     <div class="swiper-container love-goods-banner">
         <div class="swiper-wrapper" >
             {volist name="guestGoods" id="vo"}
             <div class="swiper-slide">
                 <ul class="goods-list clear">
                     {volist name="vo" id="vol"}
-                    <li>
+                    <li style="padding: 2px">
                         <a class="clear" href="{:url('goods/detail',array('id'=>$vol['id']))}">
                             <img class="good-img" src="{$vol.main_image}">
                             <p class="good-desc">{$vol.name} </p>
