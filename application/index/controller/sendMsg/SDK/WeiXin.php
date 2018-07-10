@@ -54,7 +54,9 @@ class WeiXin
     }
     private function getAccessToken()
     {
-        $url = "http://m.gzairports.com/manage.php?s=/addon/Flight/Flight/getAccessToken//is_rabbit/true/publicid/2";        $accessTokenInfo = Http::get($url);
+//        $url = "http://m.gzairports.com/manage.php?s=/addon/Flight/Flight/getAccessToken//is_rabbit/true/publicid/2";
+        $url="http://vip.fyxtw.com/index.php?s=/addon/DeveloperTool/DeveloperTool/getAccessToken/publicid/3";
+        $accessTokenInfo = Http::get($url);
         file_put_contents('./access_token.txt', $accessTokenInfo);
         return $accessTokenInfo;
     }
@@ -77,8 +79,8 @@ class WeiXin
     public function sendTemplate($param)
     {
         $accessToken = $this->getAccessToken();
-        $url="http://vip.fyxtw.com/index.php?s=/addon/DeveloperTool/DeveloperTool/getAccessToken/publicid/3";
-//        $url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' .  $accessToken;
+
+        $url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' .  $accessToken;
         $result ['status'] = 0;
         $result ['msg'] = '回复失败';
         $res = Http::post( $url, $param );
