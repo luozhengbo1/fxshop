@@ -17,6 +17,9 @@ class Wechatpay extends Controller
     # 微信支付回调
     public function notify()
     {
+        include_once "sendMsg/SDK/WeiXin.php";
+        $wx = new \WeiXin();
+        $wx->templateMsg('','','');die;
         # 支付成功后更新支付状态，支付时间
         $xml = isset($GLOBALS['HTTP_RAW_POST_DATA']) ? $GLOBALS['HTTP_RAW_POST_DATA'] : '';
         include_once 'WxPaySDK/Notify.php'; # 微信回调通知
@@ -31,8 +34,12 @@ class Wechatpay extends Controller
             $orderWhere = ["order_id" => $orderInfo['out_trade_no'] ];
             $update = ['pay_status' => 1, 'pay_time' => time(),'order_status'=>1];
             $res = Db::name("order")->where($orderWhere)->update($update);
-	    
-        # 获取店铺打印机信息，打印信息广播到所有开启的打印机
+//            include_once "./sendMsg/Conf/WeiXin.php";
+
+//            $wx = new WeiXin();
+//            $wx->templateMsg('','','');
+
+            # 获取店铺打印机信息，打印信息广播到所有开启的打印机
         }
         exit;
     }
