@@ -1,0 +1,660 @@
+{extend name="template/base" /}
+{block name="content"}
+<style>
+    .layui-layer-error{
+        background: #bc0505;
+        color: white;
+        border-radius: 8px;
+    }
+</style>
+<div class="page-container bgf">
+    <form class="form form-horizontal" id="form" method="post" action="{:\\think\\Request::instance()->baseUrl()}">
+        <input type="hidden" name="id" value="{$vo.id ?? ''}">
+        <?php if($_SESSION['think']['auth_id']==1){?>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>所属商户：</label>
+            <div class="formControls col-xs-6 col-sm-7">
+                <div class="select-box">
+                    <select name="user_id" class="select" datatype="*" nullmsg="请选择所属商户" errormsg="请选择所属商户">
+                        {volist name="userList" id="vo1"}
+                        <option value="{$vo1.id}">{$vo1.account}&nbsp;&nbsp;&nbsp;&nbsp;{$vo1.realname}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+        <?php }  ?>
+         <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>商品名称：</label>
+            <div class="formControls col-xs-6 col-sm-7">
+                <input type="text" class="input-text" placeholder="商品名称" name="name" value="{$vo.name ?? ''}"  datatype="*" nullmsg="请输入商品名称" errormsg="请输入商品名称">
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2">商品副标题：</label>
+            <div class="formControls col-xs-6 col-sm-7">
+                <textarea class="textarea" placeholder="" name="subtitle" onKeyUp="textarealength(this, 100)">{$vo.subtitle ?? ''}</textarea>
+                <p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+       <div class="page-container">
+            <div class="form form-horizontal">
+                <div class="row cl">
+                    <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>商品主图：</label>
+                    <div class="formControls col-xs-6 col-sm-7">
+                        <input type="text" class="input-text" id="upload" name="main_image" readonly  placeholder="请点击后面的上传按钮" datatype="*" nullmsg="请填写图片url" value="{$vo.pic ?? ''}" style="width: 70%">
+                        <button type="button" class="btn btn-primary radius" onclick="layer_open('文件上传','{:\\think\\Url::build(\'Upload/index\', [\'id\' => \'upload\'])}')">上传</button>
+                        <a onclick="$(this).attr('href', $('#upload').val())" type="button" class="btn btn-success radius" data-lightbox="preview">预览</a>
+                    </div>
+                    <div class="col-xs-3 col-sm-2"></div>
+                </div>
+            </div>
+            <div id="markdown" class="mt-20"></div>
+        </div>
+
+        <!--<div class="row cl price-one">-->
+            <!--<label class="form-label col-xs-3 col-sm-2">价格：</label>-->
+            <!--<div class="formControls col-xs-6 col-sm-7">-->
+                <!--<input type="number" class="input-text" placeholder="价格" style="width:150px;" name="price" value="{$vo.price ?? ''}" >-->
+            <!--</div>-->
+            <!--<div class="col-xs-3 col-sm-2"></div>-->
+        <!--</div>-->
+        <!--<div class="row cl price-two">-->
+            <!--<label class="form-label col-xs-3 col-sm-2">积分价：</label>-->
+            <!--<div class="formControls col-xs-6 col-sm-7">-->
+                <!--<input type="number" class="input-text" placeholder="积分价" style="width:150px;" name="socre" value="{$vo.socre ?? ''}" >-->
+            <!--</div>-->
+            <!--<div class="col-xs-3 col-sm-2"></div>-->
+        <!--</div>-->
+        <!--<div class="row cl price-three">-->
+            <!--<label class="form-label col-xs-3 col-sm-2">积分+价格：</label>-->
+            <!--<div class="formControls col-xs-6 col-sm-7">-->
+                <!--<input type="text" class="input-text" placeholder="严格使用积分+价格表示，否则将无效。" name="score_price" value="{$vo.score_price ?? ''}" >-->
+            <!--</div>-->
+            <!--<div class="col-xs-3 col-sm-2"></div>-->
+        <!--</div>-->
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>分类名称：</label>
+            <div class="formControls col-xs-6 col-sm-7">
+                <div class="select-box">
+                    <select name="goods_class_id" class="select" datatype="*" nullmsg="请选择商品分类" errormsg="请选择商品分类">
+                        {volist name="goodsClassList" id="vo"}
+                        <option value="{$vo.id}">{$vo.name}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>品牌名称：</label>
+            <div class="formControls col-xs-6 col-sm-7">
+                <div class="select-box">
+                    <select name="goods_brand_id" class="select" datatype="*" nullmsg="请选择商品品牌" errormsg="请选择商品品牌">
+                        {volist name="brandList" id="vo"}
+                        <option value="{$vo.id}">{$vo.name}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>上架展示区：</label>
+            <div class="formControls col-xs-6 col-sm-7 skin-minimal">
+                <div class="radio-box">
+                    <input type="radio" name="show_area" id="status-1" {$vo.show_area==1?'checked':''}  value="1" datatype="*" nullmsg="请选择商品状态" errormsg="">
+                    <label for="status-1">限时抢购</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="show_area" id="status-0" {$vo.show_area==2?'checked':''}  value="2" datatype="*" nullmsg="请选择商品状态" errormsg="">
+                    <label for="status-0">积分商城</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="show_area" id="status-1" {$vo.show_area==3?'checked':''}  value="3" datatype="*" nullmsg="请选择商品状态" errormsg="">
+                    <label for="status-1">日常售卖</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="show_area" id="status-0" {$vo.show_area==4?'checked':''} value="4" datatype="*" nullmsg="请选择商品状态" errormsg="">
+                    <label for="status-0">热销商品</label>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+         <div class="row cl start_date"  style="display: none;">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>开售时间：</label>
+            <div class="formControls col-xs-6 col-sm-7">
+                <input type="text" class="input-text Wdate" placeholder="开售时间" name="start_date" value="{$vo.start_date ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}  nullmsg="请输入开售时间" errormsg="请输入开售时间">
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+        <div class="row cl start_date" style="display: none;" >
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>截止时间：</label>
+            <div class="formControls col-xs-6 col-sm-7">
+                <input type="text" class="input-text Wdate" placeholder="截止时间" name="end_date" value="{$vo.end_date ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}   nullmsg="请输入截止时间" errormsg="请输入截止时间">
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+         <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>库存类型：</label>
+            <div class="formControls col-xs-6 col-sm-7 skin-minimal">
+                <div class="radio-box">
+                    <input type="radio" name="store_type"   {$vo.store_type==1?'checked':''} id="status-1" value="1" datatype="*" nullmsg="请选择商品状态" errormsg="">
+                    <label for="status-1">下单减库存</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="store_type" {$vo.store_type==2?'checked':''}  id="status-0" value="2" datatype="*" nullmsg="请选择商品状态" errormsg="">
+                    <label for="status-0">拍下减库存</label>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+         <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>是否包邮：</label>
+            <div class="formControls col-xs-6 col-sm-7 skin-minimal">
+                <div class="radio-box">
+                    <input type="radio" name="free_type" {$vo.free_type==1?'checked':''} id="status-1" value="1" datatype="*" nullmsg="请选择商品状态" errormsg="">
+                    <label for="status-1">是</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="free_type" {$vo.free_type==0?'checked':''} id="status-0" value="0" datatype="*" nullmsg="请选择商品状态" errormsg="">
+                    <label for="status-0">否</label>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+         <div class="row cl postage" style="display:none;">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>邮费：</label>
+            <div class="formControls col-xs-6 col-sm-7">
+                <input type="number" class="input-text" placeholder="请输入邮费" name="postage" value="{$vo.postage ?? ''}"  nullmsg="请输入邮费" errormsg="请输入邮费">
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>返现积分：</label>
+            <div class="formControls col-xs-6 col-sm-7">
+                <input type="number" class="input-text" placeholder="返现积分" name="return_score" value="{$vo.return_score ?? ''}"  datatype="*" nullmsg="请输入返现积分" errormsg="请输入返现积分">
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>商品状态：</label>
+            <div class="formControls col-xs-6 col-sm-7 skin-minimal">
+                <div class="radio-box">
+                    <input type="radio" name="status" {$vo.status==1?'checked':''} id="status-1" value="1" datatype="*" nullmsg="请选择商品状态" errormsg="请选择商品状态">
+                    <label for="status-1">上架</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="status" {$vo.status===0?'checked':''}  id="status-0" value="0" datatype="*" nullmsg="请选择商品状态" errormsg="请选择商品状态">
+                    <label for="status-0">仓库</label>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2">商品轮播图：</label>
+           <div class="layui-upload">
+                <button type="button" class="layui-btn" id="test2">多图片上传</button>
+                <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;width: 50%;margin-left: 25%;">
+                    预览图：
+                    <div class="layui-upload-list" id="demo2"></div>
+                </blockquote>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2">排序值：</label>
+            <div class="formControls col-xs-6 col-sm-7">
+                <input type="text" class="input-text" placeholder="排序值" name="orderby" value="{$vo.orderby ?? '10'}" >
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>重量：</label>
+            <div class="formControls col-xs-6 col-sm-7">
+                <input type="text" class="input-text" placeholder="重量" name="goods_weight" value="{$vo.goods_weight ?? '200'}"  datatype="*" nullmsg="请输入重量" errormsg="请输入重量">
+            </div>
+            <div class="col-xs-3 col-sm-2">单位g</div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>是否是实物：</label>
+            <div class="formControls col-xs-6 col-sm-7 skin-minimal">
+                <div class="radio-box">
+                    <input type="radio" name="is_real"  checked id="is_real-" value="1" datatype="*" nullmsg="请选择实物" errormsg="请选择实物">
+                    <label for="is_real-">是</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="is_real" id="is_real-" value="0" datatype="*" nullmsg="请选择实物" errormsg="请选择实物">
+                    <label for="is_real-">否</label>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+         <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>售后保障信息：</label>
+            <div class="formControls col-xs-6 col-sm-7 skin-minimal">
+                <textarea name="after_sale" class="textarea" placeholder=""  onKeyUp="textarealength(this, 300)">1、提供发票2、退货承诺 3、报修服务</textarea>
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2">商品属性：</label>
+            <div class="formControls col-xs-6 col-sm-7 skin-minimal">
+                <table class="table table-border table-bordered table-hover table-bg mt-20">
+                    <thead>
+                        <tr id="">
+                            <th width="100" rowspan="100000"><a href="javascript:;" class="btn" onclick="addth(this,1)">新增属性名</a></th>
+                        </tr>
+                    </thead>
+                    <tbody  id="">
+                        <tr id="td">
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>商品规格：</label>
+            <div class="formControls col-xs-6 col-sm-7 skin-minimal bgwhite borderd pad20">
+                <div class="specifications mb10" id="specifications">
+                </div>
+                <div class="borderdashed p10 tr">
+                    <a class="btn btn-secondary radius mr-5" id="btn-newcataddspec" onclick="newCatAddSpec()" > + 新增规格</a>
+                </div>
+                <div class="f14 pt10">
+                    <p>销售规格<span class="grey"> （该类目下：颜色尺寸，请全选或不选，如果只选一部分无法保证库存及价格）</span></p>
+                    <div class="pt10 pb10">
+                        <span>批量填充</span>
+                        <input class="form_control w80 mr10" type="text" placeholder="价格" id="priceSet">
+                        <input class="form_control w80 mr10" type="text" placeholder="数量" id="numSet">
+                        <input class="form_control w80  mr10" type="text" placeholder="编码" id="codeSet">
+                        <input class="form_control w80  mr20" type="text" placeholder="条形码" id="barSet">
+                        <a href="javascript:;" onclick="SetAll()" class="btn btn-success radius mr-5">
+                            <i class="Hui-iconfont"></i> 确定</a>
+
+                    </div>
+                </div>
+                <div id="createTable">
+
+                </div>
+                <!--<a href="javascript:;" onclick="GetSaleProperty()" class="btn btn-success radius mr-5">-->
+                    <!--<i class="Hui-iconfont"></i> 提交</a>-->
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+        <!--<div class="row cl">-->
+            <!--<label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>商品原价：</label>-->
+            <!--<div class="formControls col-xs-6 col-sm-7">-->
+                <!--<input type="number" class="input-text" placeholder="商品原价" name="original_price" value="{$vo.original_price ?? ''}"  datatype="*" nullmsg="请输入原价" errormsg="请输入原价">-->
+            <!--</div>-->
+            <!--<div class="col-xs-3 col-sm-2"></div>-->
+        <!--</div>-->
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>结算类型：</label>
+            <div class="formControls col-xs-6 col-sm-7 skin-minimal">
+                <div class="radio-box">
+                    <input type="radio" checked name="settlement_type" style="width:150px;" id="status-0" value="1" datatype="*" nullmsg="请选择商品状态" errormsg="">
+                    <label for="status-0">现价</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="settlement_type" id="status-1" style="width:150px;" value="2" datatype="*" nullmsg="请选择商品状态" errormsg="">
+                    <label for="status-1">积分价</label>
+                </div>
+                <!--<div class="radio-box">-->
+                    <!--<input type="radio" name="settlement_type" id="status-0" value="3" datatype="*" nullmsg="请选择商品状态" errormsg="">-->
+                    <!--<label for="status-0">积分+现价</label>-->
+                <!--</div>-->
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>商品销售属性：</label>
+            <div class="formControls col-xs-6 col-sm-7 skin-minimal bgwhite borderd pad20">
+                <table class="table table-border table-bordered table-hover table-bg mt-20"  id="productSale">
+                    <tr>
+                        <td><span class="c-red">*</span>原价：</td>
+                        <td><input class="form_control w80" type="text" name="original_price" datatype="*" nullmsg="请填写原价" errormsg=""></td>
+                        <td>基础销量：</td>
+                        <td><input type="number" name="buy_num"></td>
+                    </tr>
+                    <tr>
+                        <td>商家编码：</td>
+                        <td><input class="form_control w80"  type="text" name="shop_code"></td>
+                        <td >商品条形码：</td>
+                        <td><input class="form_control w80"  type="text" name="bar_code"></td>
+                    </tr>
+                    <tr id="priceShow">
+                        <td><span class="c-red">*</span>现价：</td>
+                        <td><input class="form_control w80" name="price"  type="number"></td>
+                        <td><span class="c-red">*</span>总库存：</td>
+                        <td><input class="form_control w80"  type="number" name="store"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+         <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>商品详情：</label>
+            <div class="formControls col-xs-6 col-sm-7 skin-minimal">
+                <div id="editor" type="text/plain" name="detail" style="text-align:center;width:800px;">{$vo.detail ?? ''}</div>
+            </div>
+            <div class="col-xs-3 col-sm-2"></div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <button type="submit"  onclick="GetSaleProperty()" class="btn btn-primary radius">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
+                <button type="button" class="btn btn-default radius ml-20" onClick="layer_close();">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+{/block}
+{block name="style"}
+<link rel="stylesheet" href="__LIB__/lightbox2/css/lightbox.min.css">
+<link rel="stylesheet" href="__STATIC__/css/layui/css/layui.css" media="all" />
+
+{/block}
+{block name="script"}
+<script type="text/javascript" src="__LIB__/showdown/1.4.2/showdown.min.js"></script>
+<script>window.UEDITOR_HOME_URL = '__LIB__/ueditor/1.4.3/'</script>
+<script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="__LIB__/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="__STATIC__/js/setProductInfo.js"></script>
+<script>
+
+    //删除规格属性
+
+    function removeProperty(_this){
+        $(_this).parents('.propertyWrap').remove();
+        refeashskus();
+        //判断删除的是不是最后一个规格属性
+
+
+    }
+    //删除单个规格属性值
+    function deletePropVal(_this){
+        var txtDiv = $(_this).parents('.propertyValWrap').find('.txtDiv');
+        if( txtDiv.size()<=1){
+           // $(_this).parents('.propertyWrap').find('.PId_Title').attr('disabled','disabled');//
+            $(_this).parents('.propertyWrap').remove();
+        }else{
+            $(_this).parents('.labelwidth').remove();
+        }
+        refeashskus();
+    }
+    //添加单个规格属性值
+    function addpropertyvalue(_this){
+        var $this = $(_this),
+            $propertyName =  $this.parents('.propertyWrap').find('.propertyName'),
+            $thisVal =  $this.parents('.propertyWrap').find('.propertyVal');
+        if(!validSku(_this)){
+            return ;
+        }
+        var html ='';
+        html +='<div class="labelwidth">';
+        html +='    <label class="active">';
+        html +='        <span class="txtDiv" data-pName="'+$propertyName.val()+'" data-pValue="'+$thisVal.val()+'">'+$thisVal.val()+'</span>';
+        html +='        <i class="del-icon" style="display:block;" onclick="deletePropVal(this)">x</i>';
+        html +='    </label>';
+        html +='</div>'
+        $(_this).parents('.propertyValWrap').find('.laber-wrap').append(html);
+        $thisVal.val('');
+       // $target.removeAttr('disabled');
+        $thisVal.parents('.propertyWrap').find('.PId_Title').removeAttr('disabled');//
+        refeashskus();
+    }
+    //商品规格添加
+    function newCatAddSpec() {
+
+        if(isDisabled()){
+            ShowMsg('请输入规格相关信息再加入下一个');
+            return;
+        }
+        var html ='';
+        html +='<div class="pb20 pt10 borderb w100p propertyWrap">';
+        html +='    <h2 class="PId_Title mb10 clear" disabled="disabled" >';
+        html +='        <div class="fl"><input type="text"  class="form_control w120 propertyName"></div>';
+        html +='        <div class="fr">';
+        html +='            <a href="javascript:;" onclick="removeProperty(this)" class="btn btn-danger radius mr-5 remove"><i class="Hui-iconfont"></i> 删除</a>';
+        html +='        </div>';
+        html +='    </h2>';
+        html +='    <div class="propertyValWrap" style="width: 100% !important;">';
+        html +='        <div class="laber-wrap"></div>';
+        html +='        <div style="display: inline-block">';
+        html +='            <label class="mr10 mb10">';
+        html +='                <input type="text" class="form_control w100 propertyVal" placeholder="规格值">';
+        html +='                <a class="add-cion-btn" href="javascript:;" onclick="addpropertyvalue(this);" >+</a>';
+        html +='            </label>';
+        html +='        </div>';
+        html +='    </div>';
+        html +='</div>';
+      //  $target.attr('disabled','disabled');
+        $("#specifications").append(html);
+    }
+
+    function refeashskus() {
+        ChangeSku().Creat_Table();
+        SetValue();
+    }
+    //判断是否可以添加下一个商品规格 ture 表示不能添加
+    function isDisabled() {
+        var flag=false;
+        $('.PId_Title').each(function (index,ele) {
+            if($(ele).attr('disabled') =='disabled'){
+                flag = true;
+            }
+        });
+        return flag;
+    }
+
+     var ue = UE.getEditor('editor',{
+            serverUrl:'{:\\think\\Url::build("Ueditor/index")}'
+        });
+    $(function () {
+        var converter = new showdown.Converter(),
+                text      = $("#markdown_tpl").html();
+        $("#markdown").html(converter.makeHtml(text));
+    })
+
+    // 属性表格js
+    function addth(obj, flag){
+        if(flag==1){
+             $(obj).parent().before('<th width="100"><input type="text" name="routine_key[]" value=""/></th>')
+             $('#td').append('<td width="100"><input type="text" name="routine_val[]" value=""/></td>')
+        }
+        else{
+            $(obj).parent().before('<th width="100"><input type="text" name="guige_name[]" value=""/></th>')
+             var num=$('#tbody').children().length-1;
+             console.log(num)
+             for(var i=1; i<=num; i++){
+                $('#tbody tr:nth-child('+i+')').append('<td width="100"><input type="text" name="guige_val[]" value=""/></td>')
+             }
+        }
+        
+    }
+    function addtd(obj)
+    {
+        var th=$('#th').children().length-3;
+        var str='<tr><td width="100"><input type="text" name="goods_code[]" value=""/></td><td width="100"><input type="text" name="store[]" value=""/></td>';
+        for(var i=0;i<th;i++){
+            str+='<td width="100"><input type="text" name="guige_val[]" value=""/></td>';
+        }
+        str+='</tr>'
+        $('#tr').before(str);
+    }
+    // 限时抢购模块
+    $('input[name="show_area"]').click(function(){
+        if( $(this).val()==1 ){
+            $('.start_date').css('display','block')
+        }else{
+            $('.start_date').css('display','none')
+        }
+    })
+</script>
+<script type="text/javascript" src="__LIB__/Validform/5.3.2/Validform.min.js"></script>
+<script src="__LIB__/lightbox2/js/lightbox.min.js"></script>
+<script type="text/javascript" src="__LIB__/My97DatePicker/WdatePicker.js"></script>
+
+<script>
+
+    $(function () {
+        $("[name='status'][value='{$vo.status ?? ''}']").prop("checked", true);
+        $("[name='is_real'][value='{$vo.is_real ?? '1#0'}']").prop("checked", true);
+        $("[name='settlement_type']").find("[value='{$vo.settlement_type ?? ''}']").attr("selected", true);
+        $("[name='goods_class_id']").find("[value='{$vo.goods_class_id ?? ''}']").attr("selected", true);
+        $("[name='goods_brand_id']").find("[value='{$vo.goods_brand_id ?? ''}']").attr("selected", true);
+        $("[name='show_area']").find("[value='{$vo.show_area ?? ''}']").attr("selected", true);
+
+        $('.skin-minimal input').iCheck({
+            checkboxClass: 'icheckbox-blue',
+            radioClass: 'iradio-blue',
+            increaseArea: '20%'
+        });
+        var $form= $('#form');
+           $form.Validform({
+                tiptype: 2,
+                showAllError: true,
+                beforeSubmit:function(curform){
+                     //结算类型 1=现价 2=积分价 3=现价+积分
+                    // if( $('input[name="settlement_type"]:checked').val()==1){
+                    //     if(!$('input[name="price"]').val()){
+                    //         alert('请填写现价');
+                    //         $('input[name="price"]').focus();
+                    //         return false;
+                    //     }
+                    // }else if( $('input[name="settlement_type"]:checked').val()==2 ){
+                    //     if(!$('input[name="price"]').val()){
+                    //         alert('请填写积分价');
+                    //         $('input[name="score"]').focus();
+                    //         return false;
+                    //     }
+                    // }else if( $('input[name="settlement_type"]:checked').val()==3 ){
+                    //         if(!$('input[name="score_price"]').val()){
+                    //             alert('请填写积分+现价');
+                    //             $('input[name="score_price"]').focus();
+                    //             return false;
+                    //         }
+                    // }
+                    // 限时抢购
+                    if( $('input[name="show_area"]:checked').val()==1){
+                        if(!$('input[name="start_date"]').val() ){
+                            alert('请填写开售时间');
+                            $('input[name="start_date"]').focus();
+                            return false;
+                        }
+                        if(!$('input[name="end_date"]').val() ){
+                            alert('请填写截止时间');
+                            $('input[name="end_date"]').focus();
+                            return false;
+                        }
+
+                        if( $('input[name="end_date"]').val() <= $('input[name="start_date"]').val() ){
+                            alert('截止时间不能小于开售时间');
+                            $('input[name="end_date"]').focus();
+                            return false;
+                        }
+                    }
+
+                    //邮费
+                    if( $('input[name="free_type"]:checked').val()==0){
+                        if(!$('input[name="postage"]').val()){
+                            alert('请填写邮费');
+                            $('input[name="postage"]').focus();
+                            return false;
+                        }
+                    }
+                    var data = $("form").serialize();
+                    var sku = GetSaleProperty();
+                    data += ('&skuZuheData='+ JSON.stringify(sku));
+                    data += ('&propty_name_val='+  JSON.stringify(arrayInforList));
+                    console.log(data);
+                    $.ajax({
+                        type:'post',
+                        data:data,//$form.serialize(),
+                        url:$form.attr('action'),
+                        success:function(ret){
+                            if(ret.code==200){
+                                alert(ret.msg)
+                            }
+                            console.log(ret);
+                        }
+                    })
+                    return false;
+                },
+                callback: function (ret){
+                    //ajax_progress(ret);
+                },
+            });
+      
+        $('.price-two').css('display','none')
+        $('.price-three').css('display','none')
+        $('input[name=settlement_type]').click(function(val){
+            if($(this).val()==1){
+                $('.price-one').css('display','block')
+                $('.price-two').css('display','none')
+                $('.price-three').css('display','none')
+            }else if($(this).val()==2){
+                $('.price-one').css('display','none')
+                $('.price-two').css('display','block')
+                $('.price-three').css('display','none')
+            }else if($(this).val()==3){
+                $('.price-one').css('display','none')
+                $('.price-two').css('display','none')
+                $('.price-three').css('display','block')
+            }
+        })
+        $('input[name=free_type]').click(function(){
+            if($(this).val()==1){
+                $('.postage').css('display','none')
+            }else{
+                $('.postage').css('display','block')
+            }
+        })
+    })
+</script>
+<!-- 多图上传js -->
+<script type="text/javascript" src="__STATIC__/js/layui.js"></script>
+        <script>
+            layui.use(['form','upload'], function() {
+                var form = layui.form,
+                    layer = layui.layer,
+                    upload = layui.upload,                  
+                    $ = layui.jquery;       
+                //多图片上传
+                //多图片上传
+                  upload.render({
+                    elem: '#test2'
+                    ,url: "{:url('admin/upload/upload')}"
+                    ,multiple: true
+                    ,before: function(obj){
+                      //预读本地文件示例，不支持ie8
+                      obj.preview(function(index, file, result){
+                        $('#demo2').append('<img src="'+ result +'" style="width:100px;height:100px;" alt="'+ file.name +'" class="layui-upload-img"><a href="javascript:;" class="layui-btn layui-btn-primary" onclick="return delPic(this)">删除该图</a>')
+                      });
+                    }
+                    ,done: function(data){
+                      //上传完毕
+                      // console.log(data)
+                      console.log(data.data.name)
+                        $('#demo2').append('<input type="hidden" name="pic[]" value="'+data.data.name+'">')
+                    
+                    }
+                  });
+
+            })
+    function delPic(obj){
+        $(obj).prev().remove();
+        $(obj).prev().remove().prev().remove();
+        $(obj).remove();
+    }
+</script>
+{/block}

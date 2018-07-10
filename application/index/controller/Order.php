@@ -17,38 +17,28 @@
         public function  index($page=1,$size=10)
         {
             $this->view->assign('titleName', "订单主页");
-            $orderList = Db::name('order')
-                ->alias('o')
-                ->join('fy_order_goods','fy_order_goods.order_id=o.order_id')
-                ->where(['openid'=>$this->userInfo['openid']])
-                ->order('o.create_time desc')
-                ->limit($page,$size)
-                ->select();
-            foreach ($orderList as $k=>$v ){
-                $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
-            }
-            $this->view->assign('orderList',$orderList);
-//            dump($orderList);
-            return $this->view->fetch('orderList');
+            return $this->view->fetch('orderlist');
         }
         #获取订单商品接口
-        public function  getOrderListApi($page=1,$size=10)
+        public function  getOrderListApi()
         {
             if($this->request->isAjax()){
+                $page = $this->request->param('page')?$this->request->param('page'):1;
+                $size = $this->request->param('size')?$this->request->param('size'):4;
                 $data = $this->request->post();
                 if($data['status']=='all'){
                     $orderList = Db::name('order')
                         ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
                         ->where(['openid'=>$this->userInfo['openid']])
                         ->order('fy_order.create_time desc')
-                        ->limit($page,$size)
+                        ->page($page,$size)
                         ->select();
                 }else{
                     $orderList = Db::name('order')
                         ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
                         ->where(['openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status']])
                         ->order('fy_order.create_time desc')
-                        ->limit($page,$size)
+                        ->page($page,$size)
                         ->select();
                 }
 
@@ -72,7 +62,7 @@
                 $storeData =  Session::get('storeData '.$this->userInfo['openid']);
 //                dump($storeData);die;
                 if(empty($storeData) ){
-                    $this->error('什么也没有','index/index/index');
+                    $this->error('什么也没有','index/order/index');
                     exit;
                 }
                 foreach ($storeData as $k=>$v){
@@ -159,7 +149,7 @@
                 $input->SetTime_start(date("YmdHis"));
                 $input->SetTime_expire(date("YmdHis", time() + 600));
                 $input->SetGoods_tag("");
-                $input->SetNotify_url("http://".$_SERVER['HTTP_HOST']."/index.php/index/WeChatPay/notify");
+                $input->SetNotify_url("http://".$_SERVER['HTTP_HOST']."/index.php/index/wechatpay/notify");
                 $input->SetTrade_type("JSAPI");
                 $input->SetOpenid($this->userInfo['openid']);
                 $unifiedOrder = \WxPayApi::unifiedOrder($input);
@@ -199,6 +189,18 @@
                 }
             }
 
+        }
+
+        public function againPay()
+        {
+            if($this->request->isAjax()){
+                $data= $this->request->post();
+                if(!$data['id']){
+                    return ajax_return_error('缺少订单id');
+                }
+                $orderData = Db::name('order')->where(['id'=>$data['id']])->find();
+                return json($orderData);
+            }
         }
 
 

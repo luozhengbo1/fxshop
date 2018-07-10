@@ -4,8 +4,9 @@
 namespace app\index\controller;
 
 use think\Controller;
+use think\Db;
 
-class WxPayController extends Controller
+class Wechatpay extends Controller
 {
     public function __construct(){
         header("content-type:text/html;charset=utf-8");
@@ -16,6 +17,11 @@ class WxPayController extends Controller
     # 微信支付回调
     public function notify()
     {
+        #付款成功通知
+//        include_once "sendMsg/SDK/WeiXin.php";
+//        $wx = new \WeiXin();
+//        $wx->templateMsg('','','');
+//        die;
         # 支付成功后更新支付状态，支付时间
         $xml = isset($GLOBALS['HTTP_RAW_POST_DATA']) ? $GLOBALS['HTTP_RAW_POST_DATA'] : '';
         include_once 'WxPaySDK/Notify.php'; # 微信回调通知
@@ -25,11 +31,11 @@ class WxPayController extends Controller
         if (empty($orderInfo)) {
             file_put_contents("wx_pay_error.log",$xml."\r", 8);
         } else {
+            file_put_contents("wx_pay_success.log",$xml."\r", 8);
             # 订单id是微信统一下单接口生成的out_trade_no
-            $orderWhere = ["order_id" => $orderInfo['out_trade_no']];
+            $orderWhere = ["order_id" => $orderInfo['out_trade_no'] ];
             $update = ['pay_status' => 1, 'pay_time' => time(),'order_status'=>1];
             $res = Db::name("order")->where($orderWhere)->update($update);
-            # 获取店铺打印机信息，打印信息广播到所有开启的打印机
         }
         exit;
     }

@@ -137,11 +137,23 @@
         }
         return html;
     }
+<<<<<<< HEAD
     function pay(orderid) {
         pub_save({
             url:url.pay,
             return_url:"#",
             data:{id:2134567},
+=======
+    function pay(id) {
+        $.ajax({
+            url:"{:url('order/againPay')}",
+            type:'post',
+            data:{order_id:id},
+            success:function (res) {
+                console.log(res)
+            }
+
+>>>>>>> upstream/master
         })
     }
 </script>
