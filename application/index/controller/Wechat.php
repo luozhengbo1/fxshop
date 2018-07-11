@@ -49,6 +49,14 @@ class WeChat extends Controller
             $customer->insert($userInfo);
             //注册送10积分
             $customer->where('openid', $userInfo['openid'])->setField('score', 10);
+            //插入grade_id
+            $experience = Db::table('fy_customer')->field('experience')->where('openid', $userInfo['openid'])->find();
+            $grade = Db::table('fy_customer_grade')->select();
+            foreach ($grade as $item) {
+                if ($experience['experience'] >= $item['experience_start'] && $experience['experience'] <= $item['experience_end']) {
+                    Db::table('fy_customer')->where('openid', $userInfo['openid'])->setField('grade_id', $item['id']);
+                }
+            }
             //新增score日志记录
             $user = $customer->where('openid', $userInfo['openid'])->find();
             $time = time();
