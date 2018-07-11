@@ -14,7 +14,7 @@
         }
 
         #订单列表页面
-        public function  index($page=1,$size=10)
+        public function  index()
         {
             $this->view->assign('titleName', "订单主页");
             return $this->view->fetch('orderlist');
@@ -27,16 +27,18 @@
                 $size = $this->request->param('size')?$this->request->param('size'):4;
                 $data = $this->request->post();
                 if($data['status']=='all'){
+//                    dump($this->userInfo['openid']);die;
                     $orderList = Db::name('order')
                         ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-                        ->where(['openid'=>$this->userInfo['openid']])
+                        ->where(['fy_order.openid'=>$this->userInfo['openid']])
                         ->order('fy_order.create_time desc')
                         ->page($page,$size)
                         ->select();
+//                    echo Db::name('order')->getLastSql();
                 }else{
                     $orderList = Db::name('order')
                         ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-                        ->where(['openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status']])
+                        ->where(['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status']])
                         ->order('fy_order.create_time desc')
                         ->page($page,$size)
                         ->select();
@@ -154,18 +156,29 @@
                         "pay_status" => 0,#支付状态;0未付款;1已付款
                         "order_status" => 0,
                     );
+                    #添加上商户id
+                    foreach ($v as $val){
+                        $orderRow[$k]["user_id"] =Db::name('goods')->field('user_id')->where(['id'=> $val['goodsId']])->find()['user_id'];
+                    }
                 }
                 $orderAll['son_id']= join($sonId,',');
                 $orderGoods=[];
 
                 foreach ($data as $k=> $v){
                     $goodsData = Db::name('goods')->where(['id'=>$v['goodsId']])->find();
-                    $orderGoods[$k]['goodsId'] = $v['goodsId'];
+                    $orderGoods[$k]['goods_id'] = $v['goodsId'];
                     $orderGoods[$k]['goods_num'] = $v['num'];
                     $orderGoods[$k]['words'] = $v['words'];
                     $orderGoods[$k]['sku_val'] = $v['val'];
                     $orderGoods[$k]['sku_id'] = $v['skuId'];
                     $orderGoods[$k]['goods_detail'] = json_encode($goodsData);
+                    $orderGoods[$k]['openid'] = $this->userInfo['openid'];
+                    $orderGoods[$k]['address_id'] = $v['addressId'] ;
+                    foreach ($orderRow as $value ){
+                        if($goodsData['user_id'] ==$value['user_id'] ){
+                            $orderGoods[$k]['order_id'] =  $value['order_id'];
+                        }
+                    }
                 }
                 #计算几个商户进行分成多个订单
                 $tools = new \JsApiPay();
@@ -184,39 +197,34 @@
                 $input->SetOpenid($this->userInfo['openid']);
                 $unifiedOrder = \WxPayApi::unifiedOrder($input);
                 $jsApiParameters= $tools->GetJsApiParameters($unifiedOrder);
-                $orderRow['prepay_id'] = $unifiedOrder['prepay_id'];
-                $orderRow['js_api_parameters'] = $jsApiParameters;
+//                $orderAll['prepay_id'] = $unifiedOrder['prepay_id'];
+//                $orderAll['js_api_parameters'] = $jsApiParameters;
                 # 插入订单数据
-//                $addId1 =Db::name("order_all")->insert($orderAll);
-//                $addId2 =Db::name("order")->insertAll($orderRow);
-//                $addId3 =Db::name("order_goods")->insertAll($orderGoods);
-
-
-
-//                if ($addId1 > 0 && $addId2 > 0 && $addId3 > 0 ) {
-                    # 清空购物车
+                $addId1 =Db::name("order_all")->insert($orderAll);
+                $addId2 =Db::name("order")->insertAll($orderRow);
+                $addId3 =Db::name("order_goods")->insertAll($orderGoods);
+                if ($addId1 > 0 && $addId2 > 0 && $addId3 > 0 ) {
+                    # 清空购物车^M
                     foreach ($data as $k =>$v){
                         if($v['carId']){
                             $res = Db::name('car')->where(['id'=>$v['carId']])->delete();
-//                            dump($res);die;
+//                            dump($res);die;^M
                         }
                     }
-                    # 成功就跳转到支付。参数必须使用？拼接。否则调不起微信支付，因为商户平台的支付授权目录的配置导致。聚能坑....
                     $jsApiParameters = base64_encode($jsApiParameters);
-                    $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$addId}");
+                    $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$addId1}");
                     die(json_encode($backData));
                 }
-//            }
+            }
 
         }
+        #二维数组分组
         public static function array_group_by($arr, $key)
         {
             $grouped = [];
             foreach ($arr as $value) {
                 $grouped[$value[$key]][] = $value;
             }
-            // Recursively build a nested grouping if more parameters are supplied
-            // Each grouped array value is grouped according to the next sequential key
             if (func_num_args() > 2) {
                 $args = func_get_args();
                 foreach ($grouped as $key => $value) {
@@ -256,7 +264,8 @@
                 }
             }
 //            dump($pay);
-            return $pay;
+//            return $pay;
+            return 0.01;
         }
 
         #计算单商铺的价格
