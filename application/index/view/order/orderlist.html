@@ -100,14 +100,13 @@
         for(var j = 0; j < result.length; j++){
             var data=result[j],//单个订单
                  status = '',//订单状态
-                order_id='';//订单id
+                order_id=data[0].order_id+"";//订单id
             html +='<li>';
-            html +='<a href="{:url(\'index/order/orderDetail\')}">';
+            html +='<a href="'+urlConnect("{:url('index/order/orderDetail')}",{id:order_id})+'">';
             for(var i=0; i<data.length; i++ ){
                 var detail = data[i].goods_detail,
                     status = data[i].order_status ,
                     order_id = data[i].order_id;
-                console.log(data[i]);
                 html +='    <div class="item-list pt10 module clear">';
                 html +='        <div class="item-img">';
                 html +='            <p> <img class="" src="'+detail.main_image+'" /> </p>';
