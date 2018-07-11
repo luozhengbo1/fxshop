@@ -47,7 +47,7 @@
                 foreach ($orderList as $k=>$v ){
                     $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
                 }
-                $orderList = $this->array_group_by($orderList,'order_id');
+                $orderList = array_values($this->array_group_by($orderList,'order_id'));
                 if(!empty($orderList) ){
                     return ajax_return($orderList,'ok','200');
                 }else{
@@ -175,6 +175,7 @@
                     $orderGoods[$k]['goods_detail'] = json_encode($goodsData);
                     $orderGoods[$k]['openid'] = $this->userInfo['openid'];
                     $orderGoods[$k]['address_id'] = $v['addressId'] ;
+                    $orderGoods[$k]['user_id'] = $goodsData['user_id'] ;
                     foreach ($orderRow as $value ){
                         if($goodsData['user_id'] ==$value['user_id'] ){
                             $orderGoods[$k]['order_id'] =  $value['order_id'];
@@ -201,9 +202,13 @@
 //                $orderAll['prepay_id'] = $unifiedOrder['prepay_id'];
 //                $orderAll['js_api_parameters'] = $jsApiParameters;
                 # 插入订单数据
+
                 $addId1 =Db::name("order_all")->insert($orderAll);
+
                 $addId2 =Db::name("order")->insertAll($orderRow);
                 $addId3 =Db::name("order_goods")->insertAll($orderGoods);
+
+
                 if ($addId1 > 0 && $addId2 > 0 && $addId3 > 0 ) {
                     # 清空购物车^M
                     foreach ($data as $k =>$v){
@@ -241,6 +246,7 @@
         {
             if($this->request->isAjax()){
                 $data= $this->request->post();
+                dump($data['id']);
                 if(!$data['id']){
                     return ajax_return_error('缺少订单id');
                 }
@@ -256,13 +262,16 @@
                         'code' => 200,
                         'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$orderData['id']}");
                 }else{
+                    include_once "WxPaySDK/WxPay.Api.php";
+                    include_once "WxPaySDK/WxPay.JsApiPay.php";
+                    include_once 'WxPaySDK/log.php';
                     $tools = new \JsApiPay();
                     //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名内，所以获取不到，使用github的实现。
                     //②、统一下单
                     $input = new \WxPayUnifiedOrder();
                     $input->SetBody("泛亚商城 的订单");
                     $input->SetAttach("附加参数");
-                    $input->SetOut_trade_no($orderData['order_id']);
+                    $input->SetOut_trade_no(substr($orderData['order_id'],0,24));
                     $input->SetTotal_fee($orderData['total_price']);
                     $input->SetTime_start(date("YmdHis"));
                     $input->SetTime_expire(date("YmdHis", time() + 600));
