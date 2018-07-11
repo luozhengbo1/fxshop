@@ -10,6 +10,14 @@
             <option value="4">待评价</option>
         </select>
     </div>
+    <div class="select-box" style="width:250px">
+        <select name="user_id" class="select">
+            <option value="">--请选择商户--</option>
+            {volist name="userList" id="vo"}
+            <option value="{$vo.id}" <?php if($vo['id']==) ?> >{$vo.account}&nbsp;&nbsp;{$vo.realname}</option>
+            {/volist}
+        </select>
+    </div>
     <input type="text" class="input-text Wdate" style="width:250px" placeholder="下单开始时间" name="create_time_start" value="{$Request.param.addtime}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" {/literal} >
     <input type="text" class="input-text Wdate" style="width:250px" placeholder="下单结束时间" name="create_time_end" value="{$Request.param.addtime}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" {/literal} >
     <div class="select-box" style="width:250px">

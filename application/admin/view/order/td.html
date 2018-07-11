@@ -7,20 +7,23 @@
     echo $address['address'],$address['street'];
     ?></td>
 <td>{$vo.total_price}</td>
+<td>{$vo.create_time|date="Y-m-d H:i:s",###}</td>
+<td><?php
+       $user = \think\Db::name('admin_user')->where(['id'=>$vo['user_id']])->find();
+    echo $user['account'].$user['realname'];
+?></td>
 <td>{php}
-    if( $vo.order_status=='0'){
+    if( $vo['order_status']=='0'){
         echo '未支付';
-    }else if($vo.order_status=='1'){
+    }else if($vo['order_status']=='1'){
         echo '待发货';
-    }else if($vo.order_status=='2'){
+    }else if($vo['order_status']=='2'){
         echo '待收货';
-    }else if($vo.order_status=='3'){
+    }else if($vo['order_status']=='3'){
         echo '待退款';
-    }else if($vo.order_status=='4'){
+    }else if($vo['order_status']=='4'){
         echo '待评价';
     }
-
-    {php}
+    {/php}
 </td>
-<td>{$vo.create_time|date="Y-m-d H:i:s",###}</td>
-<td>{$vo.pay_status}</td>
+<td>{$vo.pay_status==1?'已支付':'未支付'}</td>
