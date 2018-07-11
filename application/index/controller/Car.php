@@ -41,11 +41,11 @@
                     ->select();
 //                echo   Db::name('car')->getLastSql();die;
 //                dump($carList);
-                if(!empty($carList )){
+                //if(!empty($carList )){
                     return ajax_return($carList,'ok','200');
-                }else{
+               /* }else{
                     return ajax_return($carList,'no','400');
-                }
+                }*/
             }else{
                 $this->view->assign('titleName','购物车');
                 return $this->view->fetch();
