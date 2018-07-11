@@ -32,6 +32,7 @@ MyPageload.prototype.init = function(options){
         scrollArea : window,
         loadDownFn : function(me){
             setTimeout(function () {
+                var thisPage = _this.opts.page;
                 var url= _this.opts.ajaxData.url+'?page='+_this.opts.page+'&size='+_this.opts.size;
                  _this.opts.page++;
                $.ajax({
@@ -43,10 +44,14 @@ MyPageload.prototype.init = function(options){
                        //  console.log('=========test2=================')
                        var code = data.code;
                        var data = data.data;//数据
-                       if (code=='200' && data.length>0){
+                       if (code=='200'){
                            var html = _this.opts.dealFun(data);
-                           //如果获取的数据还没有条数多，表明数据已经没有了
-                           if(data.length<_this.opts.size){
+                               //如果获取的数据还没有条数多，表明数据已经没有了
+                           if(thisPage ==1 && data.length ==0){
+                               //第一页数据就为空
+                               _this.fnDropload(dropload);
+                               showEmptyWrap();
+                           } else if(data.length<_this.opts.size){
                                $('#'+_this.opts.target).append(html);
                                _this.fnDropload(dropload);
                            }else{
@@ -85,4 +90,12 @@ function initData(target){
     $('#'+target).empty();
     $('.dropload-down').remove();
 }
+//显示空图标
+function showEmptyWrap(){
+    $('.dropload-down').remove();
+    if($('.empty-wrap').size()>0) $('.empty-wrap').show();
 
+}
+function hideEmptyWrap(){
+    if($('.empty-wrap').size()>0) $('.empty-wrap').hide();
+}
