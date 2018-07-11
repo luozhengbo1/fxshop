@@ -23,13 +23,13 @@
             {include file="td" /}
             <td class="f-14">
                 {tp:menu menu='sedit' /}
-                {tp:menu menu='sdelete' /}
+                <a class="btn" href="{:url('order/OrderDetail')}">订单详情</a>
             </td>
         </tr>
         {/volist}
         </tbody>
     </table>
-    <div class="page-bootstrap">{$list->render()}</div>
+    <div class="page-bootstrap">{$page ?? ''}</div>
 </div>
 {/block}
 {block name="script"}

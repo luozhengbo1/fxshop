@@ -160,11 +160,17 @@
                     #添加上商户id
                     foreach ($v as $val){
                         $orderRow[$k]["user_id"] =Db::name('goods')->field('user_id')->where(['id'=> $val['goodsId']])->find()['user_id'];
+                        #获取简单的商品明细
+                        $getNameSkuNum[]=[
+                            'goods_name'=>Db::name('goods')->field('name')->where(['id'=> $val['goodsId']])->find()['name'],
+                            'sku_val'=>$val['val'],
+                            'num'=>$val['num'],
+                        ];
                     }
+                    $orderRow[$k]["buy_list"] =json_encode($getNameSkuNum);
                 }
                 $orderAll['son_id']= join($sonId,',');
                 $orderGoods=[];
-
                 foreach ($data as $k=> $v){
                     $goodsData = Db::name('goods')->where(['id'=>$v['goodsId']])->find();
                     $orderGoods[$k]['goods_id'] = $v['goodsId'];
@@ -357,10 +363,10 @@
 //            dump($orderDetail);die;
             $this->view->assign('address',$address);
             $this->view->assign('orderDetail',$orderDetail);
-           // dump($address);
-           // dump($orderDetail);die;
-            return $this->view->fetch('orderDetail');
 
+            // dump($address);
+            // dump($orderDetail);die;
+            return $this->view->fetch('orderDetail');
         }
 
         #订单详情页面
