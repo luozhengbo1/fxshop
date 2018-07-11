@@ -334,6 +334,32 @@
             }
         }
 
+        #订单详情页面
+        public function  orderDetail()
+        {
+            $id = $this->request->param('id');
+            if(!$id){
+                return $this->error('缺少参数订单id');
+            }
+            $orderDetail = Db::name('order')
+//                ->join('fy_customer_address','fy_customer_address.id=fy_order.address_id','left')
+                ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
+                ->where(['fy_order.order_id'=>$id])
+                ->find();
+            $address = Db::name('customer_address')
+                ->where(['id'=>$orderDetail['address_id']])
+                ->find();
+//            dump($address);
+//            echo Db::name('order')->getLastSql();
+//            dump($orderDetail);die;
+            $this->view->assign('address',$address);
+            $this->view->assign('orderDetail',$orderDetail);
+            return $this->view->fetch();
+
+        }
+
+
+
 
 
 
