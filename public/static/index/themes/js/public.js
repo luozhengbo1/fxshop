@@ -482,10 +482,11 @@ var msnry_destory = false;// true 表示可以删除了
 var msnry;//瀑布流对象
 function masonryShow() {
     var container = document.querySelector('.grid');
+    //图片加载有延长
     setTimeout(function () {
         msnry = new Masonry( container);
         msnry_destory = true;//表示创建masonry完成
-    },500)
+    },800)
 }
 function destoryMasonry() {
     if(msnry_destory){
