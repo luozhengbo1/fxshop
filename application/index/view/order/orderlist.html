@@ -102,6 +102,7 @@
                  status = '',//订单状态
                 order_id='';//订单id
             html +='<li>';
+            html +='<a href="{:url(\'index/order/orderDetail\')}">';
             for(var i=0; i<data.length; i++ ){
                 var detail = data[i].goods_detail,
                     status = data[i].order_status ,
@@ -142,12 +143,19 @@
                 html +='            <span class="f14">(运费<b>￥'+detail.postage+'</b>)</span>';
                 html +='        </div>';
                 html +='    </div>';
+
             }
+                 html +='</a>';
                 html +='    <div class="module clear tr mt10 mb10 pr10" >';
                 if( status==0)//代付款
                     html +='        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="pay(\''+order_id+'\')">付款</button>';
-                else if(status ==1 || detail.order_status ==2)// 代发货
+                else if(status ==1)// 代发货
                     html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">联系卖家</button>';
+                else if(status ==2) {
+                    // 待收货
+                    html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">确认收货</button>';
+                    html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">物流信息</button>';
+                }
                 else if(status==3)// 待退款
                     html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">申请售后</button>';
                 else if(status ==4)//待评价
