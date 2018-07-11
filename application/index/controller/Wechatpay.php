@@ -50,6 +50,26 @@ class Wechatpay extends Controller
         }
         exit;
     }
+
+    #支付回调
+    public function notify1()
+    {
+        # 支付成功后更新支付状态，支付时间
+        $xml = isset($GLOBALS['HTTP_RAW_POST_DATA']) ? $GLOBALS['HTTP_RAW_POST_DATA'] : '';
+        include_once 'WxPaySDK/Notify.php'; # 微信回调通知
+        $notify = new \PayNotifyCallBack();
+        $notify->Handle(false);
+        $orderInfo = \WxPayResults::Init($xml);
+        if (empty($orderInfo)) {
+            file_put_contents("wx_pay_error.log",$xml."\r", 8);
+        } else {
+            $where['order_id']=$orderInfo['out_trade_no'];
+            $data['pay_time']=time();
+            $data['pay_status']=1;
+            $data['order_status']=1;
+            Db::name('order')->where($where)->update($data);
+        }
+    }
     # 微信退款
     public function refund()
     {

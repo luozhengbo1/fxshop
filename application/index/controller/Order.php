@@ -47,6 +47,7 @@
                 foreach ($orderList as $k=>$v ){
                     $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
                 }
+                $orderList = $this->array_group_by($orderList,'order_id');
                 if(!empty($orderList) ){
                     return ajax_return($orderList,'ok','200');
                 }else{
@@ -235,6 +236,7 @@
             return $grouped;
         }
 
+        #再次发起支付
         public function againPay()
         {
             if($this->request->isAjax()){
@@ -243,12 +245,48 @@
                     return ajax_return_error('缺少订单id');
                 }
                 $orderData = Db::name('order')->where(['id'=>$data['id']])->find();
-                return json($orderData);
+                if($orderData['pay_status']==1 || $orderData['order_status']==1){
+                    return ajax_return_error('该订单已经支付');
+                }
+
+                if($orderData['js_api_parameters'] && $orderData['prepay_id'] ){
+                    $jsApiParameters = base64_encode($orderData['js_api_parameters']);
+                    $backData = array(
+                        "msg" => "呼起支付",
+                        'code' => 200,
+                        'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$orderData['id']}");
+                }else{
+                    $tools = new \JsApiPay();
+                    //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名内，所以获取不到，使用github的实现。
+                    //②、统一下单
+                    $input = new \WxPayUnifiedOrder();
+                    $input->SetBody("泛亚商城 的订单");
+                    $input->SetAttach("附加参数");
+                    $input->SetOut_trade_no($orderData['order_id']);
+                    $input->SetTotal_fee($orderData['total_price']);
+                    $input->SetTime_start(date("YmdHis"));
+                    $input->SetTime_expire(date("YmdHis", time() + 600));
+                    $input->SetGoods_tag("");
+                    $input->SetNotify_url("http://".$_SERVER['HTTP_HOST']."/index.php/index/wechatpay/notify1");
+                    $input->SetTrade_type("JSAPI");
+                    $input->SetOpenid($this->userInfo['openid']);
+                    $unifiedOrder = \WxPayApi::unifiedOrder($input);
+                    $jsApiParameters= $tools->GetJsApiParameters($unifiedOrder);
+                    $jsApiParameters = base64_encode($jsApiParameters);
+                    Db::name('order')
+                        ->where(['order_id'=>$data['id']])
+                        ->update([
+                            'js_api_parameters'=>$jsApiParameters,
+                            'prepay_id' => $unifiedOrder['prepay_id']
+                        ]);
+                    $jsApiParameters = base64_encode($jsApiParameters);
+                    $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$orderData['id']}");
+                    return json($orderData);
+                }
             }
+
+
         }
-
-
-
         # 计算订单总价值
         public function calculateOrderValue($data)
         {
@@ -268,11 +306,23 @@
             return 0.01;
         }
 
-        #计算单商铺的价格
-        public function  getGoodsPrice($data)
+        #确认收货状态
+        public function editStatus()
         {
-            dump($data);die;
+            if($this->request->isAjax()){
+                $data = $this->request->post();
+                if($data['id']){
+                    return ajax_return_error('缺少参数id');
+                }
+                $res = Db::name('order')->where(['id'=>$data['id']])->update(['order_status'=>4]);
+                if($res){
+                    return  ajax_return('','ok','200');
+                }else{
+                    return  ajax_return('','no','500');
+                }
+            }
         }
+
 
 
 
