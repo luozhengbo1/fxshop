@@ -9,7 +9,16 @@ use think\Controller;
 use think\Db;
 
 class Customer extends Controller
+
 {
+    public function customer(){
+        $this->assign('titleName', "会员中心");
+        return $this->view->fetch();
+    }
+    public function mycard_voucher(){
+        $this->assign('titleName', "卡券中兴");
+        return $this->view->fetch('mycardVoucher');
+    }
     /**
      * 收藏夹列表
      */
@@ -26,7 +35,7 @@ class Customer extends Controller
                 ->alias('collect')
                 ->join('fy_customer customer', "collect.uid = customer.id  and customer.id=$uid")
                 ->join('fy_goods goods', "collect.goods_id = goods.id")
-                ->field('collect.uid,goods.id,goods.name,goods.main_image,goods.status,goods.price')
+                ->field('collect.uid,goods.id,goods.name,goods.main_image,goods.status,goods.basic_price')
                 ->page($page, $size)
                 ->where('collect.status', '1')
                 ->select();
@@ -38,21 +47,21 @@ class Customer extends Controller
                 return ajax_return('', '您还没有收藏商品哦', 203);
             }
         } else {
-            return $this->view->fetch('goodscollect');
+            return $this->view->fetch('goodsCollect');
         }
     }
 
     /**
      * 取消收藏
      */
-    public function collect_cancel()
+    public function collect_cancel($id)
     {
         if ($this->request->isAjax()) {
             $user = session('wx_user');
             $customer = Db::table('fy_customer')->where('openid', $user['openid'])->find();
             $uid = $customer['id'];
             $data = $this->request->post();
-            $goods_id = $data['id'];
+            $goods_id = $id;
             if (!$goods_id) {
                 return $this->error('缺少参数id');
             }
@@ -60,6 +69,64 @@ class Customer extends Controller
             Db::table('fy_customer_collect')->where('uid', $uid)->where('goods_id', $goods_id)->setField('status', '0');
             return ajax_return('', '取消收藏成功', 200);
         }
+    }
+    /**
+     * 添加收藏
+     */
+    public function collect_update()
+    {
+        if ($this->request->isAjax()) {
+            $data = $this->request->post();
+            $user = session('wx_user');
+            $customer = Db::table('fy_customer')->field('id')->where('openid', $user['openid'])->find();
+            $uid = $customer['id'];
+            //若前端通过ajax传递了参数id，则进行编辑操作
+            $collect = Db::table('fy_customer_collect')
+                ->where(['uid'=>$uid,'goods_id'=> $data['goods_id'] ])
+                ->find();
+          //  dump($collect);
+            $time = time();
+            if(!empty($collect)){
+                //更新操作
+                if($collect['status'] == 1){
+                    //已经收藏的     取消收藏
+                    $data = [
+                        'status' => 0,
+                        'addtime' => $time
+                    ];
+                    $msg='已取消收藏该商品';
+                }else if ($collect['status'] == 0){
+                    //未收藏的     添加收藏
+                    $data = [
+                        'status' => 1,
+                        'addtime' => $time
+                    ];
+                    $msg='已收藏该商品';
+                }
+                Db::table('fy_customer_collect')->where('id', $collect['id'])->update($data);
+                return ajax_return($data, $msg, 200);
+
+            }else{
+                //保存操作
+                $data = [
+                    'status' => 1,
+                    'uid' => $uid,
+                    'goods_id' => $data['goods_id'],
+                    'addtime' => $time
+                ];
+                Db::table('fy_customer_collect')->insert($data);
+                //dump('添加');
+                return ajax_return($data, '已收藏该商品', 200);
+            }
+
+        }
+    }
+    public function collect_detail($goods_id){
+        $user = session('wx_user');
+        $customer = Db::table('fy_customer')->field('id')->where('openid', $user['openid'])->find();
+        $uid = $customer['id'];
+        $collect = Db::table('fy_customer_collect')->where(['uid'=>$uid,'goods_id'=> $goods_id ])->find();
+        return ajax_return($collect, '', 200);
     }
 
     /**
@@ -80,7 +147,7 @@ class Customer extends Controller
                 ->find();
             $this->assign('flag', $res ? 1 : 0);
             $this->assign('user', $userData);
-            return $this->view->fetch('mysign');
+            return $this->view->fetch('mySign');
         } else if ($this->request->isAjax()) {
             $time = time();
             $today_start = strtotime(date('Y-m-d', $time) . ' 00:00:00');

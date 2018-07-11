@@ -364,27 +364,6 @@ function req_opt(type,json,returnUrl){
             })
         }
     }
-    /*if(request_flag.edit){//请求完成后才能进行下一次请求
-        request_flag.edit = false;
-        layerLoad();
-        if(type==1){
-            $.ajax({
-                url:url.editDefaultAddr,
-                type:'post',
-                data:json ||{},
-                dataType:'json',
-                success: function(data){
-                    layer_msg(data.msg);
-                    if(data.code ==200){
-                        setTimeout(function(){
-                            location.href=url.list;
-                            request_flag.edit = true;
-                        },1500);
-                    }
-                }
-            })
-        }
-    }*/
 }
 
 /**
@@ -393,6 +372,7 @@ function req_opt(type,json,returnUrl){
  *  url:"",
  *  data:"",
  *  return_url:"",
+ *  complete:""
  * }
  */
 function pub_save(json){
@@ -424,8 +404,8 @@ function pub_save(json){
 }
 
 function pub_edit(json){
-    if(request_flag.save){//请求完成后才能进行下一次请求
-        request_flag.save = false;
+    if(request_flag.edit){//请求完成后才能进行下一次请求
+        request_flag.edit = false;
         layerLoad();
         $.ajax({
             url:json.url,
@@ -435,14 +415,65 @@ function pub_edit(json){
             success: function(data){
                 layer_msg(data.msg);
                 if(data.code ==200){
-                    setTimeout(function(){
-                        location.href=json.return_url;
-                        request_flag.save = true;
-                    },1500);
+                    if(json.complete){
+                        //有回调函数  执行回调函数
+                        json.complete(data.data);
+                        request_flag.edit = true;
+                    }else{
+                        setTimeout(function(){
+                            location.href=json.return_url;
+                            request_flag.edit = true;
+                        },1500);
+                    }
                 }
             }
         })
     }
+}
+function pub_del(json){
+    if(request_flag.del){//请求完成后才能进行下一次请求
+        request_flag.del = false;
+        layerLoad();
+        $.ajax({
+            url:json.url,
+            type:'post',
+            data:json.data,
+            dataType:'json',
+            success: function(data){
+                layer_msg(data.msg);
+                if(data.code ==200){
+                    if(json.complete){
+                        //有回调函数  执行回调函数
+                        json.complete();
+                        request_flag.del = true;
+                    }else if(json.return_url){
+                        //有返回地址  执行返回地址
+                        setTimeout(function(){
+                            location.href=json.return_url;
+                            request_flag.del = true;
+                        },1500);
+                    }
+
+                }
+            }
+        })
+    }
+}
+function pub_query(json){
+    $.ajax({
+        url:json.url,
+        type:'post',
+        data:json.data,
+        dataType:'json',
+        success: function(data){
+            if(data.code ==200){
+                if(json.complete){
+                    //有回调函数  执行回调函数
+                    json.complete(data.data);
+                }
+            }
+        }
+    })
 }
 //瀑布流显示商品
 var msnry_destory = false;// true 表示可以删除了
