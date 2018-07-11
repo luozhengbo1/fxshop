@@ -1,6 +1,22 @@
 {include file="Public/header-resource"}
 <body class="title-top footer-boottom">
 {include file="Public/header-title"}
+<style>
+    .empty-wrap{}
+    .empty-image{
+        width: 130px;
+        height: 130px;
+        border-radius: 100%;
+        background: #a9a9a9;
+        margin: 0 auto;
+        text-align: center;
+        margin-top: 60px;
+        line-height: 130px;
+    }
+    .empty-image img{
+        width: 50px;
+    }
+</style>
 <section>
    <ul class="product-order-list-tab nav-list-tab" id="navListTab">
        <li  class="active"  data-status="all"><a href="javascript:;">全部</a></li>
@@ -10,7 +26,7 @@
        <li data-status="3"><a href="javascript:;"  >待退款</a></li>
        <li data-status="4"><a href="javascript:;"  >待评价</a></li>
    </ul>
-    <div id="dataListWrap1">
+    <div id="dataListWrap">
         <ul id="orderList" class="product-order-list mt50">
           <!--  <li>
 
@@ -58,6 +74,16 @@
                 <div class="bottomLine"></div>
             </li>-->
         </ul>
+        <div class="empty-wrap" style="display: none">
+            <div class="empty-image">
+                <img  src="__STATIC__/index/images/empty_order.png">
+            </div>
+            <p class="h30 lh30 mt10 tc">您还没有相关的订单</p>
+            <p class="h30 lh30 tc grey">可以去看看有哪些想买</p>
+            <p class="tc">
+                <a href="{:\\think\\Url::build(\'\index/index\')}" class="layui-btn layui-btn-primary layui-btn-sm">随便逛逛</a>
+            </p>
+        </div>
     </div>
 </section>
 <script>
@@ -69,6 +95,7 @@
     function loadOrderData(){
         var status = $('#navListTab').find('.active').data('status');
         initData('orderList');
+        hideEmptyWrap();
         pageload({
             targetWarp:'dataListWrap',
             target:'orderList',

@@ -3928,6 +3928,7 @@ a {
 .product-order-list li{background: white;
 	/*padding-bottom: 10px;*/
 	margin-bottom: 2px;
+	padding: 0 2px;
 	border-radius: 6px;
 }
 .product-order-list .item-img {
