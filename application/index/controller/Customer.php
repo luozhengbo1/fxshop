@@ -13,13 +13,24 @@ class Customer extends Controller
 {
     public function customer()
     {
+        $user_session = session('wx_user');
+        $user_data = Db::table('fy_customer')->where('openid', $user_session['openid'])->find();
+        $this->assign('userdata', $user_data);
+
+        $count_collect = Db::table('fy_customer_collect')
+            ->where('uid', $user_data['id'])
+            ->where('status', 1)->count();
+        $this->assign('countcollect', $count_collect);
+
+        $count_lottery = Db::table('fy_lottery_log')->where('uid', $user_data['id'])->count();
+        $this->assign('countlottery', $count_lottery);
         $this->assign('titleName', "会员中心");
         return $this->view->fetch();
     }
 
     public function mycard_voucher()
     {
-        $this->assign('titleName', "卡券中兴");
+        $this->assign('titleName', "卡券中心");
         return $this->view->fetch('mycardVoucher');
     }
 
