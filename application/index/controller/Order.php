@@ -14,7 +14,7 @@
         }
 
         #订单列表页面
-        public function  index($page=1,$size=10)
+        public function  index()
         {
             $this->view->assign('titleName', "订单主页");
             return $this->view->fetch('orderlist');
@@ -27,21 +27,23 @@
                 $size = $this->request->param('size')?$this->request->param('size'):4;
                 $data = $this->request->post();
                 if($data['status']=='all'){
+//                    dump($this->userInfo['openid']);die;
                     $orderList = Db::name('order')
                         ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-                        ->where(['openid'=>$this->userInfo['openid']])
+                        ->where(['fy_order.openid'=>$this->userInfo['openid']])
                         ->order('fy_order.create_time desc')
                         ->page($page,$size)
                         ->select();
+//                    echo Db::name('order')->getLastSql();
                 }else{
                     $orderList = Db::name('order')
                         ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-                        ->where(['openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status']])
+                        ->where(['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status']])
                         ->order('fy_order.create_time desc')
                         ->page($page,$size)
                         ->select();
                 }
-
+//                dump();
                 foreach ($orderList as $k=>$v ){
                     $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
                 }
@@ -121,23 +123,64 @@
                 include_once "WxPaySDK/WxPay.Api.php";
                 include_once "WxPaySDK/WxPay.JsApiPay.php";
                 include_once 'WxPaySDK/log.php';
+                #订单总价的计算
                 $price = $this->calculateOrderValue($data);
                 if ($price == 0) {
                     $price = 0.01; #至少支付一分钱
                 }
-                $time = time();
                 $orderId = \WxPayConfig::MCHID.date("YmdHis");
-                $orderRow = array(
-                    "order_id" => $orderId,
-                    "address_id" => $data[0]['addressId'],
-                    "openid" => $this->userInfo['openid'],
-                    "customer_name" => $this->userInfo['nickname'],
-                    "total_price" => $price * 100,
-                    "goods_all" => $goodsall,
-                    "create_time" => $time,
-                    "pay_status" => 0,#支付状态;0未付款;1已付款
-                    "order_status" => 0,
-                );
+                $time = time();
+                $orderAll = [
+                    'order_id'=>$orderId,
+                    'total_price'=>$price*100,
+                    'create_time'=>time(),
+                ];
+
+                #计算几个商户进行分成多个订单
+                foreach ($data as $k=>$v){
+                    $uid = Db::name('goods')->field('user_id')->where(['id'=>$v['goodsId']])->find()['user_id'];
+                    $data[$k]['user_id'] = $uid;
+                }
+                $dataUser = array_values( self::array_group_by($data,'user_id'));
+//                dump($dataUser);die;
+                foreach ( $dataUser as $k=>$v ){
+                    $sonId[] = rand(10,99);
+                    $orderRow[$k] = array(
+                        "order_id" => $orderId.$sonId[$k],
+                        "address_id" => $data[$k]['addressId'],
+                        "openid" => $this->userInfo['openid'],
+                        "customer_name" => $this->userInfo['nickname'],
+                        "total_price" => $this->calculateOrderValue($v)*100,
+                        "goods_all" => join(array_column($v,'goodsId'),','),
+                        "create_time" => $time,
+                        "pay_status" => 0,#支付状态;0未付款;1已付款
+                        "order_status" => 0,
+                    );
+                    #添加上商户id
+                    foreach ($v as $val){
+                        $orderRow[$k]["user_id"] =Db::name('goods')->field('user_id')->where(['id'=> $val['goodsId']])->find()['user_id'];
+                    }
+                }
+                $orderAll['son_id']= join($sonId,',');
+                $orderGoods=[];
+
+                foreach ($data as $k=> $v){
+                    $goodsData = Db::name('goods')->where(['id'=>$v['goodsId']])->find();
+                    $orderGoods[$k]['goods_id'] = $v['goodsId'];
+                    $orderGoods[$k]['goods_num'] = $v['num'];
+                    $orderGoods[$k]['words'] = $v['words'];
+                    $orderGoods[$k]['sku_val'] = $v['val'];
+                    $orderGoods[$k]['sku_id'] = $v['skuId'];
+                    $orderGoods[$k]['goods_detail'] = json_encode($goodsData);
+                    $orderGoods[$k]['openid'] = $this->userInfo['openid'];
+                    $orderGoods[$k]['address_id'] = $v['addressId'] ;
+                    foreach ($orderRow as $value ){
+                        if($goodsData['user_id'] ==$value['user_id'] ){
+                            $orderGoods[$k]['order_id'] =  $value['order_id'];
+                        }
+                    }
+                }
+                #计算几个商户进行分成多个订单
                 $tools = new \JsApiPay();
                 //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名内，所以获取不到，使用github的实现。
                 //②、统一下单
@@ -145,7 +188,7 @@
                 $input->SetBody("泛亚商城 的订单");
                 $input->SetAttach("附加参数");
                 $input->SetOut_trade_no($orderId);
-                $input->SetTotal_fee($orderRow['total_price']);
+                $input->SetTotal_fee($orderAll['total_price']);
                 $input->SetTime_start(date("YmdHis"));
                 $input->SetTime_expire(date("YmdHis", time() + 600));
                 $input->SetGoods_tag("");
@@ -154,41 +197,42 @@
                 $input->SetOpenid($this->userInfo['openid']);
                 $unifiedOrder = \WxPayApi::unifiedOrder($input);
                 $jsApiParameters= $tools->GetJsApiParameters($unifiedOrder);
-                $orderRow['prepay_id'] = $unifiedOrder['prepay_id'];
-                $orderRow['js_api_parameters'] = $jsApiParameters;
+//                $orderAll['prepay_id'] = $unifiedOrder['prepay_id'];
+//                $orderAll['js_api_parameters'] = $jsApiParameters;
                 # 插入订单数据
-                $addId =Db::name("order")->insert($orderRow);
-                $arr =[];
-//                dump($data);die;
-                foreach ($data as $k=>$v){
-                    $goodsData = Db::name('goods')->where(['id'=>$v['goodsId']])->find();
-                    $arr[$k]['goods_id'] = $v['goodsId'];
-                    $arr[$k]['sku_id'] = $v['skuId'];
-                    $arr[$k]['order_id'] = $orderId;
-                    $arr[$k]['user_id'] = $goodsData['user_id'];
-                    $arr[$k]['goods_detail'] = json_encode($goodsData);
-                    $arr[$k]['words'] = $v['words'];
-                    $arr[$k]['sku_val'] = $v['val'];
-                    #购买数量
-                    $arr[$k]['goods_num'] =  $v['num'];
-                }
-                Db::name('order_goods')->insertAll($arr);
-                if ($addId > 0) {
-                    # 清空购物车
+                $addId1 =Db::name("order_all")->insert($orderAll);
+                $addId2 =Db::name("order")->insertAll($orderRow);
+                $addId3 =Db::name("order_goods")->insertAll($orderGoods);
+                if ($addId1 > 0 && $addId2 > 0 && $addId3 > 0 ) {
+                    # 清空购物车^M
                     foreach ($data as $k =>$v){
                         if($v['carId']){
                             $res = Db::name('car')->where(['id'=>$v['carId']])->delete();
-//                            dump($res);die;
+//                            dump($res);die;^M
                         }
                     }
-
-                    # 成功就跳转到支付。参数必须使用？拼接。否则调不起微信支付，因为商户平台的支付授权目录的配置导致。聚能坑....
                     $jsApiParameters = base64_encode($jsApiParameters);
-                    $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$addId}");
+                    $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$addId1}");
                     die(json_encode($backData));
                 }
             }
 
+        }
+        #二维数组分组
+        public static function array_group_by($arr, $key)
+        {
+            $grouped = [];
+            foreach ($arr as $value) {
+                $grouped[$value[$key]][] = $value;
+            }
+            if (func_num_args() > 2) {
+                $args = func_get_args();
+                foreach ($grouped as $key => $value) {
+                    $parms = array_merge([$value], array_slice($args, 2, func_num_args()));
+                    $grouped[$key] = call_user_func_array('array_group_by', $parms);
+                }
+            }
+            return $grouped;
         }
 
         public function againPay()
@@ -204,20 +248,33 @@
         }
 
 
+
         # 计算订单总价值
         public function calculateOrderValue($data)
         {
-
             $pay = 0;
             foreach ($data  as $val) {
                 $res = Db::name('goods_attribute')->field('price')->where(['id'=>$val['skuId']])->find();
+                $goods = Db::name('goods')->field('postage,free_type')->where(['id'=>$val['goodsId']])->find();
                 if (isset($val['num'])) {
                     $pay += $res['price'] * $val['num'];
                 }
+                if($goods['free_type']==0){
+                    $pay +=$goods['postage'];
+                }
             }
-//            dump($pay);die;
+//            dump($pay);
+//            return $pay;
             return 0.01;
         }
+
+        #计算单商铺的价格
+        public function  getGoodsPrice($data)
+        {
+            dump($data);die;
+        }
+
+
 
 
 

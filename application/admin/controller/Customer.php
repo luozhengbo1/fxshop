@@ -107,20 +107,6 @@ class Customer extends Controller
             }
 
             $customer_data = $model->where('isdelete', '0')->select();
-            //根据当前时间与会员创建时间的时间差是否为偶数年清零积分
-            $now_time = time();
-            for ($i = 0; $i < count($customer_data); $i++) {
-                $create_time = $customer_data[$i]['create_time'];
-                $time_difference = ($now_time - strtotime($create_time)) / (60 * 60 * 24 * 365);
-                $result = $time_difference % 2;
-                //判断创建时间是否为过去的某一天
-                if ($time_difference >= 0) {
-                    //判断时间差是否为偶数
-                    if (!$result) {
-                        $model->update(['score' => 0], ['id' => $customer_data[$i]['id']]);
-                    }
-                }
-            }
 
             //  根据经验值自动更新grade
             $gradeList = Model('CustomerGrade')->field('id ,name,experience_start,experience_end')->order('id ')->where('isdelete', 0)->select();
@@ -169,51 +155,37 @@ class Customer extends Controller
             }
 
             $customer_data = $model->where('isdelete', '0')->select();
-            //根据当前时间与会员创建时间的时间差是否为偶数年清零积分
-            $now_time = time();
+
+            //  根据经验值自动更新grade
+            $gradeList = Model('CustomerGrade')->field('id ,name,experience_start,experience_end')->order('id ')->where('isdelete', 0)->select();
+            //循环对比每个会员的经验值是否在等级经验值区间内
             for ($i = 0; $i < count($customer_data); $i++) {
-                $create_time = $customer_data[$i]['create_time'];
-                $time_difference = ($now_time - strtotime($create_time)) / (60 * 60 * 24 * 365);
-                $result = $time_difference % 2;
-                //判断创建时间是否为过去的某一天
-                if ($time_difference >= 0) {
-                    //判断时间差是否为偶数
-                    if (!$result) {
-                        $model->update(['score' => 0], ['id' => $customer_data[$i]['id']]);
+                $count = 0;
+                $customer_item = $customer_data[$i];
+                for ($j = 0; $j < count($gradeList); $j++) {
+                    $grade_item = $gradeList[$j];
+                    if ($customer_item['experience'] >= $grade_item['experience_start'] && $customer_item['experience'] <= $grade_item['experience_end']) {
+                        //若在区间内插入grade_id
+                        $model->update([
+                            'grade_id' => $grade_item['id']
+                        ], ['id' => $customer_item['id']]);
+                        $gradelist[$i] = [
+                            'name' => $grade_item['name']
+                        ];
+                    } else {
+                        $count += 1;
                     }
                 }
-            }
-        }
-
-        //  根据经验值自动更新grade
-        $gradeList = Model('CustomerGrade')->field('id ,name,experience_start,experience_end')->order('id ')->where('isdelete', 0)->select();
-        //循环对比每个会员的经验值是否在等级经验值区间内
-        for ($i = 0; $i < count($customer_data); $i++) {
-            $count = 0;
-            $customer_item = $customer_data[$i];
-            for ($j = 0; $j < count($gradeList); $j++) {
-                $grade_item = $gradeList[$j];
-                if ($customer_item['experience'] >= $grade_item['experience_start'] && $customer_item['experience'] <= $grade_item['experience_end']) {
-                    //若在区间内插入grade_id
+                //若不在区间内的次数等于gradeList的长度，表示该会员的经验值不在已有经验值区间中
+                if ($count == count($gradeList)) {
                     $model->update([
-                        'grade_id' => $grade_item['id']
+                        'grade_id' => 0
                     ], ['id' => $customer_item['id']]);
-                    $gradelist[$i] = [
-                        'name' => $grade_item['name']
-                    ];
-                } else {
-                    $count += 1;
                 }
             }
-            //若不在区间内的次数等于gradeList的长度，表示该会员的经验值不在已有经验值区间中
-            if ($count == count($gradeList)) {
-                $model->update([
-                    'grade_id' => 0
-                ], ['id' => $customer_item['id']]);
-            }
+            $this->datalist($model, $map);
+            $this->view->assign('gradelist', $gradeList);
+            return $this->view->fetch();
         }
-        $this->datalist($model, $map);
-        $this->view->assign('gradelist', $gradeList);
-        return $this->view->fetch();
     }
 }

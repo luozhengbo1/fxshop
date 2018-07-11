@@ -6,8 +6,21 @@
     echo '<br/>';
     echo $address['address'],$address['street'];
     ?></td>
-<td>{$vo.address_id}</td>
 <td>{$vo.total_price}</td>
-<td>{$vo.order_status}</td>
+<td>{php}
+    if( $vo.order_status=='0'){
+        echo '未支付';
+    }else if($vo.order_status=='1'){
+        echo '待发货';
+    }else if($vo.order_status=='2'){
+        echo '待收货';
+    }else if($vo.order_status=='3'){
+        echo '待退款';
+    }else if($vo.order_status=='4'){
+        echo '待评价';
+    }
+
+    {php}
+</td>
 <td>{$vo.create_time|date="Y-m-d H:i:s",###}</td>
 <td>{$vo.pay_status}</td>
