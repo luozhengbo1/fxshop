@@ -196,7 +196,7 @@
                 $input->SetBody("泛亚商城 的订单");
                 $input->SetAttach("附加参数");
                 $input->SetOut_trade_no($orderId);
-                $input->SetTotal_fee($orderAll['total_price']);
+                $input->SetTotal_fee($orderAll['total_price']*100);
                 $input->SetTime_start(date("YmdHis"));
                 $input->SetTime_expire(date("YmdHis", time() + 600));
                 $input->SetGoods_tag("");
@@ -252,11 +252,10 @@
         {
             if($this->request->isAjax()){
                 $data= $this->request->post();
-                dump($data['id']);
                 if(!$data['id']){
                     return ajax_return_error('缺少订单id');
                 }
-                $orderData = Db::name('order')->where(['id'=>$data['id']])->find();
+                $orderData = Db::name('order')->where(['order_id'=>$data['id']])->find();
                 if($orderData['pay_status']==1 || $orderData['order_status']==1){
                     return ajax_return_error('该订单已经支付');
                 }
@@ -277,8 +276,8 @@
                     $input = new \WxPayUnifiedOrder();
                     $input->SetBody("泛亚商城 的订单");
                     $input->SetAttach("附加参数");
-                    $input->SetOut_trade_no(substr($orderData['order_id'],0,24));
-                    $input->SetTotal_fee($orderData['total_price']);
+                    $input->SetOut_trade_no($orderData['order_id']);
+                    $input->SetTotal_fee($orderData['total_price']*100);
                     $input->SetTime_start(date("YmdHis"));
                     $input->SetTime_expire(date("YmdHis", time() + 600));
                     $input->SetGoods_tag("");
@@ -286,7 +285,9 @@
                     $input->SetTrade_type("JSAPI");
                     $input->SetOpenid($this->userInfo['openid']);
                     $unifiedOrder = \WxPayApi::unifiedOrder($input);
+//                    dump($unifiedOrder);die;
                     $jsApiParameters= $tools->GetJsApiParameters($unifiedOrder);
+
                     $jsApiParameters = base64_encode($jsApiParameters);
                     Db::name('order')
                         ->where(['order_id'=>$data['id']])
@@ -295,9 +296,10 @@
                             'prepay_id' => $unifiedOrder['prepay_id']
                         ]);
                     $jsApiParameters = base64_encode($jsApiParameters);
-                    $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$orderData['id']}");
-                    return json($orderData);
+
                 }
+                $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$orderData['id']}");
+                return json($backData);
             }
 
 
