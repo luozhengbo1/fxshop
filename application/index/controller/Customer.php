@@ -11,14 +11,18 @@ use think\Db;
 class Customer extends Controller
 
 {
-    public function customer(){
+    public function customer()
+    {
         $this->assign('titleName', "会员中心");
         return $this->view->fetch();
     }
-    public function mycard_voucher(){
+
+    public function mycard_voucher()
+    {
         $this->assign('titleName', "卡券中兴");
         return $this->view->fetch('mycardVoucher');
     }
+
     /**
      * 收藏夹列表
      */
@@ -70,6 +74,7 @@ class Customer extends Controller
             return ajax_return('', '取消收藏成功', 200);
         }
     }
+
     /**
      * 添加收藏
      */
@@ -82,31 +87,31 @@ class Customer extends Controller
             $uid = $customer['id'];
             //若前端通过ajax传递了参数id，则进行编辑操作
             $collect = Db::table('fy_customer_collect')
-                ->where(['uid'=>$uid,'goods_id'=> $data['goods_id'] ])
+                ->where(['uid' => $uid, 'goods_id' => $data['goods_id']])
                 ->find();
-          //  dump($collect);
+            //  dump($collect);
             $time = time();
-            if(!empty($collect)){
+            if (!empty($collect)) {
                 //更新操作
-                if($collect['status'] == 1){
+                if ($collect['status'] == 1) {
                     //已经收藏的     取消收藏
                     $data = [
                         'status' => 0,
                         'addtime' => $time
                     ];
-                    $msg='已取消收藏该商品';
-                }else if ($collect['status'] == 0){
+                    $msg = '已取消收藏该商品';
+                } else if ($collect['status'] == 0) {
                     //未收藏的     添加收藏
                     $data = [
                         'status' => 1,
                         'addtime' => $time
                     ];
-                    $msg='已收藏该商品';
+                    $msg = '已收藏该商品';
                 }
                 Db::table('fy_customer_collect')->where('id', $collect['id'])->update($data);
                 return ajax_return($data, $msg, 200);
 
-            }else{
+            } else {
                 //保存操作
                 $data = [
                     'status' => 1,
@@ -121,11 +126,13 @@ class Customer extends Controller
 
         }
     }
-    public function collect_detail($goods_id){
+
+    public function collect_detail($goods_id)
+    {
         $user = session('wx_user');
         $customer = Db::table('fy_customer')->field('id')->where('openid', $user['openid'])->find();
         $uid = $customer['id'];
-        $collect = Db::table('fy_customer_collect')->where(['uid'=>$uid,'goods_id'=> $goods_id ])->find();
+        $collect = Db::table('fy_customer_collect')->where(['uid' => $uid, 'goods_id' => $goods_id])->find();
         return ajax_return($collect, '', 200);
     }
 
@@ -174,6 +181,15 @@ class Customer extends Controller
                     Db::table('fy_customer')->where('openid', $user['openid'])->setField('continuity_day', 1);
                     Db::table('fy_customer')->where('openid', $user['openid'])->setInc('score', 1);
                     Db::table('fy_customer_sign')->insert($save);
+                    //新增日志记录
+                    $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid', $userData['id'])->where('addtime', $time)->find();
+                    Db::table('fy_score_log')->insert([
+                        'uid' => $userData['id'],
+                        'source_id' => $sign_id,
+                        'source' => 2,
+                        'score' => 2,
+                        'time' => $time
+                    ]);
                     return ajax_return('', '签到成功', 200);
                     exit;
                 } else {
@@ -186,6 +202,15 @@ class Customer extends Controller
                         Db::table('fy_customer')->where('openid', $user['openid'])->setField('continuity_day', 1);
                         Db::table('fy_customer')->where('openid', $user['openid'])->setInc('score', 1);
                         Db::table('fy_customer_sign')->insert($save);
+                        //新增日志记录
+                        $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid', $userData['id'])->where('addtime', $time)->find();
+                        Db::table('fy_score_log')->insert([
+                            'uid' => $userData['id'],
+                            'source_id' => $sign_id,
+                            'source' => 2,
+                            'score' => 2,
+                            'time' => $time
+                        ]);
                         return ajax_return('', '签到成功', 200);
                     } else {
                         /**
@@ -219,6 +244,15 @@ class Customer extends Controller
                                 'reward_score' => $score
                             ];
                             Db::table('fy_customer_sign')->insert($newSave);
+                            //新增日志记录
+                            $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid', $userData['id'])->where('addtime', $time)->find();
+                            Db::table('fy_score_log')->insert([
+                                'uid' => $userData['id'],
+                                'source_id' => $sign_id,
+                                'source' => 2,
+                                'score' => 2 + $score,
+                                'time' => $time
+                            ]);
                         } else {
                             //是否已达到最大连续签到天数？continue_day重置为1
                             if ($userData['continuity_day'] == 15) {
@@ -228,6 +262,15 @@ class Customer extends Controller
                             }
                             Db::table('fy_customer')->where('openid', $user['openid'])->setInc('score', 1);
                             Db::table('fy_customer_sign')->insert($save);
+                            //新增日志记录
+                            $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid', $userData['id'])->where('addtime', $time)->find();
+                            Db::table('fy_score_log')->insert([
+                                'uid' => $userData['id'],
+                                'source_id' => $sign_id,
+                                'source' => 2,
+                                'score' => 2,
+                                'time' => $time
+                            ]);
                         }
                         return ajax_return('', '签到成功', 200);
                     }

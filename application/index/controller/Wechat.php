@@ -1,4 +1,4 @@
-<?php 	
+<?php
 
 namespace app\index\controller;
 
@@ -13,12 +13,13 @@ class WeChat extends Controller
     private $appSecret;
     private $authBack;
 
-    public function __construct(){
+    public function __construct()
+    {
         header("content-type:text/html;charset=utf-8");
         parent::__construct();
         $this->appId = Config::get('app_id');
         $this->appSecret = Config::get('app_secret');
-        $serverUrl ="http://{$_SERVER['SERVER_NAME']}:{$_SERVER['SERVER_PORT']}/index.php";
+        $serverUrl = "http://{$_SERVER['SERVER_NAME']}:{$_SERVER['SERVER_PORT']}/index.php";
         $this->authBack = urlencode("{$serverUrl}/index/WeChat/sessionWxUser");
 
     }
@@ -30,6 +31,7 @@ class WeChat extends Controller
         $authUrl = "http://vip.fyxtw.com/get-weixin-code.html";
         $this->redirect("{$authUrl}?appid={$this->appId}&scope=snsapi_userinfo&state={$state}&redirect_uri={$this->authBack}");
     }
+
     # 获取微信用户信息，存放在session中
     public function sessionWxUser()
 //    public function sessionwxuser()
@@ -43,17 +45,29 @@ class WeChat extends Controller
         $customer = Db::name("customer");
         if (!$user = $customer->where(['openid' => $userInfo['openid']])->find()) {
             $userInfo['create_time'] = strtotime(date("Y-m-d H:i:s"));
-            unset( $userInfo['privilege']);
+            unset($userInfo['privilege']);
             $customer->insert($userInfo);
-        }else {
+            //注册送10积分
+            $customer->where('openid', $userInfo['openid'])->setField('score', 10);
+            //新增score日志记录
+            $user = $customer->where('openid', $userInfo['openid'])->find();
+            $time = time();
+            Db::table('fy_score_log')->insert([
+                'uid' => $user['id'],
+                'source_id' => 0,
+                'source' => 1,
+                'score' => 10,
+                'time' => $time
+            ]);
+        } else {
             # 更新登录时间
             $up['update_time'] = strtotime(date("Y-m-d H:i:s"));
             $up['login_ip'] = get_client_ip();
-            $customer->where(array('openid'=>$userInfo['openid']))->update($up);
+            $customer->where(array('openid' => $userInfo['openid']))->update($up);
         }
         Session::set('wx_user', $userInfo);
         # 从哪里来回哪里去
-        $this->redirect(urldecode($this->request->param('state'))?urldecode($this->request->param('state')):'index/index/index');
+        $this->redirect(urldecode($this->request->param('state')) ? urldecode($this->request->param('state')) : 'index/index/index');
     }
 }
 

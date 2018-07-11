@@ -1,0 +1,19 @@
+<form class="mb-20" method="get" action="{:\\think\\Url::build($Request.action)}">
+    <input type="text" class="input-text" style="width:250px" placeholder="用户ID" name="uid" value="{$Request.param.uid}" >
+    <div class="select-box" style="width:250px">
+        <select name="source" class="select">
+            <option value="">请选择积分来源类型</option>
+            <option value="1">注册</option>
+            <option value="2">签到</option>
+            <option value="3">完成任务</option>
+            <option value="4">升级</option>
+            <option value="5">购买商品</option>
+            <option value="6">参与活动</option>
+            <option value="7">兑换商品</option>
+            <option value="8">兑换积分抵扣券</option>
+            <option value="9">抵扣付款金额</option>
+            <option value="10">积分清零</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+</form>
