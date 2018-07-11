@@ -36,9 +36,15 @@ if ($query_result->num_rows > 0) {
         //计算当前时间与清零时间的时间差（单位：分钟）
         $now_empty_sub = ($now_time - $empty_time) / 60;
         if ($now_empty_sub > 0 && $now_empty_sub < 1) {
+            //清零积分
             $update_query = "UPDATE fy_customer SET score=0 WHERE id=$id";
             mysqli_query($conn, $update_query);
             echo $nickname . '的积分已请';
+            //新增score日志记录
+            $score = -$score;
+            $time = time();
+            $insert_query = "INSERT INTO fy_sign_log ('uid','source_id','source','score','time') VALUES ($id,0,10,$score,$time)";
+            mysqli_query($conn, $insert_query);
         }
 
         //计算提醒时间

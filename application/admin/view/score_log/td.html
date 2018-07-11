@@ -1,0 +1,16 @@
+<td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
+<td>{$vo.uid|high_light=$Request.param.uid}</td>
+<td>{$vo.source_id}</td>
+<td>{if condition='$vo.source==1'}注册
+    {elseif condition='$vo.source==2'/}签到
+    {elseif condition='$vo.source==3'/}完成任务
+    {elseif condition='$vo.source==4'/}升级
+    {elseif condition='$vo.source==5'/}购买商品
+    {elseif condition='$vo.source==6'/}参与活动
+    {elseif condition='$vo.source==7'/}兑换商品
+    {elseif condition='$vo.source==8'/}兑换积分抵扣券
+    {elseif condition='$vo.source==9'/}抵扣付款金额
+    {elseif condition='$vo.source==10'/}积分清零
+    {/if}</td>
+<td>{$vo.score}</td>
+<td>{$vo.time}</td>
