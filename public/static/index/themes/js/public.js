@@ -407,27 +407,29 @@ function pub_edit(json){
     if(request_flag.edit){//请求完成后才能进行下一次请求
         request_flag.edit = false;
         layerLoad();
-        $.ajax({
-            url:json.url,
-            type:'post',
-            data:json.data,
-            dataType:'json',
-            success: function(data){
-                layer_msg(data.msg);
-                if(data.code ==200){
-                    if(json.complete){
-                        //有回调函数  执行回调函数
-                        json.complete(data.data);
-                        request_flag.edit = true;
-                    }else{
-                        setTimeout(function(){
-                            location.href=json.return_url;
+        setTimeout(function () {
+            $.ajax({
+                url:json.url,
+                type:'post',
+                data:json.data,
+                dataType:'json',
+                success: function(data){
+                    layer_msg(data.msg);
+                    if(data.code ==200){
+                        if(json.complete){
+                            //有回调函数  执行回调函数
+                            json.complete(data.data);
                             request_flag.edit = true;
-                        },1500);
+                        }else{
+                            setTimeout(function(){
+                                location.href=json.return_url;
+                                request_flag.edit = true;
+                            },1500);
+                        }
                     }
                 }
-            }
-        })
+            })
+        },500)
     }
 }
 function pub_del(json){
