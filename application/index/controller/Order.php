@@ -29,7 +29,9 @@
                 if($data['status']=='all'){
 //                    dump($this->userInfo['openid']);die;
                     $orderList = Db::name('order')
+//                        ->field('fy_goods_attribute.*')
                         ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
+                        ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id')
                         ->where(['fy_order.openid'=>$this->userInfo['openid']])
                         ->order('fy_order.create_time desc')
                         ->page($page,$size)
@@ -38,21 +40,22 @@
                 }else{
                     $orderList = Db::name('order')
                         ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
+                        ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id')
                         ->where(['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status']])
                         ->order('fy_order.create_time desc')
                         ->page($page,$size)
                         ->select();
                 }
-//                dump();
+//                dump($orderList);
                 foreach ($orderList as $k=>$v ){
                     $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
                 }
                 $orderList = array_values($this->array_group_by($orderList,'order_id'));
-               // if(!empty($orderList) ){
+                if(!empty($orderList) ){
                     return ajax_return($orderList,'ok','200');
-                /*}else{
+                }else{
                     return ajax_return('','no','500');
-                }*/
+                }
 
             }
         }
@@ -351,6 +354,7 @@
             $orderDetail = Db::name('order')
 //                ->join('fy_customer_address','fy_customer_address.id=fy_order.address_id','left')
                 ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
+                ->join('fy_goods_attribute','fy_order_goods.sku_id=fy_goods_attribute.id','left')
                 ->where(['fy_order.order_id'=>$id])
                 ->select();
             $address = Db::name('customer_address')
@@ -359,35 +363,26 @@
             foreach (  $orderDetail as$k=> $v){
                 $orderDetail[$k]['goods_detail'] = json_decode($orderDetail[$k]['goods_detail'],true);
             }
-
-//            dump($address);
-//            echo Db::name('order')->getLastSql();
-//            dump($orderDetail);die;
             $this->view->assign('address',$address);
             $this->view->assign('orderDetail',$orderDetail);
-
-            // dump($address);
-            // dump($orderDetail);die;
             return $this->view->fetch('orderDetail');
         }
 
-        #订单详情页面
+        #商品售后
         public function  orderService()
         {
-            $this->assign('titleName', "订单详情");
-            $id = $this->request->param('id');
-            if(!$id){
-                return $this->error('缺少参数订单id');
+            $this->assign('titleName', "商品售后");
+            $order_id = $this->request->param('order_id');
+            $goods_id = $this->request->param('goods_id');
+            if(!$goods_id || !$order_id ){
+                return $this->error('缺少参数id');
             }
             $orderDetail = Db::name('order')
-//                ->join('fy_customer_address','fy_customer_address.id=fy_order.address_id','left')
                 ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
-                ->where(['fy_order.order_id'=>$id])
+                ->where(['fy_order.order_id'=>$order_id,'fy_order_goods.goods_id'=>$goods_id])
                 ->find();
-
             $orderDetail['goods_detail'] = json_decode($orderDetail['goods_detail'],true);
-//            dump($address);
-//            echo Db::name('order')->getLastSql();
+////            echo Db::name('order')->getLastSql();
 //            dump($orderDetail);die;
             $this->view->assign('orderDetail',$orderDetail);
             return $this->view->fetch('orderService');
