@@ -3949,8 +3949,9 @@ a {
 	display: inline-block;
 	background: #ff5000;
 	color: #fff;
+	border-radius: 4px;
 	padding: .04rem .13333rem;
-	margin: .13333rem .13333rem 0 0;
+	margin-top: 4px;
 }
 .item-pay{
 	width: 14%;
@@ -3966,7 +3967,7 @@ a {
 }
 .goode-collect  .list-item a{
 	display: block;
-	min-height: 1rem;
+	min-height: .8rem;
 	position: relative;
 }
 .goode-collect .list-item .img{
@@ -3983,7 +3984,7 @@ a {
 	float: left;
 	width: 68%;
 	margin-left: 2%;
-	min-height: 1rem;
+	min-height: .8rem;
 	position: relative;
 }
 .goode-collect .list-item .item-info .status{
@@ -4005,6 +4006,7 @@ a {
 	width: .4rem;
 	height: .25rem;
 	text-align: center;
+	top: -6px;
 }
 /*
 我的钱包*/
