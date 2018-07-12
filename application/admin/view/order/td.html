@@ -10,10 +10,13 @@
     {/php}</td>
 <td>{$vo.total_price}</td>
 <td>{$vo.create_time|date="Y-m-d H:i:s",###}</td>
+{php}   if($_SESSION['think']['auth_id']==1){ {/php}
 <td><?php
        $user = \think\Db::name('admin_user')->where(['id'=>$vo['user_id']])->find();
-    echo $user['account'].$user['realname'];
+    echo $user['account']."&nbsp;&nbsp;&nbsp;&nbsp;".$user['realname'];
 ?></td>
+{php} } {/php}
+<td>{$vo.customer_name}</td>
 <td><?php $address = \think\Db::name('customer_address')->where(['id'=> $vo['address_id']])->find();
     echo $address['name'];
     echo $address['mobile'];

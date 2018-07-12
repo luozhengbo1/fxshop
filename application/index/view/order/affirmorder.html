@@ -119,7 +119,7 @@
                price:$ele.data('price'),
                carId:$ele.data('carid'),
                words:$ele.parents('.orderWrap').find('.words').val(),
-               addressId:"{$address['id']}",
+               addressId:"{$address['id']??''}",
            };
            saveData.push(thisData);
        })

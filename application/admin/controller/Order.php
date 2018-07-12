@@ -24,6 +24,9 @@ class Order extends Controller
         if ($this->request->param("user_id")) {
             $map['fy_order.user_id'] = $this->request->param("user_id");
         }
+        if ($this->request->param("customer_name")) {
+            $map['fy_order.customer_name'] = ["like", "%" . $this->request->param("customer_name") . "%"];
+        }
         if ($this->request->param("create_time_start") || $this->request->param("create_time_end") ) {
             $map['fy_order.create_time'] = [
                 'between',
@@ -33,6 +36,7 @@ class Order extends Controller
                 ]
             ];
         }
+
 
     }
 
@@ -54,6 +58,9 @@ class Order extends Controller
         if (method_exists($this, 'filter')) {
             $this->filter($map);
         }
+        if($_SESSION['think']['auth_id']!=1){
+            $map['fy_order.user_id'] = $_SESSION['think']['auth_id'];
+        }
         $userList = Db::name('admin_user')->where(['isdelete'=>0,'id'=>['>',1]])->select();
         $orderList = Db::name('order')
             ->join( 'fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
@@ -61,10 +68,6 @@ class Order extends Controller
             ->where($map)
             ->group('fy_order.order_id')
             ->paginate(20);
-//       dump($orderList);
-//        foreach ($orderList as $k=>$v){
-//            $orderList[$k]['goods_detail'] = json_decode($v['buy'],true);
-//        }
         $this->view->assign ('userList',$userList);
         $this->view->assign('list',$orderList);
         return $this->  view->fetch();
@@ -72,7 +75,8 @@ class Order extends Controller
 
     public function orderDetail()
     {
-        
+
+        return $this->view->fetch();
     }
 
 }

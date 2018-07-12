@@ -23,6 +23,9 @@
             {include file="td" /}
             <td class="f-14">
                 {tp:menu menu='sedit' /}
+                {php}if($vo['order_status']=='1'){ {/php}
+                <a href="javascript:;" class="btn" onclick="sureSend({$vo['order_id']})">确认发货</a>
+                {php}}{/php}
                 <a class="btn" href="{:url('order/OrderDetail')}">订单详情</a>
             </td>
         </tr>
