@@ -4,8 +4,8 @@
 <!--卡券列表-->
 <section>
     <ul class="nav-list-tab" id="navListTab">
-        <li  class="w50p active"><a href="javascript:;">未使用</a></li>
-        <li class="w50p"><a href="javascript:;">使用记录</a></li>
+        <li class="w50p active"><a href="javascript:;" onclick="loadOrderData(0)">未使用</a></li>
+        <li class="w50p"><a href="javascript:;" onclick="loadOrderData(1)">使用记录</a></li>
     </ul>
     <div id="dataListWrap">
         <ul id="dataList" class="mycard-voucher-list mt50">
@@ -25,40 +25,59 @@
     </div>
 </section>
 <script>
-    tabSwitch($('.nav-list-tab li'),loadOrderData);
+    tabSwitch($('.nav-list-tab li'));
     $(function () {
         loadOrderData()
     })
 
-    function loadOrderData(){
+    function loadOrderData(status) {
         initData('dataList');
         pageload({
-            targetWarp:'dataListWrap',
-            target:'dataList',
-            page:1,
-            size:4,
-            ajaxData:{
-                url:"{:url('index/index/return_json')}",
-                data:{},
+            targetWarp: 'dataListWrap',
+            target: 'dataList',
+            page: 1,
+            size: 4,
+            ajaxData: {
+                url: "{:url('index/customer/mycardvoucher')}",
+                data: {status: status},
             },
-            dealFun:dealData
+            dealFun: dealData
         });
     }
+
     function dealData(data) {
-        var html='';
-        for(var i = 0; i < data.length; i++){
-            html +='<li>';
-            html +='    <div class="product-info clear">';
-            html +='        <img class="img fl" src="__STATIC__/index/images/image/headImg.jpg" alt="商品图片">';
-            html +='        <p class="fl bold f16 ml10">本草同堂</p>';
-            html +='        <p class="price f24">¥15</p>';
-            html +='    </div>';
-            html +='    <div class="grey mt5 mb5">满100元可用</div>';
-            html +='    <div class="clear">';
-            html +='        <p class="fl grey">使用有效期：2018.05.04-2019.02.03</p>';
-            html +='        <button class="fr layui-btn layui-btn-xs layui-btn-radius" >&nbsp;&nbsp;去使用 &nbsp;&nbsp;</button>';
-            html +='    </div>';
-            html +='</li>';
+        console.log(data)
+        var html = '';
+        for (var i = 0; i < data.length; i++) {
+            html += '<li>';
+            html += '    <div class="product-info clear">';
+            html += '        <img class="img fl" src="'+data[i].main_pic+'" alt="商品图片">';
+            html += '        <p class="fl bold f16 ml10">' + data[i].name + '</p>';
+            if (data[i].voucher_money != 0) {
+                html += '        <p class="price f24">¥' + data[i].voucher_money + '</p>';
+            } else if (data[i].coupon_money != 0) {
+                html += '        <p class="price f24">¥' + data[i].coupon_money + '</p>';
+            } else if (data[i].cash_coupon_real_money != 0) {
+                html += '        <p class="price f24">¥' + data[i].cash_coupon_real_money + '</p>';
+            } else if (data[i].score_money != 0) {
+                html += '        <p class="price f24">¥' + data[i].score_money + '</p>';
+            }
+            html += '    </div>';
+            html += '    <div class="grey mt5 mb5">' + data[i].desc + '</div>';
+            html += '    <div class="clear">';
+            Date.prototype.toLocaleString = function () {
+                return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate() + " " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
+            };
+            var expire_start_date = new Date(parseInt(data[i].expire_start_date) * 1000).toLocaleString();
+            var expire_end_date = new Date(parseInt(data[i].expire_end_date) * 1000).toLocaleString();
+            html += '        <p class="fl grey">使用有效期：' + expire_start_date + '-' + expire_end_date + '</p>';
+            if (data[i].is_use == 0) {
+                html += '        <button class="fr layui-btn layui-btn-xs layui-btn-radius" >&nbsp;&nbsp;去使用 &nbsp;&nbsp;</button>';
+            } else if (data[i].is_use == 1) {
+                html += '        <button class="fr layui-btn layui-btn-xs layui-btn-radius" disabled="disabled" style="background-color: #d0d0d0">&nbsp;&nbsp;已过期 &nbsp;&nbsp;</button>';
+            }
+            html += '    </div>';
+            html += '</li>';
         }
         return html;
     }
