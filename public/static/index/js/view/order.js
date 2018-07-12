@@ -7,31 +7,35 @@ function pay(orderid) {
     })
 }
 //退款
-function refund(order_id,goods_id) {
+function refund(order_id,goods_id,sku_id) {
     layer.open({
         content: '你确定要退款吗？'
         ,btn: ['确定', '不要']
         ,yes: function(index){
             pub_save({
-                url:url.againPay,
-                data:{id:orderid},
-                complete:refundComplete,
+                url:url.refund,
+                data:{},
+                complete:loadOrderData,
             })
         }
     });
 }
 //确认收货
-function sureDeliver(order_id,goods_id) {
+function sureDeliver(order_id,goods_id,sku_id) {
     layer.open({
         content: '你确定要确认收货吗？'
         ,btn: ['确定', '不要']
         ,yes: function(index){
-
+            pub_save({
+                url:url.sureDeliver,
+                data:{'order_id':order_id,'goods_id':goods_id,'sku_id':sku_id},
+                complete:modifyComplete,
+            })
         }
     });
 }
 //评价
-function evaluate(order_id,goods_id) {
+function evaluate(order_id,goods_id,sku_id) {
     layer.open({
         content: '你确定要确认收货吗？'
         ,btn: ['确定', '不要']
