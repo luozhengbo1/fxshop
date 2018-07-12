@@ -137,7 +137,7 @@
                 $time = time();
                 $orderAll = [
                     'order_id'=>$orderId,
-                    'total_price'=>$price*100,
+                    'total_price'=>$price,
                     'create_time'=>time(),
                 ];
 
@@ -155,7 +155,7 @@
                         "address_id" => $data[$k]['addressId'],
                         "openid" => $this->userInfo['openid'],
                         "customer_name" => $this->userInfo['nickname'],
-                        "total_price" => $this->calculateOrderValue($v)*100,
+                        "total_price" => $this->calculateOrderValue($v),
                         "goods_all" => join(array_column($v,'goodsId'),','),
                         "create_time" => $time,
                         "pay_status" => 0,#支付状态;0未付款;1已付款
@@ -200,7 +200,7 @@
                 $input->SetBody("泛亚商城 的订单");
                 $input->SetAttach("附加参数");
                 $input->SetOut_trade_no($orderId);
-                $input->SetTotal_fee($orderAll['total_price']*100);
+                $input->SetTotal_fee($orderAll['total_price']);
                 $input->SetTime_start(date("YmdHis"));
                 $input->SetTime_expire(date("YmdHis", time() + 600));
                 $input->SetGoods_tag("");
@@ -278,7 +278,7 @@
                     $input->SetBody("泛亚商城 的订单");
                     $input->SetAttach("附加参数");
                     $input->SetOut_trade_no($orderData['order_id']);
-                    $input->SetTotal_fee($orderData['total_price']*100);
+                    $input->SetTotal_fee($orderData['total_price']);
                     $input->SetTime_start(date("YmdHis"));
                     $input->SetTime_expire(date("YmdHis", time() + 600));
                     $input->SetGoods_tag("");
@@ -318,7 +318,7 @@
                     $pay +=$goods['postage'];
                 }
             }
-            return $pay;
+            return $pay*100;
 //            return 0.01;
         }
 
@@ -337,9 +337,27 @@
                         'sku_id'=>$data['sku_id']
                     ])
                     ->update(['is_get_status'=>1]);
-                //echo Db::name('order_goods')->getLastSql();
-               // dump($res);
+
                 if($res){
+                    #将这个商品的积分返给用户。
+                    $goods = Db::name('order_goods')
+                        ->field('fy_goods.return_score,fy_goods.id')
+                        ->join('fy_goods','fy_goods.id=fy_order_goods.id')
+                        ->where([
+                            'fy_order_goods.order_id'=>$data['order_id'],
+                            'fy_order_goods.goods_id'=>$data['goods_id'],
+                            'fy_order_goods.sku_id'=>$data['sku_id']
+                        ])->find();
+                    #加上同样多的价格和
+                    Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->setInc('experience',$goods['return_score']);
+                    Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->setInc('score',$goods['return_score']);
+                    $insert =[];
+                    $insert['openid']=$this->userInfo['openid'];
+                    $insert['source_id']=$goods['id'];
+                    $insert['source']=5;
+                    $insert['score']=$goods['return_score'];
+                    $insert['time']=time();
+                    Db::name('score_log')->insert($insert);
                     return  ajax_return('','确认成功','200');
                 }else{
                     return  ajax_return('','确认失败','500');
@@ -412,5 +430,49 @@
             $this->view->assign('orderDetail',$orderDetail);
             return $this->view->fetch('orderService');
         }
+
+        #订单评论
+        public function  orderComment()
+        {
+            if($this->request->isAjax()){
+                $data = $this->request->post();
+                if(!$data['order_id'] ){
+                    return ajax_return_error('缺少参数id');
+                }
+                $orderGoods = Db::name('order_goods')
+                    ->where([
+                        'order_id'=>$data['order_id'],
+                        'goods_id'=>$data['goods_id'],
+                        'sku_id'=>$data['sku_id']
+                    ])->find();
+                if($orderGoods['is_comment']==1){
+                    return ajax_return_error('只能评价一次');
+                }
+                $res = Db::name('order_goods')
+                    ->where([
+                        'order_id'=>$data['order_id'],
+                        'goods_id'=>$data['goods_id'],
+                        'sku_id'=>$data['sku_id']
+                    ])
+                    ->update(['is_comment'=>1]);
+                #记录评价内容
+                $insert = [];
+                $insert['goods_id'] = $orderGoods['goods_id'];
+                $insert['openid'] = $this->userInfo['openid'];
+                $insert['username'] = $this->userInfo['nickname'];
+                $insert['content'] = $data['content'];
+                $insert['create_time'] =time();
+                $res1 = Db::name('goods_comment')->insert($insert);
+                //echo Db::name('order_goods')->getLastSql();
+                // dump($res);
+                if($res && $res1){
+                    return  ajax_return('','确认成功','200');
+                }else{
+                    return  ajax_return('','确认失败','500');
+                }
+            }
+        }
+
+
 
     }
