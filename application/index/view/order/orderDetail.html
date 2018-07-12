@@ -60,7 +60,7 @@
                 </div>
 
             </div>
-            <div class="module  clear pr10 pt5" >
+            <div class="module  clear pr10 pt5 mb5" >
                 <div class="cont tr">
                     <span class="f14">共<b>{$vo['goods_num']}</b>件商品</span>
                     <span class="f14">合计:<b>￥{$vo['total_price']}</b></span>
@@ -70,17 +70,19 @@
                     {if condition="$status eq 3" /}  <!--待退款-->
                     <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="goOrderService('{$orderDetail[0][\'order_id\']}','{$orderDetail[0][\'goods_id\']}')"  >申请售后</button>
                     {/if}
+                    {if condition="$status neq 0 && $status neq 1" /}  <!--待退款-->
+                    <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="logistics('{$orderDetail[0][\'order_id\']}','{$orderDetail[0][\'goods_id\']}')"  >物流信息</button>
+                    {/if}
                 </div>
             </div>
             {/volist}
-            <div class="module clear tr mt10 pr10" >
-                {if condition="$status eq 0"}
+            <div class="module clear tr pt10 pr10" style="border-top: 1px dotted lightgrey" >
+                {if condition="$status eq 0"}<!--待付款-->
                 <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="pay('{$orderDetail[0][\'order_id\']}')">付款</button>
                 {elseif condition="$status eq 1" /} <!--代发货-->
                 <button class="layui-btn layui-btn-primary layui-btn-sm">联系卖家</button>
                 {elseif condition="$status eq 2" /}<!-- 待收货-->
                 <button class="layui-btn layui-btn-primary layui-btn-sm">确认收货</button>
-                <button class="layui-btn layui-btn-primary layui-btn-sm">物流信息</button>
 
                 {elseif condition="$status eq 4" /} <!--待评价-->
                 <button class="layui-btn layui-btn-primary layui-btn-sm">评价</button>
@@ -101,10 +103,21 @@
 </section>
 <script>
     var url = {
-        orderService:"{:url('index/order/orderService')}",
+        orderService:"{:url('index/order/orderService')}",//
+        logistics:"{:url('index/order/logistics')}",//物流查看
     }
     function goOrderService(order_id,goods_id) {
         window.location.href = urlConnect(url.orderService,{order_id:order_id,goods_id:goods_id})
+    }
+    function logistics(order_id,goods_id) {
+        window.location.href=urlConnect(url.logistics,{order_id:order_id,goods_id:goods_id})
+    }
+    function pay(orderid) {
+        pub_save({
+            url:url.againPay,
+            return_url:"#",
+            data:{id:orderid},
+        })
     }
 </script>
 </body>
