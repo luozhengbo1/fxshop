@@ -75,8 +75,48 @@ class Order extends Controller
 
     public function orderDetail()
     {
-
+        $id = $this->request->param('id');
+        if(!$id){
+            return $this->error('缺少参数订单id');
+        }
+        $orderDetail = Db::name('order')
+//                ->join('fy_customer_address','fy_customer_address.id=fy_order.address_id','left')
+            ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
+            ->join('fy_goods_attribute','fy_order_goods.sku_id=fy_goods_attribute.id','left')
+            ->where(['fy_order.order_id'=>$id])
+            ->select();
+        $address = Db::name('customer_address')
+            ->where(['id'=>$orderDetail[0]['address_id']])
+            ->find();
+        foreach (  $orderDetail as $k=> $v){
+            $orderDetail[$k]['goods_detail'] = json_decode($orderDetail[$k]['goods_detail'],true);
+        }
+        $this->view->assign('address',$address);
+        $this->view->assign('orderDetail',$orderDetail);
         return $this->view->fetch();
+    }
+
+    #添加物流信息
+    public function addPost()
+    {
+        if($this->request->isAjax()){
+            $data = $this->request->post();
+            if(!$data['id']){
+                return ajax_return_error('缺少参数id');
+            }
+            $res = Db::name('order_goods')
+                ->where(['id'=>$data['id']])
+                ->update([
+                    'logistics_name'=>$data['logistics_name'],
+                    'logistics_number'=>$data['logistics_number']
+                ]);
+            if($res){
+                #确认物流，提醒买家
+                return ajax_return('','操作成功','200');
+            }else{
+                return ajax_return('','操作失败','500');
+            }
+        }
     }
 
 }

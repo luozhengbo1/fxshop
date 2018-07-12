@@ -10,7 +10,7 @@
             <p>{$address['address']??''}&nbsp;&nbsp;&nbsp;&nbsp; {$address['street']??''}</p>
         </a>
         {else /}
-        <a class="add-address" href=""><span>还没有地址去添加吧</span></a>
+        <a class="add-address" href="{:\\think\\Url::build(\'address/index\')}"><span>还没有地址去添加吧</span></a>
         {/if}
     </div>
     {volist name="storeData" id="vo" empty=""}
