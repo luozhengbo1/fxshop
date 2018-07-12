@@ -85,15 +85,17 @@ class Order extends Controller
             ->join('fy_goods_attribute','fy_order_goods.sku_id=fy_goods_attribute.id','left')
             ->where(['fy_order.order_id'=>$id])
             ->select();
+
         $address = Db::name('customer_address')
             ->where(['id'=>$orderDetail[0]['address_id']])
             ->find();
+
         foreach (  $orderDetail as $k=> $v){
             $orderDetail[$k]['goods_detail'] = json_decode($orderDetail[$k]['goods_detail'],true);
         }
         $this->view->assign('address',$address);
         $this->view->assign('orderDetail',$orderDetail);
-        return $this->view->fetch();
+        return $this->view->fetch('orderdetail');
     }
 
     #添加物流信息

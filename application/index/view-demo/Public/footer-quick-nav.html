@@ -1,0 +1,78 @@
+<nav class="commom-nav dis-box ts-5" id="ectouch-top">
+	<!--快捷导航-->
+	<div class="left-icon">
+		<div class="nav-icon"><i class="iconfont icon-jiantou1"></i>快速<br>导航</div>
+		<div class="filter-top filter-top-index" id="scrollUp" style="display: none">
+			<i class="iconfont icon-jiantou"></i>
+			<span>顶部</span>
+		</div>
+	</div>
+	<div class="right-cont box-flex">
+		<ul class="nav-cont">
+			<li>
+				<a href="{:\\think\\Url::build(\'index\')}">
+					<i class="iconfont icon-home"></i>
+					<p>首页</p>
+				</a>
+			</li>
+			<li>
+				<a href="{:\\think\\Url::build(\'goodsSearch\')}">
+					<i class="iconfont icon-sousuo"></i>
+					<p>搜索</p>
+				</a>
+			</li>
+			<li>
+				<a href="{:\\think\\Url::build(\'sort\')}">
+					<i class="iconfont icon-caidan"></i>
+					<p>分类</p>
+				</a>
+			</li>
+			<li>
+				<a href="{:\\think\\Url::build(\'car/index\')}">
+					<i class="iconfont icon-gouwuche"></i>
+					<p>购物车</p>
+				</a>
+			</li>
+			<li>
+				<a href="{:\\think\\Url::build(\'customer\')}">
+					<i class="iconfont icon-geren"></i>
+					<p>会员中心</p>
+				</a>
+			</li>
+
+		</ul>
+	</div>
+</nav>
+<div class="common-show"></div>
+<script>
+    //快捷导航
+    $(".commom-nav .left-icon .nav-icon,.common-show").click(function () {
+        $(".commom-nav").toggleClass("active");
+        $(".common-show").toggleClass("active");
+        $(".icon-jiantou1").toggleClass("active");
+        $(".filter-top-index").toggleClass("active");
+    });
+    /*页面向上滚动js*/
+
+    $(".filter-top").click(function () {
+        $("html,body").animate({
+            scrollTop: 0
+        }, 200);
+    });
+
+    $(window).scroll(function () {
+        var prevTop = 0,
+            currTop = 0;
+        currTop = $(window).scrollTop();
+        win_height = $(window).height() * 2;
+        if (currTop >= win_height) {
+            $(".filter-top").stop().fadeIn(200);
+        } else {
+            $(".filter-top").stop().fadeOut(200);
+        }
+        //prevTop = currTop; //IE下有BUG，所以用以下方式
+        setTimeout(function () {
+            prevTop = currTop
+        }, 0);
+    });
+</script>

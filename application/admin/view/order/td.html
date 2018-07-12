@@ -2,10 +2,12 @@
 <td>{$vo.order_id|high_light=$Request.param.order_id}</td>
 <td>{php}
         $vo['buy_list'] =json_decode($vo['buy_list'],true);
-    foreach( $vo['buy_list']  as $val ){
-        echo $val['goods_name']."&nbsp;&nbsp;&nbsp;&nbsp;";
-        echo ($val['sku_val'])?$val['sku_val']:'';
-        echo "&nbsp;&nbsp;&nbsp;&nbsp;x".$val['num']."<br/>";
+    if(is_array($vo['buy_list']) ){
+        foreach( $vo['buy_list']  as $val ){
+            echo $val['goods_name']."&nbsp;&nbsp;&nbsp;&nbsp;";
+            echo ($val['sku_val'])?$val['sku_val']:'';
+            echo "&nbsp;&nbsp;&nbsp;&nbsp;x".$val['num']."<br/>";
+        }
     }
     {/php}</td>
 <td>{$vo.total_price}</td>

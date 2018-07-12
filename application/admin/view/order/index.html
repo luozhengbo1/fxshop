@@ -26,7 +26,7 @@
                 {php}if($vo['order_status']=='1'){ {/php}
                 <a href="javascript:;" class="btn" onclick="sureSend({$vo['order_id']})">确认发货</a>
                 {php}}{/php}
-                <a class="btn" href="{:url('order/OrderDetail')}">订单详情</a>
+                <a class="btn" href="javascript:;" data-href="" data-id="{$vo['order_id']}"  onclick="layer_open('订单详情','{:\\think\\Url::build(\'orderDetail\', [\'id\'=>$vo[\'order_id\']])}')" >订单详情</a>
             </td>
         </tr>
         {/volist}
@@ -42,6 +42,10 @@
         $("[name='order_status']").find("[value='{$Request.param.order_status}']").attr("selected", true);
         $("[name='pay_status']").find("[value='{$Request.param.pay_status}']").attr("selected", true);
     })
+    function orderDetail(_this){
+
+        layer_open('订单详情',  urlConnect("{:url('order/OrderDetail')}",{id:$(_this).attr('data-id')}));
+    }
 </script>
 {/block}
 
