@@ -30,34 +30,48 @@
       <tr class="text-c">
         <td>商品图片</td>
         <td>商品名</td>
-        <td>价格</td>
+          <td>价格</td>
+          <td>下单时间</td>
         <td>商品规格</td>
         <td>购买数量</td>
-        <td>总价</td>
-        <td>运费</td>
+          <td>运费</td>
+          <td>状态</td>
       </tr>
       </thead>
       <tbody>
       <tr class="text-c">
         <td class="f-14"><img width="30" height="30" src="{$vo['goods_detail']['main_image']}" /></td>
         <td class="f-14">{$vo['goods_detail']['name']}</td>
-        <td class="f-14">{$vo['price']}</td>
+          <td class="f-14">{$vo['price']}</td>
+          <td class="f-14">{$vo['create_time']|date="Y-m-d H:i:s",###}</td>
+
         <td class="f-14">{$vo['sku_val']}</td>
         <td class="f-14">{$vo['goods_num']}</td>
-        <td class="f-14">{$vo['total_price']}</td>
-        <td class="f-14">{$vo['goods_detail']['postage']}</td>
+          <td class="f-14">{$vo['goods_detail']['postage']??'0'}</td>
+          <td class="f-14">
+             {php} if($vo['is_get_status']==1){{/php}
+              已收货
+              {php} }elseif($vo['is_get_status']==2){{/php}
+              退款
+              {php} }else{{/php}
+              待收货
+              {php} }{/php}
+          </td>
+      </tr>
+      <tr>
+          <td>订单总价</td>
+          <td>{$vo['total_price']}</td>
       </tr>
       </tbody>
     </table>
     <div>
       <form>
         <div class="mt20 mb20">
-          <label>快递单号:</label>
-          <input type="text" placeholder="快递单号" class="form_control w120 lh30 h30" >
-
-          <label class="ml20">快递单号:</label>
-          <input type="text" placeholder="快递名称" class="form_control w120 lh30 h30" >
-          <a href="javascript:;" onclick="" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont"></i> 保存</a>
+            <label class="ml20">快递名称:</label>
+            <input type="text" placeholder="快递名称" name="logistics_name" value="{$vo['logistics_name']??''}" class="form_control w120 lh30 h30" >
+            <label>快递单号:</label>
+            <input type="text" placeholder="快递单号"  name="logistics_number"  value="{$vo['logistics_number']??''}" class="form_control w120 lh30 h30" >
+          <a href="javascript:;" onclick="addPost({$vo['id']})" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 保存</a>
         </div>
       </form>
     </div>
@@ -66,3 +80,19 @@
 </div>
 {/block}
 {block name="script"}
+<script>
+        function  addPost(id) {
+            var logistics_name = $('input[name="logistics_name"]').val();
+            var logistics_number = $('input[name="logistics_number"]').val();
+            $.ajax({
+                url:"{:url('order/addPost')}",
+                type:'post',
+                data:{'id':id,'logistics_name':logistics_name,'logistics_number':logistics_number},
+                success:function (res) {
+                    alert(res.msg)
+                    document.location.reload()
+                }
+            })
+        }
+</script>
+{/block}
