@@ -35,7 +35,7 @@
     </ul>
     <ul class="service-list" onclick="serviceSave('{$orderDetail.order_id}')">
 
-        <li class="clear" onclick="serviceSave('{$orderDetail.order_id}')">
+        <li class="clear" onclick="serviceSave('{$orderDetail.order_id}',0)">
             <div class="fl w10p tc pt10"><img width="20" src="//gw.alicdn.com/tps/TB1qGHoKFXXXXcnaXXXXXXXXXXX-104-104.png"></div>
             <div class="fl w80p pl10">
                 <p class="f14">退款退款</p>
@@ -45,7 +45,7 @@
                 <i class="icon-right-arrow iconfont f12 grey"></i>
             </div>
         </li>
-        <li class="clear" onclick="serviceSave('{$orderDetail.order_id}')">
+        <li class="clear" onclick="serviceSave('{$orderDetail.order_id}',1)">
             <div class="fl w10p tc pt10"><img width="20" src="//gw.alicdn.com/tps/TB1.5TwKFXXXXcEXVXXXXXXXXXX-104-104.png"></div>
             <div class="fl w80p pl10">
                 <p class="f14">换货</p>
@@ -60,8 +60,28 @@
     var url = {
         serviceForm:"{:url('index/order/serviceForm')}",
     }
-    function serviceSave(id) {
-        window.location.href = urlConnect(url.serviceForm,{id:id})
+    function serviceSave(id,type) {
+        if(type ==0 ){
+            layer.open({
+                content: '是否确认退货退款？'
+                ,btn: ['确定', '不要']
+                ,yes: function(index){
+
+                    layer.close(index);
+                }
+            })
+        }else if(type ==1){
+            //换货
+            layer.open({
+                content: '换货请联系卖家'
+                ,btn: ['确定', '不要']
+                ,yes: function(index){
+                    layer.close(index);
+                }
+            })
+        }
+
+      //  window.location.href = urlConnect(url.serviceForm,{id:id})
     }
 </script>
 </body>

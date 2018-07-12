@@ -90,13 +90,13 @@
         </li>
     </ul>
     <div class="p5 bg_white mt10 grey">
-        <p class="">订单编号:{$orderDetail[0]['order_id']}</p>
-        <p class="">创建时间:{$orderDetail[0]['create_time']|date="Y-m-d H:i:s",###}</p>
+        <p class="lh20">订单编号:{$orderDetail[0]['order_id']}</p>
+        <p class="lh20">创建时间:{$orderDetail[0]['create_time']|date="Y-m-d H:i:s",###}</p>
         {if condition="$status neq 0" /}<!--已经付款了-->
-        <p class="">付款时间:{$orderDetail[0]['pay_time']|date="Y-m-d H:i:s",###}</p>
+        <p class="lh20">付款时间:{$orderDetail[0]['pay_time']|date="Y-m-d H:i:s",###}</p>
         {/if}
 
-        <p class="">发货时间:{$orderDetail[0]['create_time']|date="Y-m-d H:i:s",###}</p>
+        <p class="lh20">发货时间:{$orderDetail[0]['create_time']|date="Y-m-d H:i:s",###}</p>
     </div>
 </section>
 <script>
