@@ -53,7 +53,7 @@
                 </div>
                 <div class="item-pay">
                     <div class="item-pay-data">
-                        <p class="price f14"> ￥{$vo['goods_detail']['basic_price']} </p>
+                        <p class="price f14"> ￥{$vo['price']} </p>
                         <p class="nums">x{$vo['goods_num']}</p>
 
                     </div>
@@ -103,8 +103,8 @@
     var url = {
         orderService:"{:url('index/order/orderService')}",
     }
-    function goOrderService(id) {
-        window.location.href = urlConnect(url.orderService,{id:id})
+    function goOrderService(order_id,goods_id) {
+        window.location.href = urlConnect(url.orderService,{order_id:order_id,goods_id:goods_id})
     }
 </script>
 </body>

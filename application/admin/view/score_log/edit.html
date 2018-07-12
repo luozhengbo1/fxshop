@@ -1,0 +1,87 @@
+{extend name="template/base" /}
+{block name="content"}
+<div class="page-container">
+    <form class="form form-horizontal" id="form" method="post" action="{:\\think\\Request::instance()->baseUrl()}">
+        <input type="hidden" name="id" value="{$vo.id ?? ''}">
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>用户ID：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" placeholder="用户ID" name="uid" value="{$vo.uid ?? ''}"  datatype="*" nullmsg="请填写用户ID">
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>积分来源ID：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" placeholder="积分来源ID" name="source_id" value="{$vo.source_id ?? ''}"  datatype="*" nullmsg="请填写积分来源ID">
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>积分来源类型：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <div class="select-box">
+                    <select name="source" class="select" datatype="*" nullmsg="请选择积分来源类型">
+                        <option value="1">注册</option>
+                        <option value="2">签到</option>
+                        <option value="3">完成任务</option>
+                        <option value="4">升级</option>
+                        <option value="5">购买商品</option>
+                        <option value="6">参与活动</option>
+                        <option value="7">兑换商品</option>
+                        <option value="8">兑换积分抵扣券</option>
+                        <option value="9">抵扣付款金额</option>
+                        <option value="10">积分清零</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>增减积分：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" placeholder="增减积分" name="score" value="{$vo.score ?? ''}"  datatype="*" nullmsg="请填写增减积分">
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>增减时间：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text Wdate" placeholder="增减时间" name="time" value="{$vo.time ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" {/literal}  datatype="*" nullmsg="请选择增减时间">
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <button type="submit" class="btn btn-primary radius">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
+                <button type="button" class="btn btn-default radius ml-20" onClick="layer_close();">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </form>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript" src="__LIB__/Validform/5.3.2/Validform.min.js"></script>
+<script type="text/javascript" src="__LIB__/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $(function () {
+        $("[name='source']").find("[value='{$vo.source ?? ''}']").attr("selected", true);
+
+        $('.skin-minimal input').iCheck({
+            checkboxClass: 'icheckbox-blue',
+            radioClass: 'iradio-blue',
+            increaseArea: '20%'
+        });
+
+        $("#form").Validform({
+            tiptype: 2,
+            ajaxPost: true,
+            showAllError: true,
+            callback: function (ret){
+                ajax_progress(ret);
+            }
+        });
+    })
+</script>
+{/block}

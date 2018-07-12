@@ -1,17 +1,25 @@
 <td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
 <td>{$vo.order_id|high_light=$Request.param.order_id}</td>
-<td><?php $address = \think\Db::name('customer_address')->where(['id'=> $vo['address_id']])->find();
-    echo $address['name'];
-    echo $address['mobile'];
-    echo '<br/>';
-    echo $address['address'],$address['street'];
-    ?></td>
+<td>{php}
+        $vo['buy_list'] =json_decode($vo['buy_list'],true);
+    foreach( $vo['buy_list']  as $val ){
+        echo $val['goods_name']."&nbsp;&nbsp;&nbsp;&nbsp;";
+        echo ($val['sku_val'])?$val['sku_val']:'';
+        echo "&nbsp;&nbsp;&nbsp;&nbsp;x".$val['num']."<br/>";
+    }
+    {/php}</td>
 <td>{$vo.total_price}</td>
 <td>{$vo.create_time|date="Y-m-d H:i:s",###}</td>
 <td><?php
        $user = \think\Db::name('admin_user')->where(['id'=>$vo['user_id']])->find();
     echo $user['account'].$user['realname'];
 ?></td>
+<td><?php $address = \think\Db::name('customer_address')->where(['id'=> $vo['address_id']])->find();
+    echo $address['name'];
+    echo $address['mobile'];
+    echo '<br/>';
+    echo $address['address'],$address['street'];
+    ?></td>
 <td>{php}
     if( $vo['order_status']=='0'){
         echo '未支付';
