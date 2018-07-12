@@ -1,0 +1,68 @@
+{extend name="template/base" /}
+{block name="content"}
+<div class="page-container">
+  <div>
+    <p>收货人地址信息：</p>
+    <table class="table table-border table-bordered table-hover table-bg mt-20">
+      <thead>
+      <tr class="text-c">
+        <td width="25%">收货人</td>
+        <td width="25%">电话</td>
+        <td width="25%">地址</td>
+        <td width="25%">详细地址</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="text-c">
+        <td class="f-14">{$address['name']}</td>
+        <td class="f-14">{$address['mobile']}</td>
+        <td class="f-14">{$address['address']} </td>
+        <td class="f-14"> {$address['street']}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <p>订单信息：</p>
+    {volist name="orderDetail" id="vo" empty=""}
+    <table class="table table-border table-bordered table-hover table-bg mt-20">
+      <thead>
+      <tr class="text-c">
+        <td>商品图片</td>
+        <td>商品名</td>
+        <td>价格</td>
+        <td>商品规格</td>
+        <td>购买数量</td>
+        <td>总价</td>
+        <td>运费</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="text-c">
+        <td class="f-14"><img width="30" height="30" src="{$vo['goods_detail']['main_image']}" /></td>
+        <td class="f-14">{$vo['goods_detail']['name']}</td>
+        <td class="f-14">{$vo['price']}</td>
+        <td class="f-14">{$vo['sku_val']}</td>
+        <td class="f-14">{$vo['goods_num']}</td>
+        <td class="f-14">{$vo['total_price']}</td>
+        <td class="f-14">{$vo['goods_detail']['postage']}</td>
+      </tr>
+      </tbody>
+    </table>
+    <div>
+      <form>
+        <div class="mt20 mb20">
+          <label>快递单号:</label>
+          <input type="text" placeholder="快递单号" class="form_control w120 lh30 h30" >
+
+          <label class="ml20">快递单号:</label>
+          <input type="text" placeholder="快递名称" class="form_control w120 lh30 h30" >
+          <a href="javascript:;" onclick="" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont"></i> 保存</a>
+        </div>
+      </form>
+    </div>
+    {/volist}
+  </div>
+</div>
+{/block}
+{block name="script"}

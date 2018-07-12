@@ -225,3 +225,20 @@ function layerLoad(){
     });
     return loading;
 }
+/**
+ *
+ * @param url 请求地址
+ * @param json 拼接参数jsoN
+ * @returns {*}
+ */
+function urlConnect(url,json) {
+    var result = url;
+    result = result.split('.html')[0];
+    if(json){
+        for (var key in json){
+            result +="/"+key+"/"+json[key];
+        }
+    }
+    result = result+'.html';
+    return result;
+}
