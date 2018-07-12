@@ -67,11 +67,31 @@
                     <span class="f14">(运费<b>￥{$vo['goods_detail']['postage']}</b>)</span>
                 </div>
                 <div class="tr">
+                    {php}
+                        $orderId = $orderDetail[0]['order_id'];
+                        $goodsId = $vo['goods_id'];
+                        $skuid   = $vo['sku_id'];
+
+                        $is_get_status = $vo['is_get_status'];
+                    {/php}
+
                     {if condition="$status eq 3" /}  <!--待退款-->
-                    <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="goOrderService('{$orderDetail[0][\'order_id\']}','{$orderDetail[0][\'goods_id\']}')"  >申请售后</button>
+                    <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="goOrderService('{$orderId}','{$goodsId}','{$skuid}')"  >申请售后</button>
                     {/if}
                     {if condition="$status neq 0 && $status neq 1" /}  <!--待退款-->
-                    <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="logistics('{$orderDetail[0][\'order_id\']}','{$orderDetail[0][\'goods_id\']}')"  >物流信息</button>
+                    <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="logistic('{$orderId}','{$goodsId}','{$skuid}')"  >物流信息</button>
+                    {/if}
+                    {if condition="$status eq 1" /}<!-- 待发货-->
+                    <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="refund('{$orderId}','{$goodsId}','{$skuid}')">退款</button>
+                    {/if}
+                    {if condition="$status eq 2 && $is_get_status neq 1" /}<!-- 待收货-->
+                    <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="sureDeliver('{$orderId}','{$goodsId}','{$skuid}')">确认收货</button>
+                    {/if}
+                    {if condition="$status eq 2"/}
+                    <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="refund('{$orderId}','{$goodsId}','{$skuid}')">退款</button>
+                    {/if}
+                    {if condition="$status eq 4" /} <!--待评价-->
+                    <button class="layui-btn layui-btn-primary layui-btn-sm"  onclick="evaluate('{$orderId}','{$goodsId}','{$skuid}')">评价</button>
                     {/if}
                 </div>
             </div>
@@ -81,11 +101,6 @@
                 <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="pay('{$orderDetail[0][\'order_id\']}')">付款</button>
                 {elseif condition="$status eq 1" /} <!--代发货-->
                 <button class="layui-btn layui-btn-primary layui-btn-sm">联系卖家</button>
-                {elseif condition="$status eq 2" /}<!-- 待收货-->
-                <button class="layui-btn layui-btn-primary layui-btn-sm">确认收货</button>
-
-                {elseif condition="$status eq 4" /} <!--待评价-->
-                <button class="layui-btn layui-btn-primary layui-btn-sm">评价</button>
                 {else /}
                 {/if}
             </div>
@@ -105,8 +120,21 @@
     var url = {
         orderService:"{:url('index/order/orderService')}",//
         logistics:"{:url('index/order/logistics')}",//物流查看
+        orderList:"{:url('index/order/getOrderListApi')}",
+        againPay:"{:url('index/order/againPay')}",//再次支付
+        sureDeliver:"{:url('index/order/sureDeliver')}",
+        refund:"{:url('index/order/refund')}",
     }
-
+    function modifyComplete() {
+        setTimeout(function () {
+            location.reload();
+        },1500)
+    }
+    function loadOrderData(){
+        setTimeout(function () {
+            location.reload();
+        },1500)
+    }
 </script>
 <script type="text/javascript" src="__STATIC__/index/js/view/order.js" ></script>
 </body>

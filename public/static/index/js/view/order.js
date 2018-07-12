@@ -49,6 +49,6 @@ function goOrderService(order_id,goods_id) {
     window.location.href = urlConnect(url.orderService,{order_id:order_id,goods_id:goods_id})
 }
 //查看物流
-function logistics(order_id,goods_id) {
+function logistic(order_id,goods_id) {
     window.location.href=urlConnect(url.logistics,{order_id:order_id,goods_id:goods_id})
 }
