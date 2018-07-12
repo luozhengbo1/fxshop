@@ -1,0 +1,103 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+{include file="Public/header-title"}
+
+<section class="affirm-order">
+    <div class="aui-address-box-default">
+           <a class="show-address" href="{:\\think\\Url::build(\'address/index\')}">
+               <p class="bold f14">江永飛 183**13273</p>
+               <p>北京密云区城区</p>
+           </a>
+
+          <!--<a class="add-address" href="">
+              <span>还没有地址去添加吧</span>
+          </a>-->
+    </div>
+    <div class="clear pt10 goods-info-wrap">
+        <div class="fl image">
+            <img width="100%" src="//img10.360buyimg.com/n4/jfs/t21361/160/67083062/266022/16b48e62/5af94dd0Na2afc153.png">
+        </div>
+        <div class="fr goods-info">
+            <p class="ellipsis title">【 99元3件 买一送二】2018夏季新款短袖衬衫男修身休闲商务男装衣服衬衣 cs10藏青+浅蓝 XL</p>
+            <p>cs10藏青+浅蓝，XL</p>
+            <div class="clear mt10">
+                <span class="fl red f16">¥<em id="goodPrice">99.00</em></span>
+                <span class="fr"><em id="purchaseNum">1</em>件</span>
+            </div>
+        </div>
+    </div>
+    <ul class="service-info">
+        <li class="clear">
+            <span class="fl">购买数量</span>
+            <div class="layui-btn-group fr count-wrap">
+                <button class="layui-btn layui-btn-primary layui-btn-sm fr24 minus">-</button>
+                <div class="layui-btn layui-btn-primary layui-btn-sm">
+                    <input class="sumInput" type="text" id="purchaseNumInput" value="1">
+                </div>
+                <button class="layui-btn layui-btn-primary layui-btn-sm fr24 add">+</button>
+            </div>
+        </li>
+        <li class="clear">
+            <span class="fl">服务信息</span>
+            <span class="fr">
+                <img width="20px"  src="__STATIC__/index/images/day7.png">支持7天无理由退货
+                <a href="javascript:;" onclick="showServiceInfo()">
+                     <img width="20px"  src="__STATIC__/index/images/info.png">价格说明
+                </a>
+            </span>
+        </li>
+        <li class="clear">
+            <span class="fl">店铺优惠</span>
+            <span class="fr">2件包邮</span>
+        </li>
+        <li class="clear">
+            <span class="fl">配送方式</span>
+            <span class="fr">快递包邮</span>
+        </li>
+        <li class="clear">
+            <span class="fl">运费险</span>
+            <span class="fr">卖家送，确认收货前退货可赔</span>
+        </li>
+        <li class="clear">
+            <span class="fl">卖家留言：</span>
+            <input type="text" class="fr words" placeholder="选填：填写内容已和卖家协商确定">
+        </li>
+        <li class="clear">
+            <span class="fl">商品金额</span>
+            <input type="text" class="fr words" placeholder="选填：填写内容已和卖家协商确定">
+        </li>
+    </ul>
+    <div class="aui-payment-bar">
+        <div class="shop-total">
+            <span class="aui-red aui-size">实付款: <em id="showPrice" class="bold f18"></em>￥</span>
+        </div>
+        <a href="javascript:;" id="singlePay" class="settlement">提交订单</a>
+    </div>
+</section>
+<script>
+   countCalculate(changeInfo);
+   changeInfo();
+   $('#singlePay').click(function () {
+       console.log();
+   });
+
+  // $("#showPrice").html(1234)
+   function changeInfo(){
+       var num = $('#purchaseNumInput').val()
+       $('#purchaseNum').empty().text(num);
+       $("#showPrice").empty().text(parseInt($("#goodPrice").text())*num)
+   }
+   function showServiceInfo(){
+      layer.open({
+           title:'价格说明'
+           ,content: '<small>因可能存在系统缓存、页面更新导致价格变动异常等不确定性情况出现，商品售价以本结算页商品价格为准；<br>如有疑问，请您立即联系销售商咨询。</small>'
+           ,btn: ['知道了']
+           ,yes: function(index){
+               layer.close(index);
+           }
+       });
+   }
+
+</script>
+</body>
+</html>

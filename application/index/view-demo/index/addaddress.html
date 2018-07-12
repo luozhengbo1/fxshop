@@ -1,0 +1,105 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+{include file="Public/header-title"}
+<style>
+    .get-goods-address{
+
+        font-size: .14rem;
+    }
+    .get-goods-address li{
+        padding: .02rem .06rem;
+        background: white;
+        line-height: .42rem;
+        height:  .42rem;
+        border-bottom: 1px solid #e5e5e5;
+    }
+    .get-goods-address li span.title{
+        float: left;
+        width: 20%;
+
+    }
+    .get-goods-address li p{
+        width: 80%;
+    }
+
+    .get-goods-address li input{
+        border: none;
+        height:  .32rem;
+        line-height: .32rem;
+        width: 90%;
+    }
+</style>
+<form id="form">
+<ul class="get-goods-address">
+    <li class="clear">
+        <span class="title">收货人</span>
+        <p class="fl"><input type="text" name="username" nullmsg="请输入姓名" datatype="*" placeholder="姓名"></p>
+    </li>
+    <li class="clear">
+        <span class="title">联系方式</span>
+        <p class="fl"><input type="text" name="phone"  nullmsg="请输入联系方式" datatype="*" placeholder="手机号码"></p>
+    </li>
+    <li class="clear">
+        <label for="Addr" id="areaLabel" class="address">
+            <span class="title">所在地址</span>
+            <p class="fl ">
+                <input type="text" nullmsg="请选择所在地址" datatype="*" name="address" id="Addr" readonly placeholder="请选择地区">
+                <i class="icon-right-arrow iconfont"></i>
+            </p>
+        </label>
+    </li>
+    <li class="clear">
+        <span class="title">详细地址</span>
+        <p class="fl"><input type="text" name="detailAddress" nullmsg="请输入详细地址" datatype="*"  placeholder="详细地址需填写楼栋楼层或房间号信息"></p>
+    </li>
+</ul>
+<div class="bg_white" style="padding: .3rem .06rem">
+    <input type="submit"  class="btn-dark-red w100p bootstrap-btn" value="新增收货地址" />
+</div>
+</form>
+<div id="addressSelectWrapper" style="display: none">
+    <div id="addressSelect">
+        <div class="tip">
+            <h3>所在地区</h3>
+            <button type="button" id="cancel"></button>
+        </div>
+        <div id="address">
+            <ul class="selected-address">
+                <li class="lastarea" id="lastprovince">请选择</li>
+                <li class="lastarea" id="lastcity">请选择</li>
+                <li class="lastarea" id="lastarea">请选择</li>
+                <li class="lastarea" id="lasttown">请选择</li>
+            </ul>
+            <div class="address-content">
+                <ul id="province"></ul>
+                <ul id="city"></ul>
+                <ul id="area"></ul>
+                <ul id="town"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" >
+    submitForm($("#form"),'/')
+    $(function(){
+        eventDeal();//页面点击事件处理
+        initAddress();  //初始化地址选择
+
+        $("#addressSelect").click(function (e) {
+            e.stopPropagation();
+        });
+    });
+    function initAddress() {
+        $("#Addr").cityLinkage({
+            containerId: 'addressSelectWrapper',
+            getSelectedCode:function(){return $("#Addr").data("code");},
+            callback:function(data) {
+                $("#Addr").val(data.addr).data("code",data.town.code);
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

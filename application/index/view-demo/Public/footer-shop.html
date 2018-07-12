@@ -1,0 +1,123 @@
+<style>
+	.footer-shop-nav {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		background: white;
+		z-index: 10;
+	}
+	.footer-shop-nav li{
+		float: left;
+		text-align: center;
+		-webkit-transition: all .2s;
+		-moz-transition: all .2s;
+		-o-transition: all .2s;
+		transition: all .2s;
+	}
+	.footer-shop-nav .normal-nav{
+		width: 40%;
+	}
+	.footer-shop-nav .normal-nav li {
+		width: 30%;
+	}
+
+	.footer-shop-nav .important-nav {
+		width: 60%;
+	}
+	.footer-shop-nav .important-nav li{
+		width: 50%;
+	}
+	.footer-shop-nav .important-nav li a{
+		line-height: .5rem;
+		color: white;
+		font-weight: bold;
+		padding: 0;
+		font-size: .14rem;
+	}
+	.footer-shop-nav .important-nav li a p{
+		font-size: .14rem;
+	}
+	.footer-shop-nav li a {
+		display: inline-block;
+		padding: .08rem 0 ;
+		height: .5rem;
+		width: 100%;
+	}
+	.footer-shop-nav .collect.active .layui-icon  {
+		color: #ff3f21;
+	}
+	.footer-shop-nav .collect.active p{
+		color: #ff3f21;
+	}
+	i.layui-icon {
+		font-size: 16px;
+		margin-right: 5px;
+		transition: all .3s;
+		-webkit-transition: all .3s;
+	}
+</style>
+<div class="footer-shop-nav clear" id="footerShopNav">
+	<ul class="clear normal-nav fl">
+		<li id="sellerPage">
+			<a   href="tel://18302563273" >
+				<i class="iconfont icon-kefu"></i><p>卖家</p>
+			</a>
+		</li>
+		<li id="indexPage">
+			<a  href="{:\\think\\Url::build(\'index/index\')}">
+				<i class="iconfont icon-home"></i><p>首页</p>
+			</a>
+		</li>
+		<li id="savePage">
+			<a href="javascript:;" data-id="{$goods['id']}" onclick="collectGoods(this);" class="collect">
+				<!--<i class="iconfont icon-geren"></i>-->
+				<i class="layui-icon layui-icon-rate-solid"></i><p>收藏</p>
+			</a>
+		</li>
+	</ul>
+	<ul class="clear important-nav fl">
+		<li>
+			<a href="javascript:;"  class="bg_orange">
+				<p id="carPage">加入购物车</p>
+			</a>
+		</li>
+		<li>
+			<a  href="javascript:;" class="bg_red">
+				</i><p id="buyPage">立即购买</p>
+			</a>
+		</li>
+	</ul>
+</div>
+<script>
+    $(function () {
+        pub_query({
+            url:"{:url('index/customer/collect_detail')}",
+            data:{'goods_id':$('.collect').attr('data-id'),},
+            complete:collectShow
+        })
+    })
+	function collectGoods(_this) {
+		var data = {'goods_id':$(_this).attr('data-id'),}
+		pub_edit({
+			url:url.collect_update,
+            data:data,
+			complete:collectShow
+		})
+    }
+    function collectShow(data) {
+	//	console.log(data)
+		if(data){
+		    if(data.status ==0){
+		        //取消搜藏
+				$('.collect').removeClass('active');
+                $('.collect p').html('收藏')
+			}else if(data.status ==1){
+                $('.collect').addClass('active');
+                $('.collect p').html('已收藏')
+			}
+		}
+    }
+
+</script>
+

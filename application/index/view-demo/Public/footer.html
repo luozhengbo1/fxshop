@@ -1,0 +1,45 @@
+
+<ul class="footer-nav footer-fixed">
+	<li id="indexPage">
+		<a  href="{:\\think\\Url::build(\'\index/index\')}">
+			<i class="iconfont icon-home"></i><p>首页</p>
+		</a>
+	</li>
+	<li  id="searchPage">
+		<a  href="{:\\think\\Url::build(\'goods/goodsList\')}">
+			<i class="iconfont icon-sousuo"></i><p>搜索</p>
+		</a>
+	</li>
+	<li  id="sortPage">
+		<a  href="{:url('index/goodsclass/sort')}">
+			<i class="iconfont icon-caidan"></i><p>分类</p>
+		</a>
+	</li>
+	<li  id="carPage">
+		<a href="{:\\think\\Url::build(\'car/index\')}">
+			<i class="iconfont icon-gouwuche"></i><p>购物车</p>
+		</a>
+	</li>
+	<li id="mePage">
+		<a href="{:\\think\\Url::build(\'customer/customer\')}">
+			<i class="iconfont icon-geren"></i><p>会员中心</p>
+		</a>
+	</li>
+
+</ul>
+
+<script>
+    //addActive()
+    //对点击的位置进行一个记录
+    tabSwitch( $('.footer-nav li'))
+	/*function addActive(){
+        $('#'+ $.cookie('currentPage')).addClass('active')
+	}
+	function tabSwitch($target) {
+        $target.click(function () {
+            $target.removeClass('active')
+            $(this).addClass('active')
+            $.cookie('currentPage', $(this).attr('id'), {path: '/' });
+        })
+    }*/
+</script>

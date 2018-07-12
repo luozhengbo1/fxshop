@@ -1,0 +1,26 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+{include file="Public/header-title"}
+{include file="Public/evaluate-module"}
+{include file="Public/footer-quick-nav"}
+<script>
+    $(function () {
+        loadEvaluateData();
+    })
+    function loadEvaluateData(){
+        initData('evaluateList');
+        pageload({
+            targetWarp:'dataListWrap',
+            target:'evaluateList',
+            page:1,
+            size:2,
+            ajaxData:{
+                url:"{:url('index/goods/goodsComment')}",
+                data:{},
+            },
+            dealFun:dealData
+        });
+    }
+</script>
+</body>
+</html>

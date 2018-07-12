@@ -1,0 +1,111 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+{include file="Public/header-title"}
+<style>
+</style>
+<section>
+    <div class="clear" style="background: #FF9000; padding: .14rem 0; color: white;">
+        <div class="fl ml20">
+            <p class="f16 mt20">
+                {php} $status= $orderDetail[0]['order_status']; {/php}
+                {if condition="$status eq 0"}
+                等待卖家付款
+                {elseif condition="$status eq 1" /}<!--代发货-->
+                等待卖家发货
+                {elseif condition="$status eq 2" /}<!-- 待收货-->
+                等待买家收货
+                {elseif condition="$status eq 3" /}<!--待退款-->
+                等待卖家退款
+                {elseif condition="$status eq 4" /}  <!--待评价-->
+                等待买家评价
+                {else /}
+                交易成功
+                {/if}
+            </p>
+        </div>
+        <div class="fr"><img width="100" src="__STATIC__/index/images/sell_pay.png"></div>
+    </div>
+    <div class="clear p5 bg_white mb10">
+        <div class="fl w10p mt30">
+            <i class=" iconfont icon-geren"></i>
+        </div>
+        <div class="fl w90p">
+            <p class="clear mt10 mb10">
+                <span class="fl">收货人：{$address['name']}</span>
+                <span class="fr">{$address['mobile']}</span>
+            </p>
+            <p>
+                收货地址：{$address['address']}  &nbsp;&nbsp; {$address['street']}
+            </p>
+        </div>
+    </div>
+    <ul class="product-order-list ">
+        <li class="pb10" data-orderid="{$orderDetail[0]['order_id']}">
+            {volist name="orderDetail" id="vo" empty=""}
+            <div class="item-list pt10 module clear">
+                <div class="item-img">
+                    <p> <img class="" src="{$vo['goods_detail']['main_image']}" /> </p>
+                </div>
+                <div class="item-info">
+                    <h3 class="title ellipsis">{$vo['goods_detail']['name']}</h3>
+                    <p class="sku f12 grey">{$vo['sku_val']}</p>
+                    <ul class="order-serviceinfo">   <li>{$vo['goods_detail']['after_sale']}</li>   </ul>
+                </div>
+                <div class="item-pay">
+                    <div class="item-pay-data">
+                        <p class="price f14"> ￥{$vo['price']} </p>
+                        <p class="nums">x{$vo['goods_num']}</p>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="module  clear pr10 pt5" >
+                <div class="cont tr">
+                    <span class="f14">共<b>{$vo['goods_num']}</b>件商品</span>
+                    <span class="f14">合计:<b>￥{$vo['total_price']}</b></span>
+                    <span class="f14">(运费<b>￥{$vo['goods_detail']['postage']}</b>)</span>
+                </div>
+                <div class="tr">
+                    {if condition="$status eq 3" /}  <!--待退款-->
+                    <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="goOrderService('{$orderDetail[0][\'order_id\']}','{$orderDetail[0][\'goods_id\']}')"  >申请售后</button>
+                    {/if}
+                </div>
+            </div>
+            {/volist}
+            <div class="module clear tr mt10 pr10" >
+                {if condition="$status eq 0"}
+                <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="pay('{$orderDetail[0][\'order_id\']}')">付款</button>
+                {elseif condition="$status eq 1" /} <!--代发货-->
+                <button class="layui-btn layui-btn-primary layui-btn-sm">联系卖家</button>
+                {elseif condition="$status eq 2" /}<!-- 待收货-->
+                <button class="layui-btn layui-btn-primary layui-btn-sm">确认收货</button>
+                <button class="layui-btn layui-btn-primary layui-btn-sm">物流信息</button>
+
+                {elseif condition="$status eq 4" /} <!--待评价-->
+                <button class="layui-btn layui-btn-primary layui-btn-sm">评价</button>
+                {else /}
+                {/if}
+            </div>
+        </li>
+    </ul>
+    <div class="p5 bg_white mt10 grey">
+        <p class="lh20">订单编号:{$orderDetail[0]['order_id']}</p>
+        <p class="lh20">创建时间:{$orderDetail[0]['create_time']|date="Y-m-d H:i:s",###}</p>
+        {if condition="$status neq 0" /}<!--已经付款了-->
+        <p class="lh20">付款时间:{$orderDetail[0]['pay_time']|date="Y-m-d H:i:s",###}</p>
+        {/if}
+
+        <p class="lh20">发货时间:{$orderDetail[0]['create_time']|date="Y-m-d H:i:s",###}</p>
+    </div>
+</section>
+<script>
+    var url = {
+        orderService:"{:url('index/order/orderService')}",
+    }
+    function goOrderService(order_id,goods_id) {
+        window.location.href = urlConnect(url.orderService,{order_id:order_id,goods_id:goods_id})
+    }
+</script>
+</body>
+</html>
