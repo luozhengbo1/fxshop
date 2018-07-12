@@ -1,0 +1,21 @@
+<ul class="product-order-list ">
+    <li class="pb10" data-orderid="{$orderDetail.order_id}">
+        <div class="item-list pt10 module clear">
+
+            <div class="item-img">
+                <p> <img class="" src="{$orderDetail['goods_detail']['main_image']}" /> </p>
+            </div>
+            <div class="item-info w70p">
+                <h3 class="title ellipsis">{$orderDetail['goods_detail']['name']}</h3>
+                <p class="sku f12 grey">{$orderDetail['sku_val']}</p>
+                <ul class="order-serviceinfo">   <li>{$orderDetail['goods_detail']['after_sale']}</li>   </ul>
+            </div>
+            <!--<div class="item-pay">
+                <div class="item-pay-data">
+                    <p class="price f14"> ￥{$orderDetail['price']} </p>
+                    <p class="nums">x{$orderDetail['goods_num']}</p>
+                </div>
+            </div>-->
+        </div>
+    </li>
+</ul>

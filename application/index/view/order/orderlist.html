@@ -75,7 +75,8 @@
 <script>
     var url = {
         orderList:"{:url('index/order/getOrderListApi')}",
-        againPay:"{:url('index/order/againPay')}",
+        againPay:"{:url('index/order/againPay')}",//再次支付
+        logistics:"{:url('index/order/logistics')}",//物流查看
     }
     tabSwitch($('.nav-list-tab li'),loadOrderData)
     function loadOrderData(){
@@ -153,7 +154,7 @@
                 else if(status ==2) {
                     // 待收货
                     html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">确认收货</button>';
-                    html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">物流信息</button>';
+                   // html +='        <a class="layui-btn layui-btn-primary layui-btn-sm" onclick="logistics(\''+order_id+'\',\''+goods_id+'\')">物流信息</a>';
                 }
                 else if(status==3)// 待退款
                     html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">申请售后</button>';
@@ -168,13 +169,13 @@
     }
 
     function pay(orderid) {
-
         pub_save({
             url:url.againPay,
             return_url:"#",
             data:{id:orderid},
         })
     }
+
 </script>
 {include file="Public/footer"}
 </body>

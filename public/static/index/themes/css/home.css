@@ -4176,3 +4176,85 @@ a {
 .empty-image img{
 	width: 50px;
 }
+/*物流信息页面*/
+#J_oper_plugin .logis-info {
+	font-size: 15px;
+	margin-bottom: 20px;
+	padding-left: 10px;
+}
+#J_oper_plugin .logis-info p {
+	margin: 15px 0;
+}
+.logis-detail ul li {
+	color: #666;
+	position: relative;
+}
+#J_oper_plugin .logis-detail ul li:first-child p.logis-detail-date {
+	color: #F40;
+}
+#J_oper_plugin .logis-detail ul .logis-detail-date {
+	width: 40px;
+	padding: 10px 0 10px 4px;
+	text-align: right;
+	font-size: 14px;
+}
+#J_oper_plugin .logis-detail ul li:first-child .logis-detail-first {
+	border-left: 2px solid #F40;
+}
+
+#J_oper_plugin .logis-detail ul .logis-detail-d {
+	border-left: 2px solid #bdbdbd;
+	padding: 10px 0 10px 35px;
+	margin-left: 25px;
+	position: relative;
+}
+#J_oper_plugin .logis-detail ul li:first-child .logis-detail-first .logis-detail-content {
+	background: #F40;
+	color: #fff;
+}
+#J_oper_plugin .logis-detail ul .logis-detail-content {
+	display: -webkit-box;
+	position: relative;
+	background: #ddd;
+	padding: 5px 10px;
+	-webkit-border-radius: 2px;
+	font-size: 14px;
+}
+#J_oper_plugin .logis-detail ul .logis-detail-content .logis-detail-content-time {
+	width: 50px;
+	line-height: 25px;
+}
+#J_oper_plugin .logis-detail ul .logis-detail-content .logis-detail-content-detail {
+	-webkit-box-flex: 1;
+	line-height: 25px;
+}
+#J_oper_plugin .logis-detail ul li:first-child .logis-detail-first .logis-detail-content:after {
+	border-bottom-color: #F40;
+}
+
+#J_oper_plugin .logis-detail ul .logis-detail-content:after {
+	content: '';
+	display: inline-block;
+	position: absolute;
+	left: -10px;
+	top: 18px;
+	border-left: 10px solid #EEE;
+	border-bottom: 10px solid #ddd;
+}
+#J_oper_plugin .logis-detail ul li:first-child .logis-detail-first:after {
+	background: #F40;
+	border: 2px solid #EEE;
+}
+#J_oper_plugin .logis-detail ul .logis-detail-d:after {
+	content: '';
+	display: inline-block;
+	position: absolute;
+	left: -6px;
+	top: 30px;
+	width: 10px;
+	height: 10px;
+	-webkit-border-radius: 10px;
+	background: #BDBDBD;
+	border: 2px solid #EEE;
+}
+
