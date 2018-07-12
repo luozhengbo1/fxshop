@@ -62,6 +62,7 @@ class WeChat extends Controller
             $time = time();
             Db::table('fy_score_log')->insert([
                 'uid' => $user['id'],
+                'openid' => $userInfo['openid'],
                 'source_id' => 0,
                 'source' => 1,
                 'score' => 10,

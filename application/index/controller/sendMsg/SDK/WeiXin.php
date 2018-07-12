@@ -60,7 +60,8 @@ class WeiXin
         file_put_contents('./access_token.txt', $accessTokenInfo);
         return $accessTokenInfo;
     }
-    public function templateMsg($openid, $flightInfo, $method)
+    #购买成功通知
+    public function buySuccess($openid, $flightInfo, $method)
     {
         $touser = "o7khyw2tU8pb4tWnX2u7T5YQF-b4";
         $url = "http://m.gzairports.com/manage.php?s=/addon/Flight/Flight/details/publicid/2/id/{1}";
@@ -76,6 +77,14 @@ class WeiXin
         $this->sendTemplate($param);
     }
 
+    #发货通知
+    public function  sendPost($openid)
+    {
+
+    }
+
+
+    #发送
     public function sendTemplate($param)
     {
         $accessToken = $this->getAccessToken();

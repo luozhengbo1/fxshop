@@ -80,7 +80,9 @@ class Order extends Controller
             return $this->error('缺少参数订单id');
         }
         $orderDetail = Db::name('order')
-//                ->join('fy_customer_address','fy_customer_address.id=fy_order.address_id','left')
+            ->field('
+            fy_order.order_id,fy_order.order_status,fy_order.total_price,fy_order.customer_name,fy_order.customer_name,fy_order.create_time,fy_order.pay_time,
+            fy_order_goods.*, fy_goods_attribute.store,fy_goods_attribute.price')
             ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
             ->join('fy_goods_attribute','fy_order_goods.sku_id=fy_goods_attribute.id','left')
             ->where(['fy_order.order_id'=>$id])
@@ -119,6 +121,33 @@ class Order extends Controller
                 return ajax_return('','操作失败','500');
             }
         }
+    }
+
+    #确认发货
+    public  function  sureSend()
+    {
+        if($this->request->isAjax()){
+            $data = $this->request->post();
+            if(!$data['id']){
+                return ajax_return_error('缺少参数id');
+            }
+            $order = Db::name('order') ->where(['order_id'=>$data['id']])->find();
+            if($order['pay_status']!=1){
+                return ajax_return_error('付款了才可以发货');
+            }
+            $res = Db::name('order')
+                ->where(['order_id'=>$data['id']])
+                ->update([
+                    'order_status'=>2
+                ]);
+            if($res){
+                #确认物流，提醒买家
+                return ajax_return('','操作成功','200');
+            }else{
+                return ajax_return('','操作失败','500');
+            }
+        }
+
     }
 
 }
