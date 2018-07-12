@@ -11,19 +11,38 @@ use think\Db;
 class Customer extends Controller
 
 {
+    /**
+     * 会员中心首页
+     */
     public function customer()
     {
+        //会员信息
         $user_session = session('wx_user');
         $user_data = Db::table('fy_customer')->where('openid', $user_session['openid'])->find();
         $this->assign('userdata', $user_data);
 
+        //会员收藏数量
         $count_collect = Db::table('fy_customer_collect')
             ->where('uid', $user_data['id'])
             ->where('status', 1)->count();
-        $this->assign('countcollect', $count_collect);
+        $this->assign('count_collect', $count_collect);
 
+        //会员卡券数量
         $count_lottery = Db::table('fy_lottery_log')->where('uid', $user_data['id'])->count();
-        $this->assign('countlottery', $count_lottery);
+        $this->assign('count_lottery', $count_lottery);
+
+        //会员订单数量
+        $count_pay = Db::table('fy_order')->where('openid', $user_session['openid'])->where('order_status', 0)->count();
+        $count_deliver = Db::table('fy_order')->where('openid', $user_session['openid'])->where('order_status', 1)->count();
+        $count_take_delivery = Db::table('fy_order')->where('openid', $user_session['openid'])->where('order_status', 2)->count();
+        $count_refund = Db::table('fy_order')->where('openid', $user_session['openid'])->where('order_status', 3)->count();
+        $count_evaluate = Db::table('fy_order')->where('openid', $user_session['openid'])->where('order_status', 4)->count();
+        $this->assign('count_pay', $count_pay);
+        $this->assign('count_deliver', $count_deliver);
+        $this->assign('count_take_delivery', $count_take_delivery);
+        $this->assign('count_refund', $count_refund);
+        $this->assign('count_evaluate', $count_evaluate);
+
         $this->assign('titleName', "会员中心");
         return $this->view->fetch();
     }
@@ -155,18 +174,7 @@ class Customer extends Controller
         //根据openid在customer表中查询id,nickname,score,continuity_day
         $user = session('wx_user');
         $userData = Db::table('fy_customer')->where('openid', $user['openid'])->find();
-        if ($this->request->get()) {
-            $time = time();
-            $today_start = strtotime(date('Y-m-d', $time) . ' 00:00:00');
-            $today_end = strtotime(date('Y-m-d', $time) . ' 23:59:59');
-            $res = Db::table('fy_customer_sign')
-                ->where('uid', $userData['id'])
-                ->where('addtime', 'between', [$today_start, $today_end])
-                ->find();
-            $this->assign('flag', $res ? 1 : 0);
-            $this->assign('user', $userData);
-            return $this->view->fetch('mySign');
-        } else if ($this->request->isAjax()) {
+        if ($this->request->isAjax()) {
             $time = time();
             $today_start = strtotime(date('Y-m-d', $time) . ' 00:00:00');
             $today_end = strtotime(date('Y-m-d', $time) . ' 23:59:59');
@@ -190,18 +198,19 @@ class Customer extends Controller
                 if (empty($res)) {
                     //第一次签到
                     Db::table('fy_customer')->where('openid', $user['openid'])->setField('continuity_day', 1);
-                    Db::table('fy_customer')->where('openid', $user['openid'])->setInc('score', 1);
+                    Db::table('fy_customer')->where('openid', $user['openid'])->setInc('score', 2);
                     Db::table('fy_customer_sign')->insert($save);
-                    //新增日志记录
+//                    //新增日志记录
                     $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid', $userData['id'])->where('addtime', $time)->find();
                     Db::table('fy_score_log')->insert([
                         'uid' => $userData['id'],
-                        'source_id' => $sign_id,
+                        'openid' => $user['openid'],
+                        'source_id' => $sign_id['id'],
                         'source' => 2,
                         'score' => 2,
                         'time' => $time
                     ]);
-                    return ajax_return('', '签到成功', 200);
+                    return ajax_return('', "签到成功", 200);
                     exit;
                 } else {
                     //判断前一天是否签到
@@ -211,13 +220,14 @@ class Customer extends Controller
                     //前一天未签到，continue_day重置为1，score+1更新到customer表
                     if (floor($noSignDay1) > 1 && $noSignDay2 > 1 && floor($noSignDay1) == $noSignDay2) {
                         Db::table('fy_customer')->where('openid', $user['openid'])->setField('continuity_day', 1);
-                        Db::table('fy_customer')->where('openid', $user['openid'])->setInc('score', 1);
+                        Db::table('fy_customer')->where('openid', $user['openid'])->setInc('score', 2);
                         Db::table('fy_customer_sign')->insert($save);
                         //新增日志记录
                         $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid', $userData['id'])->where('addtime', $time)->find();
                         Db::table('fy_score_log')->insert([
                             'uid' => $userData['id'],
-                            'source_id' => $sign_id,
+                            'openid' => $user['openid'],
+                            'source_id' => $sign_id['id'],
                             'source' => 2,
                             'score' => 2,
                             'time' => $time
@@ -226,10 +236,9 @@ class Customer extends Controller
                     } else {
                         /**
                          * 签到规则
-                         * 连续签到3天，一次性奖励2积分。
-                         * 连续签到7天，一次性奖励8积分。
-                         * 连续签到15天，一次性奖励20积分。
-                         * 连续签到30天，一次性奖励50积分。
+                         * 连续签到3天，一次性奖励5积分。
+                         * 连续签到7天，一次性奖励15积分。
+                         * 连续签到15天，一次性奖励30积分。
                          * */
                         $score = 0;
                         //判断今天签到后是否满足奖励条件
@@ -246,7 +255,7 @@ class Customer extends Controller
                         }
                         //满足奖励条件：continue_day+1，score+1+reward_score更新到customer表，score=1,reward_score=相应的奖励积分插入到customer_sign表
                         if ($score) {
-                            Db::table('fy_customer')->where('openid', $user['openid'])->setInc('score', $score + 1);
+                            Db::table('fy_customer')->where('openid', $user['openid'])->setInc('score', $score + 2);
                             Db::table('fy_customer')->where('openid', $user['openid'])->setInc('continuity_day', 1);
                             $newSave = [
                                 'addtime' => $time,
@@ -259,7 +268,8 @@ class Customer extends Controller
                             $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid', $userData['id'])->where('addtime', $time)->find();
                             Db::table('fy_score_log')->insert([
                                 'uid' => $userData['id'],
-                                'source_id' => $sign_id,
+                                'openid' => $user['openid'],
+                                'source_id' => $sign_id['id'],
                                 'source' => 2,
                                 'score' => 2 + $score,
                                 'time' => $time
@@ -271,13 +281,14 @@ class Customer extends Controller
                             } else {
                                 Db::table('fy_customer')->where('openid', $user['openid'])->setInc('continuity_day', 1);
                             }
-                            Db::table('fy_customer')->where('openid', $user['openid'])->setInc('score', 1);
+                            Db::table('fy_customer')->where('openid', $user['openid'])->setInc('score', 2);
                             Db::table('fy_customer_sign')->insert($save);
                             //新增日志记录
                             $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid', $userData['id'])->where('addtime', $time)->find();
                             Db::table('fy_score_log')->insert([
                                 'uid' => $userData['id'],
-                                'source_id' => $sign_id,
+                                'openid' => $user['openid'],
+                                'source_id' => $sign_id['id'],
                                 'source' => 2,
                                 'score' => 2,
                                 'time' => $time
@@ -287,6 +298,18 @@ class Customer extends Controller
                     }
                 }
             }
+        } else {
+            $time = time();
+            $today_start = strtotime(date('Y-m-d', $time) . ' 00:00:00');
+            $today_end = strtotime(date('Y-m-d', $time) . ' 23:59:59');
+            $res = Db::table('fy_customer_sign')
+                ->where('uid', $userData['id'])
+                ->where('addtime', 'between', [$today_start, $today_end])
+                ->find();
+            $this->assign('flag', $res ? 1 : 0);
+            $this->assign('user', $userData);
+            $this->assign('titleName', '签到');
+            return $this->view->fetch('mysign');
         }
     }
 }
