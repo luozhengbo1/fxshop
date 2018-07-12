@@ -52,11 +52,11 @@
                     $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
                 }
                 $orderList = array_values($this->array_group_by($orderList,'order_id'));
-                if(!empty($orderList) ){
+               // if(!empty($orderList) ){
                     return ajax_return($orderList,'ok','200');
-                }else{
+                /*}else{
                     return ajax_return('','no','500');
-                }
+                }*/
 
             }
         }
@@ -318,23 +318,31 @@
                     $pay +=$goods['postage'];
                 }
             }
-//            return $pay;
-            return 0.01;
+            return $pay;
+//            return 0.01;
         }
 
         #确认收货状态
-        public function editStatus()
+        public function sureDeliver()
         {
             if($this->request->isAjax()){
                 $data = $this->request->post();
-                if($data['id']){
+                if(!$data['order_id'] ){
                     return ajax_return_error('缺少参数id');
                 }
-                $res = Db::name('order')->where(['id'=>$data['id']])->update(['order_status'=>4]);
+                $res = Db::name('order_goods')
+                    ->where([
+                        'order_id'=>$data['order_id'],
+                        'goods_id'=>$data['goods_id'],
+                        'sku_id'=>$data['sku_id']
+                    ])
+                    ->update(['is_get_status'=>1]);
+                //echo Db::name('order_goods')->getLastSql();
+               // dump($res);
                 if($res){
-                    return  ajax_return('','ok','200');
+                    return  ajax_return('','确认成功','200');
                 }else{
-                    return  ajax_return('','no','500');
+                    return  ajax_return('','确认失败','500');
                 }
             }
         }
@@ -399,7 +407,7 @@
                 ->where(['fy_order.order_id'=>$order_id,'fy_order_goods.goods_id'=>$goods_id])
                 ->find();
             $orderDetail['goods_detail'] = json_decode($orderDetail['goods_detail'],true);
-////            echo Db::name('order')->getLastSql();
+//            echo Db::name('order')->getLastSql();
 //            dump($orderDetail);die;
             $this->view->assign('orderDetail',$orderDetail);
             return $this->view->fetch('orderService');

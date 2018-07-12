@@ -9,7 +9,7 @@
        <li data-status="0"><a href="javascript:;"  >待付款</a></li>
        <li data-status="1"><a href="javascript:;"  >待发货</a></li>
        <li data-status="2"><a href="javascript:;"  >待收货</a></li>
-       <li data-status="3"><a href="javascript:;"  >待退款</a></li>
+       <li data-status="3" id="refund"><a href="javascript:;"  >待退款</a></li>
        <li data-status="4"><a href="javascript:;"  >待评价</a></li>
    </ul>
     <div id="dataListWrap">
@@ -77,6 +77,8 @@
         orderList:"{:url('index/order/getOrderListApi')}",
         againPay:"{:url('index/order/againPay')}",//再次支付
         logistics:"{:url('index/order/logistics')}",//物流查看
+        sureDeliver:"{:url('index/order/sureDeliver')}",
+        refund:"{:url('index/order/refund')}",
     }
     tabSwitch($('.nav-list-tab li'),loadOrderData)
     function loadOrderData(){
@@ -101,13 +103,18 @@
         for(var j = 0; j < result.length; j++){
             var data=result[j],//单个订单
                  status = '',//订单状态
+
                 order_id=data[0].order_id+"";//订单id
             html +='<li>';
-            html +='<a href="'+urlConnect("{:url('index/order/orderDetail')}",{id:order_id})+'">';
+
             for(var i=0; i<data.length; i++ ){
                 var detail = data[i].goods_detail,
                     status = data[i].order_status ,
+                    goods_id =detail.id,
+                    sku_id = data[i].sku_id,
                     order_id = data[i].order_id;
+                console.log(goods_id)
+                html +='<a href="'+urlConnect("{:url('index/order/orderDetail')}",{id:order_id})+'">';
                 html +='    <div class="item-list pt10 module clear">';
                 html +='        <div class="item-img">';
                 html +='            <p> <img class="" src="'+detail.main_image+'" /> </p>';
@@ -139,44 +146,53 @@
                 html +='    <div class="module  clear pr10 pt5" >';
                 html +='        <div class="cont tr">';
                 html +='            <span class="f14">共<b>'+data[i].goods_num+'</b>件商品</span>';
-                html +='            <span class="f14">合计:<b>￥'+data[i].total_price+'</b></span>';
+                html +='            <span class="f14">合计:<b>￥'+data[i].total_price/100+'</b></span>';
                 html +='            <span class="f14">(运费<b>￥'+detail.postage+'</b>)</span>';
                 html +='        </div>';
                 html +='    </div>';
-
-            }
-                 html +='</a>';
-                html +='    <div class="module clear tr mt10 mb10 pr10" >';
-                if( status==0)//代付款
-                    html +='        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="pay(\''+order_id+'\')">付款</button>';
-                else if(status ==1)// 代发货
-                    html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">联系卖家</button>';
-                else if(status ==2) {
-                    // 待收货
-                    html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">确认收货</button>';
-                   // html +='        <a class="layui-btn layui-btn-primary layui-btn-sm" onclick="logistics(\''+order_id+'\',\''+goods_id+'\')">物流信息</a>';
+                html +='    <div class="module clear tr mt5 mb5 pr10" >';
+                html +='</a>';
+                switch(status)
+                {
+                    case 0://代付款
+                        //html +='        <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="pay(\''+order_id+'\')">付款</button>';
+                        break;
+                    case 1://发货
+                        html +='        <a class="layui-btn layui-btn-primary layui-btn-xs" onclick="refund(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">退款</a>';
+                        break;
+                    case 2://待收货
+                        if(data[i].is_get_status !=1)
+                        html +='        <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="sureDeliver(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">确认收货</button>';
+                        html +='        <a class="layui-btn layui-btn-primary layui-btn-xs" onclick="refund(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">退款</a>';
+                        break;
+                    case 3://待退款
+                        break;
+                    case 4://待评价
+                        html +='        <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="evaluate(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">评价</button>';
+                        break;
                 }
-                else if(status==3)// 待退款
-                    html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">申请售后</button>';
-                else if(status ==4)//待评价
-                    html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">评价</button>';
                 html +='    </div>';
-                html +='     <div class="bottomLine"></div>';
-                html +='</li>';
+            }
+
+            html +='    <div class="module clear tr mt10 mb10 pr10" >';
+            if(status==0)//代付款
+                html +='        <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="pay(\''+order_id+'\')">付款</button>';
+            html +='        <button class="layui-btn layui-btn-primary layui-btn-xs">联系卖家</button>';
+            html +='    </div>';
+            html +='     <div class="bottomLine"></div>';
+            html +='</li>';
 
         }
         return html;
     }
+    function modifyComplete(data) {
+        setTimeout(function () {
+            loadOrderData()
+        },1500)
 
-    function pay(orderid) {
-        pub_save({
-            url:url.againPay,
-            return_url:"#",
-            data:{id:orderid},
-        })
     }
-
 </script>
+<script type="text/javascript" src="__STATIC__/index/js/view/order.js" ></script>
 {include file="Public/footer"}
 </body>
 </html>
