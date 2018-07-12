@@ -30,8 +30,8 @@
 //                    dump($this->userInfo['openid']);die;
                     $orderList = Db::name('order')
 //                        ->field('fy_goods_attribute.*')
-                        ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-                        ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id')
+                        ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
+                        ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id','left')
                         ->where(['fy_order.openid'=>$this->userInfo['openid']])
                         ->order('fy_order.create_time desc')
                         ->page($page,$size)
@@ -39,8 +39,8 @@
 //                    echo Db::name('order')->getLastSql();
                 }else{
                     $orderList = Db::name('order')
-                        ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-                        ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id')
+                        ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
+                        ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id','left')
                         ->where(['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status']])
                         ->order('fy_order.create_time desc')
                         ->page($page,$size)
