@@ -1,5 +1,6 @@
 <td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
 <td>{$vo.uid|high_light=$Request.param.uid}</td>
+<td>{$vo.openid}</td>
 <td>{$vo.source_id}</td>
 <td>{if condition='$vo.source==1'}注册
     {elseif condition='$vo.source==2'/}签到
