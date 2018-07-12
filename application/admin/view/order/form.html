@@ -10,6 +10,7 @@
             <option value="4">待评价</option>
         </select>
     </div>
+    {php}if($_SESSION['think']['auth_id']==1){ {/php}
     <div class="select-box" style="width:250px">
         <select name="user_id" class="select">
             <option value="">--请选择商户--</option>
@@ -18,13 +19,10 @@
             {/volist}
         </select>
     </div>
+    {php}}{/php}
     <input type="text" class="input-text Wdate" style="width:250px" placeholder="下单开始时间" name="create_time_start" value="{$Request.param.create_time_start}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal} >
     <input type="text" class="input-text Wdate" style="width:250px" placeholder="下单结束时间" name="create_time_end" value="{$Request.param.create_time_end}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal} >
-    <!--<input type="text" class="input-text" style="width:250px" placeholder="订单id" name="goodsName" value="{$Request.param.order_id}" >-->
-    <!--<div class="select-box" style="width:250px">-->
-        <!--<select name="pay_status" class="select">-->
-            <!--<option value=""></option>-->
-        <!--</select>-->
-    <!--</div>-->
+    <input type="text" class="input-text" style="width:250px" placeholder="下单用户" name="customer_name" value="{$Request.param.customer_name}" >
+
     <button type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
 </form>
