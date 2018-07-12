@@ -106,19 +106,8 @@
         orderService:"{:url('index/order/orderService')}",//
         logistics:"{:url('index/order/logistics')}",//物流查看
     }
-    function goOrderService(order_id,goods_id) {
-        window.location.href = urlConnect(url.orderService,{order_id:order_id,goods_id:goods_id})
-    }
-    function logistics(order_id,goods_id) {
-        window.location.href=urlConnect(url.logistics,{order_id:order_id,goods_id:goods_id})
-    }
-    function pay(orderid) {
-        pub_save({
-            url:url.againPay,
-            return_url:"#",
-            data:{id:orderid},
-        })
-    }
+
 </script>
+<script type="text/javascript" src="__STATIC__/index/js/view/order.js" ></script>
 </body>
 </html>

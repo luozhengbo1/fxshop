@@ -390,6 +390,10 @@ function pub_save(json){
                     if(data.redirect && data.redirect!="undefined"){
                         location.href=data.redirect;
                         request_flag.save = true;
+                    }else if(json.complete){
+                        //有回调函数  执行回调函数
+                        json.complete(data.data);
+                        request_flag.save = true;
                     }else {
                         setTimeout(function(){
                             location.href=json.return_url;

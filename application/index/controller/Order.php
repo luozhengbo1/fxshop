@@ -51,11 +51,11 @@
                     $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
                 }
                 $orderList = array_values($this->array_group_by($orderList,'order_id'));
-                if(!empty($orderList) ){
+               // if(!empty($orderList) ){
                     return ajax_return($orderList,'ok','200');
-                }else{
+                /*}else{
                     return ajax_return('','no','500');
-                }
+                }*/
 
             }
         }

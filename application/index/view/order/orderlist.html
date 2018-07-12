@@ -9,7 +9,7 @@
        <li data-status="0"><a href="javascript:;"  >待付款</a></li>
        <li data-status="1"><a href="javascript:;"  >待发货</a></li>
        <li data-status="2"><a href="javascript:;"  >待收货</a></li>
-       <li data-status="3"><a href="javascript:;"  >待退款</a></li>
+       <li data-status="3" id="refund"><a href="javascript:;"  >待退款</a></li>
        <li data-status="4"><a href="javascript:;"  >待评价</a></li>
    </ul>
     <div id="dataListWrap">
@@ -143,40 +143,44 @@
                 html +='            <span class="f14">(运费<b>￥'+detail.postage+'</b>)</span>';
                 html +='        </div>';
                 html +='    </div>';
-
-            }
-                 html +='</a>';
-                html +='    <div class="module clear tr mt10 mb10 pr10" >';
-                if( status==0)//代付款
-                    html +='        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="pay(\''+order_id+'\')">付款</button>';
-                else if(status ==1)// 代发货
-                    html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">联系卖家</button>';
-                else if(status ==2) {
-                    // 待收货
-                    html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">确认收货</button>';
-                   // html +='        <a class="layui-btn layui-btn-primary layui-btn-sm" onclick="logistics(\''+order_id+'\',\''+goods_id+'\')">物流信息</a>';
+                html +='    <div class="module clear tr mt5 mb5 pr10" >';
+                switch(status)
+                {
+                    case 0://代付款
+                        //html +='        <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="pay(\''+order_id+'\')">付款</button>';
+                        break;
+                    case 1://发货
+                        html +='        <a class="layui-btn layui-btn-primary layui-btn-xs" onclick="refund(\''+order_id+'\',\''+detail.goods_id+'\')">退款</a>';
+                        break;
+                    case 2://待收货
+                        html +='        <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="sureDeliver(\''+order_id+'\',\''+detail.goods_id+'\')">确认收货</button>';
+                        html +='        <a class="layui-btn layui-btn-primary layui-btn-xs" onclick="refund(\''+order_id+'\',\''+detail.goods_id+'\')">退款</a>';
+                        break;
+                    case 3://待退款
+                        break;
+                    case 4://待评价
+                        html +='        <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="evaluate(\''+order_id+'\',\''+detail.goods_id+'\')">评价</button>';
+                        break;
                 }
-                else if(status==3)// 待退款
-                    html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">申请售后</button>';
-                else if(status ==4)//待评价
-                    html +='        <button class="layui-btn layui-btn-primary layui-btn-sm">评价</button>';
                 html +='    </div>';
-                html +='     <div class="bottomLine"></div>';
-                html +='</li>';
+            }
+            html +='</a>';
+            html +='    <div class="module clear tr mt10 mb10 pr10" >';
+            if(status==0)//代付款
+                html +='        <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="pay(\''+order_id+'\')">付款</button>';
+            html +='        <button class="layui-btn layui-btn-primary layui-btn-xs">联系卖家</button>';
+            html +='    </div>';
+            html +='     <div class="bottomLine"></div>';
+            html +='</li>';
 
         }
         return html;
     }
-
-    function pay(orderid) {
-        pub_save({
-            url:url.againPay,
-            return_url:"#",
-            data:{id:orderid},
-        })
+    function refundComplete() {
+        $('#refund').click();
     }
-
 </script>
+<script type="text/javascript" src="__STATIC__/index/js/view/order.js" ></script>
 {include file="Public/footer"}
 </body>
 </html>

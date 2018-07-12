@@ -4238,7 +4238,7 @@ a {
 	position: absolute;
 	left: -10px;
 	top: 18px;
-	border-left: 10px solid #EEE;
+	border-left: 10px solid #e3e3e3;
 	border-bottom: 10px solid #ddd;
 }
 #J_oper_plugin .logis-detail ul li:first-child .logis-detail-first:after {
