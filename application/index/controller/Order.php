@@ -379,6 +379,7 @@
             }
             $orderDetail = Db::name('order')
                 ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
+                ->join('fy_goods_attribute','fy_order_goods.sku_id=fy_goods_attribute.id','left')
                 ->where(['fy_order.order_id'=>$order_id,'fy_order_goods.goods_id'=>$goods_id])
                 ->find();
             $orderDetail['goods_detail'] = json_decode($orderDetail['goods_detail'],true);
