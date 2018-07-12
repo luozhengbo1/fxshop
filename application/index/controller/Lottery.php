@@ -30,10 +30,10 @@
                     'grant_end_date'=>['>',$time]
                     ])
                 ->select();
-            dump($lotteryList);
+//            dump($lotteryList);die;
             $this->view->assign('titleName','券集市');
             $this->view->assign('lotteryList',$lotteryList);
-            return $this->view->fetch();
+            return $this->view->fetch('index/vouchermarket');
 
         }
         #未完成待续

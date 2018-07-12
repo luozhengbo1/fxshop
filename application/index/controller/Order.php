@@ -214,11 +214,8 @@
                 # 插入订单数据
 
                 $addId1 =Db::name("order_all")->insert($orderAll);
-
                 $addId2 =Db::name("order")->insertAll($orderRow);
                 $addId3 =Db::name("order_goods")->insertAll($orderGoods);
-
-
                 if ($addId1 > 0 && $addId2 > 0 && $addId3 > 0 ) {
                     # 清空购物车^M
                     foreach ($data as $k =>$v){
@@ -306,7 +303,6 @@
                 return json($backData);
             }
 
-
         }
         # 计算订单总价值
         public function calculateOrderValue($data)
@@ -322,7 +318,6 @@
                     $pay +=$goods['postage'];
                 }
             }
-//            dump($pay);
 //            return $pay;
             return 0.01;
         }
@@ -336,6 +331,26 @@
                     return ajax_return_error('缺少参数id');
                 }
                 $res = Db::name('order')->where(['id'=>$data['id']])->update(['order_status'=>4]);
+                if($res){
+                    return  ajax_return('','ok','200');
+                }else{
+                    return  ajax_return('','no','500');
+                }
+            }
+        }
+        #退款接口
+        public function refund()
+        {
+            if($this->request->isAjax()){
+                $data = $this->request->post();
+                if($data['id']){
+                    return ajax_return_error('缺少参数id');
+                }
+                $order = Db::name('order')->where(['order_id'=>$data['id']])->find();
+                if($order['pay_status']!=1){
+                    return ajax_return_error('异常错误');
+                }
+                $res = Db::name('order')->where(['order_id'=>$data['id']])->update(['order_status'=>3]);
                 if($res){
                     return  ajax_return('','ok','200');
                 }else{
@@ -388,26 +403,6 @@
 //            dump($orderDetail);die;
             $this->view->assign('orderDetail',$orderDetail);
             return $this->view->fetch('orderService');
-        }
-        #物流信息
-        public function  logistics()
-        {
-            $this->assign('titleName', "物流信息");
-            $order_id = $this->request->param('order_id');
-            $goods_id = $this->request->param('goods_id');
-            if(!$goods_id || !$order_id ){
-                return $this->error('缺少参数id');
-            }
-            $orderDetail = Db::name('order')
-                ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
-                ->join('fy_goods_attribute','fy_order_goods.sku_id=fy_goods_attribute.id','left')
-                ->where(['fy_order.order_id'=>$order_id,'fy_order_goods.goods_id'=>$goods_id])
-                ->find();
-            $orderDetail['goods_detail'] = json_decode($orderDetail['goods_detail'],true);
-////            echo Db::name('order')->getLastSql();
-//            dump($orderDetail);die;
-            $this->view->assign('orderDetail',$orderDetail);
-            return $this->view->fetch();
         }
 
     }
