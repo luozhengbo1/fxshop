@@ -412,5 +412,25 @@
             $this->view->assign('orderDetail',$orderDetail);
             return $this->view->fetch('orderService');
         }
+        #商品售后
+        public function  logistics()
+        {
+            $this->assign('titleName', "物流信息");
+            $order_id = $this->request->param('order_id');
+            $goods_id = $this->request->param('goods_id');
+            if(!$goods_id || !$order_id ){
+                return $this->error('缺少参数id');
+            }
+            $orderDetail = Db::name('order')
+                ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
+                ->join('fy_goods_attribute','fy_order_goods.sku_id=fy_goods_attribute.id','left')
+                ->where(['fy_order.order_id'=>$order_id,'fy_order_goods.goods_id'=>$goods_id])
+                ->find();
+            $orderDetail['goods_detail'] = json_decode($orderDetail['goods_detail'],true);
+//            echo Db::name('order')->getLastSql();
+//            dump($orderDetail);die;
+            $this->view->assign('orderDetail',$orderDetail);
+            return $this->view->fetch('logistics');
+        }
 
     }
