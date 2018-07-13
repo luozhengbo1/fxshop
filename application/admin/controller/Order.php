@@ -38,6 +38,7 @@ class Order extends Controller
         }
 
 
+
     }
 
     public function  index()
@@ -61,8 +62,12 @@ class Order extends Controller
         if($_SESSION['think']['auth_id']!=1){
             $map['fy_order.user_id'] = $_SESSION['think']['auth_id'];
         }
+        $map['isdelete'] =0;
         $userList = Db::name('admin_user')->where(['isdelete'=>0,'id'=>['>',1]])->select();
         $orderList = Db::name('order')
+           ->field('fy_order.id,
+            fy_order.order_id,fy_order.order_status,fy_order.total_price,fy_order.customer_name,fy_order.customer_name,fy_order.create_time,fy_order.pay_time,
+            fy_order_goods.*, fy_goods_attribute.store,fy_goods_attribute.price')
             ->join( 'fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
             ->order('fy_order.create_time desc')
             ->where($map)
@@ -80,7 +85,7 @@ class Order extends Controller
             return $this->error('缺少参数订单id');
         }
         $orderDetail = Db::name('order')
-            ->field('
+            ->field(' fy_order.id,
             fy_order.order_id,fy_order.order_status,fy_order.total_price,fy_order.customer_name,fy_order.customer_name,fy_order.create_time,fy_order.pay_time,
             fy_order_goods.*, fy_goods_attribute.store,fy_goods_attribute.price')
             ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
@@ -122,6 +127,12 @@ class Order extends Controller
             }
         }
     }
+    public function delete()
+    {
+        dump($this->request->post());die;
+        return $this->updateField($this->fieldIsDelete, 1, "移动到回收站成功");
+    }
+
 
     #确认发货
     public  function  sureSend()
