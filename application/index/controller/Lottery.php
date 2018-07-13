@@ -7,7 +7,7 @@ use think\Db;
 use think\Cache;
 use think\Session;
 
-Class Lottery extends Controller
+Class Lottery extends Mustlogin
 {
     protected $userInfo;
 

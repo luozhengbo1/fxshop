@@ -1,7 +1,7 @@
 <?php
 namespace app\index\controller;
 use think\Controller;
-class Pay extends  Controller
+class Pay extends  Mustlogin
 {
     public function index()
     {

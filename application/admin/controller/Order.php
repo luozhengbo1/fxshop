@@ -47,7 +47,8 @@ class Order extends Controller
 
         // 列表过滤器，生成查询Map对象
         #表单搜获
-//        $map = $this->search($model, [$this->fieldIsDelete => $this::$isdelete]);
+        $map = $this->search($model, [$this->fieldIsDelete => $this::$isdelete]);
+        dump($map);
 
         // 特殊过滤器，后缀是方法名的
         #search 搜索
@@ -62,7 +63,7 @@ class Order extends Controller
         if($_SESSION['think']['auth_id']!=1){
             $map['fy_order.user_id'] = $_SESSION['think']['auth_id'];
         }
-        $map['isdelete'] =0;
+        $map['fy_order.isdelete'] =0;
         $userList = Db::name('admin_user')->where(['isdelete'=>0,'id'=>['>',1]])->select();
         $orderList = Db::name('order')
            ->field('fy_order.id,fy_order.buy_list,fy_order.address_id,
@@ -85,8 +86,7 @@ class Order extends Controller
      */
     public function recycleBin()
     {
-        $this::$isdelete = 1;
-
+        $this::$isdelete= 1;
         return $this->index();
     }
 

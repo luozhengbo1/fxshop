@@ -8,7 +8,7 @@ namespace app\index\controller;
 use think\Controller;
 use think\Db;
 
-class Customer extends Controller
+class Customer extends Mustlogin
 
 {
     /**

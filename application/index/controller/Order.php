@@ -11,6 +11,7 @@
         {
             parent::__construct();
             $this->userInfo = Session::get('wx_user');
+            $this->view->assign('param', $this->request->param('param'));
         }
 
         #订单列表页面
@@ -477,7 +478,7 @@
                         'goods_id'=>$data['goods_id'],
                         'sku_id'=>$data['sku_id']
                     ])
-                    ->update(['comment'=>1]);
+                    ->update(['comment'=>1,'']);
                 #记录评价内容
                 $insert = [];
                 $insert['goods_id'] = $orderGoods['goods_id'];
@@ -495,8 +496,6 @@
                 }
             }
         }
-
-
 
     }
 
