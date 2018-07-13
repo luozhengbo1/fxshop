@@ -465,8 +465,12 @@
                         'goods_id'=>$data['goods_id'],
                         'sku_id'=>$data['sku_id']
                     ])->find();
-                $orderGoods['goods_detail'] =    json_decode($orderGoods['goods_detail'],true );
-                if($orderGoods['goods_detail']['is_comment']==0){
+                $goods = Db::name('goods')
+                    ->field('is_comment')
+                    ->where([
+                        'id'=>$data['goods_id'],
+                    ])->find();
+                if($goods['is_comment']==0){
                     return ajax_return_error('该商品不可已评论');
                 }
                 if($orderGoods['comment']==1){
@@ -478,15 +482,23 @@
                         'goods_id'=>$data['goods_id'],
                         'sku_id'=>$data['sku_id']
                     ])
-                    ->update(['comment'=>1,'']);
+                    ->update(['comment'=>1]);
                 #记录评价内容
-                $insert = [];
-                $insert['goods_id'] = $orderGoods['goods_id'];
-                $insert['openid'] = $this->userInfo['openid'];
-                $insert['username'] = $this->userInfo['nickname'];
-                $insert['content'] = $data['content'];
-                $insert['create_time'] =time();
+                $insert=[];
+                $insert['pic']=$data['pic'];
+                $insert['openid']=$this->userInfo['openid'];
+                $insert['username']=$this->userInfo['nickname'];
+                $insert['goods_id']=$data['goods_id'];
+                $insert['content']=$data['desc'];
+                $insert['create_time']=time();
+                $insert['similarity_score']=$data['similarity_score'];
+                $insert['logistics_score']=$data['logistics_score'];
+                $insert['service_score']=$data['service_score'];
+                $insert['avg_score']= number_format(($data['service_score'] + $data['similarity_score']+$data['logistics_score'])/3 ,2);
                 $res1 = Db::name('goods_comment')->insert($insert);
+
+                #将这个订单修改为已评价
+                Db::name('order')->where(['order_id'=>$data['order_id']])->update(['order_status'=>5]);
                 //echo Db::name('order_goods')->getLastSql();
                 // dump($res);
                 if($res && $res1){
@@ -494,6 +506,13 @@
                 }else{
                     return  ajax_return('','确认失败','500');
                 }
+            }else{
+
+                $this->assign('titleName', "商品评价");
+                $this->assign('sku_id', $this->request->param('sku_id'));
+                $this->assign('goods_id', $this->request->param('goods_id'));
+                $this->assign('order_id',   $this->request->param('order_id'));
+                return $this->view->fetch('orderComment');
             }
         }
 

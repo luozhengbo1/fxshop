@@ -94,6 +94,19 @@
             $this->view->assign('guestGoods',$this->guestYouLike($id));
 //            dump($this->guestYouLike($id));
 //            die;
+
+            $bad = Db::name('goods_comment')
+                ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[0,1] ]])
+                ->count();
+            $mid = Db::name('goods_comment')
+                ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[2,3] ]])
+                ->count();
+            $good = Db::name('goods_comment')
+                ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[4,5] ]])
+                ->count();
+            $this->view->assign('bad',   $bad);
+            $this->view->assign('mid',   $mid);
+            $this->view->assign('good',   $good);
             return $this->view->fetch();
         }
 
@@ -141,17 +154,6 @@
             return $this->view->fetch();
         }
 
-        #商品评论
-        function  goodsComment($goodsId,$page=1,$size=10)
-        {
-            if(!$goodsId){
-                return ajax_return_error('缺少参数id');
-            }
-            $goodsCommnet = Db::name('goods_comment')
-                ->where(['goods_id'=>$goodsId])
-                ->page($page,$size)
-                ->select();
-        }
         #猜你喜欢
         public function guestYouLike($id)
         {
@@ -209,6 +211,45 @@
         {
             $this->assign('titleName', "商品评价");
             return $this->view->fetch('evaluateList');
+        }
+
+        #获取商品评论接口
+        public function  goodsComment()
+        {
+            if($this->request->isAjax()){
+                $data = $this->request->post();
+                $page = $this->request->param('page')?$this->request->param('page'):1;
+                $size = $this->request->param('size')?$this->request->param('size'):4;
+
+                if(!$data['id']){
+                    return ajax_return_error('缺少参数id');
+                }
+                $comment = Db::name('goods_comment')
+                    ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[$data['start'],$data['end'] ]]])
+                    ->page($page,$size)
+                    ->select();
+                $count = Db::name('goods_comment')
+                    ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[$data['start'],$data['end'] ]]])
+                    ->page($page,$size)
+                    ->count();
+                if($comment){
+                    return ajax_return('','','');
+                }
+            }else{
+                $bad = Db::name('goods_comment')
+                    ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[0,1] ]])
+                    ->count();
+                $mid = Db::name('goods_comment')
+                    ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[2,3] ]])
+                    ->count();
+                $good = Db::name('goods_comment')
+                    ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[4,5] ]])
+                    ->count();
+                $this->view->assign('bad',   $bad);
+                $this->view->assign('mid',   $mid);
+                $this->view->assign('good',   $good);
+                return $this->view->fetch();
+            }
         }
 
 	}

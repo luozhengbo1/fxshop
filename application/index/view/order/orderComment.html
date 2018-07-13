@@ -37,6 +37,9 @@
 <!--商品分类-->
 <div class="f12">
     <form role="form" id="form">
+        <input type="hidden" name="order_id" value="{$order_id??''}">
+        <input type="hidden" name="goods_id" value="{$goods_id??''}">
+        <input type="hidden" name="sku_id" value="{$sku_id??''}">
         <section class="section-group p10 border-bottoom">
             <span >描述相符<input type="hidden"  data-text="描述相符"  id="descript" name="similarity_score"></span>
             <div id="test4"></div>
@@ -73,7 +76,7 @@
     var url={
         upload:"{:url('index/upload/upload')}",
         dele:"",
-        save:"",
+        save:"{:url('index/order/orderComment')}",
         returnUrl:"",
     }
     apiready = function(){
