@@ -3404,7 +3404,7 @@ a {
     background-color: #FF0036;
     color: #FFF;
 }
-.good-evaluate-all li.active{color: #FFF;}
+.good-evaluate-all li.active a{color: #FFF;}
 .good-evaluate-content{
 	padding: 0 .08rem;
 	background: white;

@@ -217,6 +217,7 @@
         public function  goodsComment()
         {
             $this->assign('titleName', "商品评价");
+            $this->assign('param', $this->request->param('param'));
             if($this->request->isAjax()){
                 $data = $this->request->post();
                 $page = $this->request->param('page')?$this->request->param('page'):1;
@@ -233,9 +234,9 @@
                     ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[$data['start'],$data['end'] ]]])
                     ->page($page,$size)
                     ->count();
-                if($comment){
-                    return ajax_return($comment,'ok','200');
-                }
+
+                return ajax_return($comment,'ok','200');
+
             }else{
                 $bad = Db::name('goods_comment')
                     ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[0,1] ]])

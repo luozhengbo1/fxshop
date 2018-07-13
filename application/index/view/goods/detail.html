@@ -61,15 +61,14 @@
     <span class="fr">共2800条</span>
 </p>
 <ul class="good-evaluate-all clear pt10">
-    <li id="evaluate_all"   class=""><a href="{:url('goods/evaluateList',['param'=>'all'])}">所有</a></li>
-    <li id="evaluate_good"   class=""><a href="{:url('goods/evaluateList',['param'=>'good'])}">好评2700+</a></li>
-    <li id="evaluate_middle" class=""><a href="{:url('goods/evaluateList',['param'=>'middle'])}">中评2700+</a></li>
-    <li id="evaluate_bad"     class=""><a href="{:url('goods/evaluateList',['param'=>'bad'])}">差评2700+</a></li>
-    <li id="evaluate_pic"    class=""><a href="{:url('goods/evaluateList',['param'=>'pic'])}">有图3200+</a></li>
+    <li id="evaluate_all"   class=""><a href="{:url('goods/goodsComment',['goods_id'=>$goods['id'],'param'=>'all'])}">所有</a></li>
+    <li id="evaluate_good"   class=""><a href="{:url('goods/goodsComment',['goods_id'=>$goods['id'],'param'=>'good'])}">好评{$good}</a></li>
+    <li id="evaluate_middle" class=""><a href="{:url('goods/goodsComment',['goods_id'=>$goods['id'],'param'=>'middle'])}">中评{$mid}</a></li>
+    <li id="evaluate_bad"     class=""><a href="{:url('goods/goodsComment',['goods_id'=>$goods['id'],'param'=>'bad'])}">差评{$bad}</a></li>
 </ul>
 {include file="Public/evaluate-module"}
 <div class="tc bg_white show-all-evaluate">
-    <a class="layui-btn layui-btn-primary layui-btn-radius layui-btn-xs" href="{:url('goods/goodsComment',['goods_id'=>$goods['id']])}" >查看全部评价</a>
+    <a class="layui-btn layui-btn-primary layui-btn-radius layui-btn-xs" href="{:url('goods/goodsComment',['goods_id'=>$goods['id'],'param'=>'all'])}" >查看全部评价</a>
 </div>
 <!--商品推荐-->
 <a name="guess-your-love"></a>
@@ -183,6 +182,7 @@
         affirmOrder:"{:url('index/order/affirmOrder')}",//确定订单页面
         collect_update:"{:url('index/customer/collect_update')}",//修改收藏状态
         collect_detail:"{:url('index/customer/collect_detail')}",//收藏详情
+        evaluate_list:"{:url('index/goods/goodsComment')}",
     }
     var skuZhuhe={};
     // skuId goodId num  valId
@@ -206,12 +206,15 @@
     //获取商品评论
     function getEvaluate(){
         $.ajax({
-            url:"{:url('index/index/return_evaluate_json')}",
+            url:url.evaluate_list,
             type:'post',
-            data:{size:2}|| {},
+            data:{size:2,id:"{$goods['id']}",start:4,end:5},
             dataType:'json',
             success: function(data){
-                $("#evaluateList").empty().append(dealData(data.lists)) ;
+                if(data.code==200){
+                    $("#evaluateList").empty().append(dealData(data.data)) ;
+                }
+
             }
         })
     }
