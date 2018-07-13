@@ -8,7 +8,7 @@ namespace app\index\controller;
 use think\Controller;
 use think\Db;
 
-class Customer extends Controller
+class Customer extends Mustlogin
 
 {
     /**
@@ -45,49 +45,6 @@ class Customer extends Controller
         $this->view->assign('param', $param = $this->request->param('param'));
         $this->assign('titleName', "会员中心");
         return $this->view->fetch();
-    }
-
-    /**
-     * 卡券中心
-     */
-    public function mycardvoucher($page = '1', $size = '4', $status = '0')
-    {
-        if ($this->request->isAjax()) {
-            $user_session = session('wx_user');
-            $userdata = Db::table('fy_customer')->field('id')->where('openid', $user_session['openid'])->find();
-            if ($status == 0) {
-                $lottery_no_use = Db::table('fy_lottery_log')->alias('log')
-                    ->field('lott.*,log.uid,log.updatetime,log.is_use')
-                    ->join('fy_lottery lott', 'log.lottery_id=lott.id')
-                    ->join('fy_customer custo', 'log.uid=custo.id')
-                    ->where('custo.id', $userdata['id'])
-                    ->where('log.is_use', $status)
-                    ->page($page, $size)
-                    ->select();
-                if ($lottery_no_use) {
-                    return ajax_return($lottery_no_use, 'ok', 200);
-                } else {
-                    return ajax_return('', 'no data', 204);
-                }
-            } elseif ($status == 1) {
-                $lottery_use = Db::table('fy_lottery_log')->alias('log')
-                    ->field('lott.*,log.uid,log.updatetime,log.is_use')
-                    ->join('fy_lottery lott', 'log.lottery_id=lott.id')
-                    ->join('fy_customer custo', 'log.uid=custo.id')
-                    ->where('custo.id', $userdata['id'])
-                    ->where('log.is_use', $status)
-                    ->page($page, $size)
-                    ->select();
-                if ($lottery_use) {
-                    return ajax_return($lottery_use, 'ok', 200);
-                } else {
-                    return ajax_return('', 'no data', 204);
-                }
-            }
-        } else {
-            $this->assign('titleName', "卡券中心");
-            return $this->view->fetch('customer/mycardVoucher');
-        }
     }
 
     /**

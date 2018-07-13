@@ -16,5 +16,6 @@ Class MustLogin extends Controller
         if (empty($userInfo['openid'])) {
             $this->redirect(substr(url('Wechat/wxLogin', ['state' => myUrl()]), 0, -5));
         }
+        $this->view->assign('param', $this->request->param('param'));
     }
 }

@@ -4,7 +4,7 @@
 	use think\Db;
 	use think\Cache;
 	
-	Class GoodsClass extends Controller
+	Class GoodsClass extends Mustlogin
 	{
         protected $model;
 		#获取热销商品和其他显示的商品

@@ -11,13 +11,13 @@
         {
             parent::__construct();
             $this->userInfo = Session::get('wx_user');
+            $this->view->assign('param', $this->request->param('param'));
         }
 
         #订单列表页面
         public function  index()
         {
             $this->view->assign('titleName', "订单主页");
-            $this->view->assign('param', $param = $this->request->param('param'));
             return $this->view->fetch('orderlist');
         }
         #获取订单商品接口
@@ -254,6 +254,7 @@
         {
             if($this->request->isAjax()){
                 $data= $this->request->post();
+//                dump($data);die;
                 if(!$data['id']){
                     return ajax_return_error('缺少订单id');
                 }
@@ -261,7 +262,6 @@
                 if($orderData['pay_status']==1 || $orderData['order_status']==1){
                     return ajax_return_error('该订单已经支付');
                 }
-
                 if($orderData['js_api_parameters'] && $orderData['prepay_id'] ){
                     $jsApiParameters = base64_encode($orderData['js_api_parameters']);
                     $backData = array(
@@ -269,6 +269,7 @@
                         'code' => 200,
                         'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$orderData['id']}");
                 }else{
+
                     include_once "WxPaySDK/WxPay.Api.php";
                     include_once "WxPaySDK/WxPay.JsApiPay.php";
                     include_once 'WxPaySDK/log.php';
@@ -290,7 +291,6 @@
 //                    dump($unifiedOrder);die;
                     $jsApiParameters= $tools->GetJsApiParameters($unifiedOrder);
 
-                    $jsApiParameters = base64_encode($jsApiParameters);
                     Db::name('order')
                         ->where(['order_id'=>$data['id']])
                         ->update([
@@ -298,7 +298,6 @@
                             'prepay_id' => $unifiedOrder['prepay_id']
                         ]);
                     $jsApiParameters = base64_encode($jsApiParameters);
-
                 }
                 $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$orderData['id']}");
                 return json($backData);
@@ -455,7 +454,6 @@
         #订单评论
         public function  orderComment()
         {
-            $this->assign('titleName', "商品评论");
             if($this->request->isAjax()){
                 $data = $this->request->post();
                 if(!$data['order_id'] ){
@@ -467,8 +465,12 @@
                         'goods_id'=>$data['goods_id'],
                         'sku_id'=>$data['sku_id']
                     ])->find();
-                if($orderGoods['is_comment']==1){
-                    return ajax_return_error('只能评价一次');
+                $orderGoods['goods_detail'] =    json_decode($orderGoods['goods_detail'],true );
+                if($orderGoods['goods_detail']['is_comment']==0){
+                    return ajax_return_error('该商品不可已评论');
+                }
+                if($orderGoods['comment']==1){
+                    return ajax_return_error('该商品已经评论');
                 }
                 $res = Db::name('order_goods')
                     ->where([
@@ -476,7 +478,7 @@
                         'goods_id'=>$data['goods_id'],
                         'sku_id'=>$data['sku_id']
                     ])
-                    ->update(['is_comment'=>1]);
+                    ->update(['comment'=>1,'']);
                 #记录评价内容
                 $insert = [];
                 $insert['goods_id'] = $orderGoods['goods_id'];
@@ -492,11 +494,8 @@
                 }else{
                     return  ajax_return('','确认失败','500');
                 }
-            }else{
-                return $this->view->fetch('orderComment');
             }
         }
 
-
-
     }
+

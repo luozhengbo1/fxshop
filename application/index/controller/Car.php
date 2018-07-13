@@ -5,7 +5,7 @@
 	use think\Cache;
 	use think\Session;
 
-	Class Car extends Controller
+	Class Car extends Mustlogin
 	{
         protected $userInfo;
 		#获取热销商品和其他显示的商品
@@ -47,7 +47,7 @@
                     return ajax_return($carList,'no','400');
                 }*/
             }else{
-                $this->view->assign('param', $this->request->param('param'));
+//                $this->view->assign('param', $this->request->param('param'));
                 $this->view->assign('titleName','购物车');
                 return $this->view->fetch();
             }
