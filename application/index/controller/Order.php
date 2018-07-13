@@ -465,8 +465,12 @@
                         'goods_id'=>$data['goods_id'],
                         'sku_id'=>$data['sku_id']
                     ])->find();
-                $orderGoods['goods_detail'] =    json_decode($orderGoods['goods_detail'],true );
-                if($orderGoods['goods_detail']['is_comment']==0){
+                $goods = Db::name('goods')
+                    ->field('is_comment')
+                    ->where([
+                        'id'=>$data['goods_id'],
+                    ])->find();
+                if($goods['is_comment']==0){
                     return ajax_return_error('该商品不可已评论');
                 }
                 if($orderGoods['comment']==1){
@@ -502,6 +506,13 @@
                 }else{
                     return  ajax_return('','确认失败','500');
                 }
+            }else{
+
+                $this->assign('titleName', "商品评价");
+                $this->assign('sku_id', $this->request->param('sku_id'));
+                $this->assign('goods_id', $this->request->param('goods_id'));
+                $this->assign('order_id',   $this->request->param('order_id'));
+                return $this->view->fetch('orderComment');
             }
         }
 
