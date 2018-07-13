@@ -65,17 +65,29 @@ class Order extends Controller
         $map['isdelete'] =0;
         $userList = Db::name('admin_user')->where(['isdelete'=>0,'id'=>['>',1]])->select();
         $orderList = Db::name('order')
-           ->field('fy_order.id,
+           ->field('fy_order.id,fy_order.buy_list,fy_order.address_id,
             fy_order.order_id,fy_order.order_status,fy_order.total_price,fy_order.customer_name,fy_order.customer_name,fy_order.create_time,fy_order.pay_time,
-            fy_order_goods.*, fy_goods_attribute.store,fy_goods_attribute.price')
+            fy_order_goods.user_id')
             ->join( 'fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
             ->order('fy_order.create_time desc')
             ->where($map)
             ->group('fy_order.order_id')
-            ->paginate(20);
+            ->paginate(10);
         $this->view->assign ('userList',$userList);
         $this->view->assign('list',$orderList);
+        $this->view->assign('count',Db::name('order')->where($map)->count());
         return $this->  view->fetch();
+    }
+
+    /**
+     * 回收站
+     * @return mixed
+     */
+    public function recycleBin()
+    {
+        $this::$isdelete = 1;
+
+        return $this->index();
     }
 
     public function orderDetail()
@@ -126,11 +138,6 @@ class Order extends Controller
                 return ajax_return('','操作失败','500');
             }
         }
-    }
-    public function delete()
-    {
-        dump($this->request->post());die;
-        return $this->updateField($this->fieldIsDelete, 1, "移动到回收站成功");
     }
 
 
