@@ -1,0 +1,107 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+{include file="Public/header-title"}
+<!--我的钱包-->
+<section>
+    <div class="wallet-user-info">
+       <div class="clear">
+           <img class="fl user-image" src={$user_data.headimgurl} alt="头像">
+           <span class="fl user-name">{$user_data.nickname}</span>
+           <div class="fr pt30">
+               <a  href="{:\\think\\Url::build(\'message\')}" class="layui-btn layui-btn-sm layui-btn-normal  layui-btn-radius">消息</a>
+           </div>
+       </div>
+        <div>
+            <p class="tc f14 pb10">余额</p>
+            <p class="tc"><i class="f24" id="userMoney" data-value="100"></i></p>
+        </div>
+    </div>
+    <div class="user-deal-info mt10">
+        <div class="pl10 pr10 clear">
+            <p class="fl">交易记录</p>
+            <!--<p class="fr">
+                <span>查看更2多</span>
+                <i class="icon-right-arrow iconfont f12"></i>
+            </p>-->
+        </div>
+        <div id="dataListWrap">
+           <ul id="orderList"  class="deal-list-wrap">
+             <!-- <li>
+                  <p class="clear title">
+                      <span class="fl">2018年4月</span>
+                      <span class="fr">总计:293.00</span>
+                  </p>
+                  <ul class="deal-list">
+                      <li class="clear bg_white">
+                          <div class="deal-time">
+                              <p class="tc f14">27</p>
+                              <p class="tc f18 bold mt5">4月</p>
+                          </div>
+                          <div class="product-img">
+                              <img  src="__STATIC__/index/images/image/headImg.jpg">
+                          </div>
+                          <div class="product-name">
+                              <p class="f16 bold">-27.00</p>
+                              <p class="mt5 ellipsis-oneline">回城纸质蛋糕回城纸质蛋糕回城纸质蛋糕回城纸质蛋糕回城纸质蛋糕</p>
+                          </div>
+                          <div class="deal-status pt20 grey">支付成功</div>
+                      </li>
+                  </ul>
+              </li>-->
+          </ul>
+        </div>
+    </div>
+</section>
+{include file="Public/footer-quick-nav"}
+<script>
+    $(function () {
+        countUpFun('userMoney');
+        loadDealData()
+    })
+    function loadDealData(){
+        initData('orderList');
+        pageload({
+            targetWarp:'dataListWrap',
+            target:'orderList',
+            page:1,
+            size:4,
+            ajaxData:{
+                url:"{:url('index/customer/mywallet')}",
+                data:{},
+            },
+            dealFun:dealData
+        });
+    }
+    function dealData(data) {
+        var html='';
+        for(var i = 0; i < data.length; i++){
+            html +='<li>';
+            html +='    <p class="clear title">';
+            html +='        <span class="fl">2018年4月</span>';
+            html +='        <span class="fr">总计:293.00</span>';
+            html +='    </p>';
+            html +='    <ul class="deal-list">';
+            for(var j=0; j<4; j++){
+                html +='        <li class="clear bg_white">';
+                html +='            <div class="deal-time">';
+                html +='                <p class="tc f14">27</p>';
+                html +='                <p class="tc f18 bold mt5">4月</p>';
+                html +='            </div>';
+                html +='            <div class="product-img">';
+                html +='                <img  src="__STATIC__/index/images/image/headImg.jpg">';
+                html +='            </div>';
+                html +='            <div class="product-name">';
+                html +='                <p class="f16 bold">-27.00</p>';
+                html +='                <p class="mt5 ellipsis-oneline">回城纸质蛋糕回城纸质蛋糕回城纸质蛋糕回城纸质蛋糕回城纸质蛋糕</p>';
+                html +='            </div>';
+                html +='            <div class="deal-status pt20 grey">支付成功</div>';
+                html +='        </li>';
+            }
+            html +='    </ul>';
+            html +='</li>';
+        }
+        return html;
+    }
+</script>
+</body>
+</html>

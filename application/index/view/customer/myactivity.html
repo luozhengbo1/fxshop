@@ -1,0 +1,107 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+{include file="Public/header-title"}
+<!--我的活动中心-->
+<style>
+    .activity-list li {
+        margin-bottom: 2px;
+        position: relative;
+        min-height: 1.4rem;
+    }
+
+    .activity-list li img {
+        width: 100%;
+    }
+
+    .activity-list .status-wrap {
+        position: absolute;
+        top: .6rem;
+        width: 100%;
+        text-align: center;
+    }
+
+    .activity-list li .status {
+        width: .6rem;
+        height: .6rem;
+        line-height: .6rem;
+        text-align: center;
+        border-radius: 50%;
+        display: inline-block;
+        background: black;
+        color: white;
+        font-size: 14px;
+        opacity: .8;
+    }
+</style>
+<section>
+    <div id="dataListWrap">
+        <ul id="dataList" class="activity-list">
+            <!-- <li>
+                  <a href="javascript:;">
+                      <img src="https://www.0851p2p.com/statics/app/front/images/index/bannermSjb1.jpg">
+                      <p class="f12 grey lh30 h30">2018-6-14 00:00:00~2018-7-15 23:59:59</p>
+                      <div class="status-wrap">
+                          <span class="status">已结e束</span>
+                      </div>
+                  </a>
+             </li>-->
+        </ul>
+    </div>
+</section>
+{include file="Public/footer-quick-nav"}
+<script>
+    $(function () {
+        loadDealData();
+        new WOW().init();
+    })
+
+    function loadDealData() {
+        initData('dataList');
+        pageload({
+            targetWarp: 'dataListWrap',
+            target: 'dataList',
+            page: 1,
+            size: 4,
+            ajaxData: {
+                url: "{:url('index/customer/myactivity')}",
+                data: {},
+            },
+            dealFun: dealData
+        });
+    }
+
+    function dealData(data) {
+        console.log(data);
+        var html = '';
+        for (var i = 0; i < data.length; i++) {
+            var animate = "bounceInLeft";
+            if (i % 2 == 0) {
+                animate = "bounceInRight";
+            }
+            html += '<li class="wow ' + animate + '">';
+            html += '     <a href="' + data[i].url + '">';
+            html += '         <img  src="' + data[i].main_pic + '">';
+            //转换时间戳
+            Date.prototype.toLocaleString = function () {
+                return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate() + " " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
+            };
+            var start_date = new Date(parseInt(data[i].start_date) * 1000).toLocaleString();
+            var end_date = new Date(parseInt(data[i].end_date) * 1000).toLocaleString();
+            html += '         <p  class="f12 grey lh30 h30 pl10">' + start_date + '－' + end_date + '</p>';
+            html += '         <div class="status-wrap"  >';
+            //判断所参与活动是否结束
+            var now_date = new Date().toLocaleString();
+            if (now_date > end_date) {
+                html += '             <span class="status ">已结束</span>';
+            } else {
+                html += '             <span class="status ">参与中</span>';
+            }
+            html += '         </div>';
+            html += '     </a>';
+            html += '</li>';
+        }
+        return html;
+    }
+</script>
+</body>
+</html>
