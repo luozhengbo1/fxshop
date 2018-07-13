@@ -15,6 +15,7 @@
         }
         public function sort(){
             $this->assign('titleName', "商品分类");
+            $this->view->assign('param', $this->request->param('param'));
             return $this->view->fetch();
         }
         #查询出所有的一级分类分类
