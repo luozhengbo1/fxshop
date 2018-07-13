@@ -202,5 +202,11 @@
             }
 
         }
+        #获取这个商品的详情
+        public function evaluateList()
+        {
+            $this->assign('titleName', "商品评价");
+            return $this->view->fetch('evaluateList');
+        }
 
 	}

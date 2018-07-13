@@ -35,14 +35,8 @@ function sureDeliver(order_id,goods_id,sku_id) {
     });
 }
 //评价
-function evaluate(order_id,goods_id,sku_id) {
-    layer.open({
-        content: '你确定要确认收货吗？'
-        ,btn: ['确定', '不要']
-        ,yes: function(index){
-
-        }
-    });
+function evaluateEdit(order_id,goods_id,sku_id) {
+    window.location.href=urlConnect(url.evaluateEdit,{order_id:order_id,goods_id:goods_id,sku_id:sku_id})
 }
 //申请售后
 function goOrderService(order_id,goods_id) {

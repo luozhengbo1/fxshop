@@ -79,6 +79,7 @@
         logistics:"{:url('index/order/logistics')}",//物流查看
         sureDeliver:"{:url('index/order/sureDeliver')}",
         refund:"{:url('index/order/refund')}",
+        evaluateEdit:"{:url('index/order/evaluateEdit')}",
     }
     tabSwitch($('.nav-list-tab li'),loadOrderData)
     function loadOrderData(){
@@ -168,7 +169,7 @@
                     case 3://待退款
                         break;
                     case 4://待评价
-                        html +='        <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="evaluate(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">评价</button>';
+                        html +='        <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="evaluateEdit(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">评价</button>';
                         break;
                 }
                 html +='    </div>';

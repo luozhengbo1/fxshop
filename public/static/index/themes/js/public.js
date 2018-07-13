@@ -266,7 +266,7 @@ function validBuyNum() {
 //加载函数
 //
 function layerLoad(){
-    var html ='<div class="f14"><span class="loading-gif"></span><p>加载中...</p></div>'
+    var html ='<div class="f14"><span class="layer_loading"></span><p>加载中...</p></div>'
     var loading = layer.open({
          content: html
         ,skin: 'msg'

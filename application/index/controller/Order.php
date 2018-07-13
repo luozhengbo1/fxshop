@@ -432,5 +432,9 @@
             $this->view->assign('orderDetail',$orderDetail);
             return $this->view->fetch('logistics');
         }
-
+        #商品售后
+        public function  evaluateEdit(){
+            $this->assign('titleName', "商品评价");
+            return $this->view->fetch('evaluateEdit');
+        }
     }
