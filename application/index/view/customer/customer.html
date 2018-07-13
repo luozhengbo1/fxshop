@@ -5,7 +5,7 @@
     <a href="{:\\think\\Url::build(\'myset\')}" class="aui-header-item-icon fl mt10 ml10">
         <i class="aui-icon aui-icon-Set"></i>
     </a>
-    <a href="{:\\think\\Url::build(\'message\')}" class="message-icon message fr mt5 mr10">
+    <a href="{:\\think\\Url::build(\'Index/message\')}" class="message-icon message fr mt5 mr10">
         <span></span>
         <i class="iconfont icon-message" style="color: white"></i>
     </a>
@@ -26,7 +26,7 @@
                         <span>{$userdata.score}</span>
                         <span>积分</span>
                     </a>
-                    <a href="{:url('customer/mycardvoucher')}">
+                    <a href="{:\\think\\Url::build(\'Lottery/mycardvoucher\')}">
                         <span>{$count_lottery}</span>
                         <span>红包卡券</span>
                     </a>
@@ -52,7 +52,7 @@
         </div>
     </div>
     <div class="aui-me-content-order">
-        <a href="{:\\think\\Url::build(\'orderlist\')}" class="aui-well aui-fl-arrow">
+        <a href="{:\\think\\Url::build(\'Order/index\')}" class="aui-well aui-fl-arrow">
             <div class="aui-well-bd">我的订单</div>
             <div class="aui-well-ft">查看全部</div>
         </a>
