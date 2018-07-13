@@ -1,45 +1,34 @@
 
 <ul class="footer-nav footer-fixed clear">
-	<li id="indexPage">
-		<a  href="{:\\think\\Url::build(\'\index/index\')}">
+	<li id="nav_index">
+		<a href="{:url('index/index',['param'=>'index'])}" >
 			<i class="iconfont icon-home"></i><p>首页</p>
 		</a>
 	</li>
-	<li  id="searchPage">
-		<a  href="{:\\think\\Url::build(\'goods/goodsList\')}">
+	<li  id="nav_search">
+		<a  href="{:url('goods/goodsList',['param'=>'search'])}" >
 			<i class="iconfont icon-sousuo"></i><p>搜索</p>
 		</a>
 	</li>
-	<li  id="sortPage">
-		<a  href="{:url('index/goodsclass/sort')}">
+	<li  id="nav_sort">
+		<a href="{:url('goodsclass/sort',['param'=>'sort'])}" >
 			<i class="iconfont icon-caidan"></i><p>分类</p>
 		</a>
 	</li>
-	<li  id="carPage">
-		<a href="{:\\think\\Url::build(\'car/index\')}">
+	<li  id="nav_car">
+		<a href="{:url('car/index',['param'=>'car'])}" >
 			<i class="iconfont icon-gouwuche"></i><p>购物车</p>
 		</a>
 	</li>
-	<li id="mePage">
-		<a href="{:\\think\\Url::build(\'customer/customer\')}">
+	<li id="nav_customer">
+		<a href="{:url('customer/customer',['param'=>'customer'])}" >
 			<i class="iconfont icon-geren"></i><p>会员中心</p>
 		</a>
 	</li>
-
 </ul>
 
 <script>
-    //addActive()
-    //对点击的位置进行一个记录
+    var nav_param= "{$param?? ''}";
     tabSwitch( $('.footer-nav li'))
-	/*function addActive(){
-        $('#'+ $.cookie('currentPage')).addClass('active')
-	}
-	function tabSwitch($target) {
-        $target.click(function () {
-            $target.removeClass('active')
-            $(this).addClass('active')
-            $.cookie('currentPage', $(this).attr('id'), {path: '/' });
-        })
-    }*/
+    $('#nav_'+nav_param).click();
 </script>

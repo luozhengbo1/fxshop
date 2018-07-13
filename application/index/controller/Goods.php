@@ -129,6 +129,7 @@
         }
         public function goodsList(){
             $this->assign('titleName', "商品搜索");
+            $this->view->assign('param', $this->request->param('param'));
             $searchHistory = Db::name('search')
                 ->distinct(true)
                 ->field('search')

@@ -17,8 +17,7 @@
         public function  index()
         {
             $this->view->assign('titleName', "订单主页");
-            $param = $this->request->param('param');
-            $this->view->assign('param', $param);
+            $this->view->assign('param', $param = $this->request->param('param'));
             return $this->view->fetch('orderlist');
         }
         #获取订单商品接口
@@ -456,6 +455,7 @@
         #订单评论
         public function  orderComment()
         {
+            $this->assign('titleName', "商品评论");
             if($this->request->isAjax()){
                 $data = $this->request->post();
                 if(!$data['order_id'] ){
@@ -492,6 +492,8 @@
                 }else{
                     return  ajax_return('','确认失败','500');
                 }
+            }else{
+                return $this->view->fetch('orderComment');
             }
         }
 

@@ -304,8 +304,6 @@ function tabSwitch($target,complete) {
             }
         });
     })
-   /* var firstLi = $target[0];
-    firstLi.click();*/
 }
 
 function notEmpty(val) {

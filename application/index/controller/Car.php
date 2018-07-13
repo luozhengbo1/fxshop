@@ -47,6 +47,7 @@
                     return ajax_return($carList,'no','400');
                 }*/
             }else{
+                $this->view->assign('param', $this->request->param('param'));
                 $this->view->assign('titleName','购物车');
                 return $this->view->fetch();
             }

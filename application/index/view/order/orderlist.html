@@ -80,12 +80,11 @@
         logistics:"{:url('index/order/logistics')}",//物流查看
         sureDeliver:"{:url('index/order/sureDeliver')}",
         refund:"{:url('index/order/refund')}",
-        evaluateEdit:"{:url('index/order/evaluateEdit')}",
+        evaluateEdit:"{:url('index/order/orderComment')}",
     }
-    $("#orderList li").hide()
+
     tabSwitch($('.nav-list-tab li'),loadOrderData);
     $('#nav_'+nav_param).click();
-    $("#orderList li").show()
     function loadOrderData(){
         var status = $('#navListTab').find('.active').data('status');
         initData('orderList');
