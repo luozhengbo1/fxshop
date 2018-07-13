@@ -63,7 +63,7 @@
         </section>
     </form>
     <div class="footer-fixed btn-wrap">
-        <button onclick="save()" class="btn-dark-red w100p bootstrap-btn">发表评价</button>
+        <button onclick="saveEvaluate()" class="btn-dark-red w100p bootstrap-btn">发表评价</button>
     </div>
 </div>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
@@ -71,7 +71,7 @@
 
 <script>
     var url={
-        upload:"",
+        upload:"{:url('index/upload/upload')}",
         dele:"",
         save:"",
         returnUrl:"",
@@ -133,12 +133,13 @@
                 obj.preview(function(index, file, result){
                     var html ='<div class="singer-image" style="" >';
                     html +='<img  src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">';
-                    html +='<i class="close-btn" onclick="dele()"></i></div>';
+                    html +='<i class="close-btn" onclick="dele(this)"></i></div>';
                     $('#imageShow').append(html);
                 });
             }
-            ,done: function(res){
-
+            ,done: function(data){
+                console.log(data.data.name)
+                $('#imageShow').append('<input type="hidden" class="pic" name="pic" value="'+data.data.name+'">')
                 //上传完毕
             }
             ,error: function(){
@@ -151,23 +152,27 @@
             }
         });
     });
-    function save(){
-        pub_save({
+    function saveEvaluate(){
+        var data= formData('form');
+        var pic='';
+        $('.pic').each(function (index,ele) {
+            pic +=$(ele).val()+',';
+        })
+        pic = pic.substr(0,pic.length-1);
+        data.pic = pic;
+        $.ajax({
             url:url.save,
-            return_url:url.returnUrl,
-            data:formData('form'),
-            complete:saveComplete
+            type:'post',
+            data:data,
+            dataType:'json',
+            success: function(data){
+                layer_msg(data.msg);
+            }
         })
-    }
-    function dele(id) {
-        pub_del({
-            url:url.dele,
-            data:{id:id},
-            complete:deleComplete
-        })
-    }
-    function deleComplete(){
 
+    }
+    function dele(_this) {
+        $(_this).parents('.singer-image').remove();
     }
     function saveComplete() {
 
