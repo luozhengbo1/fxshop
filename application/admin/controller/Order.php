@@ -47,8 +47,7 @@ class Order extends Controller
 
         // 列表过滤器，生成查询Map对象
         #表单搜获
-        $map = $this->search($model, [$this->fieldIsDelete => $this::$isdelete]);
-        dump($map);
+//        $map = $this->search($model, [$this->fieldIsDelete => $this::$isdelete]);
 
         // 特殊过滤器，后缀是方法名的
         #search 搜索
@@ -86,8 +85,38 @@ class Order extends Controller
      */
     public function recycleBin()
     {
-        $this::$isdelete= 1;
-        return $this->index();
+//        $this::$isdelete= 1;
+        $map['fy_order.isdelete'] =1;
+        $userList = Db::name('admin_user')->where(['isdelete'=>0,'id'=>['>',1]])->select();
+        $orderList = Db::name('order')
+            ->field(
+
+                'fy_order.id,fy_order.buy_list,fy_order.address_id,
+            fy_order.order_id,fy_order.order_status,fy_order.total_price,fy_order.customer_name,fy_order.customer_name,fy_order.create_time,fy_order.pay_time,
+            fy_order_goods.user_id')
+            ->join( 'fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
+            ->order('fy_order.create_time desc')
+            ->where($map)
+            ->group('fy_order.order_id')
+            ->paginate(10);
+        $this->view->assign ('userList',$userList);
+        $this->view->assign('list',$orderList);
+        $this->view->assign('count',Db::name('order')->where($map)->count());
+        return $this->view->fetch('index');
+    }
+
+    /**
+     * 清空回收站
+     */
+    public function clear()
+    {
+        $model = $this->getModel();
+        $where[$this->fieldIsDelete] = 1;
+        if (false === $model->where($where)->delete()) {
+            return ajax_return_adv_error($model->getError());
+        }
+
+        return ajax_return_adv("清空回收站成功");
     }
 
     public function orderDetail()

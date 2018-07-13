@@ -118,7 +118,12 @@
                 html +='    <div class="p5 clear">';
                 html +='  		  <p class="fl">已售'+notEmpty(data[i].buy_num)+'</p>';
                 html +='  		      <p class="fr">';
-                html +='  		      <span class="goods-price">¥'+notEmpty(data[i].basic_price)+'</span>';
+                if(data[i].price_real!=0){
+                    html +='  		      <span class="goods-price">¥'+notEmpty(data[i].price_real)+'</span>';
+				}else{
+                    html +='  		      <span class="goods-price">¥'+notEmpty(data[i].basic_price)+'</span>';
+				}
+
                 html +='  				<span class="goods-old-price">¥'+notEmpty(data[i].original_price)+'</span>';
                 html +='  		  </p>';
                 html +='    </div>';
