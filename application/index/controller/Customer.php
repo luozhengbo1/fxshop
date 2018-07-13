@@ -8,7 +8,7 @@ namespace app\index\controller;
 use think\Controller;
 use think\Db;
 
-class Customer extends Controller
+class Customer extends Mustlogin
 
 {
     protected function getUid()
@@ -49,7 +49,7 @@ class Customer extends Controller
         $this->assign('count_take_delivery', $count_take_delivery);
         $this->assign('count_refund', $count_refund);
         $this->assign('count_evaluate', $count_evaluate);
-
+        $this->view->assign('param', $param = $this->request->param('param'));
         $this->assign('titleName', "会员中心");
         return $this->view->fetch();
     }

@@ -82,6 +82,7 @@
                 ->find();
             $this->view->assign('goods',$goods);
             $this->view->assign('skuData',$skuData);
+//            dump($skuData);die;
             $this->view->assign('proprety_name',$proprety_name);
             $this->view->assign('proprety_name_val',$proprety_name_val);
             $this->view->assign('lottery',$lottery);
@@ -128,6 +129,7 @@
         }
         public function goodsList(){
             $this->assign('titleName', "商品搜索");
+            $this->view->assign('param', $this->request->param('param'));
             $searchHistory = Db::name('search')
                 ->distinct(true)
                 ->field('search')
@@ -201,6 +203,12 @@
                 return ajax_return($skuData,'ok',200);
             }
 
+        }
+        #获取这个商品的详情
+        public function evaluateList()
+        {
+            $this->assign('titleName', "商品评价");
+            return $this->view->fetch('evaluateList');
         }
 
 	}

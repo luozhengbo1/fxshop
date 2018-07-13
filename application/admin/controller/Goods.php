@@ -87,6 +87,9 @@ class Goods extends Controller
     		$goods['show_area'] = $data['show_area'];
     		#s商品名称
     		$goods['name'] = $data['name'];
+            if( isset($data['price']) &&  $data['price'] ){
+                $goods['price_real'] = $data['price'];
+            }
     		#原价
     		$goods['original_price'] = $data['original_price'];
     		#结算类型
@@ -176,6 +179,20 @@ class Goods extends Controller
                 }
 
                 $res = Db::name('goods_attribute')->insertAll($skuData);
+
+            }else{
+                $insert=[];
+                $goodsAttribute = Db::name('goods_attribute')->where(['goods_id'=>$data['id']])->find();
+                if($goodsAttribute){
+                    Db::name('goods_attribute')->where(['goods_id'=>$data['id']])->delete();
+                }
+                $insert['goods_id'] = $data['id'];
+//                $insert['goods_code'] = $data['goods_code'];
+                $insert['price'] = $data['price'];
+                $insert['point_score'] = $data['point_price'];
+                $insert['bar_code'] = $data['bar_code'];
+                $insert['store'] = $data['store'];
+                $res = Db::name('goods_attribute')->insert($insert);
 
             }
 
@@ -269,6 +286,9 @@ class Goods extends Controller
             $goods['show_area'] = $data['show_area'];
             #s商品名称
             $goods['name'] = $data['name'];
+            if( isset($data['price']) &&  $data['price'] ){
+                $goods['price_real'] = $data['price'];
+            }
             #原价
             $goods['original_price'] = $data['original_price'];
             #结算类型
@@ -361,7 +381,22 @@ class Goods extends Controller
                 }
                  $res = Db::name('goods_attribute')->insertAll($skuData);
 
+                #将没有sku 的商品添加上价格和库存
+            }else{
+                $goodsAttribute = Db::name('goods_attribute')->where(['goods_id'=>$data['id']])->find();
+                if($goodsAttribute){
+                    Db::name('goods_attribute')->where(['goods_id'=>$data['id']])->delete();
+                }
+                $insert=[];
+                $insert['goods_id'] = $data['id'];
+//                $insert['goods_code'] = $data['bar_code'];
+                $insert['price'] = $data['price'];
+                $insert['point_score'] = $data['point_price'];
+                $insert['bar_code'] = $data['bar_code'];
+                $insert['store'] = $data['store'];
+                $res = Db::name('goods_attribute')->insert($insert);
             }
+
 
             return ajax_return('','操作成功','200');
 

@@ -1,0 +1,187 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+{include file="Public/header-title"}
+<style>
+    body{
+        background: #e8e8e8;
+        font-size: 12px;
+        color: gray;
+    }
+    .layui-rate .layui-inline{
+        margin-right: 14px;
+    }
+    .section-group{
+        background: white;
+    }
+    .border-bottoom{
+        border-bottom: 2px solid #e6e6e6;
+    }
+    .upload-image-show{
+
+    }
+    .singer-image{
+        margin-bottom: 4px;
+        position: relative; display: inline-block;
+    }
+    .upload-image-show img{ height: 70px; width: 70px;  margin-right: 6px}
+
+    .upload-icon-wrap{
+        border: 1px dotted grey;
+        height: 70px;
+        width: 70px;
+        text-align: center;
+        padding-top: 16px;
+    }
+
+</style>
+<!--商品分类-->
+<div class="f12">
+    <form role="form" id="form">
+        <input type="hidden" name="order_id" value="{$order_id??''}">
+        <input type="hidden" name="goods_id" value="{$goods_id??''}">
+        <input type="hidden" name="sku_id" value="{$sku_id??''}">
+        <section class="section-group p10 border-bottoom">
+            <span >描述相符<input type="hidden"  data-text="描述相符"  id="descript" name="similarity_score"></span>
+            <div id="test4"></div>
+        </section>
+        <section class="section-group p10">
+            <textarea style="border: none" name="desc"  data-text="商品描述" placeholder="宝贝满足你的期待吗？说说它的优点和美中不足的地方吧。" class="layui-textarea "></textarea>
+            <div class="layui-upload clear">
+                <div id="imageShow" class="upload-image-show fl"></div>
+                <div class="upload-icon-wrap fl " id="uploadBtn">
+                    <img width="30" src="__STATIC__/index/images/photo.png">
+                </div>
+            </div>
+        </section>
+        <section class="section-group p10 mt20">
+            <p>店铺评分</p>
+            <div>
+                <span >物流服务<input  data-text="物流服务" type="hidden" name="logistics_score" id="wlService"></span>
+                <div id="test5"></div>
+            </div>
+            <div>
+                <span >服务态度<input type="hidden"  data-text="服务态度" id="serviceAtti" name="service_score"></span>
+                <div id="test6"></div>
+            </div>
+        </section>
+    </form>
+    <div class="footer-fixed btn-wrap">
+        <button onclick="saveEvaluate()" class="btn-dark-red w100p bootstrap-btn">发表评价</button>
+    </div>
+</div>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script type="text/javascript" src="__STATIC__/index/plugins/layui-v2.3.0/layui.js"></script>
+
+<script>
+    var url={
+        upload:"{:url('index/upload/upload')}",
+        dele:"",
+        save:"{:url('index/order/orderComment')}",
+        returnUrl:"",
+    }
+    apiready = function(){
+        api.parseTapmode();
+    }
+   //评价
+    layui.use(['rate'], function(){
+        var rateNum ={
+            '0': ''
+            ,'0.5': '极差'
+            ,'1': '很差'
+            ,'1.5': '差'
+            ,'2': '有点差'
+            ,'2.5': '中下等'
+            ,'3': '中等'
+            ,'3.5': '中上等'
+            ,'4': '好'
+            ,'4.5': '很好'
+            ,'5': '极好'
+        }
+        var rate = layui.rate;
+        rateFun('#test4','#descript');
+        rateFun('#test5','#wlService');
+        rateFun('#test6','#serviceAtti')
+        function  rateFun(id,inputId) {
+            //半星效果
+            rate.render({
+                elem:id
+                ,value: 5
+                ,half: true
+                ,text: true
+                ,theme: '#FF5722'
+                ,setText: function(value) { //自定义文本的回调
+                    var arrs = rateNum;
+                    this.span.text(arrs[value] ||"");
+                    $(inputId).val(value);
+                    // this.span.text(arrs[value] || (value + "星"));
+                }
+            })
+        }
+    });
+    layui.use('upload', function(){
+        var $ = layui.jquery
+            ,upload = layui.upload;
+        //多图片上传
+        upload.render({
+            elem: '#uploadBtn'
+            ,url:url.upload
+            ,multiple: true
+            ,number:5
+            ,accept: 'images' //普通文件
+            ,size: (1024*3) //限制文件大小，单位 KB
+            //,exts: 'zip|rar|7z' //只允许上传压缩文件
+            //,auto: false //选完文件后不自动上传
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    var html ='<div class="singer-image" style="" >';
+                    html +='<img  src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">';
+                    html +='<i class="close-btn" onclick="dele(this)"></i></div>';
+                    $('#imageShow').append(html);
+                });
+            }
+            ,done: function(data){
+                console.log(data.data.name)
+                $('#imageShow').append('<input type="hidden" class="pic" name="pic" value="'+data.data.name+'">')
+                //上传完毕
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                /*var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadInst.upload();
+                });*/
+            }
+        });
+    });
+    function saveEvaluate(){
+        var data= formData('form');
+        var pic='';
+        $('.pic').each(function (index,ele) {
+            pic +=$(ele).val()+',';
+        })
+        pic = pic.substr(0,pic.length-1);
+        data.pic = pic;
+        $.ajax({
+            url:url.save,
+            type:'post',
+            data:data,
+            dataType:'json',
+            success: function(data){
+                layer_msg(data.msg);
+            }
+        })
+
+    }
+    function dele(_this) {
+        $(_this).parents('.singer-image').remove();
+    }
+    function saveComplete() {
+
+    }
+</script>
+
+</body>
+</html>
+</html>

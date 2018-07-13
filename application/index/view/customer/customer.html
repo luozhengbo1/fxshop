@@ -59,25 +59,26 @@
     </div>
     <section class="aui-grid-content">
         <div class="aui-grid-row">
-            <a href="{:\\think\\Url::build(\'order/index\')}" class="aui-grid-row-item">
+            <a href="{:url('order/index',['param'=>'pay'])}" class="aui-grid-row-item">
                 <i class="aui-icon-large aui-icon-large-sm aui-icon-wallet"></i>
                 <p class="aui-grid-row-label">待付款{$count_pay}</p>
             </a>
-            <a href="{:\\think\\Url::build(\'order/index\')}" class="aui-grid-row-item">
+            <a href="{:url('order/index',['param'=>'deliver'])}" class="aui-grid-row-item">
                 <i class="aui-icon-large aui-icon-large-sm aui-icon-goods"></i>
                 <p class="aui-grid-row-label">待发货{$count_deliver}</p>
             </a>
-            <a href="{:\\think\\Url::build(\'order/index\')}" class="aui-grid-row-item">
+            <a href="{:url('order/index',['param'=>'takeDeliver'])}" class="aui-grid-row-item">
                 <i class="aui-icon-large aui-icon-large-sm aui-icon-receipt"></i>
                 <p class="aui-grid-row-label">待收货{$count_take_delivery}</p>
             </a>
-            <a href="{:\\think\\Url::build(\'order/index\')}" class="aui-grid-row-item">
-                <i class="aui-icon-large aui-icon-large-sm aui-icon-evaluate"></i>
-                <p class="aui-grid-row-label">待评价{$count_evaluate}</p>
-            </a>
-            <a href="{:\\think\\Url::build(\'order/index\')}" class="aui-grid-row-item">
+
+            <a href="{:url('order/index',['param'=>'refund'])}"  class="aui-grid-row-item">
                 <i class="aui-icon-large aui-icon-large-sm aui-icon-refund"></i>
                 <p class="aui-grid-row-label">退货退款{$count_refund}</p>
+            </a>
+            <a href="{:url('order/index',['param'=>'evaluate'])}"  class="aui-grid-row-item">
+                <i class="aui-icon-large aui-icon-large-sm aui-icon-evaluate"></i>
+                <p class="aui-grid-row-label">待评价{$count_evaluate}</p>
             </a>
         </div>
         <div class="aui-dri"></div>

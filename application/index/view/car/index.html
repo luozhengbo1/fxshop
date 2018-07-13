@@ -154,12 +154,22 @@
             html +='        <span class="sku" id="showChosePup">'+data[i].val+'</span>';
             html +='        </p>';
             html +='        <div class="mt10 clear">';
-            html +='            <p class="red fl">¥ <em class="f16">'+data[i].price1+'</em></p>';
+            if(data[i].price1){
+                html +='            <p class="red fl">¥ <em class="f16">'+data[i].price1+'</em></p>';
+            }else{
+                html +='            <p class="red fl">¥ <em class="f16">'+data[i].price_real+'</em></p>';
+            }
+
             html +='            <div class="layui-btn-group fr count-wrap">';
             html +='                <button class="layui-btn layui-btn-primary layui-btn-xs fr24 minus">-</button>';
             html +='                <div class="layui-btn layui-btn-primary layui-btn-xs">';
             // onkeyup="value=(parseInt((value=value.replace(/\D/g,''))==''?'0':value,10))"
-            html +='                    <input  class="sumInput" data-image="'+data[i].main_image+'" data-name="'+data[i].name+'" data-store="'+data[i].store+'" data-goodsid="'+data[i].goods_id+'" data-carid="'+data[i].carId+'"  data-price="'+data[i].price1+'" data-skuid="'+data[i].sku_id+'" data-skuval="'+data[i].val+'"   type="text" value="'+data[i].goods_num+'">';
+            if(data[i].price1) {
+                html += '                    <input  class="sumInput" data-image="' + data[i].main_image + '" data-name="' + data[i].name + '" data-store="' + data[i].store + '" data-goodsid="' + data[i].goods_id + '" data-carid="' + data[i].carId + '"  data-price="' + data[i].price1 + '" data-skuid="' + data[i].sku_id + '" data-skuval="' + data[i].val + '"   type="text" value="' + data[i].goods_num + '">';
+            }else{
+                html +='                    <input  class="sumInput" data-image="'+data[i].main_image+'" data-name="'+data[i].name+'" data-store="'+data[i].store+'" data-goodsid="'+data[i].goods_id+'" data-carid="'+data[i].carId+'"  data-price="'+data[i].price_real+'" data-skuid="'+data[i].sku_id+'" data-skuval="'+data[i].val+'"   type="text" value="'+data[i].goods_num+'">';
+
+            }
             html +='                </div>';
             html +='                <button class="layui-btn layui-btn-primary layui-btn-xs fr24 add">+</button>';
             html +='            </div>';
