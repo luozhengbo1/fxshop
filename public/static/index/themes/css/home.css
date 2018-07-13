@@ -3939,9 +3939,8 @@ a {
 	width: 100%;
 }
 .product-order-list .item-info{
-	width: 60%;
+	width:57%;
 	float: left;
-	padding-right: 1%;
 }
 .product-order-list .order-serviceinfo {
 	box-sizing: border-box;
@@ -3955,9 +3954,8 @@ a {
 	margin-top: 4px;
 }
 .item-pay{
-	width: 14%;
+	width: 20%;
 	float: left;
-	padding-right: 10px;
 	text-align: center;
 }
 /****************************收藏夹*/

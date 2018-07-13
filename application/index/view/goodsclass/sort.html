@@ -133,7 +133,10 @@
                         html +='<li data-id="'+data[i].id+'" onclick="getGoods({goodsClassId:'+data[i].id+'})" >'+data[i].name+'</li>'
                     }
                     $('#sidebar ul').empty().append(html);
-                    tabSwitch($('#sidebar li'));
+                    var $targetLi = $('#sidebar li')
+                    tabSwitch($targetLi);
+                    var firstLi = $targetLi[0];
+                    firstLi.click();
                 }
 
             }

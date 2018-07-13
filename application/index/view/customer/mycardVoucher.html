@@ -38,7 +38,7 @@
             page: 1,
             size: 4,
             ajaxData: {
-                url: "{:url('index/customer/mycardvoucher')}",
+                url: "{:url('index/Lottery/mycardvoucher')}",
                 data: {status: status},
             },
             dealFun: dealData
@@ -51,7 +51,7 @@
         for (var i = 0; i < data.length; i++) {
             html += '<li>';
             html += '    <div class="product-info clear">';
-            html += '        <img class="img fl" src="'+data[i].main_pic+'" alt="商品图片">';
+            html += '        <img class="img fl" src="' + data[i].main_pic + '" alt="商品图片">';
             html += '        <p class="fl bold f16 ml10">' + data[i].name + '</p>';
             if (data[i].voucher_money != 0) {
                 html += '        <p class="price f24">¥' + data[i].voucher_money + '</p>';
@@ -63,23 +63,46 @@
                 html += '        <p class="price f24">¥' + data[i].score_money + '</p>';
             }
             html += '    </div>';
-            html += '    <div class="grey mt5 mb5">' + data[i].desc + '</div>';
+            var desc = Filter(data[i].desc);
+            html += '    <div class="grey mt5 mb5">' + desc + '</div>';
             html += '    <div class="clear">';
+            //转换时间戳
             Date.prototype.toLocaleString = function () {
                 return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate() + " " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
             };
             var expire_start_date = new Date(parseInt(data[i].expire_start_date) * 1000).toLocaleString();
             var expire_end_date = new Date(parseInt(data[i].expire_end_date) * 1000).toLocaleString();
-            html += '        <p class="fl grey">使用有效期：' + expire_start_date + '-' + expire_end_date + '</p>';
+            html += '        <p class="fl grey">使用有效期：' + expire_start_date + '－' + expire_end_date + '</p>';
             if (data[i].is_use == 0) {
-                html += '        <button class="fr layui-btn layui-btn-xs layui-btn-radius" >&nbsp;&nbsp;去使用 &nbsp;&nbsp;</button>';
+                if (data[i].status == 1) {
+                    html += '        <button class="fr layui-btn layui-btn-xs layui-btn-radius" >&nbsp;&nbsp;' + '<strong>去使用</strong>' + ' &nbsp;&nbsp;</button>';
+                } else if (data[i].status == 0) {
+                    html += '        <button class="fr layui-btn layui-btn-xs layui-btn-radius" disabled="disabled" style="background-color: #d0d0d0">&nbsp;&nbsp;已过期 &nbsp;&nbsp;</button>';
+                }
             } else if (data[i].is_use == 1) {
-                html += '        <button class="fr layui-btn layui-btn-xs layui-btn-radius" disabled="disabled" style="background-color: #d0d0d0">&nbsp;&nbsp;已过期 &nbsp;&nbsp;</button>';
+                html += '        <button class="fr layui-btn layui-btn-xs layui-btn-radius" disabled="disabled" style="background-color: #d0d0d0">&nbsp;&nbsp;已使用 &nbsp;&nbsp;</button>';
             }
             html += '    </div>';
             html += '</li>';
         }
         return html;
+    }
+
+    //转义HTML
+    function Filter(s) {
+        for (var i = 0; i < s.length; i++) {
+            //将&字符转义
+            s = s.replace("&amp;", "&");
+            //将<字符转义
+            s = s.replace("&lt;", "<");
+            //将>字符转义
+            s = s.replace("&gt;", ">");
+            //将"字符转义
+            s = s.replace("&quot;", "\"");
+            //将空格字符转义
+            s = s.replace("&nbsp;", " ");
+        }
+        return s;
     }
 </script>
 </body>

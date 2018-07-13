@@ -17,6 +17,7 @@ class Index extends Mustlogin
        /* dump($getSildeShow);*/
        /* dump($getModular);*/
        /* die;*/
+        $this->view->assign('param', $this->request->param('param'));
         return $this->fetch();
     }
     public function message(){
