@@ -82,6 +82,7 @@
                 ->find();
             $this->view->assign('goods',$goods);
             $this->view->assign('skuData',$skuData);
+//            dump($skuData);die;
             $this->view->assign('proprety_name',$proprety_name);
             $this->view->assign('proprety_name_val',$proprety_name_val);
             $this->view->assign('lottery',$lottery);

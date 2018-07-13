@@ -30,7 +30,7 @@
                 $carList =    Db::name('car')->alias('c')
                     ->field('fy_goods.*,c.goods_num,c.id as carId,c.val,c.sku_id,c.goods_id,c.create_time,c.id,fy_goods_attribute.store,fy_goods_attribute.price as price1')
                     ->join('fy_goods','fy_goods.id=c.goods_id')
-                    ->join('fy_goods_attribute','fy_goods_attribute.id=c.sku_id')
+                    ->join('fy_goods_attribute','fy_goods_attribute.id=c.sku_id','left')
                     ->where([
                         'c.openid'=>$this->userInfo['openid'],
                         //  'update_time'=>['<',$time],

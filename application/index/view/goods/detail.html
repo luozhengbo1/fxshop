@@ -24,7 +24,7 @@
 <!--商品-->
 <a  name="good-detail-content"></a>
 <div class="good-detail-content">
-    <p class="good-price">¥{$goods['basic_price']??''}</p>
+    <p class="good-price">¥{php}echo  empty($goods['price_real'])?$goods['basic_price']:$goods['price_real'];{/php}</p>
     <p class="good-title">{$goods['name']??''}</p>
     <ul class="clear good-service">
         <li class="fl">快递¥<?php if($goods['free_type']==1) echo 0;
@@ -76,8 +76,8 @@
                             <div class="pl5">
                                 <p class="fl">已售{$vol.buy_num}</p>
                                 <p class="fr">
-                                    <span class="goods-price">¥{$vol.basic_price}</span>
-                                    <!--  <span class="goods-old-price">¥45.00</span>-->
+                                    <span class="goods-price">¥{$vol.price?$vol.price:$vol.basic_price}</span>
+                                      <!--<span class="goods-old-price">¥45.00</span>-->
                                 </p>
                             </div>
                         </a>
@@ -123,7 +123,7 @@
     <div class="main" id="popupMain">
         <div class="header">
             <img alt="商品图" class="avt" id="popupImg"  src="{$goods['main_image']}" />
-            <p class="price">&yen;<em id="goodPrice">{$goods['basic_price']}</em></p>
+            <p class="price">&yen;<em id="goodPrice">{php}echo  empty($goods['price_real'])?$goods['basic_price']:$goods['price_real'];{/php}</em></p>
             <p class="prop" id="goodChoseSku"><!--<span>已选</span> cs10藏青+浅蓝,XL,1个--></p>
             <i class="close" id="popupClose"></i>
         </div>
@@ -178,7 +178,7 @@
         goodsId:"{$goods['id']}",
         price:"{$goods['basic_price']}",
         num :'',
-        skuId:'',
+        skuId:'123123',
         val:'',
     }
     $('#goodDetail').append(detailTag);
