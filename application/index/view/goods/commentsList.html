@@ -1,0 +1,48 @@
+{include file="Public/header-resource"}
+<link rel="stylesheet" type="text/css" href="__STATIC__/index//plugins/swiper3/css/swiper.css">
+<script src="__STATIC__/index//plugins/swiper.js"></script>
+<body class="title-top footer-boottom">
+
+{include file="Public/header-title"}
+<p class="good-evaluate-bar clear bg_white">
+    <span class="fl">评价</span>
+   <!-- <span class="fl">好评97%</span>-->
+    <span class="fr">共{$good+$mid+$bad}条</span>
+</p>
+<ul class="good-evaluate-all clear pt10" id="evaluate_nav">
+    <li data-start="0" data-end="5" id="evaluate_all"    class=""><a href="javascript:;">所有</a></li>
+    <li data-start="4" data-end="5" id="evaluate_good"   class=""><a href="javascript:;">好评{$good}</a></li>
+    <li data-start="2" data-end="3" id="evaluate_middle" class=""><a href="javascript:;">中评{$mid}</a></li>
+    <li data-start="0" data-end="1" id="evaluate_bad"    class=""><a href="javascript:;">差评{$bad}</a></li>
+    <!--<li id="evaluate_pic"    class=""><a href="">有图3200+</a></li>-->
+</ul>
+{include file="Public/evaluate-module"}
+{include file="Public/footer-quick-nav"}
+<script>
+    var url ={
+        evaluate_list:"{:url('index/goods/goodsComment')}",
+    }
+    var nav_param= "{$param?? ''}";
+    tabSwitch($('#evaluate_nav li'),loadOrderData);
+    $('#evaluate_'+nav_param).click();
+
+
+    function loadOrderData(){
+        var start = $('#evaluate_nav').find('.active').attr('data-start');
+        var end = $('#evaluate_nav').find('.active').attr('data-end');
+        initData('evaluateList');
+        pageload({
+            targetWarp:'dataListWrap',
+            target:'evaluateList',
+            page:1,
+            size:4,
+            ajaxData:{
+                url:url.evaluate_list,
+                data:{id:"{$goods_id}",start:start,end:end},
+            },
+            dealFun:dealData
+        });
+    }
+</script>
+</body>
+</html>

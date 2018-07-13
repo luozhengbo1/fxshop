@@ -3387,14 +3387,24 @@ a {
 	margin-top: .01rem;
 	background: white;
 	padding: 0 .08rem;
-	line-height: .3rem;
-	height: .3rem;
 }
 .good-evaluate-all li{
 	float: left;
 	margin-right: 10px;
-}
+    border-radius: 4px;
+    background-color: #FEE;
 
+    padding: 4px 6px;
+    margin-bottom: 4px;
+}
+.good-evaluate-all li a{
+    color: #666;
+}
+.good-evaluate-all li.active{
+    background-color: #FF0036;
+    color: #FFF;
+}
+.good-evaluate-all li.active a{color: #FFF;}
 .good-evaluate-content{
 	padding: 0 .08rem;
 	background: white;
@@ -3489,8 +3499,8 @@ a {
 	width:100%;
 	height:100%;
 	background:#000;
-	z-index: 4;
-	opacity: .9;
+	z-index: 98;
+	opacity: 1;
 }
 #origin-img .swiper-slide img{
 	width:100%;

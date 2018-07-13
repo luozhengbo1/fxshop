@@ -209,13 +209,15 @@
         #获取这个商品的详情
         public function evaluateList()
         {
-            $this->assign('titleName', "商品评价");
+
             return $this->view->fetch('evaluateList');
         }
 
         #获取商品评论接口
         public function  goodsComment()
         {
+            $this->assign('titleName', "商品评价");
+            $this->assign('param', $this->request->param('param'));
             if($this->request->isAjax()){
                 $data = $this->request->post();
                 $page = $this->request->param('page')?$this->request->param('page'):1;
@@ -232,9 +234,9 @@
                     ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[$data['start'],$data['end'] ]]])
                     ->page($page,$size)
                     ->count();
-                if($comment){
-                    return ajax_return('','','');
-                }
+
+                return ajax_return($comment,'ok','200');
+
             }else{
                 $bad = Db::name('goods_comment')
                     ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[0,1] ]])
@@ -248,7 +250,8 @@
                 $this->view->assign('bad',   $bad);
                 $this->view->assign('mid',   $mid);
                 $this->view->assign('good',   $good);
-                return $this->view->fetch();
+                $this->view->assign('goods_id',    $this->request->param('goods_id'));
+                return $this->view->fetch('commentsList');
             }
         }
 

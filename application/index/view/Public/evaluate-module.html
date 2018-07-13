@@ -1,42 +1,35 @@
-<div class="good-evaluate">
-    <p class="good-evaluate-bar clear bg_white">
-        <span class="fl">评价</span>
-        <span class="fl">好评97%</span>
-        <span class="fr">共2800条</span>
-    </p>
-    <ul class="good-evaluate-all clear">
-        <li>好评2700+</li>
-        <li>中评2700+</li>
-        <li>差评2700+</li>
-        <li>有图3200+</li>
+
+<div id="dataListWrap">
+    <ul  id="evaluateList" class="good-evaluate-content">
+       <!-- <li>
+            <div class="good-evaluate-user-info clear">
+                <span class="fl user">夜空领域</span>
+                <span class="credit fl"><span style="width:60%"></span></span>
+                <p class="fr date">2018/2/23</p>
+            </div>
+            <p class="good-evaluate-title">不错，宝贝收到了，看上这款好久了，没让我失望，穿上很舒服，很洋气！还会光临本店
+                不错，宝贝收到了，看上这款好久了，没让我失望，穿上很舒服，很洋气！还会光临本店
+                不错，宝贝收到了，看上这款好久了，没让我失望，穿上很舒服，很洋气！还会光临本店</p>
+            <ul class="good-evaluate-img clear">
+                <li onclick="showImage(this,0)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
+                <li onclick="showImage(this,1)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
+                <li onclick="showImage(this,2)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
+                <li onclick="showImage(this,3)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
+                <li onclick="showImage(this,4)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
+            </ul>
+            <div class="good-evaluate-user-info clear">
+                <span class="fl user">卖家回复</span>
+                <p class="fr date">2018/2/23</p>
+            </div>
+            <p class="good-evaluate-title">还可以，不错！不错！挺不错的。下次再买！</p>
+        </li>-->
     </ul>
-    <div id="dataListWrap">
-        <ul  id="evaluateList" class="good-evaluate-content">
-           <!-- <li>
-                <div class="good-evaluate-user-info clear">
-                    <span class="fl user">夜空领域</span>
-                    <span class="credit fl"><span style="width:60%"></span></span>
-                    <p class="fr date">2018/2/23</p>
-                </div>
-                <p class="good-evaluate-title h30 lh30">还可以，不错！不错！挺不错的。下次再买！</p>
-                <ul class="good-evaluate-img clear">
-                    <li onclick="showImage(this,0)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
-                    <li onclick="showImage(this,1)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
-                    <li onclick="showImage(this,2)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
-                    <li onclick="showImage(this,3)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
-                    <li onclick="showImage(this,4)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>
-                </ul>
-            </li>-->
-        </ul>
-    </div>
 </div>
 <div class="swiper-container swiper-evaluate" id="origin-img">
     <div class="swiper-wrapper"></div>
     <div class="swiper-pagination pagination-top" ></div>
 </div>
 <script>
-
-
     //评价图片滚动
     var swiper = new Swiper('.swiper-evaluate',{
         zoom:true,
@@ -70,19 +63,19 @@
     function dealData(data) {
         var html='';
         for(var i = 0; i < data.length; i++){
+            var avg_score= parseInt(data[i].avg_score)*20;
+            var imgArr = (data[i].pic).split(',');
             html +='<li>';
             html +='    <div class="good-evaluate-user-info clear">';
-            html +='        <span class="fl user">夜空领域</span>';
-            html +='        <span class="credit fl"><span style="width:60%"></span></span>';
-            html +='        <p class="fr date">2018/2/23</p>';
+            html +='        <span class="fl user">'+data[i].username+'</span>';
+            html +='        <span class="credit fl"><span style="width:'+avg_score+'%"></span></span>';
+            html +='        <p class="fr date">'+new Date(data[i].create_time).Format("yyyy-MM-dd hh:mm:ss")+'</p>';
             html +='    </div>';
-            html +='    <p class="good-evaluate-title h30 lh30">还可以，不错！不错！挺不错的。下次再买！</p>';
+            html +='    <p class="good-evaluate-title h30 lh30">'+data[i].content+'</p>';
             html +='    <ul class="good-evaluate-img clear">';
-            html +='        <li onclick="showImage(this,0)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>';
-            html +='        <li onclick="showImage(this,1)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>';
-            html +='        <li onclick="showImage(this,2)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>';
-            html +='        <li onclick="showImage(this,3)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>';
-            html +='        <li onclick="showImage(this,4)"><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>';
+            for(var n=0; n<imgArr.length; n++){
+                html +='        <li onclick="showImage(this,'+n+')"><img src="'+imgArr[n]+'"></li>';
+            }
             html +='    </ul>';
             html +='</li>';
         }
