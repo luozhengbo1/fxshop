@@ -5,7 +5,7 @@ namespace app\admin\controller;
 \think\Loader::import('controller/Controller', \think\Config::get('traits_path'), EXT);
 
 use app\admin\Controller;
-use app\common\model\TaskAchievement;
+use app\common\model\TaskLog;
 
 class CustomerTask extends Controller
 {
@@ -21,7 +21,7 @@ class CustomerTask extends Controller
         $controller = $this->request->controller();
         // 查询单个任务的参与情况
         $id = $this->request->param('id');
-        $model_task = new TaskAchievement();
+        $model_task = new TaskLog();
         $list_task_achive = $model_task->alias('task')
             ->where('task_id', $id)
             ->join('fy_customer customer', 'task.uid=customer.id and customer.isdelete=0')

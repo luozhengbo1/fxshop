@@ -1,0 +1,59 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+{include file="Public/header-title"}
+<!--会员权益-->
+<section>
+    <div class="member-benefits">
+        <header></header>
+        <div class="tc h40 lh40 bg_white mb5"><a href="{:\\think\\Url::build(\'memberrule\')}" >会员等级规则</a></div>
+        <div id="dataListWrap">
+            <ul id="dataList" class="content">
+              <!--  <li class="clear">
+                    <a  href="javascript:;" >
+                        <div class="w20p fl"><img class="image" src="https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike116%2C5%2C5%2C116%2C38/sign=86f7c2bd3dd12f2eda08a6322eabbe07/5d6034a85edf8db13608df0e0223dd54564e74b2.jpg"></div>
+                        <div class="w80p fr mt5 mb10 pl10">
+                            <p class="f14 bold ">体现特权</p>
+                            <p class="mt10 ">1000元以内，体现免手续费</p>
+                        </div>
+                    </a>
+                </li>-->
+             </ul>
+        </div>
+        <div class=" footer-fixed member-update-method">会员升级攻略</div>
+    </div>
+</section>
+<script>
+    loadDealData()
+    function loadDealData(){
+        initData('dataList');
+        pageload({
+            targetWarp:'dataListWrap',
+            target:'dataList',
+            page:1,
+            size:4,
+            ajaxData:{
+                url:"{:url('index/customer/memberbenefits')}",
+                data:{},
+            },
+            dealFun:dealData
+        });
+    }
+    function dealData(data) {
+        var html='';
+        for(var i = 0; i < data.length; i++){
+            html +='<li class="clear">';
+            html +='    <a  href="javascript:;" >';
+            html +='        <div class="w20p fl"><img class="image" src="https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike116%2C5%2C5%2C116%2C38/sign=86f7c2bd3dd12f2eda08a6322eabbe07/5d6034a85edf8db13608df0e0223dd54564e74b2.jpg"></div>';
+            html +='        <div class="w80p fr mt5 mb10 pl10">';
+            html +='            <p class="f14 bold ">体现特权</p>';
+            html +='            <p class="mt10 ">1000元以内，体现免手续费</p>';
+            html +='        </div>';
+            html +='    </a>';
+            html +='</li>';
+
+        }
+        return html;
+    }
+</script>
+</body>
+</html>

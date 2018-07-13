@@ -11,6 +11,13 @@ use think\Db;
 class Customer extends Mustlogin
 
 {
+    protected function getUid()
+    {
+        $user_session = session('wx_user');
+        $user_data = Db::table('fy_customer')->where('openid', $user_session['openid'])->find();
+        return $user_data['id'];
+    }
+
     /**
      * 会员中心首页
      */
@@ -55,9 +62,7 @@ class Customer extends Mustlogin
         $this->assign('titleName', '收藏夹');
         if ($this->request->isAjax()) {
             //查询用户id
-            $user = session('wx_user');
-            $customer = Db::table('fy_customer')->field('id')->where('openid', $user['openid'])->find();
-            $uid = $customer['id'];
+            $uid = $this->getUid();
             //根据customer.id=collect.uid查询用户收藏的所有商品信息（goods.id=collect.goods_id）
             $list_collect = Db::table('fy_customer_collect')
                 ->alias('collect')
@@ -85,9 +90,7 @@ class Customer extends Mustlogin
     public function collect_cancel($id)
     {
         if ($this->request->isAjax()) {
-            $user = session('wx_user');
-            $customer = Db::table('fy_customer')->where('openid', $user['openid'])->find();
-            $uid = $customer['id'];
+            $uid = $this->getUid();
             $data = $this->request->post();
             $goods_id = $id;
             if (!$goods_id) {
@@ -106,9 +109,7 @@ class Customer extends Mustlogin
     {
         if ($this->request->isAjax()) {
             $data = $this->request->post();
-            $user = session('wx_user');
-            $customer = Db::table('fy_customer')->field('id')->where('openid', $user['openid'])->find();
-            $uid = $customer['id'];
+            $uid = $this->getUid();
             //若前端通过ajax传递了参数id，则进行编辑操作
             $collect = Db::table('fy_customer_collect')
                 ->where(['uid' => $uid, 'goods_id' => $data['goods_id']])
@@ -153,9 +154,7 @@ class Customer extends Mustlogin
 
     public function collect_detail($goods_id)
     {
-        $user = session('wx_user');
-        $customer = Db::table('fy_customer')->field('id')->where('openid', $user['openid'])->find();
-        $uid = $customer['id'];
+        $uid = $this->getUid();
         $collect = Db::table('fy_customer_collect')->where(['uid' => $uid, 'goods_id' => $goods_id])->find();
         return ajax_return($collect, '', 200);
     }
@@ -305,5 +304,65 @@ class Customer extends Mustlogin
             $this->assign('titleName', '签到');
             return $this->view->fetch('mysign');
         }
+    }
+
+    /**
+     * 设置
+     */
+    public function myset()
+    {
+        $this->assign('titleName', "设置");
+        return $this->view->fetch();
+    }
+
+    /**
+     * 活动中心
+     */
+    public function myactivity($page = '1', $size = '4')
+    {
+        if ($this->request->isAjax()) {
+            $uid = $this->getUid();
+            $activity_list = Db::table('fy_customer_activity_log')
+                ->alias('log')
+                ->join('fy_activity activity', 'log.activity_id=activity.id')
+                ->field('log.*,activity.main_pic,activity.start_date,activity.end_date,activity.url')
+                ->where('uid', $uid)
+                ->page($page, $size)
+                ->order('activity.end_date', 'desc')
+                ->select();
+            if ($activity_list) {
+                return ajax_return($activity_list, 'OK', 200);
+            } else {
+                return ajax_return('123', '没有参与过活动', 204);
+            }
+        } else {
+            $this->assign('titleName', "我的活动中心");
+            return $this->view->fetch();
+        }
+    }
+
+    /**
+     * 我的钱包
+     */
+    public function mywallet($page='1',$size='4')
+    {
+        $user_session = session('wx_user');
+        $user_data = Db::table('fy_customer')->where('openid', $user_session['openid'])->find();
+        $this->assign('user_data',$user_data);
+        //到交易记录表中查询交易记录
+//        if($this->request->isAjax()){
+//
+//
+//        }
+        $this->assign('titleName', "我的钱包");
+        return $this->view->fetch();
+    }
+
+    /**
+     * 会员权益
+     */
+    public function memberbenefits(){
+        $this->assign('titleName', "会员权益");
+        return $this->view->fetch();
     }
 }
