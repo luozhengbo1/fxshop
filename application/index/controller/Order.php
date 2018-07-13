@@ -17,6 +17,8 @@
         public function  index()
         {
             $this->view->assign('titleName', "订单主页");
+            $param = $this->request->param('param');
+            $this->view->assign('param', $param);
             return $this->view->fetch('orderlist');
         }
         #获取订单商品接口
