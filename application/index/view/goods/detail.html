@@ -55,9 +55,21 @@
 </div>
 <!--商品评价-->
 <a name="good-evaluate"></a>
+<p class="good-evaluate-bar clear bg_white">
+    <span class="fl">评价</span>
+    <span class="fl">好评97%</span>
+    <span class="fr">共2800条</span>
+</p>
+<ul class="good-evaluate-all clear pt10">
+    <li id="evaluate_all"   class=""><a href="{:url('goods/evaluateList',['param'=>'all'])}">所有</a></li>
+    <li id="evaluate_good"   class=""><a href="{:url('goods/evaluateList',['param'=>'good'])}">好评2700+</a></li>
+    <li id="evaluate_middle" class=""><a href="{:url('goods/evaluateList',['param'=>'middle'])}">中评2700+</a></li>
+    <li id="evaluate_bad"     class=""><a href="{:url('goods/evaluateList',['param'=>'bad'])}">差评2700+</a></li>
+    <li id="evaluate_pic"    class=""><a href="{:url('goods/evaluateList',['param'=>'pic'])}">有图3200+</a></li>
+</ul>
 {include file="Public/evaluate-module"}
 <div class="tc bg_white show-all-evaluate">
-    <a class="layui-btn layui-btn-primary layui-btn-radius" href="{:url('goods/evaluateList')}" >查看全部评价</a>
+    <a class="layui-btn layui-btn-primary layui-btn-radius layui-btn-xs" href="{:url('goods/evaluateList')}" >查看全部评价</a>
 </div>
 <!--商品推荐-->
 <a name="guess-your-love"></a>
