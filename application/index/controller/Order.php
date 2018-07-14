@@ -204,7 +204,7 @@
                 $input->SetOut_trade_no($orderId);
                 $input->SetTotal_fee($orderAll['total_price']*100);
                 $input->SetTime_start(date("YmdHis"));
-                $input->SetTime_expire(date("YmdHis", time() + 600));
+                $input->SetTime_expire(date("YmdHis", time() + 1800));
                 $input->SetGoods_tag("");
                 $input->SetNotify_url("http://".$_SERVER['HTTP_HOST']."/index.php/index/wechatpay/notify");
                 $input->SetTrade_type("JSAPI");
@@ -270,7 +270,7 @@
                         'code' => 200,
                         'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$orderData['id']}");
                 }else{
-                    dump($orderData['total_price']);die;
+//                    dump($orderData['total_price']*100);die;
                     include_once "WxPaySDK/WxPay.Api.php";
                     include_once "WxPaySDK/WxPay.JsApiPay.php";
                     include_once 'WxPaySDK/log.php';
@@ -285,7 +285,7 @@
                     $input->SetOut_trade_no($orderData['order_id']);
                     $input->SetTotal_fee($orderData['total_price']*100);
                     $input->SetTime_start(date("YmdHis"));
-                    $input->SetTime_expire(date("YmdHis", time() + 600));
+                    $input->SetTime_expire(date("YmdHis", time() + 1800));
                     $input->SetGoods_tag("");
                     $input->SetNotify_url("http://".$_SERVER['HTTP_HOST']."/index.php/index/wechatpay/notify1");
                     $input->SetTrade_type("JSAPI");

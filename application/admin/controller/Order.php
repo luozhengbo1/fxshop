@@ -120,7 +120,8 @@ class Order extends Controller
             ->join('fy_goods_attribute','fy_order_goods.sku_id=fy_goods_attribute.id','left')
             ->where(['fy_order.order_id'=>$id])
             ->select();
-
+//        dump($id);
+//        dump($orderDetail);die;
         $address = Db::name('customer_address')
             ->where(['id'=>$orderDetail[0]['address_id']])
             ->find();
@@ -170,11 +171,16 @@ class Order extends Controller
             if(!$order){
                 return ajax_return_error('参数异常');
             }
+            include_once "WxPaySDK/WxPay.Api.php";
+            include_once "WxPaySDK/WxPay.JsApiPay.php";
+            include_once 'WxPaySDK/log.php';
+            $orderId = \WxPayConfig::MCHID.date("YmdHis");
             $res = $this->getModel()
                 ->where(['order_id'=>$data['order_id']])
-                ->update(['total_price'=>$data['totalPrice'],'js_api_parameters'=>'','prepay_id'=>'']);
-            if($res){
-                return ajax_return('','修改成功','200');
+                ->update(['total_price'=>$data['totalPrice'],'js_api_parameters'=>'','prepay_id'=>'','order_id'=>$orderId]);
+           $res1 = Db::name('order_goods')->where(['order_id'=>$data['order_id']])->update(['order_id'=>$orderId]);
+            if($res && $res1){
+                return ajax_return_adv('修改成功','parent','200');
             }else{
                 return ajax_return('','修改失败','200');
             }
