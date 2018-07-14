@@ -254,5 +254,10 @@
                 return $this->view->fetch('commentsList');
             }
         }
+        #获取商品评论接口
+        public function  goodsScore(){
+            $this->assign('titleName', "积分商城");
+            return $this->view->fetch('goodsScore');
+        }
 
 	}
