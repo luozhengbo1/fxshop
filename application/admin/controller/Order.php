@@ -47,8 +47,7 @@ class Order extends Controller
 
         // 列表过滤器，生成查询Map对象
         #表单搜获
-        $map = $this->search($model, [$this->fieldIsDelete => $this::$isdelete]);
-        dump($map);
+//        $map = $this->search($model, [$this->fieldIsDelete => $this::$isdelete]);
 
         // 特殊过滤器，后缀是方法名的
         #search 搜索
@@ -73,7 +72,7 @@ class Order extends Controller
             ->order('fy_order.create_time desc')
             ->where($map)
             ->group('fy_order.order_id')
-            ->paginate(10);
+            ->paginate(5);
         $this->view->assign ('userList',$userList);
         $this->view->assign('list',$orderList);
         $this->view->assign('count',Db::name('order')->where($map)->count());
@@ -86,9 +85,26 @@ class Order extends Controller
      */
     public function recycleBin()
     {
-        $this::$isdelete= 1;
-        return $this->index();
+//        $this::$isdelete= 1;
+        $map['fy_order.isdelete'] =1;
+        $userList = Db::name('admin_user')->where(['isdelete'=>0,'id'=>['>',1]])->select();
+        $orderList = Db::name('order')
+            ->field(
+
+                'fy_order.id,fy_order.buy_list,fy_order.address_id,
+            fy_order.order_id,fy_order.order_status,fy_order.total_price,fy_order.customer_name,fy_order.customer_name,fy_order.create_time,fy_order.pay_time,
+            fy_order_goods.user_id')
+            ->join( 'fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
+            ->order('fy_order.create_time desc')
+            ->where($map)
+            ->group('fy_order.order_id')
+            ->paginate(1);
+        $this->view->assign ('userList',$userList);
+        $this->view->assign('list',$orderList);
+        $this->view->assign('count',Db::name('order')->where($map)->count());
+        return $this->view->fetch('indexrecyclebin');
     }
+
 
     public function orderDetail()
     {
@@ -104,7 +120,8 @@ class Order extends Controller
             ->join('fy_goods_attribute','fy_order_goods.sku_id=fy_goods_attribute.id','left')
             ->where(['fy_order.order_id'=>$id])
             ->select();
-
+//        dump($id);
+//        dump($orderDetail);die;
         $address = Db::name('customer_address')
             ->where(['id'=>$orderDetail[0]['address_id']])
             ->find();
@@ -137,6 +154,37 @@ class Order extends Controller
             }else{
                 return ajax_return('','操作失败','500');
             }
+        }
+    }
+
+    public function editTotalPrice()
+    {
+        if($this->request->isAjax()){
+            $data = $this->request->post();
+            if(!$data['order_id']){
+                return ajax_return_error('缺少订单id');
+            }
+            if($data['totalPrice']<0){
+                return ajax_return_error('订单总金额不能小于0');
+            }
+            $order = $this->getModel()->where(['order_id'=>$data['order_id']])->find();
+            if(!$order){
+                return ajax_return_error('参数异常');
+            }
+            include_once "WxPaySDK/WxPay.Api.php";
+            include_once "WxPaySDK/WxPay.JsApiPay.php";
+            include_once 'WxPaySDK/log.php';
+            $orderId = \WxPayConfig::MCHID.date("YmdHis");
+            $res = $this->getModel()
+                ->where(['order_id'=>$data['order_id']])
+                ->update(['total_price'=>$data['totalPrice'],'js_api_parameters'=>'','prepay_id'=>'','order_id'=>$orderId]);
+           $res1 = Db::name('order_goods')->where(['order_id'=>$data['order_id']])->update(['order_id'=>$orderId]);
+            if($res && $res1){
+                return ajax_return_adv('修改成功','parent','200');
+            }else{
+                return ajax_return('','修改失败','200');
+            }
+
         }
     }
 

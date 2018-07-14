@@ -38,7 +38,7 @@
                         ->page($page,$size)
                         ->select();
 //                    dump($orderList);
-//                    echo Db::name('order')->getLastSql();
+//
                 }else{
                     $orderList = Db::name('order')
                         ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
@@ -48,6 +48,7 @@
                         ->page($page,$size)
                         ->select();
                 }
+//                echo Db::name('order')->getLastSql();
 //                dump($orderList);
                 foreach ($orderList as $k=>$v ){
                     $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
@@ -70,7 +71,7 @@
                 $storeData =  Session::get('storeData '.$this->userInfo['openid']);
 //                dump($storeData);die;
                 if(empty($storeData) ){
-                    $this->error('什么也没有','index/order/index');
+                    $this->redirect('index/order/index');
                     exit;
                 }
                 foreach ($storeData as $k=>$v){
@@ -87,12 +88,11 @@
                 $this->view->assign('address',$address?$address:'');
                 $this->view->assign('storeData',$storeData);
 //               dump($address);
-//               dump($storeData);
                 return $this->view->fetch();
             }
         }
 
-        #订单确认中间表
+        #订单确认
         public function  affirmOrderApi()
         {
             if($this->request->isAjax()){
@@ -201,9 +201,9 @@
                 $input->SetBody("泛亚商城 的订单");
                 $input->SetAttach("附加参数");
                 $input->SetOut_trade_no($orderId);
-                $input->SetTotal_fee($orderAll['total_price']);
+                $input->SetTotal_fee($orderAll['total_price']*100);
                 $input->SetTime_start(date("YmdHis"));
-                $input->SetTime_expire(date("YmdHis", time() + 600));
+                $input->SetTime_expire(date("YmdHis", time() + 1800));
                 $input->SetGoods_tag("");
                 $input->SetNotify_url("http://".$_SERVER['HTTP_HOST']."/index.php/index/wechatpay/notify");
                 $input->SetTrade_type("JSAPI");
@@ -269,20 +269,22 @@
                         'code' => 200,
                         'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$orderData['id']}");
                 }else{
-
+//                    dump($orderData['total_price']*100);die;
                     include_once "WxPaySDK/WxPay.Api.php";
                     include_once "WxPaySDK/WxPay.JsApiPay.php";
                     include_once 'WxPaySDK/log.php';
                     $tools = new \JsApiPay();
-                    //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名内，所以获取不到，使用github的实现。
+                    //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名
+                    //
+                    //内，所以获取不到，使用github的实现。
                     //②、统一下单
                     $input = new \WxPayUnifiedOrder();
                     $input->SetBody("泛亚商城 的订单");
                     $input->SetAttach("附加参数");
                     $input->SetOut_trade_no($orderData['order_id']);
-                    $input->SetTotal_fee($orderData['total_price']);
+                    $input->SetTotal_fee($orderData['total_price']*100);
                     $input->SetTime_start(date("YmdHis"));
-                    $input->SetTime_expire(date("YmdHis", time() + 600));
+                    $input->SetTime_expire(date("YmdHis", time() + 1800));
                     $input->SetGoods_tag("");
                     $input->SetNotify_url("http://".$_SERVER['HTTP_HOST']."/index.php/index/wechatpay/notify1");
                     $input->SetTrade_type("JSAPI");
@@ -318,7 +320,7 @@
                     $pay +=$goods['postage'];
                 }
             }
-            return $pay*100;
+            return $pay;
 //            return 0.01;
         }
 
@@ -369,16 +371,29 @@
         {
             if($this->request->isAjax()){
                 $data = $this->request->post();
-                if($data['id']){
+                if($data['order_id'] && $data['goods_id'] && $data['sku_id'] ){
                     return ajax_return_error('缺少参数id');
                 }
-                $order = Db::name('order')->where(['order_id'=>$data['id']])->find();
-                if($order['pay_status']!=1){
-                    return ajax_return_error('异常错误');
-                }
+                $orderGoods = Db::name('order')->where([
+                    'order_id'=>$data['order_id'],
+                    'goods_id'=>$data['goods_id'],
+                    'sku_id'=>$data['sku_id'],
+                ])->find();
+                #查询是否使用优惠券
+                $order =  Db::name('order')->where([
+                    'order_id'=>$data['order_id'],'is_lottery'=>1])->find();
+                #扣去奖券金额   #未使用优惠券直接退款商品价格 如果不包邮直接商品价格，
+                $goodsAttribute = Db::name('goods_attribute')->where(['price'=>$data['sku_id']])->find();
+                $returnMoney = $goodsAttribute['price'];
+//                if($order){
+//                    if($order['pay_status']!=1){
+//                        return ajax_return_error('未付款商品不能退款');
+//                    }
+//                    Db::name('lottery')->where(['id'=>$order['lottery_id'],''])->
+//                }
                 $res = Db::name('order')->where(['order_id'=>$data['id']])->update(['order_status'=>3]);
                 if($res){
-                    return  ajax_return('','ok','200');
+                    return  ajax_return($returnMoney,'ok','200');
                 }else{
                     return  ajax_return('','no','500');
                 }
@@ -484,11 +499,13 @@
                     ])
                     ->update(['comment'=>1]);
                 #记录评价内容
+                $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'],true);
                 $insert=[];
                 $insert['pic']=$data['pic'];
                 $insert['openid']=$this->userInfo['openid'];
                 $insert['username']=$this->userInfo['nickname'];
-                $insert['goods_id']=$data['goods_id'];
+                $insert['goods_id']= $data['goods_id'] ;
+                $insert['goods_name']=$orderGoods['goods_detail']['name'];
                 $insert['content']=$data['desc'];
                 $insert['create_time']=time();
                 $insert['similarity_score']=$data['similarity_score'];

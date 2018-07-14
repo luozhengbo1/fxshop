@@ -1,0 +1,19 @@
+<td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
+<td>{$vo.username}</td>
+{php}if($_SESSION['think']['auth_id']==1){{/php}
+<td>{$vo.username}</td>
+{php}}{/php}
+<td>{$vo.goods_name}</td>
+<td>{php} $pic = explode(',',$vo['pic']);
+            foreach($pic as $vopic){
+                echo "<img src='$vopic' width='50' height='50'>";
+            }
+    {/php}
+</td>
+<td>{$vo.content}</td>
+<td>{$vo.create_time|date="Y-m-d H:i:s",###}</td>
+<td>{$vo.status|get_status}</td>
+<td>{$vo.similarity_score}</td>
+<td>{$vo.logistics_score}</td>
+<td>{$vo.service_score}</td>
+<td>{$vo.avg_score}</td>
