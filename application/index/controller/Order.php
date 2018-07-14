@@ -371,8 +371,7 @@
         {
             if($this->request->isAjax()){
                 $data = $this->request->post();
-//                dump($data);die;
-                if(!$data['order_id'] && !$data['goods_id'] && !$data['sku_id'] ){
+                if(!$data['order_id'] || !$data['goods_id'] || !$data['sku_id'] ){
                     return ajax_return_error('缺少参数id');
                 }
                 $orderGoods = Db::name('order_goods')->where([
@@ -388,7 +387,7 @@
                 $order =  Db::name('order')->where([
                     'order_id'=>$data['order_id'],'is_lottery'=>1])->find();
                 #扣去奖券金额   #未使用优惠券直接退款商品价格 如果不包邮直接商品价格，
-                $goodsAttribute = Db::name('goods_attribute')->where(['price'=>$data['sku_id']])->find();
+                $goodsAttribute = Db::name('goods_attribute')->field('price')->where(['id'=>$data['sku_id']])->find();
                 $returnMoney = $goodsAttribute['price'];
 //                if($order){
 //                    if($order['pay_status']!=1){
@@ -396,13 +395,18 @@
 //                    }
 //                    Db::name('lottery')->where(['id'=>$order['lottery_id'],''])->
 //                }
+//                dump($goodsAttribute['price']);die;
                 $res1 = Db::name('order_goods')->where([
                     'order_id'=>$data['order_id'],
                     'goods_id'=>$data['goods_id'],
                     'sku_id'=>$data['sku_id'],
                 ])->update(['is_return'=>1,'return_price'=>$goodsAttribute['price']]); # 待退款
-                Db::name('order')->where(['order_id'=>$data['id']])->setInc('return_price_all',$goodsAttribute['price']);#总退款加上
-                $res = Db::name('order')->where(['order_id'=>$data['id']])->update(['order_status'=>3]);
+                $ordertmp = Db::name('order')->field('return_price_all')->where([
+                    'order_id'=>$data['order_id']])->find();
+
+                Db::name('order')->where('order_id',$data['order_id'])->update(['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all']]);#总退款加上
+                $res = Db::name('order')->where(['order_id'=>$data['order_id']])->update(['order_status'=>3]);
+
                 if($res){
                     return  ajax_return($returnMoney,'ok','200');
                 }else{

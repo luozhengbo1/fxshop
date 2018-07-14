@@ -36,7 +36,6 @@
         <td>购买数量</td>
           <td>运费</td>
         <td>状态</td>
-        {if condition="$vo.is_return eq 1"}
         <td>退货退款操作</td>
         {/if}
       </tr>
@@ -58,19 +57,17 @@
               待收货
               {php} }{/php}
           </td>
-        {if condition="$vo.is_return eq 1"}
+
         <td class="f-14">
+          {if condition="$vo.is_return eq 1"}
           <a href="javascript:;" onclick="refundHandle('{$vo[\'order_id\']}',{$vo['id']})" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 确定退款</a>
+          {else if if condition="$vo.is_return eq 2"}
+          已退款
+          {/if}
         </td>
-        {/if}
+
       </tr>
-      <tr>
-          <td>订单总价</td>
-          <td>
-            <input type="text" placeholder="订单总金额"  name="total_price"  value="{$vo['total_price']??''}" class="form_control w120 lh30 h30" >
-            <a href="javascript:;" onclick="editTotalPrice('{$vo[\'order_id\']}')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 修改总金额</a>
-          </td>
-      </tr>
+
       </tbody>
     </table>
     <div>
@@ -85,6 +82,13 @@
       </form>
     </div>
     {/volist}
+    <tr>
+      <td>订单总价</td>
+      <td>
+        <input type="text" placeholder="订单总金额"  name="total_price"  value="{$vo['total_price']??''}" class="form_control w120 lh30 h30" >
+        <a href="javascript:;" onclick="editTotalPrice('{$vo[\'order_id\']}')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 修改总金额</a>
+      </td>
+    </tr>
   </div>
 </div>
 {/block}
@@ -124,7 +128,7 @@
        function refundHandle(order_id,id) {
            if(order_id && id ){
                $.ajax({
-                   url:"{:url('order/editTotalPrice')}",
+                   url:"{:url('order/refund')}",
                    type:'post',
                    data:{'order_id':order_id,'id':id},
                    success:function (res) {
