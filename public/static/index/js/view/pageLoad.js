@@ -51,10 +51,17 @@ MyPageload.prototype.init = function(options){
                                //第一页数据就为空
                                _this.fnDropload(dropload);
                                showEmptyWrap();
-                           } else if(data.length<_this.opts.size){
+                           }
+                           //订单数据后台组合后问题
+                          /* else if(data.length<_this.opts.size){
                                $('#'+_this.opts.target).append(html);
                                _this.fnDropload(dropload);
-                           }else{
+                           }*/
+                           else if(data.length<1){
+                               $('#'+_this.opts.target).append(html);
+                               _this.fnDropload(dropload);
+                           }
+                           else{
                                // setTimeout(function(){
                                $('#'+_this.opts.target).append(html);
                                // 每次数据加载完，必须重置
