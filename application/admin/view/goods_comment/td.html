@@ -4,7 +4,12 @@
 <td>{$vo.username}</td>
 {php}}{/php}
 <td>{$vo.goods_name}</td>
-<td>{$vo.pic}</td>
+<td>{php} $pic = explode(',',$vo['pic']);
+            foreach($pic as $vopic){
+                echo "<img src='$vopic' width='50' height='50'>";
+            }
+    {/php}
+</td>
 <td>{$vo.content}</td>
 <td>{$vo.create_time|date="Y-m-d H:i:s",###}</td>
 <td>{$vo.status|get_status}</td>
