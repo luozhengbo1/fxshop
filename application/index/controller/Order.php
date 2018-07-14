@@ -71,7 +71,7 @@
                 $storeData =  Session::get('storeData '.$this->userInfo['openid']);
 //                dump($storeData);die;
                 if(empty($storeData) ){
-                    $this->error('什么也没有','index/order/index');
+                    $this->redirect('index/order/index');
                     exit;
                 }
                 foreach ($storeData as $k=>$v){
@@ -88,12 +88,11 @@
                 $this->view->assign('address',$address?$address:'');
                 $this->view->assign('storeData',$storeData);
 //               dump($address);
-//               dump($storeData);
                 return $this->view->fetch();
             }
         }
 
-        #订单确认中间表
+        #订单确认
         public function  affirmOrderApi()
         {
             if($this->request->isAjax()){
@@ -372,16 +371,29 @@
         {
             if($this->request->isAjax()){
                 $data = $this->request->post();
-                if($data['id']){
+                if($data['order_id'] && $data['goods_id'] && $data['sku_id'] ){
                     return ajax_return_error('缺少参数id');
                 }
-                $order = Db::name('order')->where(['order_id'=>$data['id']])->find();
-                if($order['pay_status']!=1){
-                    return ajax_return_error('异常错误');
-                }
+                $orderGoods = Db::name('order')->where([
+                    'order_id'=>$data['order_id'],
+                    'goods_id'=>$data['goods_id'],
+                    'sku_id'=>$data['sku_id'],
+                ])->find();
+                #查询是否使用优惠券
+                $order =  Db::name('order')->where([
+                    'order_id'=>$data['order_id'],'is_lottery'=>1])->find();
+                #扣去奖券金额   #未使用优惠券直接退款商品价格 如果不包邮直接商品价格，
+                $goodsAttribute = Db::name('goods_attribute')->where(['price'=>$data['sku_id']])->find();
+                $returnMoney = $goodsAttribute['price'];
+//                if($order){
+//                    if($order['pay_status']!=1){
+//                        return ajax_return_error('未付款商品不能退款');
+//                    }
+//                    Db::name('lottery')->where(['id'=>$order['lottery_id'],''])->
+//                }
                 $res = Db::name('order')->where(['order_id'=>$data['id']])->update(['order_status'=>3]);
                 if($res){
-                    return  ajax_return('','ok','200');
+                    return  ajax_return($returnMoney,'ok','200');
                 }else{
                     return  ajax_return('','no','500');
                 }
