@@ -337,7 +337,7 @@ class Customer extends Mustlogin
             }
         } else {
             $this->assign('titleName', "我的活动中心");
-            return $this->view->fetch();
+            return $this->view->fetch("myActivity");
         }
     }
 
@@ -355,7 +355,7 @@ class Customer extends Mustlogin
 //
 //        }
         $this->assign('titleName', "我的钱包");
-        return $this->view->fetch();
+        return $this->view->fetch("myWallet");
     }
 
     /**
@@ -363,6 +363,13 @@ class Customer extends Mustlogin
      */
     public function memberbenefits(){
         $this->assign('titleName', "会员权益");
-        return $this->view->fetch();
+        return $this->view->fetch("memberBenefits");
+    }
+    /**
+     * 会员权益
+     */
+    public function message(){
+        $this->assign('titleName', "消息中心");
+        return $this->view->fetch("message");
     }
 }

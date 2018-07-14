@@ -14,7 +14,7 @@ function refund(order_id,goods_id,sku_id) {
         ,yes: function(index){
             pub_save({
                 url:url.refund,
-                data:{},
+                data:{'order_id':order_id,'goods_id':goods_id,'sku_id':sku_id},
                 complete:loadOrderData,
             })
         }

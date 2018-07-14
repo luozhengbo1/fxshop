@@ -4,10 +4,10 @@
 <!--券集市-->
 <section>
    <div class="nav-list-tab clear" style="padding: 10px 5px">
-       <div class="me fl"> <a  href="{:\\think\\Url::build(\'mycardvoucher\')}" class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger">&nbsp;我的&nbsp;</a></div>
+       <div class="me fl"> <a  href="{:url('lottery/mycardvoucher')}" class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger">&nbsp;我的&nbsp;</a></div>
        <div class="message-group fr">
            <span class="sign"></span>
-           <a  href="{:\\think\\Url::build(\'message\')}"  class="layui-btn layui-btn-xs layui-btn-radius">&nbsp;消息&nbsp;</a>
+           <a href="{:url('customer/message')}" class="layui-btn layui-btn-xs layui-btn-radius">&nbsp;消息&nbsp;</a>
        </div>
    </div>
     <div><img  width="100%" src="http://scsc.top/data/gallery_album/original_img/5b109f656e378.jpg"></div>
@@ -19,9 +19,9 @@
         <li class="w20p fl tc"><img class="w80p" src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg"></li>
     </ul>
     <div id="dataListWrap">
-            <ul id="dataList" class="voucher-market-list">
-          <!--  <li>
-                <a href="#">
+            <ul id="dataList1" class="voucher-market-list">
+            <li>
+                <a href="{:url('lottery/detail')}">
                     <div class="clear">
                         <p class="fl" ><span class="catalog tag">美食</span>财门一号北京烤鸭</p>
                         <p class="price fr f18 bold">￥6 8</p>
@@ -38,7 +38,7 @@
                         </div>
                     </div>
                 </a>
-            </li>-->
+            </li>
         </ul>
     </div>
 </section>

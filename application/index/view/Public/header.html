@@ -8,7 +8,7 @@
 			</a>
 		</section>
 		<div class="fl  mr10">
-			<a href="{:\\think\\Url::build(\'message\')}" class="message">
+			<a  href="{:url('customer/message')}" class="message">
 				<span></span>
 				<i class="iconfont icon-message"></i>
 			</a>
@@ -16,11 +16,14 @@
 	</div>
 </header>
 <script>
-    $(window).scroll(function () {
-        var scrTop = $(window).scrollTop();
-        var opacity = ((100/200)*scrTop)/100;
-        //console.log(scrTop+"::"+opacity)
-		if(opacity>1) opacity=1;
-        $('.search-box-cover').css('opacity',opacity);
-    });
+
+    function changeSearchBg() {
+        $(window).scroll(function () {
+            var scrTop = $(window).scrollTop();
+            var opacity = ((100/200)*scrTop)/100;
+            //console.log(scrTop+"::"+opacity)
+            if(opacity>1) opacity=1;
+            $('.search-box-cover').css('opacity',opacity);
+        });
+    }
 </script>
