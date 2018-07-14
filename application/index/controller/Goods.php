@@ -259,5 +259,10 @@
             $this->assign('titleName', "积分商城");
             return $this->view->fetch('goodsScore');
         }
+        #获取商品评论接口
+        public function  rushPurchase(){
+            $this->assign('titleName', "限时抢购");
+            return $this->view->fetch('rushPurchase');
+        }
 
 	}

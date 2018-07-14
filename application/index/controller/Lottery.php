@@ -21,8 +21,8 @@ Class Lottery extends Mustlogin
         }
     }
 
-    #取出没有结算，并且没有过期的奖券
-    public function index()
+    #券集市  取出没有结算，并且没有过期的奖券
+    public function market()
     {
         $time = time();
         $lotteryList = Db::name('Lottery')
@@ -36,10 +36,16 @@ Class Lottery extends Mustlogin
 //            dump($lotteryList);die;
         $this->view->assign('titleName', '券集市');
         $this->view->assign('lotteryList', $lotteryList);
-        return $this->view->fetch('index/vouchermarket');
+        return $this->view->fetch('market');
 
     }
+    #券详情
+    public function detail()
+    {
+        $this->assign('titleName', "券详情");
+        return  $this->view->fetch();
 
+    }
     #未完成待续
     public function get()
     {
@@ -119,7 +125,7 @@ Class Lottery extends Mustlogin
             }
         } else {
             $this->assign('titleName', "卡券中心");
-            return $this->view->fetch('customer/mycardVoucher');
+            return $this->view->fetch('mycardVoucher');
         }
     }
 }
