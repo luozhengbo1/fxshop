@@ -1,0 +1,19 @@
+<form class="mb-20" method="get" action="{:\\think\\Url::build($Request.action)}">
+    <input type="text" class="input-text" style="width:250px" placeholder="商品名称" name="goodsName" value="{$Request.param.goodsName}" >
+    <div class="select-box" style="width:250px">
+        <select name="status" class="select">
+            <option value="">全部</option>
+            <option value="1"  {$Request.param.status==1?"selected":''}>已处理评价</option>
+            <option value="0"  {$Request.param.status==0?"selected":''}>未处理评价</option>
+        </select>
+    </div>
+    <div class="select-box" style="width:250px">
+        <select name="avg_score" class="select">
+            <option value="">全部</option>
+            <option value="1" {$Request.param.avg_score==1?"selected":''}>好评</option>
+            <option value="2" {$Request.param.avg_score==2?"selected":''}>中评</option>
+            <option value="3"{$Request.param.avg_score==3?"selected":''}>差评</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+</form>

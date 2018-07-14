@@ -184,14 +184,12 @@ trait Controller
     /**
      * 从回收站恢复
      */
-    public function recycle()
+     public function recycle()
     {
         return $this->updateField($this->fieldIsDelete, 0, "恢复成功");
     }
 
-    /**
-     * 默认禁用操作
-     */
+
     public function forbid()
     {
         return $this->updateField($this->fieldStatus, 0, "禁用成功");

@@ -484,11 +484,13 @@
                     ])
                     ->update(['comment'=>1]);
                 #记录评价内容
+                $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'],true);
                 $insert=[];
                 $insert['pic']=$data['pic'];
                 $insert['openid']=$this->userInfo['openid'];
                 $insert['username']=$this->userInfo['nickname'];
-                $insert['goods_id']=$data['goods_id'];
+                $insert['goods_id']= $data['goods_id'] ;
+                $insert['goods_name']=$orderGoods['goods_detail']['name'];
                 $insert['content']=$data['desc'];
                 $insert['create_time']=time();
                 $insert['similarity_score']=$data['similarity_score'];

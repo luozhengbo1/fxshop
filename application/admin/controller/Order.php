@@ -72,7 +72,7 @@ class Order extends Controller
             ->order('fy_order.create_time desc')
             ->where($map)
             ->group('fy_order.order_id')
-            ->paginate(10);
+            ->paginate(5);
         $this->view->assign ('userList',$userList);
         $this->view->assign('list',$orderList);
         $this->view->assign('count',Db::name('order')->where($map)->count());
@@ -98,26 +98,13 @@ class Order extends Controller
             ->order('fy_order.create_time desc')
             ->where($map)
             ->group('fy_order.order_id')
-            ->paginate(10);
+            ->paginate(1);
         $this->view->assign ('userList',$userList);
         $this->view->assign('list',$orderList);
         $this->view->assign('count',Db::name('order')->where($map)->count());
-        return $this->view->fetch('index');
+        return $this->view->fetch('indexrecyclebin');
     }
 
-    /**
-     * 清空回收站
-     */
-    public function clear()
-    {
-        $model = $this->getModel();
-        $where[$this->fieldIsDelete] = 1;
-        if (false === $model->where($where)->delete()) {
-            return ajax_return_adv_error($model->getError());
-        }
-
-        return ajax_return_adv("清空回收站成功");
-    }
 
     public function orderDetail()
     {
