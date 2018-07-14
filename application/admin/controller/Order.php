@@ -216,4 +216,65 @@ class Order extends Controller
 
     }
 
+
+    # 微信退款
+    public function refund()
+    {
+        if($this->request->isAjax()){
+            include_once 'WxPaySDK/WxPay.Api.php';
+            $data = $this->request->post();
+            $order_id = $data['order_id'];
+            $result = ['code'=>400,'msg'=>''];
+            if( $order_id ){
+                $where = array('order_id' => $order_id);
+                $order = Db::name('order')
+                    ->where([
+                        'order_id'=>$order_id,
+                        'pay_status'=>1,
+                        'order_status'=>['in',[1,2,3]]
+                    ])//支付状态//支付成功，和正在处理中的订单
+                    ->find();
+                $orderGoods =  Db::name('order_goods')->where(['id'=>$data['id']])->find();
+                if($orderGoods['is_return']!=1){
+                    return ajax_return_error('没有退款单');
+                }
+                $merchid = \WxPayConfig::MCHID;
+                if( !$order ){
+                    $result['code'] = 401;
+                    $result['msg'] = '没有退款订单';
+                    file_put_contents("wx_refund_error.log",print_r($result, true)."\r", 8);
+                    die(json_encode($result));
+                }
+                $input = new \WxPayRefund();
+                $input->SetOut_trade_no($order['order_id']);   //自己的订单号
+                //$input->SetTransaction_id($order['transaction_id']);  //微信官方生成的订单流水号，在支付成功中有返回
+                $input->SetOut_refund_no( uniqid().time() );   //退款单号
+                $input->SetTotal_fee(  $orderGoods['return_price']*100);   //订单标价金额，单位为分
+                $input->SetRefund_fee(  $orderGoods['return_price']*100 );  //退款总金额，订单总金额，单位为分，只能为整数
+                $input->SetOp_user_id($merchid);
+                $res = \WxPayApi::refund($input);
+                //退款操作
+                if( $res['return_code'] == 'SUCCESS' ){
+                    file_put_contents("wx_refund_success.log",print_r($res, true)."\r", 8);
+                    //修改订单状态
+                    $updateres = Db::name('order')->where( [ 'order_id'=>$order_id ] )->update(['order_status'=>7]); //2表示退款成功
+                    $result['code'] = 200;
+                    $result['msg'] = '退款成功';
+                    die(json_encode($result)) ;
+                }else{
+                    file_put_contents("wx_refund_error.log",$res."\r", 8);
+                    $result['code'] = 402;
+                    $result['msg'] = '退款异常请联系客服人员';
+                    die(json_encode($result));
+                }
+            }else{
+                $result['code'] = 404;
+                $result['msg'] = '订单号不存在';
+                file_put_contents("wx_refund_error.log",json_encode($result."\r"), 8);
+                die(json_encode($result));
+            }
+        }
+
+    }
+
 }
