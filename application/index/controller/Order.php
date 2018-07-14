@@ -379,6 +379,10 @@
                     'goods_id'=>$data['goods_id'],
                     'sku_id'=>$data['sku_id'],
                 ])->find();
+                $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'],true);
+                if($orderGoods['goods_detail']['is_return_goods']==0){
+                    return ajax_return_error('该商品不支持退换货');
+                }
                 #查询是否使用优惠券
                 $order =  Db::name('order')->where([
                     'order_id'=>$data['order_id'],'is_lottery'=>1])->find();
@@ -391,6 +395,12 @@
 //                    }
 //                    Db::name('lottery')->where(['id'=>$order['lottery_id'],''])->
 //                }
+                $res1 = Db::name('order_goods')->where([
+                    'order_id'=>$data['order_id'],
+                    'goods_id'=>$data['goods_id'],
+                    'sku_id'=>$data['sku_id'],
+                ])->update(['is_return'=>1,'return_price'=>$goodsAttribute['price']]); # 待退款
+                Db::name('order')->where(['order_id'=>$data['id']])->setInc('return_price_all',$goodsAttribute['price']);#总退款加上
                 $res = Db::name('order')->where(['order_id'=>$data['id']])->update(['order_status'=>3]);
                 if($res){
                     return  ajax_return($returnMoney,'ok','200');
