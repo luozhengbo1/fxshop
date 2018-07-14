@@ -58,7 +58,10 @@
       </tr>
       <tr>
           <td>订单总价</td>
-          <td>{$vo['total_price']}</td>
+          <td>
+            <input type="text" placeholder="订单总金额"  name="total_price"  value="{$vo['total_price']??''}" class="form_control w120 lh30 h30" >
+            <a href="javascript:;" onclick="editTotalPrice('{$vo[\'order_id\']}')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 修改总金额</a>
+          </td>
       </tr>
       </tbody>
     </table>
@@ -92,5 +95,23 @@
                 }
             })
         }
+       function  editTotalPrice(order_id) {
+            var totalPrice = $('input[name="total_price"]').val();
+            if(totalPrice<=0){
+                alert('订单金额不能小于0');
+                return false;
+            }
+           if(order_id){
+               $.ajax({
+                   url:"{:url('order/editTotalPrice')}",
+                   type:'post',
+                   data:{'order_id':order_id,'totalPrice':totalPrice},
+                   success:function (res) {
+                       alert(res.msg)
+                       document.location.reload()
+                   }
+               })
+           }
+       }
 </script>
 {/block}

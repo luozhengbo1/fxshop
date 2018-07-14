@@ -38,7 +38,7 @@
                         ->page($page,$size)
                         ->select();
 //                    dump($orderList);
-//                    echo Db::name('order')->getLastSql();
+//
                 }else{
                     $orderList = Db::name('order')
                         ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
@@ -48,6 +48,7 @@
                         ->page($page,$size)
                         ->select();
                 }
+//                echo Db::name('order')->getLastSql();
 //                dump($orderList);
                 foreach ($orderList as $k=>$v ){
                     $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
@@ -201,7 +202,7 @@
                 $input->SetBody("泛亚商城 的订单");
                 $input->SetAttach("附加参数");
                 $input->SetOut_trade_no($orderId);
-                $input->SetTotal_fee($orderAll['total_price']);
+                $input->SetTotal_fee($orderAll['total_price']*100);
                 $input->SetTime_start(date("YmdHis"));
                 $input->SetTime_expire(date("YmdHis", time() + 600));
                 $input->SetGoods_tag("");
@@ -269,18 +270,20 @@
                         'code' => 200,
                         'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$orderData['id']}");
                 }else{
-
+                    dump($orderData['total_price']);die;
                     include_once "WxPaySDK/WxPay.Api.php";
                     include_once "WxPaySDK/WxPay.JsApiPay.php";
                     include_once 'WxPaySDK/log.php';
                     $tools = new \JsApiPay();
-                    //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名内，所以获取不到，使用github的实现。
+                    //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名
+                    //
+                    //内，所以获取不到，使用github的实现。
                     //②、统一下单
                     $input = new \WxPayUnifiedOrder();
                     $input->SetBody("泛亚商城 的订单");
                     $input->SetAttach("附加参数");
                     $input->SetOut_trade_no($orderData['order_id']);
-                    $input->SetTotal_fee($orderData['total_price']);
+                    $input->SetTotal_fee($orderData['total_price']*100);
                     $input->SetTime_start(date("YmdHis"));
                     $input->SetTime_expire(date("YmdHis", time() + 600));
                     $input->SetGoods_tag("");
@@ -318,7 +321,7 @@
                     $pay +=$goods['postage'];
                 }
             }
-            return $pay*100;
+            return $pay;
 //            return 0.01;
         }
 

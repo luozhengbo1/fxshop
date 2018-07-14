@@ -156,6 +156,32 @@ class Order extends Controller
         }
     }
 
+    public function editTotalPrice()
+    {
+        if($this->request->isAjax()){
+            $data = $this->request->post();
+            if(!$data['order_id']){
+                return ajax_return_error('缺少订单id');
+            }
+            if($data['totalPrice']<0){
+                return ajax_return_error('订单总金额不能小于0');
+            }
+            $order = $this->getModel()->where(['order_id'=>$data['order_id']])->find();
+            if(!$order){
+                return ajax_return_error('参数异常');
+            }
+            $res = $this->getModel()
+                ->where(['order_id'=>$data['order_id']])
+                ->update(['total_price'=>$data['totalPrice'],'js_api_parameters'=>'','prepay_id'=>'']);
+            if($res){
+                return ajax_return('','修改成功','200');
+            }else{
+                return ajax_return('','修改失败','200');
+            }
+
+        }
+    }
+
 
     #确认发货
     public  function  sureSend()
