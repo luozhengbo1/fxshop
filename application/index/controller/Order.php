@@ -371,10 +371,11 @@
         {
             if($this->request->isAjax()){
                 $data = $this->request->post();
-                if($data['order_id'] && $data['goods_id'] && $data['sku_id'] ){
+//                dump($data);die;
+                if(!$data['order_id'] && !$data['goods_id'] && !$data['sku_id'] ){
                     return ajax_return_error('缺少参数id');
                 }
-                $orderGoods = Db::name('order')->where([
+                $orderGoods = Db::name('order_goods')->where([
                     'order_id'=>$data['order_id'],
                     'goods_id'=>$data['goods_id'],
                     'sku_id'=>$data['sku_id'],
