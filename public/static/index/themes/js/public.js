@@ -488,7 +488,7 @@ function masonryShow() {
     setTimeout(function () {
         msnry = new Masonry( container);
         msnry_destory = true;//表示创建masonry完成
-    },800)
+    },800)//800
 }
 function destoryMasonry() {
     if(msnry_destory){

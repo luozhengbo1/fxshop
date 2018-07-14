@@ -10,31 +10,31 @@
 	<div class="right-cont box-flex">
 		<ul class="nav-cont">
 			<li>
-				<a href="{:\\think\\Url::build(\'index\')}">
+				<a href="{:url('index/index',['param'=>'index'])}" >
 					<i class="iconfont icon-home"></i>
 					<p>首页</p>
 				</a>
 			</li>
 			<li>
-				<a href="{:\\think\\Url::build(\'goodsSearch\')}">
+				<a  href="{:url('goods/goodsList',['param'=>'search'])}" >
 					<i class="iconfont icon-sousuo"></i>
 					<p>搜索</p>
 				</a>
 			</li>
 			<li>
-				<a href="{:\\think\\Url::build(\'sort\')}">
+				<a href="{:url('goodsclass/sort',['param'=>'sort'])}" >
 					<i class="iconfont icon-caidan"></i>
 					<p>分类</p>
 				</a>
 			</li>
 			<li>
-				<a href="{:\\think\\Url::build(\'car/index\')}">
+				<a href="{:url('car/index',['param'=>'car'])}" >
 					<i class="iconfont icon-gouwuche"></i>
 					<p>购物车</p>
 				</a>
 			</li>
 			<li>
-				<a href="{:\\think\\Url::build(\'customer\')}">
+				<a href="{:url('customer/customer',['param'=>'customer'])}" >
 					<i class="iconfont icon-geren"></i>
 					<p>会员中心</p>
 				</a>

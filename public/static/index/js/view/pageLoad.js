@@ -75,7 +75,7 @@ MyPageload.prototype.init = function(options){
                        _this.fnDropload(dropload)
                    }
                });
-           },100)
+           },200)
         }
     });
 };

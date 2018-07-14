@@ -1,14 +1,26 @@
 <header class="header-search">
-	<section  class="input" style="color: rgb(255, 255, 255);">
-		<a href="{:\\think\\Url::build(\'goods/goodsList\')}">
-			<i  class="iconfont icon-search"></i>
-			商品/店铺搜索
-		</a>
-	</section>
-	<div class="fr  ml10">
-		<a href="{:\\think\\Url::build(\'message\')}" class="message">
-			<span></span>
-			<i class="iconfont icon-message"></i>
-		</a>
+	<div class="search-box-cover"></div>
+	<div class="search-box">
+		<section  class="input" style="color: rgb(255, 255, 255);">
+			<a class="search_bg" href="{:\\think\\Url::build(\'goods/goodsList\')}">
+				<i  class="iconfont icon-search"></i>
+				商品/店铺搜索
+			</a>
+		</section>
+		<div class="fl  mr10">
+			<a href="{:\\think\\Url::build(\'message\')}" class="message">
+				<span></span>
+				<i class="iconfont icon-message"></i>
+			</a>
+		</div>
 	</div>
 </header>
+<script>
+    $(window).scroll(function () {
+        var scrTop = $(window).scrollTop();
+        var opacity = ((100/200)*scrTop)/100;
+        //console.log(scrTop+"::"+opacity)
+		if(opacity>1) opacity=1;
+        $('.search-box-cover').css('opacity',opacity);
+    });
+</script>

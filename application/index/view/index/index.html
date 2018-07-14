@@ -1,4 +1,7 @@
 {include file="Public/header-resource"}
+<style>
+	.search-box-cover{opacity: .1}
+</style>
 <body class="footer-boottom">
 {include file="Public/header"}
 <link rel="stylesheet" type="text/css" type="text/css" href="__STATIC__/index/plugins/swiper3.4/css/swiper.min.css">
@@ -80,8 +83,8 @@
 </div>
 <!--商品列表-->
 <div class="module-hot-goods">
-	<p class="item-title mt10 mb10">热销商品</p>
-	<div id="dataListWrap">
+	<div class="pt5 pb5 bg_white"><img style="width:100%" alt="热销商品" src="__STATIC__/index/images/hot_goods.jpg"></div>
+	<div id="dataListWrap" class="bg_white">
 		<ul class="goods-list list clear grid pb40" id="goodsList" >
 			<!--<li class="grid-item">
 				<img class="grid-item-image" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
@@ -95,6 +98,7 @@
 				</div>
 			</li>-->
 		</ul>
+	</div>
 </div>
 {include file="Public/footer"}
 	<script>
