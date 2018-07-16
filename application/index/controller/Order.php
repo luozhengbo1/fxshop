@@ -150,7 +150,7 @@
                 $dataUser = array_values( self::array_group_by($data,'user_id'));
 //                dump($dataUser);die;
                 foreach ( $dataUser as $k=>$v ){
-                    $sonId[] = rand(10,99);
+                    $sonId[] = rand(1000,9999);
                     $orderRow[$k] = array(
                         "order_id" => $orderId.$sonId[$k],
                         "address_id" => $data[$k]['addressId'],

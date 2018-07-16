@@ -24,7 +24,7 @@
 <!--商品-->
 <a  name="good-detail-content"></a>
 <div class="good-detail-content">
-    <p class="good-price">¥{php}echo  empty($goods['price_real'])?$goods['basic_price']:$goods['price_real'];{/php}</p>
+    <p class="good-price">¥{php}echo  ($goods['basic_price'])?$goods['basic_price']:$goods['price_real'];{/php}</p>
     <p class="good-title">{$goods['name']??''}</p>
     <ul class="clear good-service">
         <li class="fl">快递¥<?php if($goods['free_type']==1) echo 0;

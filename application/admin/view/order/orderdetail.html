@@ -37,7 +37,6 @@
           <td>运费</td>
         <td>状态</td>
         <td>退货退款操作</td>
-        {/if}
       </tr>
       </thead>
       <tbody>
@@ -61,7 +60,7 @@
         <td class="f-14">
           {if condition="$vo.is_return eq 1"}
           <a href="javascript:;" onclick="refundHandle('{$vo[\'order_id\']}',{$vo['id']})" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 确定退款</a>
-          {else if if condition="$vo.is_return eq 2"}
+          {elseif  condition="$vo.is_return eq 2" /}
           已退款
           {/if}
         </td>
@@ -132,8 +131,8 @@
                    type:'post',
                    data:{'order_id':order_id,'id':id},
                    success:function (res) {
-                       // alert(res.msg)
-                       // document.location.relaod();
+                       alert(res.msg)
+                       document.location.relaod();
                    }
                })
            }

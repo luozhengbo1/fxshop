@@ -57,7 +57,7 @@
             <li class="clear">
                 <span class="fl">快递</span>
                 <span class="fr">
-                    {if condition="$vo['free_type']  neq 1 "}
+                    {if condition="$vo['free_type']  eq 1 "}
                         包邮
                     {else /}
                         {$vo['postage']??'0'} 元邮费

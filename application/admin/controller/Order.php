@@ -234,6 +234,12 @@ class Order extends Controller
                         'order_status'=>['in',[1,2,3]]
                     ])//支付状态//支付成功，和正在处理中的订单
                     ->find();
+                #如果订单在父订单中支付，需要找到父订单用父订单id发起退款
+                $orderId = substr($order_id,'0',strlen($order_id)-4);
+                $orderAll = Db::name('order_all')->where(['order_id'=>$orderId,'status'=>1])->find();
+                if( empty($orderAll)  ){
+                    $orderId = $order_id;
+                }
                 $orderGoods =  Db::name('order_goods')->where(['id'=>$data['id']])->find();
                 if($orderGoods['is_return']!=1){
                     return ajax_return_error('没有退款单');
@@ -249,17 +255,17 @@ class Order extends Controller
                    return ajax_return_error('没有退款订单');
                 }
                 $input = new \WxPayRefund();
-                $input->SetOut_trade_no($order['order_id']);   //自己的订单号
+                $input->SetOut_trade_no($orderId);   //自己的订单号
                 //$input->SetTransaction_id($order['transaction_id']);  //微信官方生成的订单流水号，在支付成功中有返回
                 $input->SetOut_refund_no( uniqid().time() );   //退款单号
-                $input->SetTotal_fee(  $orderGoods['return_price']*100);   //订单标价金额，单位为分
+                $input->SetTotal_fee(  $order['total_price']*100);   //订单标价金额，单位为分
                 $input->SetRefund_fee(  $orderGoods['return_price']*100 );  //退款总金额，订单总金额，单位为分，只能为整数
                 $input->SetOp_user_id($merchid);
                 $res = \WxPayApi::refund($input);
 //                dump($input);
 //                dump($res);die;
                 //退款操作
-                if( $res['return_code'] == 'SUCCESS' ){
+                if( $res['return_code'] == 'SUCCESS' &&  $res['result_code']=="SUCCESS" ){
                     file_put_contents("wx_refund_success.log",print_r($res, true)."\r", 8);
                     //修改订单状态
                     $updateres = Db::name('order')->where( [ 'order_id'=>$order_id ] )->update(['order_status'=>7]); //2表示退款成功
