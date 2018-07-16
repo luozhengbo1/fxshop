@@ -1,11 +1,11 @@
 {include file="Public/header-resource"}
-<body>
+<body class="title-top">
 <!--积分商城-->
 {include file="Public/header-search"}
-<div class="module-hot-goods margin-top-header">
+<div class="module-hot-goods mt10">
     <div id="dataListWrap" class="data-refresh-list-wrap">
-        <ul class="goods-list list clear" id="goodsList1">
-            <li>
+        <ul class="goods-list list clear grid" id="goodsList">
+           <!-- <li>
                 <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg">
                 <p class="good-desc ellipsis">Lay’s/乐事e薯片清爽酸奶零食 </p>
                 <div>
@@ -14,51 +14,20 @@
                         <span class="goods-price">2000积分</span>
                     </p>
                 </div>
-            </li>
+            </li>-->
         </ul>
     </div>
 </div>
+{include file="Public/footer-quick-nav"}
 <script>
-    loadGoodsData();
-    $(window).keyup(function (event) {
-        var e = event || window.event;
-        if (e && e.keyCode == 13) { //回车键的键值为13
-            searchGoods(); //调用登录按钮的登录事件
-            return false;
-        }
+    $(function () {
+        getGoods();
     })
-
-    function searchGoods(){
-        if(!formEmptyValid('form')){
-            return;
-        }else{
-            getGoods(formData('form'))
-        }
-    }
-
-    function dealData(data) {
-        var html='';
-        for(var i = 0; i < data.length; i++){
-            console.log(data[i])
-            html +='<li class="grid-item">';
-            html +='	<a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
-            html +='     <p class="tc"><img class="grid-item-image" src="'+data[i].main_image+'"></p>';
-            html +='     <p class="good-desc ellipsis">'+notEmpty(data[i].name)+' </p>';
-            html +='    </a>';
-            html +='    <div class="p5 clear">';
-            html +='  		  <p class="fl">已售'+notEmpty(data[i].buy_num)+'</p>';
-            html +='  		      <p class="fr">';
-            html +='  		      <span class="goods-price">¥'+notEmpty(data[i].basic_price)+'</span>';
-            html +='  				<span class="goods-old-price">¥'+notEmpty(data[i].original_price)+'</span>';
-            html +='  		  </p>';
-            html +='    </div>';
-            html +='  </li>';
-        }
-        return html;
-
-    }
-    function loadGoodsData(){
+    function getGoods(json) {
+        var data= {show_area:2}
+        if(json) $.extend(data,json);
         initData('goodsList');
+        destoryMasonry();
         pageload({
             targetWarp:'dataListWrap',
             target:'goodsList',
@@ -66,13 +35,36 @@
             size:10,
             ajaxData:{
                 url:"{:url('index/goods/getGoodsHotOrOther')}",
-                data:{
-                    show_area:4
-                },
+                data:data
             },
             dealFun:dealData,
             complete:masonryShow,
         });
+    }
+
+    function dealData(data) {
+        var html='';
+        for(var i = 0; i < data.length; i++){
+            //console.log(data[i]);
+           /* var price=notEmpty(data[i].basic_price);
+            if(data[i].price_real && data[i].price_real!=0){
+                price = notEmpty(data[i].price_real);
+            }*/
+            html +='<li class="grid-item">';
+            html +='	<a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
+            html +='     <p class="tc"><img class="grid-item-image" src="'+data[i].main_image+'"></p>';
+            html +='     <p class="good-desc ellipsis">'+notEmpty(data[i].name)+' </p>';
+            html +='    </a>';
+            html +='    <div class="p5 clear">';
+            html +='  		  <p class="fl">已售'+notEmpty(data[i].buy_num)+'</p>';
+            html +='  		  <p class="fr">';
+            html +='  		      <span class="goods-price">'+parseInt(data[i].socre)+'积分</span>';
+            html +='  		  </p>';
+            html +='    </div>';
+            html +='  </li>';
+        }
+        return html;
+
     }
 
 </script>

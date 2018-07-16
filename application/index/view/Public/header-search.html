@@ -5,15 +5,34 @@
 			<a class="search_bg" href="javascript:;">
 				<i  class="iconfont icon-search" onclick="searchGoods()"></i>
 				<div id="form" class="w100p">
-					<input type="text" name="goodsName" id="goodsNameSearch" data-text="商品不为空" placeholder="商品搜索">
+					<input type="text" name="goodsName" onkeyup="searchChange(this)"  id="goodsNameSearch" data-text="商品不为空" placeholder="商品搜索">
 				</div>
+				<i id="clearSearch" style="display: none" class="iconfont icon-guanbi f12" onclick="clearSearch(this)"></i>
 			</a>
 		</section>
 		<div class="fl  mr10">
 			<a href="{:url('customer/message')}" class="message">
-				<span></span>
 				<i class="iconfont icon-message"></i>
 			</a>
 		</div>
 	</div>
 </header>
+<script>
+    enterKey(searchGoods);
+    function searchGoods(){
+        if(!formEmptyValid('form')){
+            return;
+        }else{
+            getGoods(formData('form'))
+        }
+    }
+	function clearSearch(_this) {
+		$('#goodsNameSearch').val('');
+		$(_this).hide()
+    }
+    function searchChange(_this) {
+		if($(_this).val() !=''){
+		    $('#clearSearch').show();
+		}else $('#clearSearch').hide();
+    }
+</script>

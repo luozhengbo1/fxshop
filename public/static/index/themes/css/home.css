@@ -4091,7 +4091,7 @@ a {
 }
 .mycard-voucher-list .product-info .img{
 	max-height: .44rem;
-	max-height: .44rem;
+	min-height: .3rem;
 }
 .mycard-voucher-list .product-info .price{
 	position: absolute;

@@ -496,3 +496,13 @@ function destoryMasonry() {
         msnry.destroy();
     }
 }
+
+function enterKey(complete){
+    $(window).keyup(function (event) {
+        var e = event || window.event;
+        if (e && e.keyCode == 13) { //回车键的键值为13
+            complete(); //调用登录按钮的登录事件
+            return false;
+        }
+    })
+}

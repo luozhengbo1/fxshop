@@ -180,6 +180,7 @@ body{
 .bg_range{ background:#fe6b38!important; }
 .bg_green{ background: #39CEF9!important;}
 .bg_red{ background: red!important;}
+.bg_sred{ background: #de181b!important;}
 .bg_white{ background: white!important;}
 .bg_orange{ background: orange!important;}
 .yellow{color: #ffe60e!important;}
@@ -592,6 +593,10 @@ body{
     background-image: url(../../images/close.png);
     background-size: 100%;
     background-repeat: no-repeat;
+}
+.layui-progress {
+    background-color: #696767!important;
+    color: white;
 }
 /*
 .swiper-pagination .swiper-pagination-bullet {
