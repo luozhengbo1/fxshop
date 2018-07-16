@@ -24,11 +24,11 @@
                     ->page($page,$size)
                     ->select();
             }
-            if( empty($goodsList) ) {
+           /* if( empty($goodsList) ) {
                 return ajax_return('','no','500');
-            }else{
+            }else{*/
                 return ajax_return($goodsList,'ok','200');
-            }
+            //}
         }
         #获取这个商品的详情
         public function detail($id)
