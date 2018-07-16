@@ -23,6 +23,7 @@
         #获取订单商品接口
         public function  getOrderListApi()
         {
+
             if($this->request->isAjax()){
                 $page = $this->request->param('page')?$this->request->param('page'):1;
                 $size = $this->request->param('size')?$this->request->param('size'):4;
@@ -92,11 +93,16 @@
             }
         }
 
-        #订单确认
+        #订单确认  判断商品库存是否够
         public function  affirmOrderApi()
         {
             if($this->request->isAjax()){
                 $storeData = json_decode(str_replace('&quot;','"', $this->request->post()['arr']),true);
+                $res = Db::name('goods_attribute')->where(['id'=>$storeData[0]['skuId'],'store'=>['<',$storeData[0]['num']]])->find();
+//                dump($res);die;
+                if($res){
+                    return ajax_return_error('库存数量不足');
+                }
                 Session::set('storeData '.$this->userInfo['openid'],$storeData);
 //                dump(  Session::get('storeData '.$this->userInfo['openid']));die;
 //                $res = Db::name('order_confirm')->insert($data);
