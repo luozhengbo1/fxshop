@@ -35,9 +35,23 @@ class Wechatpay extends Controller
             $arr =[];
             $arr = explode(',',$sonId['son_id']);
             foreach ($arr as $value){
+                #修改子订单状态
                 Db::name('order')
                     ->where(['order_id'=>$orderInfo['out_trade_no'].$value])
                     ->update(['order_status'=>1,'pay_status'=>1, 'pay_time' => time()]);
+                #将子订单中对应的商品数量减少。
+                $goodsOrder = Db::name('order_goods')->field('sku_id,goods_num')->where(['order_id'=>$orderInfo['out_trade_no'].$value])->select();
+                foreach ($goodsOrder as $v){
+                    $goodsStore = Db::name('goods_attribute')->where(['id'=>$v['sku_id']])->find();
+                    $store ='';
+                    if($goodsStore['store']-$v['goods_num']<=0){
+                        $store =0;
+                    }
+                    $store = $goodsStore['store']-$v['goods_num'];
+                    #减库存
+                    Db::name('goods_attribute')->where(['id'=>$goodsOrder['sku_id']])->update(['store'=>$store]);
+                }
+
 
             }
             file_put_contents("wx_pay_success.log",$xml."\r", 8);
@@ -70,6 +84,18 @@ class Wechatpay extends Controller
             $data['pay_status']=1;
             $data['order_status']=1;
             Db::name('order')->where($where)->update($data);
+            #减对应商品的库存
+            $goodsOrder = Db::name('order_goods')->field('sku_id,goods_num')->where(['order_id'=>$orderInfo['out_trade_no'].$value])->select();
+            foreach ($goodsOrder as $v){
+                $goodsStore = Db::name('goods_attribute')->where(['id'=>$v['sku_id']])->find();
+                $store ='';
+                if($goodsStore['store']-$v['goods_num']<=0){
+                    $store =0;
+                }
+                $store = $goodsStore['store']-$v['goods_num'];
+                #减库存
+                Db::name('goods_attribute')->where(['id'=>$goodsOrder['sku_id']])->update(['store'=>$store]);
+            }
         }
     }
 

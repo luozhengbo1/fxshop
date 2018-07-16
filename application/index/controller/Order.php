@@ -223,6 +223,7 @@
                 $addId1 =Db::name("order_all")->insert($orderAll);
                 $addId2 =Db::name("order")->insertAll($orderRow);
                 $addId3 =Db::name("order_goods")->insertAll($orderGoods);
+                #将库存减少，半小时后不付款恢复 或者支付成功减库存
                 if ($addId1 > 0 && $addId2 > 0 && $addId3 > 0 ) {
                     # 清空购物车^M
                     foreach ($data as $k =>$v){
