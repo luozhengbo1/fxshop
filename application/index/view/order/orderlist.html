@@ -151,7 +151,11 @@
                 html +='        <div class="cont tr">';
                 html +='            <span class="f14">共<b>'+data[i].goods_num+'</b>件商品</span>';
                 html +='            <span class="f14">合计:<b>￥'+data[i].total_price+'</b></span>';
-                html +='            <span class="f14">(运费<b>￥'+detail.postage+'</b>)</span>';
+                if(detail.postage){
+                    html +='            <span class="f14">(运费<b>￥'+detail.postage+'</b>)</span>';
+                }else{
+                    html +='            <span class="f14">(运费<b>￥0</b>)</span>';
+                }
                 html +='        </div>';
                 html +='    </div>';
                 html +='    <div class="module clear tr mt5 mb5 pr10" >';
@@ -181,6 +185,7 @@
             html +='    <div class="module clear tr mt10 mb10 pr10" >';
             if(status==0)//代付款
                 html +='        <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="pay(\''+order_id+'\')">付款</button>';
+            // html +='        <button class="layui-btn layui-btn-primary layui-btn-xs">删除订单</button>';
             html +='        <button class="layui-btn layui-btn-primary layui-btn-xs">联系卖家</button>';
             html +='    </div>';
             html +='     <div class="bottomLine"></div>';

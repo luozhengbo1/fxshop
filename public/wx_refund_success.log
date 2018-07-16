@@ -1,0 +1,62 @@
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [cash_fee] => 1
+    [cash_refund_fee] => 1
+    [coupon_refund_count] => 0
+    [coupon_refund_fee] => 0
+    [mch_id] => 1441217402
+    [nonce_str] => c5SOFK1tQZc2lzzK
+    [out_refund_no] => 5b4c02b94699c1531708089
+    [out_trade_no] => 144121740220180716102727
+    [refund_channel] => Array
+        (
+        )
+
+    [refund_fee] => 1
+    [refund_id] => 50000007492018071605429296019
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 10F6442ED54C33093A05B894D8615AB9
+    [total_fee] => 1
+    [transaction_id] => 4200000154201807166164665736
+)
+
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => REFUND_FEE_MISMATCH
+    [err_code_des] => 订单金额或退款金额与之前请求不一致，请核实后再试
+    [mch_id] => 1441217402
+    [nonce_str] => TH4P8xzPO0Qi7jL4
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => EB78FB1733E8316CBDA41075672DC79F
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [cash_fee] => 2
+    [cash_refund_fee] => 1
+    [coupon_refund_count] => 0
+    [coupon_refund_fee] => 0
+    [mch_id] => 1441217402
+    [nonce_str] => Kyvn4srT778xadZx
+    [out_refund_no] => 5b4c0595f312e1531708821
+    [out_trade_no] => 144121740220180716102929
+    [refund_channel] => Array
+        (
+        )
+
+    [refund_fee] => 1
+    [refund_id] => 50000107362018071605439242870
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => F903A615AB5213F2BCBC70E564C4051C
+    [total_fee] => 2
+    [transaction_id] => 4200000154201807168543090249
+)
+

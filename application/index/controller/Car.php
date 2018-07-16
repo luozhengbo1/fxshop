@@ -61,40 +61,45 @@
                 if(!$data['goodsId']){
                     return ajax_return_error('缺少商品id');
                 }
-            }
-           $carData = Db::name('car')
-                ->where([
-                    'goods_id'=>$data['goodsId'],
-                    'openid'=>$this->userInfo['openid'],
-                    'sku_id'=>$data['skuId']
-                    ])
-                ->find();
-            $time =time();
-//            dump($carData);die;
-            if($carData){
-                $res = Db::name('car')
+                $checkStore =  Db::name('goods_attribute')->where(['id'=>$data['skuId']])->find();
+                if($checkStore['store']<$data['num']){
+                    return ajax_return_error('库存不足');
+                }
+               $carData = Db::name('car')
                     ->where([
                         'goods_id'=>$data['goodsId'],
                         'openid'=>$this->userInfo['openid'],
                         'sku_id'=>$data['skuId']
-                    ])->setInc('goods_num', ($data['num']!=0)?$data['num']:'1');
-            }else{
-                $res = Db::name('car')
-                    ->insert([
-                        'goods_num'=>$data['num']?$data['num']:'1',
-                        'update_time'=>$time,
-                        'create_time'=>$time,
-                        'goods_id'=>$data['goodsId'],
-                        'openid'=>$this->userInfo['openid'],
-                        'sku_id'=>$data['skuId'],
-                        'val'=>$data['val'],
-                    ]);
+                        ])
+                    ->find();
+                $time =time();
+    //            dump($carData);die;
+                if($carData){
+                    $res = Db::name('car')
+                        ->where([
+                            'goods_id'=>$data['goodsId'],
+                            'openid'=>$this->userInfo['openid'],
+                            'sku_id'=>$data['skuId']
+                        ])->setInc('goods_num', ($data['num']!=0)?$data['num']:'1');
+                }else{
+                    $res = Db::name('car')
+                        ->insert([
+                            'goods_num'=>$data['num']?$data['num']:'1',
+                            'update_time'=>$time,
+                            'create_time'=>$time,
+                            'goods_id'=>$data['goodsId'],
+                            'openid'=>$this->userInfo['openid'],
+                            'sku_id'=>$data['skuId'],
+                            'val'=>$data['val'],
+                        ]);
+                }
+                if($res){
+                    return ajax_return('','添加成功','200');
+                }else{
+                    return ajax_return('','添加失败','500');
+                }
             }
-            if($res){
-                return ajax_return('','添加成功','200');
-            }else{
-                return ajax_return('','添加失败','500');
-            }
+
 
         }
 

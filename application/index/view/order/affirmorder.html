@@ -57,7 +57,7 @@
             <li class="clear">
                 <span class="fl">快递</span>
                 <span class="fr">
-                    {if condition="$vo['free_type']  neq 1 "}
+                    {if condition="$vo['free_type']  eq 1 "}
                         包邮
                     {else /}
                         {$vo['postage']??'0'} 元邮费
@@ -134,8 +134,8 @@
        var totalNum = 0;
         $('.goodsData').each(function (index,ele) {
             var $ele =$(ele);
-            var num =$ele.data('num') , price =$ele.data('price'),postage =parseInt($ele.data('postage')),freetype =$ele.data('freetype') ;
-            totalNum += parseInt(num)*parseInt(price);
+            var num =$ele.data('num') , price =$ele.data('price'),postage =parseFloat($ele.data('postage')),freetype =$ele.data('freetype') ;
+            totalNum += parseInt(num)*parseFloat(price);
            // console.log('test'+isNaN(23))
             //freetype=1不包邮
             if(freetype==1 && !isNaN(postage)){

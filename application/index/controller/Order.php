@@ -23,6 +23,7 @@
         #获取订单商品接口
         public function  getOrderListApi()
         {
+
             if($this->request->isAjax()){
                 $page = $this->request->param('page')?$this->request->param('page'):1;
                 $size = $this->request->param('size')?$this->request->param('size'):4;
@@ -92,11 +93,16 @@
             }
         }
 
-        #订单确认
+        #订单确认  判断商品库存是否够
         public function  affirmOrderApi()
         {
             if($this->request->isAjax()){
                 $storeData = json_decode(str_replace('&quot;','"', $this->request->post()['arr']),true);
+                $res = Db::name('goods_attribute')->where(['id'=>$storeData[0]['skuId'],'store'=>['<',$storeData[0]['num']]])->find();
+//                dump($res);die;
+                if($res){
+                    return ajax_return_error('库存数量不足');
+                }
                 Session::set('storeData '.$this->userInfo['openid'],$storeData);
 //                dump(  Session::get('storeData '.$this->userInfo['openid']));die;
 //                $res = Db::name('order_confirm')->insert($data);
@@ -150,7 +156,7 @@
                 $dataUser = array_values( self::array_group_by($data,'user_id'));
 //                dump($dataUser);die;
                 foreach ( $dataUser as $k=>$v ){
-                    $sonId[] = rand(10,99);
+                    $sonId[] = rand(1000,9999);
                     $orderRow[$k] = array(
                         "order_id" => $orderId.$sonId[$k],
                         "address_id" => $data[$k]['addressId'],
@@ -217,6 +223,7 @@
                 $addId1 =Db::name("order_all")->insert($orderAll);
                 $addId2 =Db::name("order")->insertAll($orderRow);
                 $addId3 =Db::name("order_goods")->insertAll($orderGoods);
+                #将库存减少，半小时后不付款恢复 或者支付成功减库存
                 if ($addId1 > 0 && $addId2 > 0 && $addId3 > 0 ) {
                     # 清空购物车^M
                     foreach ($data as $k =>$v){
@@ -259,6 +266,10 @@
                     return ajax_return_error('缺少订单id');
                 }
                 $orderData = Db::name('order')->where(['order_id'=>$data['id']])->find();
+                #超过半小时过期
+                if($orderData['create_time'] + 1800 < time() ){
+                    return ajax_return_error('该订单已经失效');
+                }
                 if($orderData['pay_status']==1 || $orderData['order_status']==1){
                     return ajax_return_error('该订单已经支付');
                 }
@@ -371,8 +382,7 @@
         {
             if($this->request->isAjax()){
                 $data = $this->request->post();
-//                dump($data);die;
-                if(!$data['order_id'] && !$data['goods_id'] && !$data['sku_id'] ){
+                if(!$data['order_id'] || !$data['goods_id'] || !$data['sku_id'] ){
                     return ajax_return_error('缺少参数id');
                 }
                 $orderGoods = Db::name('order_goods')->where([
@@ -388,7 +398,7 @@
                 $order =  Db::name('order')->where([
                     'order_id'=>$data['order_id'],'is_lottery'=>1])->find();
                 #扣去奖券金额   #未使用优惠券直接退款商品价格 如果不包邮直接商品价格，
-                $goodsAttribute = Db::name('goods_attribute')->where(['price'=>$data['sku_id']])->find();
+                $goodsAttribute = Db::name('goods_attribute')->field('price')->where(['id'=>$data['sku_id']])->find();
                 $returnMoney = $goodsAttribute['price'];
 //                if($order){
 //                    if($order['pay_status']!=1){
@@ -396,13 +406,18 @@
 //                    }
 //                    Db::name('lottery')->where(['id'=>$order['lottery_id'],''])->
 //                }
+//                dump($goodsAttribute['price']);die;
                 $res1 = Db::name('order_goods')->where([
                     'order_id'=>$data['order_id'],
                     'goods_id'=>$data['goods_id'],
                     'sku_id'=>$data['sku_id'],
                 ])->update(['is_return'=>1,'return_price'=>$goodsAttribute['price']]); # 待退款
-                Db::name('order')->where(['order_id'=>$data['id']])->setInc('return_price_all',$goodsAttribute['price']);#总退款加上
-                $res = Db::name('order')->where(['order_id'=>$data['id']])->update(['order_status'=>3]);
+                $ordertmp = Db::name('order')->field('return_price_all')->where([
+                    'order_id'=>$data['order_id']])->find();
+
+                Db::name('order')->where('order_id',$data['order_id'])->update(['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all']]);#总退款加上
+                $res = Db::name('order')->where(['order_id'=>$data['order_id']])->update(['order_status'=>3]);
+
                 if($res){
                     return  ajax_return($returnMoney,'ok','200');
                 }else{

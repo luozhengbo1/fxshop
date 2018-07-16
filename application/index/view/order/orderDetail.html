@@ -63,8 +63,8 @@
             <div class="module  clear pr10 pt5 mb5" >
                 <div class="cont tr">
                     <span class="f14">共<b>{$vo['goods_num']}</b>件商品</span>
-                    <span class="f14">合计:<b>￥{$vo['total_price']/100}</b></span>
-                    <span class="f14">(运费<b>￥{$vo['goods_detail']['postage']}</b>)</span>
+                    <span class="f14">合计:<b>￥{$vo['total_price']}</b></span>
+                    <span class="f14">(运费<b>￥{$vo['goods_detail']['postage']??'0'}</b>)</span>
                 </div>
                 <div class="tr">
                     {php}
