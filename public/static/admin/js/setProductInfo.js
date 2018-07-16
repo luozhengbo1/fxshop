@@ -2,7 +2,7 @@
 var productInfoModel = {};
 var arrayInforList;
 var setpid = 0;
-var $priceShow = $('#priceShow');//商品销售属性
+var $priceShow = $('.priceShow');//商品销售属性
 /*$(function () {
     //初始化商品分类
     InitTypeId();
@@ -771,12 +771,12 @@ function GetSaleProperty() {
         var proxyprice = $("#proxyprice" + id).val() ? parseFloat($("#proxyprice" + id).val()) : "0";
         var num = $("#num" + id).val();
         //验证数据
-        if (!ValidatePrice(price)) {
+        /*if (!ValidatePrice(price)) {
             result = false;
         };
         if (!ValidatePrice(proxyprice)) {
             result = false;
-        };
+        };*/
         if (!ValidateNum(num)) {
             result = false;
         }
@@ -1223,7 +1223,7 @@ function ChangeSku() {
 
                 //商品销售属性修改
                 if(arrayInfor.length>0){
-                    $('#priceShow').remove();
+                    $('.priceShow').remove();
                 }else{
                     $('#productSale').append($priceShow)
                 }

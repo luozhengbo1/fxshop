@@ -90,6 +90,10 @@ class Goods extends Controller
             if( isset($data['price']) &&  $data['price'] ){
                 $goods['price_real'] = $data['price'];
             }
+            #积分价
+            if( isset($data['score']) &&  $data['score'] ){
+                $goods['score'] = $data['score'];
+            }
     		#原价
     		$goods['original_price'] = $data['original_price'];
     		#结算类型
@@ -286,8 +290,13 @@ class Goods extends Controller
             $goods['show_area'] = $data['show_area'];
             #s商品名称
             $goods['name'] = $data['name'];
+            #价格
             if( isset($data['price']) &&  $data['price'] ){
                 $goods['price_real'] = $data['price'];
+            }
+            #积分价
+            if( isset($data['score']) &&  $data['score'] ){
+                $goods['score'] = $data['score'];
             }
             #原价
             $goods['original_price'] = $data['original_price'];
