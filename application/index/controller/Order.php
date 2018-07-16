@@ -266,6 +266,10 @@
                     return ajax_return_error('缺少订单id');
                 }
                 $orderData = Db::name('order')->where(['order_id'=>$data['id']])->find();
+                #超过半小时过期
+                if($orderData['create_time'] + 1800 < time() ){
+                    return ajax_return_error('该订单已经失效');
+                }
                 if($orderData['pay_status']==1 || $orderData['order_status']==1){
                     return ajax_return_error('该订单已经支付');
                 }
