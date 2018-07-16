@@ -23,6 +23,7 @@ class Lottery extends Controller
             $map['type'] = $this->request->param("type");
         }
     }
+
     public function add()
     {
         if($this->request->isPost()){
@@ -92,7 +93,8 @@ class Lottery extends Controller
                 return ajax_return_adv_error('添加失败');
             }
         }else{
-            $goodsList = Db::name('goods')->field('id,name')->select();
+            $goods = Db::name('goods')->field('id,name')->where(['isdelete'=>0,'status'=>1])->select();
+            $this->view->assign('goodsList',$goods);
 
             return $this->view->fetch(isset($this->template) ? $this->template : 'edit');
         }
@@ -150,6 +152,8 @@ class Lottery extends Controller
             }
             $id = $data['id'];
             $data['surplus_number']= $data['number'];
+            $goods = Db::name('goods')->field('name')->where(['id'=>$data['goods_id']])->find();
+            $data['goods_name'] =$goods['name'];
             unset($data['id']);
             $res = $this->getModel()->where(['id'=>$id])->update($data);
             if($res){
@@ -169,6 +173,8 @@ class Lottery extends Controller
             }
             $this->view->assign('vo',$list);
             $this->view->assign('flag',1);
+            $goods = Db::name('goods')->field('id,name')->where(['isdelete'=>0,'status'=>1])->select();
+            $this->view->assign('goodsList',$goods);
             return $this->view->fetch(isset($this->template) ? $this->template : 'edit');
         }
     }
