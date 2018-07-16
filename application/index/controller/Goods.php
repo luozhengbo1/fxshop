@@ -13,7 +13,7 @@
             parent::__construct();
             $this->userInfo = Session::get('wx_user');
         }
-        #获取商品的
+        #获取商品的  
         public function  getGoodsHotOrOther($page,$size,$show_area='3')
         {
             if($show_area=="all"){

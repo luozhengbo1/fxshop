@@ -150,11 +150,10 @@
             <div class="formControls col-xs-6 col-sm-6">
                 <div class="select-box">
                     <select name="goods_id" class="select" datatype="*" nullmsg="请选择关联商品" errormsg="请选择关联商品">
-                        <!--<option value="0">所有商品</option>-->
-                        <option value="1">商品1</option>
-                        <option value="1">商品1</option>
-                        <option value="1">商品1</option>
-                        <option value="1">商品1</option>
+                        <option value="">--请选择--</option>
+                        {volist name="goodsList" id="vo1"}
+                            <option value="{$vo1.id}" {if condition="$vo['goods_id'] eq $vo1['id']"}selected{/if}>{$vo1.name}</option>
+                        {/volist}
                     </select>
                 </div>
             </div>
