@@ -45,7 +45,7 @@
     function dealData(data) {
         var html='';
         for(var i = 0; i < data.length; i++){
-            //console.log(data[i]);
+            console.log(data[i]);
            /* var price=notEmpty(data[i].basic_price);
             if(data[i].price_real && data[i].price_real!=0){
                 price = notEmpty(data[i].price_real);
@@ -58,7 +58,7 @@
             html +='    <div class="p5 clear">';
             html +='  		  <p class="fl">已售'+notEmpty(data[i].buy_num)+'</p>';
             html +='  		  <p class="fr">';
-            html +='  		      <span class="goods-price">'+parseInt(data[i].score)+'积分</span>';
+            html +='  		      <span class="goods-price">'+data[i].score+'积分</span>';
             html +='  		  </p>';
             html +='    </div>';
             html +='  </li>';

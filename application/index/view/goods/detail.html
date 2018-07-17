@@ -38,7 +38,7 @@
         <li class="fl tc">销量{$goods['buy_num']??''}</li>
         <li class="fr tr">{$goods['yieldly']??'贵州贵阳'}</li>
     </ul>
-    <p class="mt10 detail-block">
+    <p class="mt10 detail-block" onclick="showPop('goodsVoucher')">
         <span class="title">优惠</span>
         <span class="content"><span class="icon-couple"></span>{$lottery?$lottery['id']:'无'}</span>
         <i class="detail_footer-icon"></i>
@@ -135,12 +135,11 @@
         </div>
     </div>
 </div>
-
 <div class="detail_popup" id="popupBuyArea">
-    <div class="main" id="popupMain">
+    <div class="main" id="popupMain" data-showarea="{$goods['show_area']}">
         <div class="header">
             <img alt="商品图" class="avt" id="popupImg"  src="{$goods['main_image']}" />
-            <p class="price">&yen;<em id="goodPrice">{php}echo  empty($goods['price_real'])?$goods['basic_price']:$goods['price_real'];{/php}</em></p>
+            <p class="price"><em id="goodPrice"></em></p>
             <p class="prop" id="goodChoseSku"><!--<span>已选</span> cs10藏青+浅蓝,XL,1个--></p>
             <i class="close" id="popupClose"></i>
         </div>
@@ -175,9 +174,73 @@
         </div>
     </div>
 </div>
+
+<div class="detail_popup show" id="goodsVoucher" style="display:none ">
+    <div class="cover-bg"  onclick="closePop('goodsVoucher')"></div>
+    <div class=" main-voucher" >
+        <div class="header h60 lh60">
+            <i class="close" onclick="closePop('goodsVoucher')"></i>
+            <p class="f16 bold blackRed">优惠券领取</p>
+        </div>
+        <div class="body mb70">
+            <div class="tax-box">
+            <div class="clear">
+                <div class="fl w70p" style="">
+                    <p class="tc f16 mt5">天猫购物券</p>
+                    <p class="tc mt5">100%刮中奖 最高50元</p>
+                    <p class="tc mt5">有效期：7天</p>
+                </div>
+                <div class="tax-split fl" >
+                    <div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>
+                </div>
+                <div class="fl" style="width: 28%" >
+                    <div class="f14 tc mt30">立即领取</div>
+                </div>
+            </div>
+        </div>
+            <div class="tax-box">
+                <div class="clear">
+                    <div class="fl w70p" style="">
+                        <p class="tc f16 mt5">天猫购物券</p>
+                        <p class="tc mt5">100%刮中奖 最高50元</p>
+                        <p class="tc mt5">有效期：7天</p>
+                    </div>
+                    <div class="tax-split fl" >
+                        <div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>
+                    </div>
+                    <div class="fl" style="width: 28%" >
+                        <div class="f14 tc mt30">立即领取</div>
+                    </div>
+                </div>
+            </div>
+            <div class="tax-box">
+                <div class="clear">
+                    <div class="fl w70p" style="">
+                        <p class="tc f16 mt5">天猫购物券</p>
+                        <p class="tc mt5">100%刮中奖 最高50元</p>
+                        <p class="tc mt5">有效期：7天</p>
+                    </div>
+                    <div class="tax-split fl" >
+                        <div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>
+                    </div>
+                    <div class="fl" style="width: 28%" >
+                        <div class="f14 tc mt30">立即领取</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="btns show">
+            <div class="btn blue" onclick="closePop('goodsVoucher')">
+                关闭
+            </div>
+        </div>
+    </div>
+</div>
 {include file="Public/footer-shop"}
 {include file="Public/footer-quick-nav"}
 <script>
+    //showarea  展示区域1-限时抢购2-积分商城3-日常售卖4-热销产品
+    var show_area = $('#popupMain').attr('data-showarea');
     var detailTag = "{$goods['detail']??''}";
     detailTag = detailTag.replace(/&lt;/g,"<");
     detailTag = detailTag.replace(/&gt;/g,">");
@@ -234,6 +297,7 @@
             dataType:'json',
             success: function(data){
                 var code = data.code,result = data.data;
+                console.log(data)
                 skuZhuhe= result;
                 choseFirst()//获取到组合sku后选中第一个
             }
@@ -273,7 +337,17 @@
                 //console.log(item);
                 //匹配id修改页面显示变量
                 if(zhuheId ==id){
-                    $('#goodPrice').empty().append(item.price);
+                    //showarea  展示区域1-限时抢购2-积分商城3-日常售卖4-热销产品  id="popupMain" data-showarea="{$goods['show_area']}"
+                    var showPrice = '';
+                    switch(show_area){
+                        case '2':
+                            showPrice = item.point_score+'<i class="f12">积分</i>';
+                            break;
+                        default:
+                            showPrice = '&yen;'+item.price;
+                            break;
+                    }
+                    $('#goodPrice').empty().append(showPrice);
                     $('#goodChoseSku').empty().append('<span>已选</span> '+zhuheVal+'<i class="ml10" id="showBuyNum"></i>个');
                     $('#buyNum').attr('data-store',item.store);//item.pointPrice  item.id
                     saveData.skuId = item.id;
@@ -324,6 +398,25 @@
             })
         }
         return true;
+    }
+    function showPop(id) {
+        var $dom = $('#'+id);
+        this.mainViewScroll = $(window).scrollTop();
+        $dom.show();
+        setTimeout(function() {
+            $dom.addClass('show');
+            $('body').addClass('overflowHide');
+            //obj.popupshow = true;
+        }, 50);
+    }
+    function closePop(id) {
+        var $dom = $('#'+id);
+        $('body').removeClass('overflowHide');
+        $dom.removeClass('show');
+        window.scrollTo(0, this.mainViewScroll);
+        setTimeout(function() {
+            $dom.hide();
+        }, 50);
     }
 </script>
 </body>
