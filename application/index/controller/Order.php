@@ -29,7 +29,7 @@
                 $size = $this->request->param('size')?$this->request->param('size'):4;
                 $data = $this->request->post();
                 if($data['status']=='all'){
-                    $where = ['fy_order.openid'=>$this->userInfo['openid']]
+                    $where = ['fy_order.openid'=>$this->userInfo['openid']];
                 }else{
                     if($data['status']==1 ||  $data['status']==2 ){
                         $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status'],'fy_order_goods.is_return'=>0];
@@ -50,12 +50,7 @@
                     $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
                 }
                 $orderList = array_values($this->array_group_by($orderList,'order_id'));
-               // if(!empty($orderList) ){
-                    return ajax_return($orderList,'ok','200');
-                /*}else{
-                    return ajax_return('','no','500');
-                }*/
-
+                return ajax_return($orderList,'ok','200');
             }
         }
 
