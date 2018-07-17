@@ -96,7 +96,7 @@
 
     <div class="aui-payment-bar">
         <div class="shop-total">
-            <span class="aui-red aui-size">实付款:￥<em id="showPrice" class="bold f18"></em></span>
+            <span class="aui-red aui-size">实付款:￥<em id="showPrice" class="bold f14"></em></span>
         </div>
         <a href="javascript:;" id="singlePay" class="settlement" onclick="saveOrder()">提交订单</a>
     </div>
@@ -146,8 +146,8 @@
    }
     showData()
     function showData() {
-       var totalNum = 0,
-           scoreTotal=0
+       var totalPrice = 0,
+           totalPoint=0
        ;
 
         $('.goodsData').each(function (index,ele) {
@@ -164,18 +164,22 @@
             //freetype=1不包邮
             switch(show_area){
                 case 2:
-                    scoreTotal +=(parseInt(num)*parseFloat(pointScore));
+                    totalPoint +=(parseInt(num)*parseFloat(pointScore));
                     break;
                 default:
-                    totalNum += parseInt(num)*parseFloat(price);
+                    totalPrice += parseInt(num)*parseFloat(price);
                     break;
             }
             if(freetype==1 && !isNaN(postage)){
-                totalNum += postage;//加上邮费
+                totalPrice += postage;//加上邮费
             }
         })
-        var html =totalNum;
-        if (scoreTotal>0) html = totalNum+'+'+scoreTotal+'积分'
+        var html='';
+        if(totalPrice>0 && totalPoint>0) html =totalPrice+'+'+totalPoint+'积分';
+        else{
+            if(totalPrice>0)   html +=totalPrice;
+            if (totalPoint>0) html +=totalPoint+'积分'
+        }
         $('#showPrice').html(html)
     }
 </script>

@@ -112,10 +112,12 @@
             html +='<li>';
 
             for(var i=0; i<data.length; i++ ){
+                console.log(data)
                 var detail = data[i].goods_detail,
                     status = data[i].order_status ,
-                    goods_id =detail.id,
+                    goods_id =data[i].goods_id,
                     sku_id = data[i].sku_id,
+                    show_area = detail.store_type,
                     order_id = data[i].order_id;
                 console.log(goods_id)
                 html +='<a href="'+urlConnect("{:url('index/order/orderDetail')}",{id:order_id})+'">';
@@ -130,7 +132,15 @@
                 html +='        </div>';
                 html +='        <div class="item-pay">';
                 html +='            <div class="item-pay-data">';
-                html +='                <p class="price f14"> ￥'+data[i].price+' </p>';
+                switch(show_area){
+                    case 2:
+                        html +='                <p class="price f14"> '+data[i].point_score+'积分 </p>';
+                        break;
+                    default:
+                        html +='                <p class="price f14"> ￥'+data[i].price+' </p>';
+                        break;
+                }
+
                 html +='                <p class="nums">x'+data[i].goods_num+'</p>';
                 html +='            </div>';
                 html +='        </div>';

@@ -170,9 +170,9 @@
             // onkeyup="value=(parseInt((value=value.replace(/\D/g,''))==''?'0':value,10))"
 
             if(data[i].price1!=0) {
-                html += '  <input class="sumInput"  data-score="' + data[i].score + '" data-showarea="' + data[i].show_area + '" data-image="' + data[i].main_image + '" data-name="' + data[i].name + '" data-store="' + data[i].store + '" data-goodsid="' + data[i].goods_id + '" data-carid="' + data[i].carId + '"  data-price="' + data[i].price1 + '" data-skuid="' + data[i].sku_id + '" data-skuval="' + data[i].val + '"   type="text" value="' + data[i].goods_num + '">';
+                html += '  <input class="sumInput"  data-score="' + data[i].point_score + '" data-showarea="' + data[i].show_area + '" data-image="' + data[i].main_image + '" data-name="' + data[i].name + '" data-store="' + data[i].store + '" data-goodsid="' + data[i].goods_id + '" data-carid="' + data[i].carId + '"  data-price="' + data[i].price1 + '" data-skuid="' + data[i].sku_id + '" data-skuval="' + data[i].val + '"   type="text" value="' + data[i].goods_num + '">';
             }else{
-                html +='   <input  class="sumInput"  data-score="' + data[i].score + '" data-showarea="' + data[i].show_area + '" data-image="'+data[i].main_image+'" data-name="'+data[i].name+'" data-store="'+data[i].store+'" data-goodsid="'+data[i].goods_id+'" data-carid="'+data[i].carId+'"  data-price="'+data[i].price_real+'" data-skuid="'+data[i].sku_id+'" data-skuval="'+data[i].val+'"   type="text" value="'+data[i].goods_num+'">';
+                html +='   <input  class="sumInput"  data-score="' + data[i].point_score + '" data-showarea="' + data[i].show_area + '" data-image="'+data[i].main_image+'" data-name="'+data[i].name+'" data-store="'+data[i].store+'" data-goodsid="'+data[i].goods_id+'" data-carid="'+data[i].carId+'"  data-price="'+data[i].price_real+'" data-skuid="'+data[i].sku_id+'" data-skuval="'+data[i].val+'"   type="text" value="'+data[i].goods_num+'">';
 
             }
             html +='                </div>';
@@ -237,17 +237,17 @@
     function showData() {
         var dataArr = getData();
         var plusNum = 0;
-        var plusPrice= 0;
-        var scoreTotal=0;
+        var totalPrice= 0;
+        var totalPoint=0;
         for (var i= 0; i<dataArr.length; i++){
             var sinData = dataArr[i];
             var show_area = sinData.showArea;
            switch(show_area){
                case 2:
-                   scoreTotal +=(parseInt(sinData.num)*parseFloat(sinData.pointScore));
+                   totalPoint +=(parseInt(sinData.num)*parseFloat(sinData.pointScore));
                    break;
                default:
-                   plusPrice +=(parseInt(sinData.num)*parseFloat(sinData.price));
+                   totalPrice +=(parseInt(sinData.num)*parseFloat(sinData.price));
                    break;
            }
             plusNum += parseInt(sinData.num);//合计购买数量;
@@ -255,8 +255,12 @@
 
         }
         $('#totalNum').empty().append(plusNum);
-        var html =plusPrice;
-        if (scoreTotal>0) html = plusPrice+'+'+scoreTotal+'积分'
+        var html ='';
+        if(totalPrice>0 && totalPoint>0) html =totalPrice+'+'+totalPoint+'积分';
+        else{
+            if(totalPrice>0)   html +=totalPrice;
+            if (totalPoint>0) html +=totalPoint+'积分'
+        }
         $('#totalPrice').empty().append(html);
     }
     //单个商品选择
