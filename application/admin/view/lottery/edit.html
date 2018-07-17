@@ -55,7 +55,7 @@
                 <div class="select-box">
                     <?php if(isset($flag)){  ?>
                     <select name="type" class="select" datatype="*" nullmsg="请选择类型" errormsg="请选择类型">
-                        <option value="{$vo.type ?? ''}"><?php if($vo['type']==1){ echo "抵用券";}if($vo['type']==2){ echo "优惠券";}if($vo['type']==3){ echo "代金券";}if($vo['type']==4){ echo "积分券";} ?></option>
+                        <option value="{$vo.type ?? ''}"><?php if($vo['type']==1){ echo "抵用券";}if($vo['type']==2){ echo "优惠券";}if($vo['type']==3){ echo "代金券";}if($vo['type']==4){ echo "积分券";}if($vo['type']==5){ echo "生日券";} ?></option>
                     </select>
                     <?php }else{?>
                     <select name="type" class="select" datatype="*" nullmsg="请选择类型" errormsg="请选择类型">
@@ -63,6 +63,7 @@
                         <option value="2">优惠券</option>
                         <option value="3">代金券</option>
                         <option value="4">积分抵现金</option>
+                        <option value="5">生日券</option>
                     </select>
                     <?php } ?>
                 </div>
@@ -105,6 +106,15 @@
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
+        <?php  } if($vo['type']==5){ ?>
+        <div class="row cl quan2" style="display: ;">
+            <label class="form-label col-xs-3 col-sm-3">生日券设置：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                满<input type="number" class="input-text"  style="width:50%;" placeholder="" name="coupon_money" value="{$vo.coupon_money ?? ''}" >
+                减<input type="number" class="input-text"  style="width:50%;"  name="coupon_real_money" value="{$vo.coupon_real_money ?? ''}" >
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
         <?php  } }else{ ?>
         <div class="row cl quan1" style="display: block;" >
             <label class="form-label col-xs-3 col-sm-3">抵扣券设置：</label>
@@ -134,6 +144,14 @@
             <div class="formControls col-xs-6 col-sm-6">
                 <input type="number" class="input-text"  style="width:50%;" placeholder="" name="score_money" value="{$vo.score_money ?? ''}" >
                 积分抵<input type="number" class="input-text"  style="width:50%;"  name="score_real_money" value="{$vo.score_real_money ?? ''}" >
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl quan5" style="display:none;">
+            <label class="form-label col-xs-3 col-sm-3">生日券设置：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                满<input type="number" class="input-text"  style="width:50%;" placeholder="" name="coupon_money" value="{$vo.coupon_money ?? ''}" >
+                减<input type="number" class="input-text"  style="width:50%;"  name="coupon_real_money" value="{$vo.coupon_real_money ?? ''}" >
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
@@ -260,24 +278,35 @@
                 $('.quan2').css('display','none');
                 $('.quan3').css('display','none');
                 $('.quan4').css('display','none');
+                $('.quan5').css('display','none');
             }
             if( $(this).val()==2 ){
                 $('.quan2').css('display','block');
                 $('.quan1').css('display','none');
                 $('.quan3').css('display','none');
                 $('.quan4').css('display','none');
+                $('.quan5').css('display','none');
             }
             if( $(this).val()==3 ){
                 $('.quan1').css('display','none');
                 $('.quan2').css('display','none');
                 $('.quan3').css('display','block');
                 $('.quan4').css('display','none');
+                $('.quan5').css('display','none');
             }
             if( $(this).val()==4 ){
                 $('.quan1').css('display','none');
                 $('.quan2').css('display','none');
                 $('.quan3').css('display','none');
                 $('.quan4').css('display','block');
+                $('.quan5').css('display','none');
+            }
+            if( $(this).val()==5 ){
+                $('.quan1').css('display','none');
+                $('.quan2').css('display','none');
+                $('.quan3').css('display','none');
+                $('.quan4').css('display','none');
+                $('.quan5').css('display','block');
             }
         })
     })
