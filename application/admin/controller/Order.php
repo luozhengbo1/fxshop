@@ -267,8 +267,12 @@ class Order extends Controller
                 //退款操作
                 if( $res['return_code'] == 'SUCCESS' &&  $res['result_code']=="SUCCESS" ){
                     file_put_contents("wx_refund_success.log",print_r($res, true)."\r", 8);
-                    //修改订单状态
-                    $updateres = Db::name('order')->where( [ 'order_id'=>$order_id ] )->update(['order_status'=>7]); //2表示退款成功
+                    //修改订单状态 将订单总金额减少退款金额
+
+                    $orderData = Db::name('order')->field('total_price')->where( [ 'order_id'=>$order_id ] )->find();
+                    $decPrice = $orderData['total_price'] -$orderGoods['return_price'] ;
+                    if($decPrice<0)$decPrice=0;
+                    $updateRes = Db::name('order')->where( [ 'order_id'=>$order_id ] )->update(['order_status'=>7,'total_price'=>$decPrice]);
                     Db::name('order_goods')->where( [ 'id'=>$data['id'] ] )->update(['is_return'=>2]);
                     $result['code'] = 200;
                     $result['msg'] = '退款成功';
