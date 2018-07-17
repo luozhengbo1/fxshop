@@ -357,6 +357,8 @@ function req_opt(type,json,returnUrl){
                             location.href=url.list;
                             request_flag.del = true;
                         },1500);
+                    }else{
+                        request_flag.del = true;
                     }
                 }
             })
@@ -398,7 +400,8 @@ function pub_save(json){
                             request_flag.save = true;
                         },1500);
                     }
-
+                }else{
+                    request_flag.save = true;
                 }
             }
         })
@@ -428,6 +431,8 @@ function pub_edit(json){
                                 request_flag.edit = true;
                             },1500);
                         }
+                    }else{
+                        request_flag.edit = true;
                     }
                 }
             })
@@ -458,6 +463,8 @@ function pub_del(json){
                         },1500);
                     }
 
+                }else{
+                    request_flag.del = true;
                 }
             }
         })

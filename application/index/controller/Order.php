@@ -108,6 +108,7 @@
             }
         }
 
+
         #订单确认  判断商品库存是否够  #庞端用户积分是否
         public function  affirmOrderApi()
         {
@@ -129,8 +130,10 @@
                         return ajax_return('',$goods['name'].'库存数量不足','500');
                     }
                 }
+                $totalScore = $this->totalScore($storeData);
                 $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
-                if($score>$user['score']){
+//                dump($totalScore);
+                if($totalScore>$user['score']){
                     return ajax_return('','你积分数量不足','500');
                 }
 //                dump($res);die;
@@ -347,6 +350,22 @@
                 return json($backData);
             }
 
+        }
+        #统计积分合计
+        public function totalScore($data)
+        {
+            $pay = 0;
+            foreach ($data  as $val) {
+                $res = Db::name('goods_attribute')->field('price,point_score')->where(['id'=>$val['skuId']])->find();
+//                $goods = Db::name('goods')->field('postage,free_type')->where(['id'=>$val['goodsId']])->find();
+                if (isset($val['num'])) {
+                    $pay += $res['point_score'] * $val['num'];
+                }
+//                if($goods['free_type']==0){
+//                    $pay +=$goods['postage'];
+//                }
+            }
+            return $pay;
         }
         # 计算订单总价值
         public function calculateOrderValue($data)
