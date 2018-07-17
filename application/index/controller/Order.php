@@ -115,17 +115,23 @@
                 $storeData = json_decode(str_replace('&quot;','"', $this->request->post()['arr']),true);
                 #判断库存是否足够
                 $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
+                $score = 0;
                 foreach ($storeData as $v) {
-                    $res = Db::name('goods_attribute')->where(['id'=>$v['skuId'],'store'=>['<',$v['num']]])->find();
+                    #积分判断
                     $goodsData = Db::name('goods')->where(['id'=>$v['goodsId']])->find();
                     if($goodsData['show_area']==2){
-
+                        $score+=$goodsData['score'];
                     }
-                    if($res){
+                    #库存判断
+                    $goods_attribute = Db::name('goods_attribute')->where(['id'=>$v['skuId']])->find();
+                    if($goods_attribute['store']<$v['num']){
                         $goods = Db::name('goods')->field('name')->where(['id'=>$v['goodsId']])->find();
-                        return ajax_return_error($goods['name'].'库存数量不足');
+                        return ajax_return('',$goods['name'].'库存数量不足','500');
                     }
-
+                }
+                $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
+                if($score>$user['score']){
+                    return ajax_return('','你积分数量不足','500');
                 }
 //                dump($res);die;
 
