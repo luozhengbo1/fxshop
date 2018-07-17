@@ -145,6 +145,7 @@ class Order extends Controller
             $res = Db::name('order_goods')
                 ->where(['id'=>$data['id']])
                 ->update([
+                    'is_send'=>1,
                     'logistics_name'=>$data['logistics_name'],
                     'logistics_number'=>$data['logistics_number']
                 ]);
@@ -177,7 +178,7 @@ class Order extends Controller
             $orderId = \WxPayConfig::MCHID.date("YmdHis");
             $res = $this->getModel()
                 ->where(['order_id'=>$data['order_id']])
-                ->update(['total_price'=>$data['totalPrice'],'js_api_parameters'=>'','prepay_id'=>'','order_id'=>$orderId]);
+                ->update(['total_price'=>$data['totalPrice'],'js_api_parameters'=>'','prepay_id'=>'','order_id'=>$orderId,'create_time'=>time()]);#时间修改
            $res1 = Db::name('order_goods')->where(['order_id'=>$data['order_id']])->update(['order_id'=>$orderId]);
             if($res && $res1){
                 return ajax_return_adv('修改成功','parent','200');
@@ -190,31 +191,31 @@ class Order extends Controller
 
 
     #确认发货
-    public  function  sureSend()
-    {
-        if($this->request->isAjax()){
-            $data = $this->request->post();
-            if(!$data['id']){
-                return ajax_return_error('缺少参数id');
-            }
-            $order = Db::name('order') ->where(['order_id'=>$data['id']])->find();
-            if($order['pay_status']!=1){
-                return ajax_return_error('付款了才可以发货');
-            }
-            $res = Db::name('order')
-                ->where(['order_id'=>$data['id']])
-                ->update([
-                    'order_status'=>2
-                ]);
-            if($res){
-                #确认物流，提醒买家
-                return ajax_return('','操作成功','200');
-            }else{
-                return ajax_return('','操作失败','500');
-            }
-        }
-
-    }
+//    public  function  sureSend()
+//    {
+//        if($this->request->isAjax()){
+//            $data = $this->request->post();
+//            if(!$data['id']){
+//                return ajax_return_error('缺少参数id');
+//            }
+//            $order = Db::name('order') ->where(['order_id'=>$data['id']])->find();
+//            if($order['pay_status']!=1){
+//                return ajax_return_error('付款了才可以发货');
+//            }
+//            $res = Db::name('order')
+//                ->where(['order_id'=>$data['id']])
+//                ->update([
+//                    'order_status'=>2
+//                ]);
+//            if($res){
+//                #确认物流，提醒买家
+//                return ajax_return('','操作成功','200');
+//            }else{
+//                return ajax_return('','操作失败','500');
+//            }
+//        }
+//
+//    }
 
 
     # 微信退款
@@ -231,7 +232,7 @@ class Order extends Controller
                     ->where([
                         'order_id'=>$order_id,
                         'pay_status'=>1,
-                        'order_status'=>['in',[1,2,3]]
+//                        'order_status'=>['in',[1,2,3]]
                     ])//支付状态//支付成功，和正在处理中的订单
                     ->find();
                 #如果订单在父订单中支付，需要找到父订单用父订单id发起退款
@@ -272,7 +273,12 @@ class Order extends Controller
                     $orderData = Db::name('order')->field('total_price')->where( [ 'order_id'=>$order_id ] )->find();
                     $decPrice = $orderData['total_price'] -$orderGoods['return_price'] ;
                     if($decPrice<0)$decPrice=0;
-                    $updateRes = Db::name('order')->where( [ 'order_id'=>$order_id ] )->update(['order_status'=>7,'total_price'=>$decPrice]);
+                    if($decPrice == $order['total_price'] || ($order['return_price_all']+$decPrice)== $order['total_price']){#全额退款
+                        $order_status = 6;
+                    }else {
+                        $order_status =5;
+                    }
+                    $updateRes = Db::name('order')->where( [ 'order_id'=>$order_id ] )->update(['order_status'=>$order_status,'total_price'=>$decPrice]);
                     Db::name('order_goods')->where( [ 'id'=>$data['id'] ] )->update(['is_return'=>2]);
                     $result['code'] = 200;
                     $result['msg'] = '退款成功';

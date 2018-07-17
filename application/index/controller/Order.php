@@ -31,11 +31,27 @@
                 if($data['status']=='all'){
                     $where = ['fy_order.openid'=>$this->userInfo['openid']];
                 }else{
-                    if($data['status']==1 ||  $data['status']==2 ){
-                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status'],'fy_order_goods.is_return'=>0];
-                    }else{
-                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status'],'fy_order_goods.is_return'=>1];
+                    #待付款
+                    if($data['status']==0){
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>0];
                     }
+                    #待發貨
+                    if($data['status']==1 ){
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>0];
+                    }
+                    #已发货
+                    if($data['status']==2){
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>1];
+                    }
+                    #待退款
+                    if($data['status']==3){
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order_goods.is_return'=>1];
+                    }
+                    #待评价
+                    if($data['status']==4){
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order_goods.is_return'=>1];
+                    }
+                    //$where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status'],'fy_order_goods.is_return'=>1];
                 }
                 $orderList = Db::name('order')
                     ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
@@ -73,6 +89,7 @@
                 $address = Db::name('customer_address')->alias('ca')
                     ->field('ca.*')
                     ->join('fy_customer','fy_customer.id=ca.uid')
+                    ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id','left')
                     ->where(['fy_customer.openid'=>$this->userInfo['openid'],'ca.status'=>1 ])
                     ->find();
 //                dump($address);die;
@@ -137,7 +154,6 @@
                     'total_price'=>$price,
                     'create_time'=>time(),
                 ];
-
                 #计算几个商户进行分成多个订单
                 foreach ($data as $k=>$v){
                     $uid = Db::name('goods')->field('user_id')->where(['id'=>$v['goodsId']])->find()['user_id'];

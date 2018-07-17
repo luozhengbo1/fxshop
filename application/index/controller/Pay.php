@@ -13,6 +13,13 @@ class Pay extends  Mustlogin
         return $this->fetch();
     }
 
+    public function test()
+    {
+        $Wechatpay=new Wechatpay;
+        $res = $Wechatpay -> payToUser();
+        var_dump($res);
+    }
+
 }
 
 
