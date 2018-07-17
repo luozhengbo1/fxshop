@@ -15,6 +15,7 @@
 		complete:fun,数据加载完成后调用函数
      });
  */
+var pageloadFlag=true;//请求结束
 var pageload = function(options){
     return new MyPageload(this, options);
 };
@@ -31,7 +32,7 @@ MyPageload.prototype.init = function(options){
     var dropload =  $('#'+_this.opts.targetWarp).dropload({
         scrollArea : window,
         loadDownFn : function(me){
-            setTimeout(function () {
+         if(!pageloadFlag) return;
                 var thisPage = _this.opts.page;
                 var url= _this.opts.ajaxData.url+'?page='+_this.opts.page+'&size='+_this.opts.size;
                  _this.opts.page++;
@@ -74,7 +75,7 @@ MyPageload.prototype.init = function(options){
                        } else{
                            _this.fnDropload(dropload)
                        }
-                       _this.flag = true
+                       _this.pageloadFlag = true;
                    },
                    error: function(xhr, type){
                        console.error('网络错误');
@@ -82,7 +83,6 @@ MyPageload.prototype.init = function(options){
                        _this.fnDropload(dropload)
                    }
                });
-           },200)
         }
     });
 };

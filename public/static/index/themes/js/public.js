@@ -153,7 +153,7 @@ Date.prototype.Format = function (fmt) { //author: meizz
 };
 //tab导航
 function navTab(){
-    var $tabNavItem= $('.tab-nav .tab-nav-item');
+    var $tabNavItem= $('.tab-nav .tab-nav-swiper');
     $tabNavItem.click(function () {
         $tabNavItem.removeClass('active');
         $(this).addClass('active');

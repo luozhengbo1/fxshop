@@ -85,15 +85,14 @@
                 html +='     <p class="p5">开始时间'+new Date(parseInt(data[i].start_date)*1000).Format("yyyy-MM-dd hh:mm:ss")+'</p>';
                 html +='     <p class="pl5">结束时间'+new Date(parseInt(data[i].end_date)*1000).Format("yyyy-MM-dd hh:mm:ss")+'</p>';
                 html +='     <div class="p5 clear">';
-                console.log(new Date().getTime())
-                console.log(parseInt(data[i].start_date)*1000)
+
                 html +='         <p class="fl">';
                 html +='             <span class="goods-price">¥'+price+'</span>';
                 html +='             <span class="goods-old-price">¥'+notEmpty(data[i].original_price)+'</span>';
                 html +='         </p>';
                 html +='         <div class="fr">';
                 if(activeFlag)
-                     html +='       <button class="layui-btn layui-btn-xs layui-btn-radius" >马上抢</a>';//活动范围内
+                     html +='       <button class="layui-btn layui-btn-xs layui-btn-radius" >马上抢</button>';//活动范围内
                 else
                     html +='        <button class="layui-btn layui-btn-xs layui-btn-disabled" >已结束</button>';
                 html +='         </div>';
