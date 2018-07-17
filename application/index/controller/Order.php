@@ -89,6 +89,7 @@
                             'fy_goods.id'=>$v['goodsId'],
                             'fy_goods_attribute.id'=>$v['skuId'],
                         ])->find();
+//                    dump($tempGoods);die;
                     $storeData[$k] = array_merge($storeData[$k], $tempGoods);
                    // $storeData[$k] = array_merge($storeData[$k], Db::name('goods')->where(['id'=>$v['goodsId']])->find());
                 }
@@ -97,7 +98,6 @@
                 $address = Db::name('customer_address')->alias('ca')
                     ->field('ca.*')
                     ->join('fy_customer','fy_customer.id=ca.uid')
-                    ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id','left')
                     ->where(['fy_customer.openid'=>$this->userInfo['openid'],'ca.status'=>1 ])
                     ->find();
 //                dump($address);die;
@@ -108,16 +108,27 @@
             }
         }
 
-        #订单确认  判断商品库存是否够
+        #订单确认  判断商品库存是否够  #庞端用户积分是否
         public function  affirmOrderApi()
         {
             if($this->request->isAjax()){
                 $storeData = json_decode(str_replace('&quot;','"', $this->request->post()['arr']),true);
-                $res = Db::name('goods_attribute')->where(['id'=>$storeData[0]['skuId'],'store'=>['<',$storeData[0]['num']]])->find();
-//                dump($res);die;
-                if($res){
-                    return ajax_return_error('库存数量不足');
+                #判断库存是否足够
+                $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
+                foreach ($storeData as $v) {
+                    $res = Db::name('goods_attribute')->where(['id'=>$v['skuId'],'store'=>['<',$v['num']]])->find();
+                    $goodsData = Db::name('goods')->where(['id'=>$v['goodsId']])->find();
+                    if($goodsData['show_area']==2){
+
+                    }
+                    if($res){
+                        $goods = Db::name('goods')->field('name')->where(['id'=>$v['goodsId']])->find();
+                        return ajax_return_error($goods['name'].'库存数量不足');
+                    }
+
                 }
+//                dump($res);die;
+
                 Session::set('storeData '.$this->userInfo['openid'],$storeData);
 //                dump(  Session::get('storeData '.$this->userInfo['openid']));die;
 //                $res = Db::name('order_confirm')->insert($data);
