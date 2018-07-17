@@ -3,6 +3,9 @@
 <td>{$vo.subtitle}</td>
 <td><img src="{$vo.main_image}" width="100" alt="主图"></td>
 <td>{$vo.original_price}</td>
+<td>{$vo.price_real}</td>
+<td>{$vo.score}</td>
+<td>{$vo.price_real}+{$vo.score}</td>
 <td>
     <?php
       $goods_name = \think\Db::name('goods_class')->field('name')->where(['id'=>$vo['goods_class_id']])->find();
