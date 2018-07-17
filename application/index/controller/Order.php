@@ -31,11 +31,27 @@
                 if($data['status']=='all'){
                     $where = ['fy_order.openid'=>$this->userInfo['openid']];
                 }else{
-                    if($data['status']==1 ||  $data['status']==2 ){
-                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status'],'fy_order_goods.is_return'=>0];
-                    }else{
-                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status'],'fy_order_goods.is_return'=>1];
+                    #待付款
+                    if($data['status']==0){
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>0];
                     }
+                    #待發貨
+                    if($data['status']==1 ){
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>0];
+                    }
+                    #已发货
+                    if($data['status']==2){
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>1];
+                    }
+                    #待退款
+                    if($data['status']==3){
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order_goods.is_return'=>1];
+                    }
+                    #待评价
+                    if($data['status']==4){
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order_goods.is_return'=>1];
+                    }
+                    //$where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status'],'fy_order_goods.is_return'=>1];
                 }
                 $orderList = Db::name('order')
                     ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
@@ -73,6 +89,7 @@
                             'fy_goods.id'=>$v['goodsId'],
                             'fy_goods_attribute.id'=>$v['skuId'],
                         ])->find();
+//                    dump($tempGoods);die;
                     $storeData[$k] = array_merge($storeData[$k], $tempGoods);
                    // $storeData[$k] = array_merge($storeData[$k], Db::name('goods')->where(['id'=>$v['goodsId']])->find());
                 }
@@ -91,16 +108,27 @@
             }
         }
 
-        #订单确认  判断商品库存是否够
+        #订单确认  判断商品库存是否够  #庞端用户积分是否
         public function  affirmOrderApi()
         {
             if($this->request->isAjax()){
                 $storeData = json_decode(str_replace('&quot;','"', $this->request->post()['arr']),true);
-                $res = Db::name('goods_attribute')->where(['id'=>$storeData[0]['skuId'],'store'=>['<',$storeData[0]['num']]])->find();
-//                dump($res);die;
-                if($res){
-                    return ajax_return_error('库存数量不足');
+                #判断库存是否足够
+                $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
+                foreach ($storeData as $v) {
+                    $res = Db::name('goods_attribute')->where(['id'=>$v['skuId'],'store'=>['<',$v['num']]])->find();
+                    $goodsData = Db::name('goods')->where(['id'=>$v['goodsId']])->find();
+                    if($goodsData['show_area']==2){
+
+                    }
+                    if($res){
+                        $goods = Db::name('goods')->field('name')->where(['id'=>$v['goodsId']])->find();
+                        return ajax_return_error($goods['name'].'库存数量不足');
+                    }
+
                 }
+//                dump($res);die;
+
                 Session::set('storeData '.$this->userInfo['openid'],$storeData);
 //                dump(  Session::get('storeData '.$this->userInfo['openid']));die;
 //                $res = Db::name('order_confirm')->insert($data);
@@ -145,7 +173,6 @@
                     'total_price'=>$price,
                     'create_time'=>time(),
                 ];
-
                 #计算几个商户进行分成多个订单
                 foreach ($data as $k=>$v){
                     $uid = Db::name('goods')->field('user_id')->where(['id'=>$v['goodsId']])->find()['user_id'];
