@@ -29,26 +29,21 @@
                 $size = $this->request->param('size')?$this->request->param('size'):4;
                 $data = $this->request->post();
                 if($data['status']=='all'){
-//                    dump($this->userInfo['openid']);die;
-                    $orderList = Db::name('order')
-//                        ->field('fy_goods_attribute.*')
-                        ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
-                        ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id','left')
-                        ->where(['fy_order.openid'=>$this->userInfo['openid']])
-                        ->order('fy_order.create_time desc')
-                        ->page($page,$size)
-                        ->select();
-//                    dump($orderList);
-//
+                    $where = ['fy_order.openid'=>$this->userInfo['openid']]
                 }else{
-                    $orderList = Db::name('order')
-                        ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
-                        ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id','left')
-                        ->where(['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status']])
-                        ->order('fy_order.create_time desc')
-                        ->page($page,$size)
-                        ->select();
+                    if($data['status']==1 ||  $data['status']==2 ){
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status'],'fy_order_goods.is_return'=>0];
+                    }else{
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status'],'fy_order_goods.is_return'=>1];
+                    }
                 }
+                $orderList = Db::name('order')
+                    ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
+                    ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id','left')
+                    ->where($where)
+                    ->order('fy_order.create_time desc')
+                    ->page($page,$size)
+                    ->select();
 //                echo Db::name('order')->getLastSql();
 //                dump($orderList);
                 foreach ($orderList as $k=>$v ){
