@@ -50,6 +50,8 @@ class Wechatpay extends Controller
                     $store = $goodsStore['store']-$v['goods_num'];
                     #减库存
                     Db::name('goods_attribute')->where(['id'=>$goodsOrder['sku_id']])->update(['store'=>$store]);
+                    #加上销量
+                    Db::name('goods')->where(['id'=>$goodsStore['goods_id']])->seInc('buy_num',$goodsStore['store']);
                 }
 
 
@@ -95,6 +97,8 @@ class Wechatpay extends Controller
                 $store = $goodsStore['store']-$v['goods_num'];
                 #减库存
                 Db::name('goods_attribute')->where(['id'=>$goodsOrder['sku_id']])->update(['store'=>$store]);
+                #加销量
+                Db::name('goods')->where(['id'=>$goodsStore['goods_id']])->seInc('buy_num',$goodsStore['store']);
             }
         }
     }
