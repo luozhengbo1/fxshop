@@ -39,7 +39,8 @@ class Customer extends Mustlogin
         $this->assign('count_lottery', $count_lottery);
 
         //会员订单数量
-        $count_pay = Db::table('fy_order')->where('openid', $user_session['openid'])->where('order_status', 0)->count();
+        #代付款
+        $count_pay = Db::table('fy_order')->where('openid', $user_session['openid'])->where(['order_status', 0,'pay_status'=>0])->count();
         $count_deliver = Db::table('fy_order')->where('openid', $user_session['openid'])->where('order_status', 1)->count();
         $count_take_delivery = Db::table('fy_order')->where('openid', $user_session['openid'])->where('order_status', 2)->count();
         $count_refund = Db::table('fy_order')->where('openid', $user_session['openid'])->where('order_status', 3)->count();

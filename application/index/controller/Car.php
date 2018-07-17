@@ -34,22 +34,21 @@
                     ->join('fy_goods_attribute','fy_goods_attribute.id=c.sku_id','left')
                     ->where([
                         'c.openid'=>$this->userInfo['openid'],
-                        //  'update_time'=>['<',$time],
                         'c.status'=>1,
                     ] )
                     ->page($page,$size)
                     ->order('c.create_time desc')
                     ->select();
 //                echo   Db::name('car')->getLastSql();die;
-//                dump($carList);
                 //if(!empty($carList )){
                     return ajax_return($carList,'ok','200');
                /* }else{
                     return ajax_return($carList,'no','400');
                 }*/
             }else{
-//                $this->view->assign('param', $this->request->param('param'));
                 $this->view->assign('titleName','购物车');
+                $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
+                $this->view->assign('user',  $user );
                 return $this->view->fetch();
             }
 
@@ -62,9 +61,13 @@
                 if(!$data['goodsId']){
                     return ajax_return_error('缺少商品id');
                 }
-                $checkStore =  Db::name('goods_attribute')->where(['id'=>$data['skuId']])->find();
-                if($checkStore['store']<$data['num']){
+                $check =  Db::name('goods_attribute')->where(['id'=>$data['skuId']])->find();
+                if($check['store']<$data['num']){
                     return ajax_return_error('库存不足');
+                }
+                $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
+                if($user['score']<$check['point_score']){
+                    return ajax_return_error('你的积分不足，暂时不能加入购物车');
                 }
                $carData = Db::name('car')
                     ->where([
@@ -121,7 +124,5 @@
                 return ajax_return('','删除失败','400');
             }
         }
-
-
 
 	}
