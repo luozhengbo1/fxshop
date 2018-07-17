@@ -51,9 +51,9 @@
     <p class="chose">
         <i class="no-selected-icon chose-all" id="choseAll"  data-checked="false" onclick="choseAll(this)"></i>全选
     </p>
-    <div class="fr w70p tr">
-        <span class="f12">不含运费</span>
-        <span class="red">合计¥ <em class="f16" id="totalPrice"></em></span>
+    <div class="fr w80p tr">
+        <span class="f10">不含运费</span>
+        <span class="red">¥ <em class="" id="totalPrice"></em></span>
         <button class="bootstrap-btn btn-pink" onclick="save()">结算（<i id=totalNum>0</i>）</button>
     </div>
 </div>
@@ -136,6 +136,7 @@
     function dealData(data) {
         var html='';
         for(var i = 0; i < data.length; i++){
+            var show_area = data[i].show_area;
             html +='<li class="singer-good clear carGoods" data-checked="false">';
             html +='    <i class="no-selected-icon chose-btn " onclick="choseGoods(this)" ></i>';
             html +='    <a  href="'+urlConnect("{:url('goods/detail')}",{id:data[i].goods_id})+'">';
@@ -154,20 +155,24 @@
             html +='        <span class="sku" id="showChosePup">'+data[i].val+'</span>';
             html +='        </p>';
             html +='        <div class="mt10 clear">';
-            if(data[i].price1){
-                html +='            <p class="red fl">¥ <em class="f16">'+data[i].price1+'</em></p>';
-            }else{
-                html +='            <p class="red fl">¥ <em class="f16">'+data[i].price_real+'</em></p>';
+            switch(show_area){
+                case 2:
+                    html +='            <p class="red fl"> <em class="f14">'+data[i].point_score+'积分</em></p>';
+                    break;
+                default:
+                    html +='            <p class="red fl">¥ <em class="f14">'+data[i].price1+'</em></p>';
+                    break;
             }
 
             html +='            <div class="layui-btn-group fr count-wrap">';
             html +='                <button class="layui-btn layui-btn-primary layui-btn-xs fr24 minus">-</button>';
             html +='                <div class="layui-btn layui-btn-primary layui-btn-xs">';
             // onkeyup="value=(parseInt((value=value.replace(/\D/g,''))==''?'0':value,10))"
+
             if(data[i].price1!=0) {
-                html += '                    <input  class="sumInput" data-image="' + data[i].main_image + '" data-name="' + data[i].name + '" data-store="' + data[i].store + '" data-goodsid="' + data[i].goods_id + '" data-carid="' + data[i].carId + '"  data-price="' + data[i].price1 + '" data-skuid="' + data[i].sku_id + '" data-skuval="' + data[i].val + '"   type="text" value="' + data[i].goods_num + '">';
+                html += '  <input class="sumInput"  data-score="' + data[i].score + '" data-showarea="' + data[i].show_area + '" data-image="' + data[i].main_image + '" data-name="' + data[i].name + '" data-store="' + data[i].store + '" data-goodsid="' + data[i].goods_id + '" data-carid="' + data[i].carId + '"  data-price="' + data[i].price1 + '" data-skuid="' + data[i].sku_id + '" data-skuval="' + data[i].val + '"   type="text" value="' + data[i].goods_num + '">';
             }else{
-                html +='                    <input  class="sumInput" data-image="'+data[i].main_image+'" data-name="'+data[i].name+'" data-store="'+data[i].store+'" data-goodsid="'+data[i].goods_id+'" data-carid="'+data[i].carId+'"  data-price="'+data[i].price_real+'" data-skuid="'+data[i].sku_id+'" data-skuval="'+data[i].val+'"   type="text" value="'+data[i].goods_num+'">';
+                html +='   <input  class="sumInput"  data-score="' + data[i].score + '" data-showarea="' + data[i].show_area + '" data-image="'+data[i].main_image+'" data-name="'+data[i].name+'" data-store="'+data[i].store+'" data-goodsid="'+data[i].goods_id+'" data-carid="'+data[i].carId+'"  data-price="'+data[i].price_real+'" data-skuid="'+data[i].sku_id+'" data-skuval="'+data[i].val+'"   type="text" value="'+data[i].goods_num+'">';
 
             }
             html +='                </div>';
@@ -192,6 +197,7 @@
         var $carGoods = $('.carGoods');
         $carGoods.each(function (index,ele) {
             var $buyNum = $(ele).find('.sumInput');
+            var showArea = $buyNum.data('showarea');
            //当前选中的
             if($(ele).attr('data-checked') =="true"){
                 var thisData = {
@@ -203,6 +209,8 @@
                     carId:$buyNum.data('carid'),
                     main_image:$buyNum.data('image'),
                     name:$buyNum.data('name'),
+                    showArea:showArea,
+                    pointScore:$buyNum.data('score'),
                 }
                 console.log(thisData)
                 saveData.push(thisData);
@@ -230,14 +238,26 @@
         var dataArr = getData();
         var plusNum = 0;
         var plusPrice= 0;
+        var scoreTotal=0;
         for (var i= 0; i<dataArr.length; i++){
-            var sinData = dataArr[i]
+            var sinData = dataArr[i];
+            var show_area = sinData.showArea;
+           switch(show_area){
+               case 2:
+                   scoreTotal +=(parseInt(sinData.num)*parseFloat(sinData.pointScore));
+                   break;
+               default:
+                   plusPrice +=(parseInt(sinData.num)*parseFloat(sinData.price));
+                   break;
+           }
             plusNum += parseInt(sinData.num);//合计购买数量;
-            plusPrice +=(parseInt(sinData.num)*parseFloat(sinData.price));
+
 
         }
         $('#totalNum').empty().append(plusNum);
-        $('#totalPrice').empty().append(plusPrice);
+        var html =plusPrice;
+        if (scoreTotal>0) html = plusPrice+'+'+scoreTotal+'积分'
+        $('#totalPrice').empty().append(html);
     }
     //单个商品选择
     function choseGoods(_this) {

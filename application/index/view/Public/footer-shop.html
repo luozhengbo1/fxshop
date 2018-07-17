@@ -84,7 +84,16 @@
 		</li>
 		<li>
 			<a  href="javascript:;" class="bg_red">
-				</i><p id="buyPage">立即购买</p>
+				<p id="buyPage">
+
+				{php}
+					if($goods['show_area']==2){
+					echo'积分兑换';
+					}else{
+					echo'立即购买';
+					}
+				{/php}
+				</p>
 			</a>
 		</li>
 	</ul>

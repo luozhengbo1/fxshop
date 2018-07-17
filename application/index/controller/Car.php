@@ -27,8 +27,9 @@
                 // $time=time()-3600*24*30;
                 $page = $this->request->param('page')?$this->request->param('page'):'1';
                 $size =  $this->request->param('size')?$this->request->param('size'):'10';
-                $carList =    Db::name('car')->alias('c')
-                    ->field('fy_goods.*,c.goods_num,c.id as carId,c.val,c.sku_id,c.goods_id,c.create_time,c.id,fy_goods_attribute.store,fy_goods_attribute.price as price1')
+                $carList =    Db::name('car')
+                    ->alias('c')
+                    ->field('fy_goods.*,fy_goods_attribute.point_score,c.goods_num,c.id as carId,c.val,c.sku_id,c.goods_id,c.create_time,c.id,fy_goods_attribute.store,fy_goods_attribute.price as price1')
                     ->join('fy_goods','fy_goods.id=c.goods_id')
                     ->join('fy_goods_attribute','fy_goods_attribute.id=c.sku_id','left')
                     ->where([

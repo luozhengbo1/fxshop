@@ -82,7 +82,15 @@
                     exit;
                 }
                 foreach ($storeData as $k=>$v){
-                    $storeData[$k] = array_merge($storeData[$k], Db::name('goods')->where(['id'=>$v['goodsId']])->find());
+                    $tempGoods = Db::name('goods')
+                        ->field('fy_goods.*,fy_goods_attribute.point_score,fy_goods_attribute.price as price1')
+                        ->join('fy_goods_attribute','fy_goods_attribute.goods_id=fy_goods.id','left')
+                        ->where([
+                            'fy_goods.id'=>$v['goodsId'],
+                            'fy_goods_attribute.id'=>$v['skuId'],
+                        ])->find();
+                    $storeData[$k] = array_merge($storeData[$k], $tempGoods);
+                   // $storeData[$k] = array_merge($storeData[$k], Db::name('goods')->where(['id'=>$v['goodsId']])->find());
                 }
 
                 #如果有地址就取出地址
@@ -95,7 +103,7 @@
 //                dump($address);die;
                 $this->view->assign('address',$address?$address:'');
                 $this->view->assign('storeData',$storeData);
-//               dump($address);
+              // dump($storeData);
                 return $this->view->fetch();
             }
         }
