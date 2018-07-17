@@ -53,7 +53,16 @@
                 </div>
                 <div class="item-pay">
                     <div class="item-pay-data">
-                        <p class="price f14"> ￥{$vo['price']} </p>
+                        <p class="price f14">
+                            {php}
+                            $showArea   = $vo['goods_detail']['show_area'];
+                            $totalPoint   = $vo['total_point'];
+                            $totalPrice   = $vo['total_price'];
+                            {/php}
+                            {if condition="$showArea eq 2" /}{$vo['point_score']} 积分{/if}
+
+                            {if condition="$showArea neq 2" /}￥{$vo['price']}  {/if}
+                            </p>
                         <p class="nums">x{$vo['goods_num']}</p>
 
                     </div>
@@ -63,7 +72,13 @@
             <div class="module  clear pr10 pt5 mb5" >
                 <div class="cont tr">
                     <span class="f14">共<b>{$vo['goods_num']}</b>件商品</span>
-                    <span class="f14">合计:<b>￥{$vo['total_price']}</b></span>
+                    <span class="f14">合计:<b>
+                        {if condition="$totalPrice >0" /}￥{$totalPrice} {/if}
+                        {if condition="$totalPrice >0 && $totalPoint > 0" /}+{/if}
+                        {if condition="$totalPoint > 0" /}{$totalPoint} 积分{/if}
+
+
+                    </b></span>
                     <span class="f14">(运费<b>￥{$vo['goods_detail']['postage']??'0'}</b>)</span>
                 </div>
                 <div class="tr">

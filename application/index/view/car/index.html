@@ -237,17 +237,17 @@
     function showData() {
         var dataArr = getData();
         var plusNum = 0;
-        var plusPrice= 0;
-        var scoreTotal=0;
+        var totalPrice= 0;
+        var totalPoint=0;
         for (var i= 0; i<dataArr.length; i++){
             var sinData = dataArr[i];
             var show_area = sinData.showArea;
            switch(show_area){
                case 2:
-                   scoreTotal +=(parseInt(sinData.num)*parseFloat(sinData.pointScore));
+                   totalPoint +=(parseInt(sinData.num)*parseFloat(sinData.pointScore));
                    break;
                default:
-                   plusPrice +=(parseInt(sinData.num)*parseFloat(sinData.price));
+                   totalPrice +=(parseInt(sinData.num)*parseFloat(sinData.price));
                    break;
            }
             plusNum += parseInt(sinData.num);//合计购买数量;
@@ -255,8 +255,12 @@
 
         }
         $('#totalNum').empty().append(plusNum);
-        var html =plusPrice;
-        if (scoreTotal>0) html = plusPrice+'+'+scoreTotal+'积分'
+        var html ='';
+        if(totalPrice>0 && totalPoint>0) html =totalPrice+'+'+totalPoint+'积分';
+        else{
+            if(totalPrice>0)   html +=totalPrice;
+            if (totalPoint>0) html +=totalPoint+'积分'
+        }
         $('#totalPrice').empty().append(html);
     }
     //单个商品选择
