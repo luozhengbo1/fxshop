@@ -4190,6 +4190,10 @@ a {
 	padding: 8px 0;
 	background: white;
 }
+.voucher-market-catalogs li.active{
+	background-color: #de181b;
+	border-radius: 50%;
+}
 .border-tag {
 	display: inline-block;
 	position: relative;
@@ -4205,7 +4209,7 @@ a {
 .voucher-market-list .item-img{
 	width: 80%;
 	overflow: hidden;
-	height: .7rem;
+	max-height: .7rem;
 }
 .voucher-market-list .item-img li{
 	width: 32%;

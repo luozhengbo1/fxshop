@@ -22,20 +22,55 @@ Class Lottery extends Mustlogin
     }
 
     #券集市  取出没有结算，并且没有过期的奖券
+    #根据分类id 查找商品 过滤条件：商品有券
     public function market()
     {
-        $time = time();
-        $lotteryList = Db::name('Lottery')
+        $this->view->assign('titleName', '券集市');
+        if($this->request->isAjax()){
+            $page = $this->request->param('page');
+            $size = $this->request->param('size');
+            $goodsClassId = $this->request->param('goodsClassId');
+            if($goodsClassId =='all'){
+                //dump($goodsClassId);
+                $goodsWithLottery = Db::name('goods')
+                    ->field('fy_lottery.*,fy_goods.*')
+                    ->join('fy_lottery', 'fy_goods.id=fy_lottery.goods_id','left')
+                    ->where(['fy_goods.status'=>1,'fy_goods.isdelete'=>'0'])
+                    ->page($page,$size)
+                    ->select();
+            }else{
+                //dump($goodsClassId);
+                if(!$goodsClassId){
+                    return ajax_return_error('缺少参数分类id');
+                }
+                #查询所有的子分类
+                $goodsClassAllChild = getAllChildcateIds($goodsClassId);
+                $goodsWithLottery = Db::name('goods')
+                    ->field('fy_lottery.*,fy_goods.*')
+                    ->join('fy_lottery', 'fy_goods.id=fy_lottery.goods_id','left')
+                    ->where(['fy_goods.goods_class_id'=>['in',$goodsClassAllChild],'fy_goods.status'=>1,'fy_goods.isdelete'=>'0'])
+                    ->page($page,$size)
+                    ->select();
+            }
+            return ajax_return($goodsWithLottery, '', '200');
+            //带有券的商品
+           // dump($goodsWithLottery);
+        }
+
+      /* $time = time();
+       *   $lotteryList = Db::name('Lottery')
+
             ->where([
                 'isdelete' => 0,
                 'status' => 1,
                 'grant_start_date' => ['<', $time],
                 'grant_end_date' => ['>', $time]
             ])
-            ->select();
+            ->select();*/
 //            dump($lotteryList);die;
-        $this->view->assign('titleName', '券集市');
-        $this->view->assign('lotteryList', $lotteryList);
+
+        /*$this->view->assign('lotteryList', $lotteryList);*/
+
         return $this->view->fetch('market');
 
     }
