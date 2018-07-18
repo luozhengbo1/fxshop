@@ -59,7 +59,7 @@ class Wechatpay extends Controller
                 $totalScore = $this->totalScore($goodsOrder);
                 #将用户积分扣取，并将扣取记录记下来
                 $userInfo =Session::get('wx_user');
-                $user = Db::name('customer')
+                $user = Db::name('customer')->where(['openid'=>$userInfo['openid']])->find();
                 $decScore = $user['score']-$totalScore;
                 if($decScore<0)$decScore=0;
                 Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->update(['score'=>$decScore]);
@@ -71,7 +71,6 @@ class Wechatpay extends Controller
                 $scoreLog['score']=-$decScore;
                 $scoreLog['time']=time();
                 Db::name('score_log')->insert($scoreLog);
-                $jsApiParameters = base64_encode($jsApiParameters);
 
             }
             file_put_contents("wx_pay_success.log",$xml."\r", 8);
