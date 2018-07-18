@@ -155,17 +155,35 @@
         {
             if($this->request->isAjax()){
                 $data = json_decode(str_replace('&quot;','"', $this->request->post()['arr']),true);
-//                dump($data);
+//                dump($data);die;
                 if(!$data[0]['addressId']){
                     return ajax_return('','请选择收货地址');
                 }
-                foreach ($data as $k=>$v){
-                    $res = Db::name('goods_attribute')->where(['id'=>$v['skuId'],'store'=>['<',$v['num'] ]])->find();
-                    if($res){
-                        $goods = Db::name('goods')->where(['id'=>$v['goodsId']]);
-                        return ajax_return($goods['name'],'该商品库存不足，还剩'.$res['store'],'500');
+                $totalType = 0;
+                foreach ($data as $k=>$v) {
+                    $goodsAttribute = Db::name('goods_attribute')->where(['id' => $v['skuId']])->find();
+                    $goods = Db::name('goods')->where(['id' => $v['goodsId']])->find();
+                    if ($goodsAttribute['store'] < $v['num']) {
+                        return ajax_return($goods['name'], '该商品库存不足，还剩' . $goodsAttribute['store'], '500');
+                    }
+                    if($goods['show_area']==2){
+                        $totalType +=1;
                     }
                 }
+                if(count($data)==$totalType){#积分
+                    $type = 1;
+                }elseif($totalType==0){#钱
+                    $type = 0;
+                }else{
+                    $type = 2;
+                }
+                $totalScore = $this->totalScore($data);
+                $user = getUserInfo($this->userInfo['openid']);
+
+                if($user['score']<$totalScore){
+                    return ajax_return_error('用户积分不足');
+                }
+
                 $goodsall = join(array_column($data,'goodsId'),',');
                 include_once "WxPaySDK/WxPay.Api.php";
                 include_once "WxPaySDK/WxPay.JsApiPay.php";
@@ -201,6 +219,8 @@
                         "create_time" => $time,
                         "pay_status" => 0,#支付状态;0未付款;1已付款
                         "order_status" => 0,
+                        "type"=>$type,
+                        "total_point"=>$totalScore,
                     );
                     #添加上商户id
                     foreach ($v as $val){
@@ -266,9 +286,27 @@
 //                            dump($res);die;^M
                         }
                     }
-                    $jsApiParameters = base64_encode($jsApiParameters);
-                    $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$addId1}");
-                    die(json_encode($backData));
+                    if($type==0 || $type==2){
+                        $jsApiParameters = base64_encode($jsApiParameters);
+                        $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$addId1}");
+                        die(json_encode($backData));
+                    }else{
+                        #将用户积分扣取，并将扣取记录记下来
+                        $decScore = $user['score']-$totalScore;
+                        if($decScore<0)$decScore=0;
+                        Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->update(['score'=>$decScore]);
+                        #记录
+                        $scoreLog=[];
+                        $scoreLog['openid']=$this->userInfo['openid'];
+                        $scoreLog['source']=7;
+                        $scoreLog['uid']=$user['id'];
+                        $scoreLog['score']=-$decScore;
+                        $scoreLog['time']=time();
+                        Db::name('score_log')->insert($scoreLog);
+                        $backData = array("msg" => "积分扣取成功", 'code' => 201,'redirect' => url("order/index"));
+                        die(json_encode($backData));
+                    }
+
                 }
             }
 
@@ -357,7 +395,7 @@
             $pay = 0;
             foreach ($data  as $val) {
                 $res = Db::name('goods_attribute')->field('price,point_score')->where(['id'=>$val['skuId']])->find();
-//                $goods = Db::name('goods')->field('postage,free_type')->where(['id'=>$val['goodsId']])->find();
+//                $goods = Db::name('goods')->where(['id'=>$val['goodsId']])->find();
                 if (isset($val['num'])) {
                     $pay += $res['point_score'] * $val['num'];
                 }
