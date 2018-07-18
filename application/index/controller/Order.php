@@ -37,11 +37,11 @@
                     }
                     #待發貨
                     if($data['status']==1 ){
-                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>0];
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order.order_status'=>1,'fy_order_goods.is_send'=>0];
                     }
-                    #已发货
+                    #待收货
                     if($data['status']==2){
-                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>1];
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order.order_status'=>1,'fy_order_goods.is_send'=>1];
                     }
                     #待退款
                     if($data['status']==3){
@@ -49,13 +49,13 @@
                     }
                     #待评价
                     if($data['status']==4){
-                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order_goods.is_return'=>1];
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>2];
                     }
                     //$where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status'],'fy_order_goods.is_return'=>1];
                 }
                 $orderList = Db::name('order')
                     ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
-                    ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id','left')
+//                    ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id','left')
                     ->where($where)
                     ->order('fy_order.create_time desc')
                     ->page($page,$size)
@@ -155,17 +155,35 @@
         {
             if($this->request->isAjax()){
                 $data = json_decode(str_replace('&quot;','"', $this->request->post()['arr']),true);
-//                dump($data);
+//                dump($data);die;
                 if(!$data[0]['addressId']){
                     return ajax_return('','请选择收货地址');
                 }
-                foreach ($data as $k=>$v){
-                    $res = Db::name('goods_attribute')->where(['id'=>$v['skuId'],'store'=>['<',$v['num'] ]])->find();
-                    if($res){
-                        $goods = Db::name('goods')->where(['id'=>$v['goodsId']]);
-                        return ajax_return($goods['name'],'该商品库存不足，还剩'.$res['store'],'500');
+                $totalType = 0;
+                foreach ($data as $k=>$v) {
+                    $goodsAttribute = Db::name('goods_attribute')->where(['id' => $v['skuId']])->find();
+                    $goods = Db::name('goods')->where(['id' => $v['goodsId']])->find();
+                    if ($goodsAttribute['store'] < $v['num']) {
+                        return ajax_return($goods['name'], '该商品库存不足，还剩' . $goodsAttribute['store'], '500');
+                    }
+                    if($goods['show_area']==2){
+                        $totalType +=1;
                     }
                 }
+                if(count($data)==$totalType){#积分
+                    $type = 1;
+                }elseif($totalType==0){#钱
+                    $type = 0;
+                }else{
+                    $type = 2;
+                }
+                $totalScore = $this->totalScore($data);
+                $user = getUserInfo($this->userInfo['openid']);
+
+                if($user['score']<$totalScore){
+                    return ajax_return_error('用户积分不足');
+                }
+
                 $goodsall = join(array_column($data,'goodsId'),',');
                 include_once "WxPaySDK/WxPay.Api.php";
                 include_once "WxPaySDK/WxPay.JsApiPay.php";
@@ -201,6 +219,8 @@
                         "create_time" => $time,
                         "pay_status" => 0,#支付状态;0未付款;1已付款
                         "order_status" => 0,
+                        "type"=>$type,
+                        "total_point"=>$totalScore,
                     );
                     #添加上商户id
                     foreach ($v as $val){
@@ -266,9 +286,31 @@
 //                            dump($res);die;^M
                         }
                     }
-                    $jsApiParameters = base64_encode($jsApiParameters);
-                    $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$addId1}");
-                    die(json_encode($backData));
+                    if($type==0 ||  $type==2){
+                        $jsApiParameters = base64_encode($jsApiParameters);
+                        $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$addId1}");
+                        die(json_encode($backData));
+                    } else {
+                        #将用户积分扣取，并将扣取记录记下来
+                        $decScore = $user['score']-$totalScore;
+                        if($decScore<0)$decScore=0;
+                        Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->update(['score'=>$decScore]);
+                        #记录
+                        $scoreLog=[];
+                        $scoreLog['openid']=$this->userInfo['openid'];
+                        $scoreLog['source']=7;
+                        $scoreLog['uid']=$user['id'];
+                        $scoreLog['score']=-$decScore;
+                        $scoreLog['time']=time();
+                        Db::name('score_log')->insert($scoreLog);
+//                        dump($orderRow);die;
+                        foreach ($orderRow as $val){
+                            $res = Db::name('order')->where(['order_id'=>$val['order_id']])->update(['pay_status'=>1,'order_status'=>1]);#将订单状态修改为1
+                        }
+                        $backData = array("msg" => "积分扣取成功", 'code' => 200,'redirect' => url("order/index"));
+                        die(json_encode($backData));
+                    }
+
                 }
             }
 
@@ -307,6 +349,7 @@
                 if($orderData['pay_status']==1 || $orderData['order_status']==1){
                     return ajax_return_error('该订单已经支付');
                 }
+
                 if($orderData['js_api_parameters'] && $orderData['prepay_id'] ){
                     $jsApiParameters = base64_encode($orderData['js_api_parameters']);
                     $backData = array(
@@ -346,6 +389,10 @@
                         ]);
                     $jsApiParameters = base64_encode($jsApiParameters);
                 }
+                #积分扣取
+                if($orderData['type']==0||$orderData['type']==2){
+
+                }
                 $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$orderData['id']}");
                 return json($backData);
             }
@@ -357,7 +404,7 @@
             $pay = 0;
             foreach ($data  as $val) {
                 $res = Db::name('goods_attribute')->field('price,point_score')->where(['id'=>$val['skuId']])->find();
-//                $goods = Db::name('goods')->field('postage,free_type')->where(['id'=>$val['goodsId']])->find();
+//                $goods = Db::name('goods')->where(['id'=>$val['goodsId']])->find();
                 if (isset($val['num'])) {
                     $pay += $res['point_score'] * $val['num'];
                 }
@@ -399,8 +446,7 @@
                         'goods_id'=>$data['goods_id'],
                         'sku_id'=>$data['sku_id']
                     ])
-                    ->update(['is_get_status'=>1]);
-
+                    ->update(['is_send'=>2]);#表示确认收货
                 if($res){
                     #将这个商品的积分返给用户。
                     $goods = Db::name('order_goods')
@@ -440,6 +486,11 @@
                     'goods_id'=>$data['goods_id'],
                     'sku_id'=>$data['sku_id'],
                 ])->find();
+                #积分商品不支持退货退款
+                $goods = Db::name('goods')->where(['id'=>$data['goods_id']])->find();
+                if($goods['show_area']==2){
+                    return ajax_return_error('积分商品不支持退换');
+                }
                 $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'],true);
                 if($orderGoods['goods_detail']['is_return_goods']==0){
                     return ajax_return_error('该商品不支持退换货');
@@ -461,13 +512,21 @@
                     'order_id'=>$data['order_id'],
                     'goods_id'=>$data['goods_id'],
                     'sku_id'=>$data['sku_id'],
-                ])->update(['is_return'=>1,'return_price'=>$goodsAttribute['price']]); # 待退款
+                ])->update(['is_return'=>1,'return_price'=>$goodsAttribute['price']]); # 待退款3退货中
                 $ordertmp = Db::name('order')->field('return_price_all')->where([
                     'order_id'=>$data['order_id']])->find();
-
-                Db::name('order')->where('order_id',$data['order_id'])->update(['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all']]);#总退款加上
-                $res = Db::name('order')->where(['order_id'=>$data['order_id']])->update(['order_status'=>3]);
-
+                #退款价
+                $order = Db::name('order')->where('order_id',$data['order_id'])->find();
+                $update =[];
+                if($goodsAttribute['price']+$ordertmp['return_price_all']==$order['total_price'] ){
+                    $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all']];
+                }else{
+                    $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all']];
+                }
+                $res= Db::name('order')
+                    ->where('order_id',$data['order_id'])
+                    #总退款加上0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成
+                    ->update($update);
                 if($res){
                     return  ajax_return($returnMoney,'ok','200');
                 }else{
@@ -591,7 +650,7 @@
                 $res1 = Db::name('goods_comment')->insert($insert);
 
                 #将这个订单修改为已评价
-                Db::name('order')->where(['order_id'=>$data['order_id']])->update(['order_status'=>5]);
+                Db::name('order')->where(['order_id'=>$data['order_id']])->update(['order_status'=>8]);
                 //echo Db::name('order_goods')->getLastSql();
                 // dump($res);
                 if($res && $res1){

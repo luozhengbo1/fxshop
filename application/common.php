@@ -543,6 +543,13 @@ function get_client_ip(){
     return $realip;
 }
 
+#得到用户信息
+function getUserInfo($openid)
+{
+    $user = \think\Db::name('customer')->where(['openid'=>$openid])->find();
+    return $user;
+}
+
 #获取分类下面的所有子分类 商品
 function getAllChildcateIds($categoryID)
 {
