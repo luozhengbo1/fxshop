@@ -271,9 +271,9 @@ class Order extends Controller
                     //修改订单状态 将订单总金额减少退款金额
 
                     $orderData = Db::name('order')->field('total_price')->where( [ 'order_id'=>$order_id ] )->find();
-                    $decPrice = $orderData['total_price'] -$orderGoods['return_price'] ;
+                    $decPrice = $orderData['total_price'] -$orderGoods['return_price'] ;#减去订单总价
                     if($decPrice<0)$decPrice=0;
-                    if($decPrice == $order['total_price'] || ($order['return_price_all']+$decPrice)== $order['total_price']){#全额退款
+                    if(($order['return_price_all']+$orderGoods['return_price'])== $order['total_price']){#全额退款
                         $order_status = 6;
                     }else {
                         $order_status =5;

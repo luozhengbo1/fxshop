@@ -121,7 +121,7 @@ class Wechatpay extends Controller
             $data['order_status']=1;
             Db::name('order')->where($where)->update($data);
             #减对应商品的库存
-            $goodsOrder = Db::name('order_goods')->field('sku_id,goods_num')->where(['order_id'=>$orderInfo['out_trade_no'].$value])->select();
+            $goodsOrder = Db::name('order_goods')->field('sku_id,goods_num')->where(['order_id'=>$orderInfo['out_trade_no']])->select();
             foreach ($goodsOrder as $v){
                 $goodsStore = Db::name('goods_attribute')->where(['id'=>$v['sku_id']])->find();
                 $store ='';

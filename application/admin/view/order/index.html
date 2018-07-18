@@ -22,11 +22,12 @@
         <tr class="text-c">
             {include file="td" /}
             <td class="f-14">
+                <!--0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成-->
                 {php}if($vo['order_status']=='1'){ {/php}
                 <a href="javascript:;" class="btn" onclick="layer_open('去发货','{:\\think\\Url::build(\'orderDetail\', [\'id\'=>$vo[\'order_id\']])}')">去发货</a>
                 {php}}{/php}
                 <a class="btn" href="javascript:;" data-href="" data-id="{$vo['order_id']}"  onclick="layer_open('订单详情','{:\\think\\Url::build(\'orderDetail\', [\'id\'=>$vo[\'order_id\']])}')" >订单详情</a>
-                {php}if($vo['order_status']=='3'){ {/php}
+                {php}if($vo['order_status']=='5'||$vo['order_status']=='6'){ {/php}
                 <a class="btn" href="javascript:;" data-href="" data-id="{$vo['order_id']}"  onclick="layer_open('确认退款','{:\\think\\Url::build(\'orderDetail\', [\'id\'=>$vo[\'order_id\']])}')" >确认退款</a>
                 {php}}{/php}
             </td>

@@ -286,12 +286,8 @@
 //                            dump($res);die;^M
                         }
                     }
-                    if($type==0 ){
+                    if($type==0 ||  $type==2){
                         $jsApiParameters = base64_encode($jsApiParameters);
-                        $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$addId1}");
-                        die(json_encode($backData));
-                    }else if( $type==2){
-
                         $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$addId1}");
                         die(json_encode($backData));
                     } else {
@@ -520,10 +516,17 @@
                 $ordertmp = Db::name('order')->field('return_price_all')->where([
                     'order_id'=>$data['order_id']])->find();
                 #退款价
-                $res= Db::name('order')->where('order_id',$data['order_id'])->update(['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all']]);#总退款加上
-
-//                $res = Db::name('order')->where(['order_id'=>$data['order_id']])->update(['order_status'=>]);
-
+                $order = Db::name('order')->where('order_id',$data['order_id'])->find();
+                $update =[];
+                if($goodsAttribute['price']+$ordertmp['return_price_all']==$order['total_price'] ){
+                    $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all']];
+                }else{
+                    $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all']];
+                }
+                $res= Db::name('order')
+                    ->where('order_id',$data['order_id'])
+                    #总退款加上0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成
+                    ->update($update);
                 if($res){
                     return  ajax_return($returnMoney,'ok','200');
                 }else{
@@ -647,7 +650,7 @@
                 $res1 = Db::name('goods_comment')->insert($insert);
 
                 #将这个订单修改为已评价
-                Db::name('order')->where(['order_id'=>$data['order_id']])->update(['order_status'=>5]);
+                Db::name('order')->where(['order_id'=>$data['order_id']])->update(['order_status'=>8]);
                 //echo Db::name('order_goods')->getLastSql();
                 // dump($res);
                 if($res && $res1){
