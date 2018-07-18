@@ -5,6 +5,7 @@ namespace app\index\controller;
 
 use think\Controller;
 use think\Db;
+use think\Session;
 
 class Wechatpay extends Controller
 {
@@ -40,7 +41,7 @@ class Wechatpay extends Controller
                     ->where(['order_id'=>$orderInfo['out_trade_no'].$value])
                     ->update(['order_status'=>1,'pay_status'=>1, 'pay_time' => time()]);
                 #将子订单中对应的商品数量减少。
-                $goodsOrder = Db::name('order_goods')->field('sku_id,goods_num')->where(['order_id'=>$orderInfo['out_trade_no'].$value])->select();
+                $goodsOrder = Db::name('order_goods')->where(['order_id'=>$orderInfo['out_trade_no'].$value])->select();
                 foreach ($goodsOrder as $v){
                     $goodsStore = Db::name('goods_attribute')->where(['id'=>$v['sku_id']])->find();
                     $store ='';
@@ -52,8 +53,25 @@ class Wechatpay extends Controller
                     Db::name('goods_attribute')->where(['id'=>$goodsOrder['sku_id']])->update(['store'=>$store]);
                     #加上销量
                     Db::name('goods')->where(['id'=>$goodsStore['goods_id']])->seInc('buy_num',$goodsStore['store']);
+                    #扣取相应的积分
+//                    $goods = Db::name('goods')->where(['id'=>$v['goods_id']])->find();
                 }
-
+                $totalScore = $this->totalScore($goodsOrder);
+                #将用户积分扣取，并将扣取记录记下来
+                $userInfo =Session::get('wx_user');
+                $user = Db::name('customer')
+                $decScore = $user['score']-$totalScore;
+                if($decScore<0)$decScore=0;
+                Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->update(['score'=>$decScore]);
+                #记录
+                $scoreLog=[];
+                $scoreLog['openid']=$this->userInfo['openid'];
+                $scoreLog['source']=7;
+                $scoreLog['uid']=$user['id'];
+                $scoreLog['score']=-$decScore;
+                $scoreLog['time']=time();
+                Db::name('score_log')->insert($scoreLog);
+                $jsApiParameters = base64_encode($jsApiParameters);
 
             }
             file_put_contents("wx_pay_success.log",$xml."\r", 8);
@@ -67,6 +85,23 @@ class Wechatpay extends Controller
 //            $wx->buySuccess('','','');
         }
         exit;
+    }
+
+    #统计积分合计
+    public function totalScore($data)
+    {
+        $pay = 0;
+        foreach ($data  as $val) {
+            $res = Db::name('goods_attribute')->field('price,point_score')->where(['id'=>$val['skuId']])->find();
+//                $goods = Db::name('goods')->where(['id'=>$val['goodsId']])->find();
+            if (isset($val['num'])) {
+                $pay += $res['point_score'] * $val['num'];
+            }
+//                if($goods['free_type']==0){
+//                    $pay +=$goods['postage'];
+//                }
+        }
+        return $pay;
     }
 
     #支付回调
