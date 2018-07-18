@@ -3116,9 +3116,10 @@ a {
 	padding: 0 .02rem;
 	width: 16%;
 	float: left;
+    padding-top: .05rem;
 }
 .message-lists .img img{
-
+    border-radius: 6px;
 	width: 100%;
 }
 .message-lists .content{

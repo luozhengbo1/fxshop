@@ -416,13 +416,13 @@
                     </tr>
                     <tr class="priceShow">
                         <td><span class="c-red"></span>现价：</td>
-                        <td><input class="form_control w80" name="price"  type="number"></td>
+                        <td><input class="form_control w80" name="price"  type="number" value="{$skuData[0]['price']??''}"></td>
                         <td><span class="c-red">*</span>总库存：</td>
-                        <td><input class="form_control w80"  type="number" name="store"></td>
+                        <td><input class="form_control w80"  type="number" name="store" value="{$skuData[0]['store']??''}"></td>
                     </tr>
                     <tr class="priceShow">
                         <td>积分价：</td>
-                        <td><input class="form_control w80"  type="text" name="point_price" value="{$vo.point_price??''}"></td>
+                        <td><input class="form_control w80"  type="text" name="point_price" value="{$skuData[0]['point_score']??''}"></td>
                     </tr>
                 </table>
             </div>
@@ -453,7 +453,7 @@
 
         <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-                <button type="submit"  onclick="GetSaleProperty()" class="btn btn-primary radius">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
+                <button type="submit" class="btn btn-primary radius">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
                 <button type="button" class="btn btn-default radius ml-20" onClick="layer_close();">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
             </div>
         </div>
