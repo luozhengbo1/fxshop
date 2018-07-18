@@ -231,6 +231,15 @@ return [
     #微信配置
     'app_id'=>'wxd9da51e6bae6c3c0',
     'app_secret'=>'ae60c49ed63b16f55ca76ba597cbb1c8',
-    'order_notice'=>'1vQvSZqWBqCCSteVQUDHuJioRdYD-GrNcWFCTwReEXg',
+    'wx_key'=>'7c82dcb3c8437f7c654b57fb0509944b',
+    'mchid' => '1441217402',
+    #订单付款通知
+    'order_pay'=>'hN9bm2tlU2gsBwJxH8eiWFvKHnFabfdlFyZBS3PC5n4',
+    #订单退款通知
+    'order_refund'=>'wFlXa4vtBJvg82JmwIzF8pAt2w7K-wHf0op20uk2dws',
+    #发货提醒通知
+    'send'=>'lxuLCs3_eY7wsa2CTVUT45mqW8hECsK5gqns7LEHy6c',
+    #确认收货提醒
+    'sure'=>'vfjUQ3F8WVhlcbArgxX7rirho2yp9CtnI9UwDZv9UnI',
 
 ];

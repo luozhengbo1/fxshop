@@ -1,0 +1,24 @@
+{
+  "touser":"%s",
+  "template_id":"%s",
+  "url":"%s",
+  "topcolor":"#FF0000",
+  "data":{
+    "first": {
+      "value":"%s",
+      "color":"#173177"
+    },
+    "orderMoneySum":{
+      "value":"%s",
+      "color":"#173177"
+    },
+    "orderProductName":{
+      "value":"%s",
+      "color":"#173177"
+    },
+    "remark":{
+      "value":"%s",
+      "color":"#ff0000"
+    }
+  }
+}

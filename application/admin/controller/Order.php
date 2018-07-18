@@ -142,6 +142,14 @@ class Order extends Controller
             if(!$data['id']){
                 return ajax_return_error('缺少参数id');
             }
+            #付款成功通知
+            include_once APP_PATH."/index/controller/sendMsg/SDK/WeiXin.php";
+            $orderGoods = Db::name('order_goods')->where(['id'=>$data['id']])->find();
+            $orderGoods['goods_detail'] = json_decode( $orderGoods['goods_detail'],true);
+            $address = Db::name('customer_address')->where(['id'=>$orderGoods['address_id']])->find();
+            $addressStr = $address['name']."   ".$address['mobile']."    ".$address['address'].$address['street'];
+            $wx = new \WeiXin();
+            $wx->sendGoods( $orderGoods['goods_detail']['name'],$orderGoods['openid'],$orderGoods['order_id'],$data['logistics_name'],$data['logistics_number'],$addressStr);
             $res = Db::name('order_goods')
                 ->where(['id'=>$data['id']])
                 ->update([
@@ -242,6 +250,7 @@ class Order extends Controller
                     $orderId = $order_id;
                 }
                 $orderGoods =  Db::name('order_goods')->where(['id'=>$data['id']])->find();
+                $orderGoods['goods_detail']=json_decode($orderGoods['goods_detail'],true);
                 if($orderGoods['is_return']!=1){
                     return ajax_return_error('没有退款单');
                 }
@@ -282,6 +291,11 @@ class Order extends Controller
                     Db::name('order_goods')->where( [ 'id'=>$data['id'] ] )->update(['is_return'=>2]);
                     $result['code'] = 200;
                     $result['msg'] = '退款成功';
+
+                    #退款通知
+                    include_once APP_PATH."/index/controller/sendMsg/SDK/WeiXin.php";
+                    $wx = new \WeiXin();
+                    $wx->refund($orderGoods['goods_detail']['name'],$orderGoods['openid'],$orderGoods['order_id'],$orderGoods['return_price']);
                     return ajax_return('','退款成功');
                 }else{
                     file_put_contents("wx_refund_error.log",$res."\r", 8);

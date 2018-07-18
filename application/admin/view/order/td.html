@@ -26,10 +26,10 @@
     echo $address['address'],$address['street'];
     ?></td>
 <td>{php}
-    <!--0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成-->
+    #0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成
     if( $vo['order_status']=='0'){
         echo '未支付';
-    }else if($vo['order_status']=='1'&& $vo['pay_status']=='1'){
+    }else if($vo['order_status']=='1'){
         echo '已支付';
     }else if($vo['order_status']=='2'){
         echo '待评价';

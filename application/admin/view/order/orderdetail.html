@@ -76,7 +76,7 @@
             <input type="text" placeholder="快递名称" name="logistics_name" value="{$vo['logistics_name']??''}" class="form_control w120 lh30 h30" >
             <label>快递单号:</label>
             <input type="text" placeholder="快递单号"  name="logistics_number"  value="{$vo['logistics_number']??''}" class="form_control w120 lh30 h30" >
-          <a href="javascript:;" onclick="addPost({$vo['id']})" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 保存</a>
+          <a href="javascript:;" onclick="addPost(this,{$vo['id']})" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 保存</a>
         </div>
       </form>
     </div>
@@ -93,9 +93,10 @@
 {/block}
 {block name="script"}
 <script>
-        function  addPost(id) {
-            var logistics_name = $('input[name="logistics_name"]').val();
-            var logistics_number = $('input[name="logistics_number"]').val();
+        function  addPost(obj,id) {
+
+            var logistics_name = $(obj).prev().prev().prev().val()
+            var logistics_number = $(obj).prev('input').val()
             $.ajax({
                 url:"{:url('order/addPost')}",
                 type:'post',
