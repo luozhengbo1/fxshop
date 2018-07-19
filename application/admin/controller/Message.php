@@ -1,7 +1,8 @@
 <?php
+
 namespace app\admin\controller;
 
-\think\Loader::import('controller/Controller', \think\Config::get('traits_path') , EXT);
+\think\Loader::import('controller/Controller', \think\Config::get('traits_path'), EXT);
 
 use app\admin\Controller;
 use think\Db;
@@ -13,59 +14,129 @@ class Message extends Controller
     protected static $blacklist = [];
 
     protected $beforeActionList = [
-        'beforeEdit'  =>  ['only'=>'edit'],
-        'beforeAdd'  =>  ['only'=>'add'],
+        'beforeEdit' => ['only' => 'edit'],
+        'beforeAdd' => ['only' => 'add'],
 
-];
+    ];
+
     protected function filter(&$map)
     {
         if ($this->request->param("title")) {
             $map['title'] = ["like", "%" . $this->request->param("title") . "%"];
         }
     }
-    
+
     public function beforeEdit()
     {
-        $this->view->assign('lottery',$this->getLottery());
+        $this->view->assign('lottery', $this->getLottery());
     }
+
     public function beforeAdd()
     {
-        $this->view->assign('lottery',$this->getLottery());
+        $this->view->assign('lottery', $this->getLottery());
     }
+
     public function getLottery()
     {
         $time = time();#在有效期内的优惠券
         $lottery = Db::name('lottery')
-            ->where(['status'=>1, 'isdelete'=>0,'expire_start_date'=>['<',$time],'expire_end_date'=>['>',$time] ])
+            ->where(['status' => 1, 'isdelete' => 0, 'expire_start_date' => ['<', $time], 'expire_end_date' => ['>', $time]])
             ->select();
         return $lottery;
     }
 
-    public function sendUser()
+    public function add()
     {
-        if($this->request->isAjax()){
-            $data = $this->request->post();
-            if(!$data['id']){
+        $controller = $this->request->controller();
+
+        if ($this->request->isAjax()) {
+            // 插入
+            $data = $this->request->except(['id']);
+            #根据类型检测出是否有积分清零提醒、积分清零、生日消息
+            if ($data['type'] == 1) {
+                $score_remind_res = Db::table('fy_message')->where(['type' => 1, 'isdelete' => 0])->select();
+                if ($score_remind_res) {
+                    return ajax_return_error('积分清零提醒消息模板只能有一个', '200');
+                }
+            } else if ($data['type'] == 2) {
+                $score_empty_res = Db::table('fy_message')->where(['type' => 2, 'isdelete' => 0])->select();
+                if ($score_empty_res) {
+                    return ajax_return_error('积分清零消息模板只能有一个', '200');
+                }
+            } else if ($data['type'] == 3) {
+                $birthday_res = Db::table('fy_message')->where(['type' => 3, 'isdelete' => 0])->select();
+                if ($birthday_res) {
+                    return ajax_return_error('生日消息模板只能有一个', '200');
+                }
             }
-            $check = Db::name('message')->where(['id'=>$data['id']])->find();
-            if($check['status']==0){
-                return json(['msg'=>'该消息已经被禁用，不可发送','code'=>401]);
+
+            // 验证
+            if (class_exists($validateClass = \think\Loader::parseClass(\think\Config::get('app.validate_path'), 'validate', $controller))) {
+                $validate = new $validateClass();
+                if (!$validate->check($data)) {
+                    return ajax_return_adv_error($validate->getError());
+                }
+            }
+
+
+            // 写入数据
+            if (
+                class_exists($modelClass = \think\Loader::parseClass(\think\Config::get('app.model_path'), 'model', $this->parseCamelCase($controller)))
+                || class_exists($modelClass = \think\Loader::parseClass(\think\Config::get('app.model_path'), 'model', $controller))
+            ) {
+                //使用模型写入，可以在模型中定义更高级的操作
+                $model = new $modelClass();
+                $ret = $model->isUpdate(false)->save($data);
+            } else {
+                // 简单的直接使用db写入
+                Db::startTrans();
+                try {
+                    $model = Db::name($this->parseTable($controller));
+                    $ret = $model->insert($data);
+                    // 提交事务
+                    Db::commit();
+                } catch (\Exception $e) {
+                    // 回滚事务
+                    Db::rollback();
+
+                    return ajax_return_adv_error($e->getMessage());
+                }
+            }
+
+            return ajax_return_adv('添加成功');
+        } else {
+            // 添加
+            return $this->view->fetch(isset($this->template) ? $this->template : 'edit');
+        }
+    }
+
+
+    public
+    function sendUser()
+    {
+        if ($this->request->isAjax()) {
+            $data = $this->request->post();
+            if (!$data['id']) {
+            }
+            $check = Db::name('message')->where(['id' => $data['id']])->find();
+            if ($check['status'] == 0) {
+                return json(['msg' => '该消息已经被禁用，不可发送', 'code' => 401]);
             }
             $userList = Db::name('customer')->select();
-            $arr =[];
+            $arr = [];
             $time = time();
-            foreach ($userList as $k=> $v){
-                $arr[$k]['uid']= $v['id'];
-                $arr[$k]['openid']= $v['openid'];
-                $arr[$k]['message_id']=   $data['id'];
-                $arr[$k]['create_time']=  $time;
+            foreach ($userList as $k => $v) {
+                $arr[$k]['uid'] = $v['id'];
+                $arr[$k]['openid'] = $v['openid'];
+                $arr[$k]['message_id'] = $data['id'];
+                $arr[$k]['create_time'] = $time;
             }
             $res = Db::name('message_user')->insertAll($arr);
-            Db::name('message')->where(['id'=>$data['id']])->update(['is_send'=>1]);
-            if($res){
-                return json(['msg'=>'操作成功','code'=>200]);
-            }else{
-                return json(['msg'=>'操作失败','code'=>500]);
+            Db::name('message')->where(['id' => $data['id']])->update(['is_send' => 1]);
+            if ($res) {
+                return json(['msg' => '操作成功', 'code' => 200]);
+            } else {
+                return json(['msg' => '操作失败', 'code' => 500]);
             }
         }
     }
