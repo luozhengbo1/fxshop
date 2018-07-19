@@ -17,8 +17,35 @@ class Order extends Controller
         if ($this->request->param("order_id")) {
             $map['fy_order.order_id'] = ["like", "%" . $this->request->param("order_id") . "%"];
         }
+        #0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成
         if ($this->request->param("order_status")) {
-            $map['fy_order.order_status'] = $this->request->param("order_status");
+            $orderStatus  = $this->request->param("order_status");
+            if($orderStatus==0){#未支付
+                $map['fy_order.order_status'] = 0;
+            }
+            if($orderStatus==1){#待发货
+                $map['fy_order.order_status'] = 1;
+                $map['fy_order_goods.is_send'] = 0;
+            }
+            if($orderStatus==2){#待收货
+                $map['fy_order.order_status'] = 1;
+                $map['fy_order_goods.is_send'] = 1;
+            }
+            if($orderStatus==3){#待退款
+                $map['fy_order.order_status'] = 5;
+                $map['fy_order.order_status'] = 6;
+            }
+            if($orderStatus==4){#待评价
+                $map['fy_order.order_status'] = 2;
+            }
+            if($orderStatus==5){#取消订单
+                $map['fy_order.order_status'] = 7;
+            }
+            if($orderStatus==6){#完成订单
+                $map['fy_order.order_status'] = 8;
+            }
+
+
         }
         #
         if ($this->request->param("user_id")) {
@@ -65,17 +92,18 @@ class Order extends Controller
         $map['fy_order.isdelete'] =0;
         $userList = Db::name('admin_user')->where(['isdelete'=>0,'id'=>['>',1]])->select();
         $orderList = Db::name('order')
-           ->field('fy_order.id,fy_order.buy_list,fy_order.address_id,
+           ->field('fy_order.id,fy_order.buy_list,fy_order.address_id,fy_order.pay_status,
             fy_order.order_id,fy_order.order_status,fy_order.total_price,fy_order.customer_name,fy_order.customer_name,fy_order.create_time,fy_order.pay_time,
-            fy_order_goods.user_id')
+            fy_order_goods.user_id,fy_order_goods.is_send')
             ->join( 'fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
             ->order('fy_order.create_time desc')
             ->where($map)
             ->group('fy_order.order_id')
             ->paginate(5);
+//        dump($orderList);
         $this->view->assign ('userList',$userList);
         $this->view->assign('list',$orderList);
-        $this->view->assign('count',Db::name('order')->where($map)->count());
+        $this->view->assign('count',count($orderList));
         return $this->  view->fetch();
     }
 

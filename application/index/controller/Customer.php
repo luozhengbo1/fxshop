@@ -40,11 +40,28 @@ class Customer extends Mustlogin
 
         //会员订单数量
         #代付款
-        $count_pay = Db::table('fy_order')->where('openid', $user_session['openid'])->where(['order_status', 0,'pay_status'=>0])->count();
-        $count_deliver = Db::table('fy_order')->where('openid', $user_session['openid'])->where('order_status', 1)->count();
-        $count_take_delivery = Db::table('fy_order')->where('openid', $user_session['openid'])->where('order_status', 2)->count();
-        $count_refund = Db::table('fy_order')->where('openid', $user_session['openid'])->where('order_status', 3)->count();
-        $count_evaluate = Db::table('fy_order')->where('openid', $user_session['openid'])->where('order_status', 4)->count();
+        $count_pay = Db::table('fy_order')
+            ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
+            ->where(['fy_order.openid'=> $user_session['openid'], 'fy_order.order_status'=>0,'fy_order.pay_status'=>0])->count();
+        #待发货
+        $count_deliver = Db::table('fy_order')
+            ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
+            ->where(['fy_order.openid'=> $user_session['openid'],'fy_order.order_status'=>1,'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>0])
+            ->count();
+        #待收货
+        $count_take_delivery = Db::table('fy_order')
+            ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
+            ->where(['fy_order.openid'=> $user_session['openid'],'fy_order.order_status'=>1,'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>1])
+            ->count();
+        #退货退款
+        $count_refund = Db::table('fy_order')
+            ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
+            ->where(['fy_order.openid'=> $user_session['openid'],'fy_order.order_status'=>['in',5,6],'fy_order.pay_status'=>1])
+            ->count();
+        $count_evaluate = Db::table('fy_order')
+            ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
+            ->where(['fy_order.openid'=> $user_session['openid'],'fy_order.order_status'=>1,'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>2])
+            ->count();
         $this->assign('count_pay', $count_pay);
         $this->assign('count_deliver', $count_deliver);
         $this->assign('count_take_delivery', $count_take_delivery);
