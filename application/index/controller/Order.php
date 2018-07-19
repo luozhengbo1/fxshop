@@ -458,8 +458,11 @@
                             'fy_order_goods.sku_id'=>$data['sku_id']
                         ])->find();
                     #加上同样多的价格和
+                    $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
+                    $grade = Db::name('customer_grade')->where(['experience_start'=>['<=',$user['experience']],'experience_end'=>['>=',$user['experience'] ]])->find();
                     Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->setInc('experience',$goods['return_score']);
-                    Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->setInc('score',$goods['return_score']);
+                    #不同等级得到不同积分。
+                    Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->setInc('score',$goods['return_score']*$grade['goods_score_rate']);
                     $insert =[];
                     $insert['openid']=$this->userInfo['openid'];
                     $insert['source_id']=$goods['id'];
