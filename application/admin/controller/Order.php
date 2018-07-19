@@ -183,7 +183,8 @@ class Order extends Controller
                 ->update([
                     'is_send'=>1,
                     'logistics_name'=>$data['logistics_name'],
-                    'logistics_number'=>$data['logistics_number']
+                    'logistics_number'=>$data['logistics_number'],
+                    'send_time'=>time(),
                 ]);
             if($res){
                 #确认物流，提醒买家
