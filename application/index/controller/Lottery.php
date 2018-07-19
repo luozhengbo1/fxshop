@@ -138,8 +138,9 @@ Class Lottery extends Mustlogin
             $insert['status'] = 1;
             $insert['lottery_name'] = $lottery['name'];
             $insert['is_use'] = 0;
-            $res = Db::name('lottery')->where(['id' => $data['id']])->update($insert);
-            if ($res) {
+            $res = Db::name('lottery')->where(['id' => $data['id']])->update(['number'=>$lottery['number']-1]);
+            $res1 = Db::name('lottery_log')->insert($insert);
+            if ($res && $res1) {
                 return ajax_return('', '领取成功', '200');
             } else {
                 return ajax_return_error('领取失败', '500');
