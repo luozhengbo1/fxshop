@@ -513,3 +513,11 @@ function enterKey(complete){
         }
     })
 }
+
+//标签解析
+function tagParse(tag){
+    var detailTag = tag;
+    detailTag = detailTag.replace(/&lt;/g,"<");
+    detailTag = detailTag.replace(/&gt;/g,">");
+    return detailTag
+}

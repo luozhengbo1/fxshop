@@ -30,14 +30,16 @@ Class Lottery extends Mustlogin
             $page = $this->request->param('page');
             $size = $this->request->param('size');
             $goodsClassId = $this->request->param('goodsClassId');
+            $time = time();
             if($goodsClassId =='all'){
                 //dump($goodsClassId);
-                $goodsWithLottery = Db::name('goods')
-                    ->field('fy_lottery.*,fy_goods.*')
-                    ->join('fy_lottery', 'fy_goods.id=fy_lottery.goods_id','left')
-                    ->where(['fy_goods.status'=>1,'fy_goods.isdelete'=>'0'])
-                    ->page($page,$size)
-                    ->select();
+                $where =[
+                    'fy_goods.status'=>1,
+                    'fy_goods.isdelete'=>'0',
+                    'fy_lottery.grant_start_date' => ['<', $time],
+                    'fy_lottery.grant_end_date' => ['>', $time]
+                ];
+
             }else{
                 //dump($goodsClassId);
                 if(!$goodsClassId){
@@ -45,39 +47,66 @@ Class Lottery extends Mustlogin
                 }
                 #查询所有的子分类
                 $goodsClassAllChild = getAllChildcateIds($goodsClassId);
-                $goodsWithLottery = Db::name('goods')
-                    ->field('fy_lottery.*,fy_goods.*')
-                    ->join('fy_lottery', 'fy_goods.id=fy_lottery.goods_id','left')
-                    ->where(['fy_goods.goods_class_id'=>['in',$goodsClassAllChild],'fy_goods.status'=>1,'fy_goods.isdelete'=>'0'])
-                    ->page($page,$size)
-                    ->select();
+                $where = [
+                    'fy_goods.goods_class_id'=>['in',$goodsClassAllChild],
+                    'fy_goods.status'=>1,
+                    'fy_goods.isdelete'=>'0',
+                    'fy_lottery.grant_start_date' => ['<', $time],
+                    'fy_lottery.grant_end_date' => ['>', $time]
+                ];
             }
+            $goodsWithLottery = Db::name('goods')
+                ->field(
+                    'fy_lottery.type as coupon_type,
+                    fy_lottery.id as coupon_id,
+                    fy_lottery.coupon_money,fy_lottery.coupon_real_money,
+                    fy_goods_class.name as class_name,
+                    fy_goods.*')
+                ->join('fy_lottery', 'fy_goods.id=fy_lottery.goods_id','left')
+                ->join('fy_goods_class', 'fy_goods_class.id=fy_goods.goods_class_id','left')
+                ->where($where)
+                ->page($page,$size)
+                ->select();
             return ajax_return($goodsWithLottery, '', '200');
             //带有券的商品
            // dump($goodsWithLottery);
         }
-
-      /* $time = time();
-       *   $lotteryList = Db::name('Lottery')
-
-            ->where([
-                'isdelete' => 0,
-                'status' => 1,
-                'grant_start_date' => ['<', $time],
-                'grant_end_date' => ['>', $time]
-            ])
-            ->select();*/
-//            dump($lotteryList);die;
-
-        /*$this->view->assign('lotteryList', $lotteryList);*/
-
         return $this->view->fetch('market');
 
     }
     #券详情
-    public function detail()
+    public function detail($id,$goods_id)
     {
         $this->assign('titleName', "券详情");
+        $lottery = Db::name('lottery')
+            ->where( [
+                'id'=>['in',$id],
+            ])
+            ->find();
+
+        $this->assign('lottery', $lottery);
+        $this->assign('goods_id', $goods_id);
+
+        return  $this->view->fetch();
+
+    }
+    #券清单确认
+    public function affairm($lottery_id,$goods_id)
+    {
+        $this->assign('titleName', "订单确认");
+        $goods = Db::name('goods')
+            ->where( [
+                'id'=>['in',$goods_id],
+            ])
+            ->find();
+        $lottery = Db::name('lottery')
+            ->where( [
+                'id'=>['in',$lottery_id],
+            ])
+            ->find();
+        $this->assign('lottery', $lottery);
+        $this->assign('goods', $goods);
+
         return  $this->view->fetch();
 
     }

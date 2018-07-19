@@ -58,104 +58,33 @@
                         <option value="{$vo.type ?? ''}"><?php if($vo['type']==1){ echo "抵用券";}if($vo['type']==2){ echo "优惠券";}if($vo['type']==3){ echo "代金券";}if($vo['type']==4){ echo "积分券";}if($vo['type']==5){ echo "生日券";} ?></option>
                     </select>
                     <?php }else{?>
-                    <select name="type" class="select" datatype="*" nullmsg="请选择类型" errormsg="请选择类型">
-                        <option value="1">抵扣券</option>
+                    <select name="type" class="select" datatype="*" onchange="showVoucher(this);" nullmsg="请选择类型" errormsg="请选择类型">
+                        <option>=请选择=</option>
+                        <!--<option value="1">抵扣券</option>-->
                         <option value="2">优惠券</option>
                         <option value="3">代金券</option>
-                        <option value="4">积分抵现金</option>
-                        <option value="5">生日券</option>
+                        <option value="4">免邮券</option>
+                        <!--<option value="5">生日券</option>-->
                     </select>
                     <?php } ?>
                 </div>
             </div>
             <div class="col-xs-3 col-sm-3">类型生成之后不可修改</div>
         </div>
-        <?php if(isset($flag)){
-            if($vo['type']==1){ ?>
-        <div class="row cl quan1" style="display: block;" >
-            <label class="form-label col-xs-3 col-sm-3">抵扣券设置：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <input type="number" class="input-text"  style="width:50%;" placeholder="" name="voucher_money" value="{$vo.voucher_money ?? ''}" >
-                抵<input type="number" class="input-text"  style="width:50%;"  name="voucher_real_money" value="{$vo.voucher_real_money ?? ''}" >
+        <div class="row cl quan2" >
+            <label class="form-label col-xs-3 col-sm-3">券设置：</label>
+            <div id="voucherWrap">
+                <div class="formControls col-xs-6 col-sm-6 voucher"   id="voucher2"><!--优惠券-->
+                    满<input type="number" class="input-text"  style="width:50%;" name="coupon_real_money" value="{$vo.coupon_real_money ?? ''}" >
+                    减<input type="number" class="input-text"  style="width:50%;"  placeholder="券额"  name="coupon_money" value="{$vo.coupon_money ?? ''}" >
+                </div>
+                <div class="formControls col-xs-6 col-sm-6 voucher"  id="voucher3"><!--代金券-->
+                    <input type="number" class="input-text"  style="width:50%;" name="coupon_real_money" value="{$vo.coupon_real_money ?? ''}" >元代
+                    <input type="number" class="input-text"  style="width:50%;"  placeholder="券额"  name="coupon_money" value="{$vo.coupon_money ?? ''}" >
+                </div>
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
-        <?php  } if($vo['type']==2){ ?>
-        <div class="row cl quan2" style="display: ;">
-            <label class="form-label col-xs-3 col-sm-3">优惠券设置：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                满<input type="number" class="input-text"  style="width:50%;" placeholder="" name="coupon_money" value="{$vo.coupon_money ?? ''}" >
-                减<input type="number" class="input-text"  style="width:50%;"  name="coupon_real_money" value="{$vo.coupon_real_money ?? ''}" >
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <?php  } if($vo['type']==3){ ?>
-        <div class="row cl quan3" style="display: ;">
-            <label class="form-label col-xs-3 col-sm-3">代金券设置：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <input type="number" class="input-text"  style="width:50%;" placeholder="" name="cash_coupon_real_money" value="{$vo.cash_coupon_real_money ?? ''}" >元
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <?php  } if($vo['type']==4){ ?>
-        <div class="row cl quan4" style="display: ;">
-            <label class="form-label col-xs-3 col-sm-3">积分券设置：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <input type="number" class="input-text"  style="width:50%;" placeholder="" name="score_money" value="{$vo.score_money ?? ''}" >
-                积分抵<input type="number" class="input-text"  style="width:50%;"  name="score_real_money" value="{$vo.score_real_money ?? ''}" >
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <?php  } if($vo['type']==5){ ?>
-        <div class="row cl quan2" style="display: ;">
-            <label class="form-label col-xs-3 col-sm-3">生日券设置：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                满<input type="number" class="input-text"  style="width:50%;" placeholder="" name="coupon_money" value="{$vo.coupon_money ?? ''}" >
-                减<input type="number" class="input-text"  style="width:50%;"  name="coupon_real_money" value="{$vo.coupon_real_money ?? ''}" >
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <?php  } }else{ ?>
-        <div class="row cl quan1" style="display: block;" >
-            <label class="form-label col-xs-3 col-sm-3">抵扣券设置：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <input type="number" class="input-text"  style="width:50%;" placeholder="" name="voucher_money" value="{$vo.voucher_money ?? ''}" >
-                抵<input type="number" class="input-text"  style="width:50%;"  name="voucher_real_money" value="{$vo.voucher_real_money ?? ''}" >
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <div class="row cl quan2" style="display: none;">
-            <label class="form-label col-xs-3 col-sm-3">优惠券设置：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                满<input type="number" class="input-text"  style="width:50%;" placeholder="" name="coupon_money" value="{$vo.coupon_money ?? ''}" >
-                减<input type="number" class="input-text"  style="width:50%;"  name="coupon_real_money" value="{$vo.coupon_real_money ?? ''}" >
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <div class="row cl quan3" style="display: none;">
-            <label class="form-label col-xs-3 col-sm-3">代金券设置：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <input type="number" class="input-text"  style="width:50%;" placeholder="" name="cash_coupon_real_money" value="{$vo.cash_coupon_real_money ?? ''}" >元
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <div class="row cl quan4" style="display: none;">
-            <label class="form-label col-xs-3 col-sm-3">积分券设置：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <input type="number" class="input-text"  style="width:50%;" placeholder="" name="score_money" value="{$vo.score_money ?? ''}" >
-                积分抵<input type="number" class="input-text"  style="width:50%;"  name="score_real_money" value="{$vo.score_real_money ?? ''}" >
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <div class="row cl quan5" style="display:none;">
-            <label class="form-label col-xs-3 col-sm-3">生日券设置：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                满<input type="number" class="input-text"  style="width:50%;" placeholder="" name="coupon_money" value="{$vo.coupon_money ?? ''}" >
-                减<input type="number" class="input-text"  style="width:50%;"  name="coupon_real_money" value="{$vo.coupon_real_money ?? ''}" >
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <?php } ?>
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>奖券数量：</label>
             <div class="formControls col-xs-6 col-sm-6">
@@ -169,8 +98,9 @@
                 <div class="select-box">
                     <select name="goods_id" class="select" datatype="*" nullmsg="请选择关联商品" errormsg="请选择关联商品">
                         <option value="">--请选择--</option>
+                       <!-- <option value="238">裤子</option>-->
                         {volist name="goodsList" id="vo1"}
-                            <option value="{$vo1.id}" {if condition="isset($vo['goods_id']) && $vo['goods_id'] eq $vo1['id']"}selected{/if}>{$vo1.name}</option>
+                        <option value="{$vo1.id}" {if condition="isset($vo['goods_id']) && $vo['goods_id'] eq $vo1['id']"}selected{/if}>{$vo1.name}</option>
                         {/volist}
                     </select>
                 </div>
@@ -221,6 +151,16 @@
 <script type="text/javascript" src="__UEDITOR__/ueditor.all.js"></script>
 <!--实例化编辑器并设置toolbar的按钮-->
 <script type="text/javascript">
+    var voucherWrap = $("#voucherWrap");
+    var voucher2= $('#voucher2');
+    var voucher3= $('#voucher3');
+    voucherWrap.html('');
+    function showVoucher(_this) {
+        var val = $(_this).val();
+        $('.voucher').remove();
+        if(val ==2|| val ==3)
+        voucherWrap.html(eval('voucher'+val));
+    }
     var ue = UE.getEditor('container', {
         toolbars: [
             ['source', 'fullscreen', 'undo', 'redo', 'formatmatch', '|',
@@ -272,7 +212,7 @@
                 console.log(ret);
             }
         });
-        $('select[name="type"]').change(function () {
+      /*  $('select[name="type"]').change(function () {
             if( $(this).val()==1 ){
                 $('.quan1').css('display','block');
                 $('.quan2').css('display','none');
@@ -308,7 +248,7 @@
                 $('.quan4').css('display','none');
                 $('.quan5').css('display','block');
             }
-        })
+        })*/
     })
 </script>
 {/block}

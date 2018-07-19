@@ -57,10 +57,16 @@ MyPageload.prototype.init = function(options){
         me.$domDown = $('.'+me.opts.domDown.domClass);
     }
     // 加载下方
+
     $(window).on('scroll',function(){
-        if(!me.opts.noData && !me.opts.loading  && document.getElementsByClassName(me.opts.domDown.domClass)[0].getBoundingClientRect().top<$(window).height()){
-            loadDown(me);
-        }
+        console.log('scroll1:'+me.opts.loading);
+        setTimeout(function () {
+            if(refreshOk(me)){
+                console.log('scrolltest:'+me.opts.loading);
+                me.opts.loading = true;
+                loadDown(me);
+            }
+        },500)
     });
 
     // 加载下方
@@ -75,13 +81,13 @@ MyPageload.prototype.init = function(options){
     fnAutoLoad(me);
     function fnAutoLoad(me){
         if(me.opts.autoLoad){
-            if(!me.opts.noData && !me.opts.loading  && document.getElementsByClassName(me.opts.domDown.domClass)[0].getBoundingClientRect().top<$(window).height()){
+            if(refreshOk(me)){
                 loadDown(me);
             }
         }
     }
     //下拉卡加载执行函数
-    function loadDownFn() {
+    function loadDownFn(me) {
         var data=$.extend(true, {}, {
             page:me.opts.page,
             size:me.opts.size,
@@ -109,6 +115,10 @@ MyPageload.prototype.init = function(options){
                         var html = me.opts.dealFun(data);
                         $target.append(html);
                         me.$domDown.html(me.opts.domDown.domLoad);
+                        me.opts.loading = false;
+                        if(refreshOk(me)){
+                            fnAutoLoad(me);
+                        }
                     }
                     if ( me.opts.complete !=''){
                         me.opts.complete();
@@ -125,6 +135,9 @@ MyPageload.prototype.init = function(options){
                 // 即使加载出错，也得重置
             }
         });
+    }
+    function refreshOk(me){
+        return !me.opts.noData && !me.opts.loading  && document.getElementsByClassName(me.opts.domDown.domClass)[0].getBoundingClientRect().top<$(window).height()
     }
 
 };

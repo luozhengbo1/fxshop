@@ -61,34 +61,55 @@
             dealFun:dealData
         });
     }
+
     function dealData(data) {
         var html='';
         for(var i = 0; i < data.length; i++){
             var imgArr = new Array();
+            var coupon_type = data[i].coupon_type;
             if(data[i].pic){
                 imgArr = eval(data[i].pic);
             }
-            /*if(data[i].pic && (data[i].pic).indexOf(',')>-1){
-                imgArr = (data[i].pic).split(',')
-            }*/
             html +='<li>';
-            html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].goods_id})+'" >';
             html +='        <div class="clear">';
-            html +='            <p class="fl" ><span class="catalog border-tag">美食</span>'+data[i].name+'</p>';
-            html +='            <p class="price fr f18 bold">￥6 8</p>';
+            html +='            <p class="fl" ><span class="catalog border-tag">'+data[i].class_name+'</span>'+data[i].name+'</p>';
+            html +='            <p class="price fr f18 bold">￥'+data[i].coupon_real_money+'</p>';
             html +='        </div>';
             html +='        <div class="clear mt5">';
+            html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
             html +='            <ul class="item-img clear fl">';
             for(var n=0; n<imgArr.length; n++){
                 html +='        <li><img src="'+imgArr[n]+'"></li>';
             }
             html +='            </ul>';
-            html +='            <div class="fr">';
-            html +='                <p class="tc base-color f12 mb10">满24元可用</p>';
-            html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10">立即领取</button>';
+             html +='    </a>';
+            html +='            <div class="fr tr">';
+            //"1":抵扣券  coupon_type "2":优惠券   "3":代金券   "4":免邮券   "5":生日券
+            var btn_text ='立即领取';
+            var moneyShow = '';
+            switch(coupon_type){
+                case 1:
+                  //  html +='                <p class="price"> '+data[i].point_score+'积分 </p>';
+                    break;
+                case 2:
+                    html +='                <p class="price f12"> 满'+data[i].coupon_real_money+'优惠'+data[i].coupon_money+'元 </p>';
+                    html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10">立即领取</button>';
+                    break;
+                case 3:
+                    html +='                <p class="tc base-color mb10">代'+data[i].coupon_money+'元券</p>';
+                    btn_text=''
+                    html +='                <a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10" href="'+urlConnect("{:url('lottery/detail')}",{id:data[i].coupon_id,goods_id:data[i].id})+'" >立即购买</a>';
+                    break;
+                case 4:
+                    html +='                <p class="price f12"> 包邮券 </p>';
+                    html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10">立即领取</button>';
+                    break;
+                default:
+                  //  html +='                <p class="price"> ￥'+data[i].price+' </p>';
+                    break;
+            }
             html +='            </div>';
             html +='        </div>';
-            html +='    </a>';
             html +='</li>';
         }
         return html;
