@@ -458,8 +458,11 @@
                             'fy_order_goods.sku_id'=>$data['sku_id']
                         ])->find();
                     #加上同样多的价格和
+                    $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
+                    $grade = Db::name('customer_grade')->where(['experience_start'=>['<=',$user['experience']],'experience_end'=>['>=',$user['experience'] ]])->find();
                     Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->setInc('experience',$goods['return_score']);
-                    Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->setInc('score',$goods['return_score']);
+                    #不同等级得到不同积分。
+                    Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->setInc('score',$goods['return_score']*$grade['goods_score_rate']);
                     $insert =[];
                     $insert['openid']=$this->userInfo['openid'];
                     $insert['source_id']=$goods['id'];
@@ -512,16 +515,16 @@
                     'order_id'=>$data['order_id'],
                     'goods_id'=>$data['goods_id'],
                     'sku_id'=>$data['sku_id'],
-                ])->update(['is_return'=>1,'return_price'=>$goodsAttribute['price']]); # 待退款3退货中
+                ])->update(['is_return'=>1,'return_price'=>$goodsAttribute['price'],'is_send'=>3]); # 待退款3退货中
                 $ordertmp = Db::name('order')->field('return_price_all')->where([
                     'order_id'=>$data['order_id']])->find();
                 #退款价
                 $order = Db::name('order')->where('order_id',$data['order_id'])->find();
                 $update =[];
                 if($goodsAttribute['price']+$ordertmp['return_price_all']==$order['total_price'] ){
-                    $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all']];
+                    $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all'],'order_status'=>4];
                 }else{
-                    $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all']];
+                    $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all'],'order_status'=>4];
                 }
                 $res= Db::name('order')
                     ->where('order_id',$data['order_id'])

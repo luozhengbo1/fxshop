@@ -6,7 +6,8 @@
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>主题：</label>
             <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text" placeholder="主题" name="title" value="{$vo.title ?? ''}"  datatype="*" nullmsg="主题必填" errormsg="主题必填">
+                <input type="text" class="input-text" placeholder="主题" name="title" value="{$vo.title ?? ''}"
+                       datatype="*" nullmsg="主题必填" errormsg="主题必填">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
@@ -15,9 +16,14 @@
                 <div class="row cl">
                     <label class="form-label col-xs-3 col-sm-2">图片：</label>
                     <div class="formControls col-xs-6 col-sm-7">
-                        <input type="text" class="input-text" id="upload" name="pic" readonly  placeholder="请点击后面的上传按钮" datatype="*" nullmsg="请填写图片url" value="{$vo.pic ?? ''}" style="width: 70%">
-                        <button type="button" class="btn btn-primary radius" onclick="layer_open('文件上传','{:\\think\\Url::build(\'Upload/index\', [\'id\' => \'upload\'])}')">上传</button>
-                        <a onclick="$(this).attr('href', $('#upload').val())" type="button" class="btn btn-success radius" data-lightbox="preview">预览</a>
+                        <input type="text" class="input-text" id="upload" name="pic" readonly placeholder="请点击后面的上传按钮"
+                               datatype="*" nullmsg="请填写图片url" value="{$vo.pic ?? ''}" style="width: 70%">
+                        <button type="button" class="btn btn-primary radius"
+                                onclick="layer_open('文件上传','{:\\think\\Url::build(\'Upload/index\', [\'id\' => \'upload\'])}')">
+                            上传
+                        </button>
+                        <a onclick="$(this).attr('href', $('#upload').val())" type="button"
+                           class="btn btn-success radius" data-lightbox="preview">预览</a>
                     </div>
                     <div class="col-xs-3 col-sm-2"></div>
                 </div>
@@ -25,17 +31,40 @@
             <div id="markdown" class="mt-20"></div>
         </div>
         <!--<div class="row cl">-->
-            <!--<label class="form-label col-xs-3 col-sm-3">图片：</label>-->
-            <!--<div class="formControls col-xs-6 col-sm-6">-->
-                <!--<input type="text" class="input-text" placeholder="图片" name="pic" value="{$vo.pic ?? ''}" >-->
-            <!--</div>-->
-            <!--<div class="col-xs-3 col-sm-3"></div>-->
+        <!--<label class="form-label col-xs-3 col-sm-3">图片：</label>-->
+        <!--<div class="formControls col-xs-6 col-sm-6">-->
+        <!--<input type="text" class="input-text" placeholder="图片" name="pic" value="{$vo.pic ?? ''}" >-->
+        <!--</div>-->
+        <!--<div class="col-xs-3 col-sm-3"></div>-->
         <!--</div>-->
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>详情：</label>
             <div class="formControls col-xs-6 col-sm-6">
-                <textarea class="textarea" placeholder="" name="detail" onKeyUp="textarealength(this, 100)" datatype="*" nullmsg="填写详情" errormsg="填写详情">{$vo.detail ?? ''}</textarea>
+                <textarea class="textarea" placeholder="" name="detail" onKeyUp="textarealength(this, 100)" datatype="*"
+                          nullmsg="填写详情" errormsg="填写详情">{$vo.detail ?? ''}</textarea>
                 <p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>类型：</label>
+            <div class="formControls col-xs-6 col-sm-6 skin-minimal">
+                <div class="radio-box">
+                    <input type="radio" name="type" id="status-1" value="1">
+                    <label for="status-1">积分清零提醒</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="type" id="status-2" value="2">
+                    <label for="status-2">积分清零</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="type" id="status-3" value="3">
+                    <label for="status-3">生日</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="type" id="status-4" value="4">
+                    <label for="status-4">其他</label>
+                </div>
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
@@ -61,7 +90,8 @@
                         <option value="">--请选择--</option>
                         {if condition="empty($lottery) neq 1"}
                         {volist name="lottery" id="vo1"}
-                        <option value="{$vo1.id}"  <?php if(isset($vo['lottery_id'])){
+                        <option value="{$vo1.id}"
+                        <?php if(isset($vo['lottery_id'])){
                             if($vo['lottery_id']==$vo1['id']){
                                 echo "selected";
                             }
@@ -104,7 +134,7 @@
             tiptype: 2,
             ajaxPost: true,
             showAllError: true,
-            callback: function (ret){
+            callback: function (ret) {
                 ajax_progress(ret);
             }
         });

@@ -1,4 +1,5 @@
 <?php
+use think\Config;
 class WeiXin
 {
     private $appID;
@@ -81,7 +82,7 @@ class WeiXin
     public function buySuccess($goods="测试商品",$openid="omQYXwNAT5uC15TQqMGxajJzqo4s",$pay_price="10")
     {
         $touser =$openid;
-        $templateId=\think\Config::get('order_pay');
+        $templateId=Config::get('order_pay');
         $url = "http://shop.istiny.cc/index.php/index/order/index";
         $first ="我们已收到您的货款，开始为您打包商品，请耐心等待: )";
         $template = file_get_contents(__DIR__."/buySuccess.json");
@@ -94,7 +95,7 @@ class WeiXin
     public function  sendGoods($goods,$openid,$out_trade_no,$post ,$log_number,$address)
     {
         $touser =$openid;
-        $templateId=\think\Config::get('send');
+        $templateId=Config::get('send');
         $url = "http://shop.istiny.cc/index.php/index/order/index";
         $first = "您购买{$goods}已经发货啦，正快马加鞭向您飞奔而去。";
         #发货时间
@@ -109,7 +110,7 @@ class WeiXin
     public function  refund($goods="test商品",$openid="omQYXwNAT5uC15TQqMGxajJzqo4s",$out_trade_no="",$refundMoney ="10")
     {
         $touser =$openid;
-        $templateId=\think\Config::get('order_refund');
+        $templateId=Config::get('order_refund');
         $url = "http://shop.istiny.cc/index.php/index/order/index";
         $first = "您的订单已经完成退款，原路退回到您的支付帐户（零钱20天内到账；储蓄卡1-3个工作日；信用卡2-5个工作日）请留意查收。";
         $remark= "有什么疑问请联系【12345678998】咨询";
@@ -123,7 +124,7 @@ class WeiXin
     public function sure($goods="test商品",$openid="omQYXwNAT5uC15TQqMGxajJzqo4s",$out_trade_no="")
     {
         $touser =$openid;
-        $templateId=\think\Config::get('sure');
+        $templateId="vfjUQ3F8WVhlcbArgxX7rirho2yp9CtnI9UwDZv9UnI";
         $url = "http://shop.istiny.cc/index.php/index/order/index";
         $first = "亲，物流显示您的订单已签收，请确认！";
         $remark= "如果您已收到货，请点此消息确认收货";
@@ -132,6 +133,7 @@ class WeiXin
         $param = sprintf($template, $touser,$templateId, $url, $first, $out_trade_no, $goods, $status,$remark);
         $this->sendTemplate($param);
     }
+
 
 
     #发送
@@ -143,7 +145,7 @@ class WeiXin
         $result ['status'] = 0;
         $result ['msg'] = '回复失败';
         $res = Http::post( $url, $param );
-//        dump($res);
+//        var_dump($res);
         if ($res ['errcode'] != 0) {
             $result ['msg'] = $res;
             $datetime = date("Y-m-d H:i:s");

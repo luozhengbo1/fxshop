@@ -38,14 +38,14 @@
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>有效期开始时间：</label>
             <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text Wdate" placeholder="奖券有效期开始时间" name="expire_start_date"value="{$vo['expire_start_date'] ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}  datatype="*" nullmsg="请填写奖券有效期开始时间" errormsg="请填写奖券有效期开始时间">
+                <input type="text" class="input-text Wdate" autocomplete="off" placeholder="奖券有效期开始时间" name="expire_start_date"value="{$vo['expire_start_date'] ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}  datatype="*" nullmsg="请填写奖券有效期开始时间" errormsg="请填写奖券有效期开始时间">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>有效期结束时间：</label>
             <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text Wdate" placeholder="奖券有效期结束时间" name="expire_end_date" value="{$vo['expire_end_date'] ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd  H:mm:ss'})" {/literal}  datatype="*" nullmsg="请填写奖券有效期结束时间" errormsg="请填写奖券有效期结束时间">
+                <input type="text" class="input-text Wdate" autocomplete="off" placeholder="奖券有效期结束时间" name="expire_end_date" value="{$vo['expire_end_date'] ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd  H:mm:ss'})" {/literal}  datatype="*" nullmsg="请填写奖券有效期结束时间" errormsg="请填写奖券有效期结束时间">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>

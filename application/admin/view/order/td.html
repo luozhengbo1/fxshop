@@ -35,7 +35,9 @@
         echo '待评价';
     }else if($vo['order_status']=='3'){
         echo '待回复';
-    }else if($vo['order_status']=='5'){
+    }else if($vo['order_status']=='4'){
+        echo '待退款';
+    } else if($vo['order_status']=='5'){
         echo '部分退款';
     }else if($vo['order_status']=='6'){
         echo '全部退款';
@@ -46,4 +48,4 @@
     }
     {/php}
 </td>
-<td>{$vo.pay_status==1?'已支付':'未支付'}</td>
+<td>{php}if($vo['pay_status'])echo '已支付' ;else echo '未支付';{/php}</td>
