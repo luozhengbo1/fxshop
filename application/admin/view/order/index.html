@@ -27,7 +27,7 @@
                 <a href="javascript:;" class="btn" onclick="layer_open('去发货','{:\\think\\Url::build(\'orderDetail\', [\'id\'=>$vo[\'order_id\']])}')">去发货</a>
                 {php}}{/php}
                 <a class="btn" href="javascript:;" data-href="" data-id="{$vo['order_id']}"  onclick="layer_open('订单详情','{:\\think\\Url::build(\'orderDetail\', [\'id\'=>$vo[\'order_id\']])}')" >订单详情</a>
-                {php}if($vo['order_status']=='5'||$vo['order_status']=='6'){ {/php}
+                {php}if($vo['order_status']==4){ {/php}
                 <a class="btn" href="javascript:;" data-href="" data-id="{$vo['order_id']}"  onclick="layer_open('确认退款','{:\\think\\Url::build(\'orderDetail\', [\'id\'=>$vo[\'order_id\']])}')" >确认退款</a>
                 {php}}{/php}
             </td>

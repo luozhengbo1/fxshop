@@ -515,16 +515,16 @@
                     'order_id'=>$data['order_id'],
                     'goods_id'=>$data['goods_id'],
                     'sku_id'=>$data['sku_id'],
-                ])->update(['is_return'=>1,'return_price'=>$goodsAttribute['price']]); # 待退款3退货中
+                ])->update(['is_return'=>1,'return_price'=>$goodsAttribute['price'],'is_send'=>3]); # 待退款3退货中
                 $ordertmp = Db::name('order')->field('return_price_all')->where([
                     'order_id'=>$data['order_id']])->find();
                 #退款价
                 $order = Db::name('order')->where('order_id',$data['order_id'])->find();
                 $update =[];
                 if($goodsAttribute['price']+$ordertmp['return_price_all']==$order['total_price'] ){
-                    $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all']];
+                    $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all'],'order_status'=>4];
                 }else{
-                    $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all']];
+                    $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all'],'order_status'=>4];
                 }
                 $res= Db::name('order')
                     ->where('order_id',$data['order_id'])

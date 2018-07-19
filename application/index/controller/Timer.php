@@ -32,7 +32,6 @@ class Timer
         }
     }
 
-//    public function
 
 }
 
