@@ -376,10 +376,12 @@ class Customer extends Mustlogin
         if ($this->request->isAjax()) {
             $user_session = session('wx_user');
             $message_list = Db::table('fy_message_user')
-                ->alias('user')
-                ->join('fy_message message', 'user.message_id=message.id')
-                ->where(['user.openid' => $user_session['openid'], 'message.status' => 1, 'message.isdelete' => 0, 'message.is_send' => 1])
-                ->page($page, $size)->select();
+                ->alias('u')
+                ->join('fy_message m', 'u.message_id=m.id')
+                ->order('u.create_time','desc')
+                ->where(['u.openid' => $user_session['openid'], 'm.status' => 1, 'm.isdelete' => 0, 'm.is_send' => 1])
+                ->page($page, $size)
+                ->select();
             return ajax_return($message_list, 'OK', 200);
         } else {
             return $this->view->fetch();

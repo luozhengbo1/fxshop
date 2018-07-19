@@ -2,11 +2,23 @@
 <td>{$vo.title|high_light=$Request.param.title}</td>
 <td><img src="{$vo.pic}" width="100px"></td>
 <td>{$vo.detail}</td>
+<td><?php
+    if($vo['type']==1)
+        {
+            echo '积分清零提醒';
+        }else if($vo['type']==2){
+            echo '积分清零';
+        }else if($vo['type']==3){
+            echo '生日礼包';
+        }else if($vo['type']==4){
+            echo '其他';
+        }
+?></td>
 <td>{$vo.status|get_status}</td>
 <td><?php  echo \think\Db::name('lottery')->where(['id'=>$vo['lottery_id']])->find()['name']; ?></td>
 <td><?php
     if($vo['is_send']==1){?>
-    <a href="javascript:;" >已发送</a>
+    <a href="javascript:;">已发送</a>
     <?php }else{ ?>
     <a href="javascript:;" class="btn" onclick="sendUser({$vo['id']})">发送</a>
     <?php } ?>
