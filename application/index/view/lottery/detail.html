@@ -7,6 +7,7 @@
     .voucher-detail .content{
         padding: 2px 5px;
         background: white;
+        min-height: 300px;
     }
     .footer-pay-info li{
         width: 50%;
@@ -27,19 +28,21 @@
 </style>
 <div class="voucher-detail">
    <div class="content">
-       有效期32456789
-       有效期32456789 有效期32456789 有效期32456789 有效期32456789
-       有效期32456789 有效期32456789 有效期32456789 有效期32456789 有效期32456789 有效期32456789 有效期32456789
+
    </div>
     <ul class="footer-fixed footer-pay-info clear">
         <li>
-            <p class="pl10 pt5"><i class="price bold f24">￥68</i><span class="border-tag ml10">6.8折</span> </p>
-            <p class="pl10 grey f12">门市价<i>￥100</i></p>
+            <p class="pl10 pt5"><i class="price bold f24">￥ {$lottery['coupon_real_money']}</i><span class="border-tag ml10"> {$lottery['coupon_real_money']/$lottery['coupon_money']}折</span> </p>
+            <p class="pl10 grey f12">门市价<i>￥ {$lottery['coupon_money']}</i></p>
         </li>
         <li>
-            <a class="go-pay">立&nbsp;即&nbsp;抢&nbsp;购</a>
+            <a class="go-pay" href="{:url('lottery/affairm',['lottery_id'=>$lottery['id'],'goods_id'=>$lottery['goods_id']])}" >立&nbsp;即&nbsp;抢&nbsp;购</a>
         </li>
     </ul>
 </div>
+<script>
+   $('.content').html(tagParse("{$lottery['desc']}"));
+
+</script>
 </body>
 </html>

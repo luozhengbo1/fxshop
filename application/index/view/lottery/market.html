@@ -1,26 +1,24 @@
 {include file="Public/header-resource"}
 <body class="title-top footer-boottom">
 {include file="Public/header-title"}
+<div class="nav-list-tab clear" style="padding: 10px 5px">
+    <div class="me fl"> <a  href="{:url('lottery/mycardvoucher')}" class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger">&nbsp;我的&nbsp;</a></div>
+    <div class="message-group fr">
+        <span class="sign"></span>
+        <a href="{:url('customer/message')}" class="layui-btn layui-btn-xs layui-btn-radius">&nbsp;消息&nbsp;</a>
+    </div>
+</div>
 <!--券集市-->
-<section>
-   <div class="nav-list-tab clear" style="padding: 10px 5px">
-       <div class="me fl"> <a  href="{:url('lottery/mycardvoucher')}" class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger">&nbsp;我的&nbsp;</a></div>
-       <div class="message-group fr">
-           <span class="sign"></span>
-           <a href="{:url('customer/message')}" class="layui-btn layui-btn-xs layui-btn-radius">&nbsp;消息&nbsp;</a>
-       </div>
-   </div>
-    <div><img  width="100%" src="http://scsc.top/data/gallery_album/original_img/5b109f656e378.jpg"></div>
-    <ul class="voucher-market-catalogs clear">
-        <li class="w20p fl tc"><img class="w80p" src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg"></li>
-        <li class="w20p fl tc"><img class="w80p" src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg"></li>
-        <li class="w20p fl tc"><img class="w80p" src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg"></li>
-        <li class="w20p fl tc"><img class="w80p" src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg"></li>
-        <li class="w20p fl tc"><img class="w80p" src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg"></li>
+<section class="mt40">
+
+    <div><img  width="100%" src="__STATIC__/index/images/voucher.png"></div>
+    <ul class="voucher-market-catalogs clear" id="voucherClass">
+       <!-- <li class="w20p fl tc"><img class="w80p" src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg"></li>
+        -->
     </ul>
     <div id="dataListWrap">
-            <ul id="dataList1" class="voucher-market-list">
-            <li>
+            <ul id="dataList" class="voucher-market-list">
+           <!-- <li>
                 <a href="{:url('lottery/detail')}">
                     <div class="clear">
                         <p class="fl" ><span class="catalog tag">美食</span>财门一号北京烤鸭</p>
@@ -38,50 +36,105 @@
                         </div>
                     </div>
                 </a>
-            </li>
+            </li>-->
         </ul>
     </div>
 </section>
 <script>
-    loadDealData()
-    function loadDealData(){
+    var url ={
+        getGoodsClass:"{:url('index/goodsclass/getGoodsClass')}",//获取商品分类
+        goodsWithLottery:"{:url('index/lottery/market')}",//根据分类获取带有券的商品
+    }
+    getGoodsClass();
+    function goodsWithLottery(){
         initData('dataList');
+        var classId = $('#voucherClass').find('.active').attr('data-classid');
         pageload({
             targetWarp:'dataListWrap',
             target:'dataList',
             page:1,
             size:4,
             ajaxData:{
-                url:"{:url('index/index/return_json')}",
-                data:{},
+                url:url.goodsWithLottery,
+                data:{goodsClassId:classId},
             },
             dealFun:dealData
         });
     }
+
     function dealData(data) {
         var html='';
         for(var i = 0; i < data.length; i++){
+            var imgArr = new Array();
+            var coupon_type = data[i].coupon_type;
+            if(data[i].pic){
+                imgArr = eval(data[i].pic);
+            }
             html +='<li>';
-            html +='    <a href="{:\\think\\Url::build(\'voucherdetail\')}" >';
             html +='        <div class="clear">';
-            html +='            <p class="fl" ><span class="catalog border-tag">美食</span>财门一号北京烤鸭</p>';
-            html +='            <p class="price fr f18 bold">￥6 8</p>';
+            html +='            <p class="fl" ><span class="catalog border-tag">'+data[i].class_name+'</span>'+data[i].name+'</p>';
+            html +='            <p class="price fr f18 bold">￥'+data[i].coupon_real_money+'</p>';
             html +='        </div>';
             html +='        <div class="clear mt5">';
+            html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
             html +='            <ul class="item-img clear fl">';
-            html +='                <li><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>';
-            html +='                <li><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>';
-            html +='                <li><img src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg"></li>';
+            for(var n=0; n<imgArr.length; n++){
+                html +='        <li><img src="'+imgArr[n]+'"></li>';
+            }
             html +='            </ul>';
-            html +='            <div class="fr">';
-            html +='                <p class="tc base-color f12 mb10">满24元可用</p>';
-            html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10">立即领取</button>';
+             html +='    </a>';
+            html +='            <div class="fr tr">';
+            //"1":抵扣券  coupon_type "2":优惠券   "3":代金券   "4":免邮券   "5":生日券
+            var btn_text ='立即领取';
+            var moneyShow = '';
+            switch(coupon_type){
+                case 1:
+                  //  html +='                <p class="price"> '+data[i].point_score+'积分 </p>';
+                    break;
+                case 2:
+                    html +='                <p class="price f12"> 满'+data[i].coupon_real_money+'优惠'+data[i].coupon_money+'元 </p>';
+                    html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10">立即领取</button>';
+                    break;
+                case 3:
+                    html +='                <p class="tc base-color mb10">代'+data[i].coupon_money+'元券</p>';
+                    btn_text=''
+                    html +='                <a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10" href="'+urlConnect("{:url('lottery/detail')}",{id:data[i].coupon_id,goods_id:data[i].id})+'" >立即购买</a>';
+                    break;
+                case 4:
+                    html +='                <p class="price f12"> 包邮券 </p>';
+                    html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10">立即领取</button>';
+                    break;
+                default:
+                  //  html +='                <p class="price"> ￥'+data[i].price+' </p>';
+                    break;
+            }
             html +='            </div>';
             html +='        </div>';
-            html +='    </a>';
             html +='</li>';
         }
         return html;
+    }
+    //获取商品分类4
+    function getGoodsClass() {
+        $.ajax({
+            type:'post',
+            url:url.getGoodsClass,
+            success:function (data) {
+                var html='', code = data.code,data = data.data;
+                html +=' <li class="w20p fl tc h60 lh60"  data-classid="all"   >全部</li>';
+                if(code=='200'){
+                    for(var i = 0; i < data.length; i++){
+                        html +=' <li class="w20p fl tc" data-classid="'+data[i].id+'"  ><img class="w80p" src="'+data[i].pic+'"></li>';
+                    }
+                    $('#voucherClass').empty().append(html);
+                    var $targetLi = $('#voucherClass li');
+                    tabSwitch($targetLi,goodsWithLottery);
+                    var firstLi = $targetLi[0];
+                    firstLi.click();
+                }
+
+            }
+        })
     }
 </script>
 </body>

@@ -186,11 +186,11 @@ class Goods extends Controller
 
             }else{
                 $insert=[];
-                $goodsAttribute = Db::name('goods_attribute')->where(['goods_id'=>$data['id']])->find();
+                $goodsAttribute = Db::name('goods_attribute')->where(['goods_id'=>$goods_id])->find();
                 if($goodsAttribute){
-                    Db::name('goods_attribute')->where(['goods_id'=>$data['id']])->delete();
+                    Db::name('goods_attribute')->where(['goods_id'=>$goods_id])->delete();
                 }
-                $insert['goods_id'] = $data['id'];
+                $insert['goods_id'] = $goods_id;
 //                $insert['goods_code'] = $data['goods_code'];
                 $insert['price'] = $data['price'];
                 $insert['point_score'] = $data['point_price'];

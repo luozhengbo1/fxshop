@@ -1,0 +1,79 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+{include file="Public/header-title"}
+<!--券详情-->
+<style>
+    .footer-pay-info .go-pay{
+        background: orange;
+        color: white;
+        width: 100%;
+        display: inline-block;
+        height: .5rem;
+        line-height: .5rem;
+        text-align: center;
+        font-weight: bold;
+        font-size: 20px;
+    }
+</style>
+<div class="voucher-affairm ">
+   <div class="title p5 bg_white f16">{$goods['name']}</div>
+    <div class="clear bg_white p10 mb5">
+        <img width="50px" height="50px" class="fl" src="{$goods['main_image']}">
+        <div class="fl w80p pl10" >
+            <p class="clear">
+                <span class="fl f14 bold">{$lottery['coupon_money']}元代金券</span>
+                <span class="fr">￥{$lottery['coupon_real_money']}元</span>
+            </p>
+            <div>
+                <span class="grey">周一至周日&nbsp;|&nbsp;&nbsp;</span>
+                <span class="grey">部分可用&nbsp;|&nbsp;&nbsp;</span>
+                <span class="grey">免预约&nbsp;|&nbsp;&nbsp;</span>
+            </div>
+            <div class="green">
+                <span class="">随时退&nbsp;&nbsp;</span>
+                <span class="">过期自动退</span>
+            </div>
+        </div>
+    </div>
+    <ul class="pl10 pr10 bg_white">
+        <li class="clear h40 lh40">
+            <span class="fl bold">数量</span>
+            <div class="layui-btn-group fr count-wrap ">
+                <button class="layui-btn layui-btn-primary layui-btn-sm fr24 minus">-</button>
+                <div class="layui-btn layui-btn-primary layui-btn-sm">
+                    <input class="sumInput" type="text" data-store ="{$lottery['number']}" data-price="{$lottery['coupon_real_money']}" value="1" id="buyNum"  onkeyup="buyNumShow();">
+                </div>
+                <button class="layui-btn layui-btn-primary layui-btn-sm fr24 add">+</button>
+            </div>
+        </li>
+        <li class="clear  h40 lh40">
+            <span class="fl bold">小计</span>
+            <div class="fr"><span class="price f12">￥<i class="priceShow">{$lottery['coupon_real_money']}</i>元</span></div>
+        </li>
+        <li class="clear  h40 lh40 mt0">
+            <span class="fl bold">抵用券</span>
+            <div class="fr">无可用券</div>
+        </li>
+        <li class="clear  h40 lh40">
+            <span class="fl bold">实付金额</span>
+            <div class="fr price">￥<i class="priceShow f16 ">{$lottery['coupon_real_money']}</i>元</div>
+        </li>
+    </ul>
+    <ul class="footer-fixed footer-pay-info clear">
+        <li>
+            <a class="go-pay" href="{:url('lottery/affairm',['lottery_id'=>$lottery['id'],'goods_id'=>$lottery['goods_id']])}" >提&nbsp;交&nbsp;订&nbsp;单</a>
+        </li>
+    </ul>
+</div>
+<script>
+   $('.content').html(tagParse("{$lottery['desc']}"));
+   new countCalculate(buyNumShow);//数字计算
+   //显示购买数量 根据
+   function buyNumShow(){
+       var buyNum = $('#buyNum').val();
+       var price = parseInt($('#buyNum').attr('data-price'));
+       $('.priceShow').html(buyNum*price)
+   }
+</script>
+</body>
+</html>

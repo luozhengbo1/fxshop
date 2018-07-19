@@ -17,18 +17,22 @@
         public function  getGoodsHotOrOther($page,$size,$show_area='3')
         {
             if($show_area=="all"){
-                $goodsList =Db::name('goods')->select();
+                $goodsList =Db::name('goods')
+                    ->select();
             }else{
                 $goodsList = Db::name('goods')
                     ->where(['show_area'=>$show_area,'status'=>1,'isdelete'=>'0'])
                     ->page($page,$size)
                     ->select();
             }
-            if( empty($goodsList) ) {
-                return ajax_return('','no','500');
-            }else{
-                return ajax_return($goodsList,'ok','200');
+            foreach ($goodsList as $k=>$v){
+                $goods_attribute = Db::name('goods_attribute')
+                    ->where(['goods_id'=>$v['id']])
+                    ->page($page,$size)
+                    ->select();
+                $goodsList[$k]['skuData'] =$goods_attribute;
             }
+            return ajax_return($goodsList,'ok','200');
         }
         #获取这个商品的详情
         public function detail($id)

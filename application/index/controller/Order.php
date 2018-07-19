@@ -54,7 +54,7 @@
                     //$where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status'],'fy_order_goods.is_return'=>1];
                 }
                 $orderList = Db::name('order')
-                    ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
+                    ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
 //                    ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id','left')
                     ->where($where)
                     ->order('fy_order.create_time desc')

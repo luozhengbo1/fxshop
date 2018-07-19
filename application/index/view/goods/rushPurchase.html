@@ -62,7 +62,11 @@
         function dealData(data) {
             var html='';
             for(var i = 0; i < data.length; i++){
-                var width=100;
+                var skuData=data[i].skuData,totalNum=data[i].buy_num;
+                for(var n=0; n<skuData.length; n++){
+                    totalNum +=skuData[n].store;
+                }
+                var width=parseInt((data[i].buy_num)/totalNum *100)+'%';
                 var price=notEmpty(data[i].basic_price);
                 var activeFlag = new Date().getTime()>parseInt(data[i].start_date)*1000  &&　new Date().getTime()<parseInt(data[i].end_date)*1000;//活动区间
                 if(data[i].price_real && data[i].price_real!=0){
@@ -78,9 +82,9 @@
                 html +='      <div class="layui-progress layui-progress-big progress-bar-height ml5 mr5 w90p">';
                 html +='          <div class="clear text-show" >';
                 html +='              <p class="fl">已抢'+notEmpty(data[i].buy_num)+'件</p>';
-                html +='              <p class="fr pr5">3%</p>';
+                html +='              <p class="fr pr5">'+width+'</p>';
                 html +='          </div>';
-                html +='          <div class="layui-progress-bar bg_sred progress-bar-height" style="width: '+width+'px;"></div>';
+                html +='          <div class="layui-progress-bar bg_sred progress-bar-height" style="width: '+width+'"></div>';
                 html +='      </div>';
                 html +='     <p class="p5">开始时间'+new Date(parseInt(data[i].start_date)*1000).Format("yyyy-MM-dd hh:mm:ss")+'</p>';
                 html +='     <p class="pl5">结束时间'+new Date(parseInt(data[i].end_date)*1000).Format("yyyy-MM-dd hh:mm:ss")+'</p>';

@@ -117,7 +117,7 @@
                     status = data[i].order_status ,
                     goods_id =data[i].goods_id,
                     sku_id = data[i].sku_id,
-                    show_area = detail.store_type,
+                    show_area = detail.show_area,
                     order_id = data[i].order_id;
                 console.log(goods_id)
                 html +='<a href="'+urlConnect("{:url('index/order/orderDetail')}",{id:order_id})+'">';

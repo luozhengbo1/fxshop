@@ -3116,9 +3116,10 @@ a {
 	padding: 0 .02rem;
 	width: 16%;
 	float: left;
+    padding-top: .05rem;
 }
 .message-lists .img img{
-
+    border-radius: 6px;
 	width: 100%;
 }
 .message-lists .content{
@@ -3523,11 +3524,11 @@ a {
 	width:100%;}
 
 .show.detail_popup {
-	/*top: 0;*/
+	top: 0;
 }
 .detail_popup {
 	position: fixed;
-	top: 100%;
+	/*top: 100%;*/
 	bottom: 0;
 	left: 0;
 	right: 0;
@@ -4038,6 +4039,7 @@ a {
 	width: 20%;
 	float: left;
 	text-align: center;
+	overflow: scroll;
 }
 /****************************收藏夹*/
 .goode-collect .list-item{
@@ -4189,6 +4191,10 @@ a {
 	padding: 8px 0;
 	background: white;
 }
+.voucher-market-catalogs li.active{
+	background-color: #de181b;
+	border-radius: 50%;
+}
 .border-tag {
 	display: inline-block;
 	position: relative;
@@ -4204,7 +4210,7 @@ a {
 .voucher-market-list .item-img{
 	width: 80%;
 	overflow: hidden;
-	height: .7rem;
+	max-height: .7rem;
 }
 .voucher-market-list .item-img li{
 	width: 32%;

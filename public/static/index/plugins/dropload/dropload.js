@@ -113,6 +113,7 @@
 
         // 加载下方
         me.$scrollArea.on('scroll',function(){
+            debugger;
             me._scrollTop = me.$scrollArea.scrollTop();
 
             // 滚动页面触发加载数据
