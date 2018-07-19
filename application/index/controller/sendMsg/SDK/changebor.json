@@ -1,6 +1,6 @@
 {
   "touser":"%s",
-  "template_id":"dYe35_CkByO0Tq9udu0gHCTFMEcCQw_siGYrokDX7PM",
+  "template_id":"%s",
   "url":"%s",
   "topcolor":"#FF0000",
   "data":{
@@ -8,27 +8,23 @@
       "value":"%s",
       "color":"#173177"
     },
-    "FlightNo":{
+    "keyword1":{
       "value":"%s",
       "color":"#173177"
     },
-    "DepAirport":{
+    "keyword2":{
       "value":"%s",
       "color":"#173177"
     },
-    "ArrAirport":{
+    "keyword3":{
       "value":"%s",
       "color":"#173177"
     },
-    "DepTime":{
+    "keyword4":{
       "value":"%s",
       "color":"#173177"
     },
-    "ArrTime":{
-      "value":"%s",
-      "color":"#173177"
-    },
-    "beforeTrainNumber":{
+    "keyword5":{
       "value":"%s",
       "color":"#173177"
     },

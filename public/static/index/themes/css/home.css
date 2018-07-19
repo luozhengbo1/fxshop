@@ -3524,11 +3524,11 @@ a {
 	width:100%;}
 
 .show.detail_popup {
-	/*top: 0;*/
+	top: 0;
 }
 .detail_popup {
 	position: fixed;
-	top: 100%;
+	/*top: 100%;*/
 	bottom: 0;
 	left: 0;
 	right: 0;
@@ -4039,6 +4039,7 @@ a {
 	width: 20%;
 	float: left;
 	text-align: center;
+	overflow: scroll;
 }
 /****************************收藏夹*/
 .goode-collect .list-item{
