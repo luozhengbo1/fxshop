@@ -28,8 +28,25 @@
     <script>DD_belatedPNG.fix('*');</script>
     <![endif]-->
     {include file='template/javascript_vars' /}
+    <style>
+        .lockScreen{
+            width: 100%;
+            background: black;
+            opacity: .6;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            z-index: 9999;
+            color: white;
+            text-align: center;
+            font-size: 18px;
+        }
+    </style>
 </head>
 <body>
+<div class="lockScreen" style="display: none">
+    <span class="" onclick="closeLockScreen()">退出锁屏</span>
+</div>
 <header class="navbar-wrapper">
     <div class="navbar navbar-fixed-top">
         <div class="container-fluid cl"> <a class="logo navbar-logo f-l mr-10 hidden-xs" href="{:\\think\\Url::build('/admin')}">{$Think.config.site.name}</a> <a class="logo navbar-logo-m f-l mr-10 visible-xs" href="{:\\think\\Url::build('/admin')}">tp</a> <span class="logo navbar-slogan f-l mr-10 hidden-xs">{$Think.config.site.version}</span> <a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs" href="javascript:;">&#xe667;</a>
@@ -89,6 +106,9 @@
 <script type="text/javascript" src="__STATIC__/h-ui.admin/js/H-ui.admin.js"></script>
 <script type="text/javascript" src="__STATIC__/js/app.js"></script>
 <script>
+    function closeLockScreen() {
+        $('.lockScreen').fadeOut();//使用淡出效果退出锁屏
+    }
     function logout() {
         layer.confirm('您确定要退出登录？',{title:'登出提醒'},function (index) {
             location.href = '{:\\think\\Url::build("Pub/logout")}'

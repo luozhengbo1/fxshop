@@ -5,7 +5,6 @@
     margin: 20px;
     display: flex;
 }
-
 h4 {
     position: relative;
     top: -2.5em;
@@ -19,7 +18,7 @@ h4 {
     border-width: 1px;
     border-color: #909090;
     padding: 30px;
-    margin: 50px auto;
+    margin: 100px auto;
 }
 
 .div-target {
@@ -59,7 +58,7 @@ img {
     text-align: center;
     vertical-align: middle;
     margin: 10px;
-    font-size: large;
+    font-size: medium;
 }
 
 p {
@@ -76,9 +75,15 @@ ol li {
 }
 
 strong {
-    font-size: larger;
+    font-size: medium;
 }
 
 .btn-li {
     margin: 50px;
+}
+.div-table-border{
+    border-style: solid;
+    border-width: 1px;
+    border-color: #909090;
+    margin: 60px;
 }

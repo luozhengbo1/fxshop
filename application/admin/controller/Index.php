@@ -22,7 +22,6 @@ use think\Db;
 
 class Index extends Controller
 {
-
     public function index()
     {
         // 读取数据库模块列表生成菜单项
@@ -85,6 +84,7 @@ class Index extends Controller
 //        $this->view->assign("info", $info);
 //
 //        return $this->view->fetch();
+        //待处理事项
         //查询订单
         $count_pay = Db::table('fy_order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
@@ -103,34 +103,52 @@ class Index extends Controller
             ->count();
         $this->view->assign('count_refund', $count_refund);
 
-        $date = new \DateTime();
-        $date->modify('this week');
-        $first_day_of_week = $date->format('Y-m-d');
-        $date->modify('this week +6 days');
-        $end_day_of_week = $date->format('Y-m-d');
-        $first_day_time = strtotime($first_day_of_week);
-        $end_day_time = strtotime($end_day_of_week);
-        //查询一周内访问人数
-        $count_visitor = Model('LoginLog')->where('login_time', 'between', [$first_day_of_week, $end_day_of_week])->count('login_time');
-        $this->view->assign('count_visitor', $count_visitor);
-
-        //查询一周内成交客户
-        $count_accomplish = Db::table('fy_order')
-            ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
-            ->where(['order_status' => 8, 'create_time' => ['between', [$first_day_time, $end_day_time]]])
-            ->count('order_status');
-        $this->view->assign('count_accomplish', $count_accomplish);
-
-        //查询一周内支付的订单
-        $count_pay_accomplish = Db::table('fy_order')
-            ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
-            ->where(['order_status' => 1, 'pay_status' => 1, 'create_time' => ['between', [$first_day_time, $end_day_time]]])
-            ->count('order_status');
-        $this->view->assign('count_pay_accomplish', $count_pay_accomplish);
+        //指标展示
+        $this->queryTarget();
 
         //查询公告
         $notice_list = Model('Notice')->where(['status' => 1, 'isdelete' => 0])->select();
         $this->view->assign("notice_list", $notice_list);
         return $this->view->fetch();
+    }
+
+    /**
+     * 查询指标
+     */
+    protected function queryTarget()
+    {
+        $date = new \DateTime();
+        for ($i = 0; $i < 8; $i++) {
+            $date->modify('this week +' . $i . ' days');
+            $day_of_week[$i] = $date->format('Y-m-d');
+            $time_of_week[$i] = strtotime($day_of_week[$i]);
+        }
+        //查询一周内每天的访问人数
+        for ($i = 0; $i < 7; $i++) {
+            $count = Model('LoginLog')->where('login_time', 'between', [$day_of_week[$i], $day_of_week[$i + 1]])->count('login_time');
+            $count_visitor[$i] = $count;
+        }
+        $count_visitor = join($count_visitor, ',');
+        $this->view->assign('count_visitor', $count_visitor);
+
+        //查询一周内成交客户
+        for ($i = 0; $i < 7; $i++) {
+            $count = Db::table('fy_order')
+                ->where(['order_status' => 8, 'create_time' => ['between', [$time_of_week[$i], $time_of_week[$i + 1]]]])
+                ->count('order_status');
+            $count_accomplish[$i] = $count;
+        }
+        $count_accomplish = join($count_accomplish, ',');
+        $this->view->assign('count_accomplish', $count_accomplish);
+
+        //查询一周内支付的订单
+        for ($i = 0; $i < 7; $i++) {
+            $count = Db::table('fy_order')
+                ->where(['pay_status' => 1, 'create_time' => ['between', [$time_of_week[$i], $time_of_week[$i + 1]]]])
+                ->count('order_status');
+            $count_pay_accomplish[$i] = $count;
+        }
+        $count_pay_accomplish = join($count_pay_accomplish, ',');
+        $this->view->assign('count_pay_accomplish', $count_pay_accomplish);
     }
 }
