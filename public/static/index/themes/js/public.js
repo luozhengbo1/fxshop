@@ -551,6 +551,7 @@ function backTime(){
                 var showText = '剩余支付时间'+secondTime+'分'+millTime+'秒';
                 if(sulfTime>0)
                   $(ele).html(showText);
+                else  $(ele).html('订单已过期，重新下单吧');
             },1000)
         }else{
             var showText = '订单已过期，重新下单吧';
@@ -559,4 +560,22 @@ function backTime(){
             var $orderPay =  $(ele).parents('.orderWrap').find('.orderPay').remove();
         }
     })
+}
+var is_send_param = {
+    0:'未发货',
+    1:'已发货',
+    2:'已收货',
+    3:'退货中',
+    4:'退货完成',
+}
+var order_status_param={
+    0:'未支付',
+    1:'已支付',
+    2:'待评价',
+    3:'待回复',
+    4:'待退款',
+    5:'部分退款',
+    6:'全部退款',
+    7:'已取消订单',
+    8:'订单完成',
 }

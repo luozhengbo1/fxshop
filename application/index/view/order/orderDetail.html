@@ -12,14 +12,9 @@
                 {php}
                 $status   = $orderDetail[0]['order_status'];
                 {/php}
+                <p id="showStatus" class="f16" data-status="{$status}"></p>
                 {if condition="$status eq 0"}
-                <p class="sulfTime fl f16" data-createtime="{$orderDetail[0]['create_time']}">剩余支付时间</p>
-                {elseif condition="$status eq 4" /}<!--待退款-->
-                等待卖家退款
-                {elseif condition="$status eq 2" /}  <!--待评价-->
-                等待买家评价
-                {elseif condition="$status eq 8" /}  <!--待评价-->
-                交易成功
+                <p class="sulfTime fl f14" data-createtime="{$orderDetail[0]['create_time']}">剩余支付时间</p>
                 {/if}
             </div>
         </div>
@@ -148,6 +143,7 @@
             location.reload();
         },1500)
     }
+    $('#showStatus').html(order_status_param[$('#showStatus').data('status')])
 </script>
 <script type="text/javascript" src="__STATIC__/index/js/view/order.js" ></script>
 </body>
