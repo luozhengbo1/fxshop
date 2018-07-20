@@ -44,6 +44,7 @@
     var url ={
         getGoodsClass:"{:url('index/goodsclass/getGoodsClass')}",//获取商品分类
         goodsWithLottery:"{:url('index/lottery/market')}",//根据分类获取带有券的商品
+        getLottery:"{:url('index/lottery/get')}",//
     }
     getGoodsClass();
     function goodsWithLottery(){
@@ -72,8 +73,8 @@
             }
             html +='<li>';
             html +='        <div class="clear">';
-            html +='            <p class="fl" ><span class="catalog border-tag">'+data[i].class_name+'</span>'+data[i].name+'</p>';
-            html +='            <p class="price fr f18 bold">￥'+data[i].coupon_real_money+'</p>';
+            html +='            <p class="fl" ><span class="catalog border-tag" style="vertical-align: top">'+data[i].class_name+'</span><i>'+data[i].name+'</i></p>';
+            html +='            <p class="price fr f16 bold">￥'+data[i].coupon_real_money+'</p>';
             html +='        </div>';
             html +='        <div class="clear mt5">';
             html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
@@ -93,7 +94,7 @@
                     break;
                 case 2:
                     html +='                <p class="price f12"> 满'+data[i].coupon_real_money+'优惠'+data[i].coupon_money+'元 </p>';
-                    html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10">立即领取</button>';
+                    html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10" onclick="getLottery('+data[i].coupon_id+')">立即领取</button>';
                     break;
                 case 3:
                     html +='                <p class="tc base-color mb10">代'+data[i].coupon_money+'元券</p>';
@@ -102,7 +103,7 @@
                     break;
                 case 4:
                     html +='                <p class="price f12"> 包邮券 </p>';
-                    html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10">立即领取</button>';
+                    html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10" onclick="getLottery('+data[i].coupon_id+')">立即领取</button>';
                     break;
                 default:
                   //  html +='                <p class="price"> ￥'+data[i].price+' </p>';
@@ -133,6 +134,16 @@
                     firstLi.click();
                 }
 
+            }
+        })
+    }
+    function getLottery(id) {
+        $.ajax({
+            type:'post',
+            url:url.getLottery,
+            data:{id:id},
+            success:function (data) {
+               layer_msg(data.msg);
             }
         })
     }
