@@ -61,8 +61,8 @@
                     ->order('fy_order.create_time desc')
                     ->page($page,$size)
                     ->select();
-                echo Db::name('order')->getLastSql();
-                dump($orderList);
+               // echo Db::name('order')->getLastSql();
+               // dump($orderList);
                 foreach ($orderList as $k=>$v ){
                     $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
                 }
