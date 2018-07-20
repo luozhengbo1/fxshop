@@ -94,7 +94,6 @@
                     $storeData[$k] = array_merge($storeData[$k], $tempGoods);
                    // $storeData[$k] = array_merge($storeData[$k], Db::name('goods')->where(['id'=>$v['goodsId']])->find());
                 }
-
                 #如果有地址就取出地址
                 $address = Db::name('customer_address')->alias('ca')
                     ->field('ca.*')
@@ -138,7 +137,6 @@
                     return ajax_return('','你积分数量不足','500');
                 }
 //                dump($res);die;
-
                 Session::set('storeData '.$this->userInfo['openid'],$storeData);
 //                dump(  Session::get('storeData '.$this->userInfo['openid']));die;
 //                $res = Db::name('order_confirm')->insert($data);

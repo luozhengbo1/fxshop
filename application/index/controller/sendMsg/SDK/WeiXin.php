@@ -45,8 +45,8 @@ class WeiXin
         $accessToken = $this->getAccessToken();
         $url = 'https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=' .  $accessToken;
         $sendResult = Http::post( $url, $msg );
-
-        var_dump($sendResult);
+//
+//        var_dump($sendResult);
         if ($sendResult['errcode'] != 0) {
             // Todo 发送失败
         } else {

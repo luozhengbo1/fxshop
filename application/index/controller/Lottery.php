@@ -138,8 +138,9 @@ Class Lottery extends Mustlogin
             $insert['status'] = 1;
             $insert['lottery_name'] = $lottery['name'];
             $insert['is_use'] = 0;
-            $res = Db::name('lottery')->where(['id' => $data['id']])->update($insert);
-            if ($res) {
+            $res = Db::name('lottery')->where(['id' => $data['id']])->update(['number'=>$lottery['number']-1]);
+            $res1 = Db::name('lottery_log')->insert($insert);
+            if ($res && $res1) {
                 return ajax_return('', '领取成功', '200');
             } else {
                 return ajax_return_error('领取失败', '500');
@@ -191,5 +192,44 @@ Class Lottery extends Mustlogin
             $this->assign('titleName', "卡券中心");
             return $this->view->fetch('mycardVoucher');
         }
+    }
+
+    #券的支付接口
+    public function  payLottery()
+    {
+        if($this->request->isAjax()){
+            $data = $this->request->post();
+            if(!$data['id']){
+                return ajax_return_error('缺少奖券id');
+            }
+            include_once "WxPaySDK/WxPay.Api.php";
+            include_once "WxPaySDK/WxPay.JsApiPay.php";
+            include_once 'WxPaySDK/log.php';
+            #订单总价的计算
+            #计算几个商户进行分成多个订单
+            $orderId = \WxPayConfig::MCHID.date("YmdHis");
+            $tools = new \JsApiPay();
+            //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名内，所以获取不到，使用github的实现。
+            //②、统一下单
+            $input = new \WxPayUnifiedOrder();
+            $input->SetBody("泛亚商城 的订单");
+            $input->SetAttach("附加参数");
+            $input->SetOut_trade_no($orderId);
+            $input->SetTotal_fee(100);
+            $input->SetTime_start(date("YmdHis"));
+            $input->SetTime_expire(date("YmdHis", time() + 1800));
+            $input->SetGoods_tag("");
+            $input->SetNotify_url("http://".$_SERVER['HTTP_HOST']."/index.php/index/wechatpay/notify3");
+            $input->SetTrade_type("JSAPI");
+            $input->SetOpenid($this->userInfo['openid']);
+            $unifiedOrder = \WxPayApi::unifiedOrder($input);
+            $jsApiParameters= $tools->GetJsApiParameters($unifiedOrder);
+//            if(){}
+
+            $jsApiParameters = base64_encode($jsApiParameters);
+            $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}");
+            die(json_encode($backData));
+        }
+
     }
 }

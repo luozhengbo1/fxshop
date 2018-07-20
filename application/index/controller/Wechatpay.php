@@ -18,14 +18,14 @@ class Wechatpay extends Controller
     # 微信支付回调
     public function notify()
     {
-
         # 支付成功后更新支付状态，支付时间
         $xml = isset($GLOBALS['HTTP_RAW_POST_DATA']) ? $GLOBALS['HTTP_RAW_POST_DATA'] : '';
         include_once 'WxPaySDK/Notify.php'; # 微信回调通知
         $notify = new \PayNotifyCallBack();
-        $notify->Handle(false);
+        $notify->Handle(true);
         $orderInfo = \WxPayResults::Init($xml);
-//        $orderInfo['out_trade_no']="144121740220180718160315";
+//        $orderInfo['out_trade_no']="144121740220180720165543";
+//        $orderInfo['openid']="omQYXwNAT5uC15TQqMGxajJzqo4s";
         if (empty($orderInfo)) {
             file_put_contents("wx_pay_error.log",$xml."\r", 8);
         } else {
@@ -34,59 +34,63 @@ class Wechatpay extends Controller
             $sonId = Db::name('order_all')->where($where)->find();
             $arr =[];
             $arr = explode(',',$sonId['son_id']);
-            $userInfo =Session::get('wx_user');
-            $user = Db::name('customer')->where(['openid'=>$userInfo['openid']])->find();
+            $user = Db::name('customer')->where(['openid'=>$orderInfo['openid']])->find();
             $goodsname="";
-            foreach ($arr as $value){
-                #修改子订单状态
-                Db::name('order')
-                    ->where(['order_id'=>$orderInfo['out_trade_no'].$value])
-                    ->update(['order_status'=>1,'pay_status'=>1, 'pay_time' => time()]);
-                #将子订单中对应的商品数量减少。
-                $goodsOrder = Db::name('order_goods')->where(['order_id'=>$orderInfo['out_trade_no'].$value])->select();
-                foreach ($goodsOrder as $v){
-                    $goodsStore = Db::name('goods_attribute')->where(['id'=>$v['sku_id']])->find();
-                    $store ='';
-                    if($goodsStore['store']-$v['goods_num']<=0){
-                        $store =0;
-                    }
-                    $store = $goodsStore['store']-$v['goods_num'];
+            if(is_array($arr)){
+                foreach ($arr as $value){
+                    #修改子订单状态
+                    Db::name('order')
+                        ->where(['order_id'=>$orderInfo['out_trade_no'].$value])
+                        ->update(['order_status'=>1,'pay_status'=>1, 'pay_time' => time()]);
+                    #将子订单中对应的商品数量减少。
+                    $goodsOrder = Db::name('order_goods')->where(['order_id'=>$orderInfo['out_trade_no'].$value])->select();
+                    foreach ($goodsOrder as $v){
+                        $goodsStore = Db::name('goods_attribute')->where(['id'=>$v['sku_id']])->find();
+                        $store ='';
+                        if($goodsStore['store']-$v['goods_num']<=0){
+                            $store =0;
+                        }
+                        $store = $goodsStore['store']-$v['goods_num'];
 
-                    $goodsDa  = Db::name('goods')->where(['id'=>$goodsStore['goods_id']])->find();
-                    $goodsname .= $goodsDa['name']."  ".$v['sku_val']."*".$v['goods_num']."   ";
-                    #减库存
-                    Db::name('goods_attribute')->where(['id'=>$v['sku_id']])->update(['store'=>$store]);
-                    #加上销量
-                    Db::name('goods')->where(['id'=>$goodsStore['goods_id']])->setInc('buy_num',$goodsStore['store']);
-                    #扣取相应的积分
+                        $goodsDa  = Db::name('goods')->where(['id'=>$goodsStore['goods_id']])->find();
+                        $goodsname .= $goodsDa['name']."  ".$v['sku_val']."*".$v['goods_num']."   ";
+                        #减库存
+                        Db::name('goods_attribute')->where(['id'=>$v['sku_id']])->update(['store'=>$store]);
+                        #加上销量
+                        Db::name('goods')->where(['id'=>$goodsStore['goods_id']])->setInc('buy_num',$goodsStore['store']);
+                        #扣取相应的积分
 //                    $goods = Db::name('goods')->where(['id'=>$v['goods_id']])->find();
+                    }
+                    $totalScore = $this->totalScore($goodsOrder);
+
+                    #将用户积分扣取，并将扣取记录记下来
+                    $decScore = $user['score']-$totalScore;
+                    if($decScore<0)$decScore=0;
+                    Db::name('customer')->where(['openid'=>$orderInfo['openid']])->update(['score'=>$decScore]);
+//                    file_put_contents("wx_pay_success.log",Db::name('customer')->getLastSql()."\r", 8);
+                    #记录
+                    $scoreLog=[];
+                    $scoreLog['openid']=$orderInfo['openid'];
+                    $scoreLog['source']=7;
+                    $scoreLog['uid']=$user['id'];
+                    $scoreLog['source_id']=0;
+                    $scoreLog['score']=-$decScore;
+                    $scoreLog['time']=time();
+                    Db::name('score_log')->insert($scoreLog);
+
                 }
-                $totalScore = $this->totalScore($goodsOrder);
-                #将用户积分扣取，并将扣取记录记下来
-
-                $decScore = $user['score']-$totalScore;
-                if($decScore<0)$decScore=0;
-                Db::name('customer')->where(['openid'=>$userInfo['openid']])->update(['score'=>$decScore]);
-                #记录
-                $scoreLog=[];
-                $scoreLog['openid']=$userInfo['openid'];
-                $scoreLog['source']=7;
-                $scoreLog['uid']=$user['id'];
-                $scoreLog['source_id']=0;
-                $scoreLog['score']=-$decScore;
-                $scoreLog['time']=time();
-                Db::name('score_log')->insert($scoreLog);
-
             }
             file_put_contents("wx_pay_success.log",$xml."\r", 8);
-            # 订单id是微信统一下单接口生成的out_trade_no
+            # 订单id是微信统  echo Db::name("order_all")->getLastSql();
+//            dump($res);一下单接口生成的out_trade_no
             $orderWhere = ["order_id" => $orderInfo['out_trade_no'] ];
             $update = ['status' => 1];
             $res = Db::name("order_all")->where($orderWhere)->update($update);
+//             file_put_contents("wx_pay_success.log",Db::name('order_all')->getLastSql()."\r", 8);
             #付款成功通知
             include_once "sendMsg/SDK/WeiXin.php";
             $wx = new \WeiXin();
-            $wx->buySuccess($goodsname,$userInfo['openid'],$sonId['total_price']);
+            $wx->buySuccess($goodsname,$orderInfo['openid'],$sonId['total_price']);
         }
         exit;
     }
@@ -118,12 +122,11 @@ class Wechatpay extends Controller
         $notify = new \PayNotifyCallBack();
         $notify->Handle(false);
         $orderInfo = \WxPayResults::Init($xml);
-//        $orderInfo['out_trade_no']="1441217402201807181603153772";
-        $userInfo =Session::get('wx_user');
-        $user = Db::name('customer')->where(['openid'=>$userInfo['openid']])->find();
+//        $orderInfo['out_trade_no']="144121740220180720145045";
         if (empty($orderInfo)) {
             file_put_contents("wx_pay_error.log",$xml."\r", 8);
         } else {
+            $user = Db::name('customer')->where(['openid'=>$orderInfo['openid']])->find();
             $order = Db::name('order')->where(['order_id'=>  $orderInfo['out_trade_no']])->find();
             $where['order_id']=$orderInfo['out_trade_no'];
             $data['pay_time']=time();
@@ -151,13 +154,13 @@ class Wechatpay extends Controller
             #减去对应商品的积分
             $totalScore = $this->totalScore($goodsOrder);
             #将用户积分扣取，并将扣取记录记下来
-
+//            dump($order);die;
             $decScore = $user['score']-$totalScore;
             if($decScore<0)$decScore=0;
-            Db::name('customer')->where(['openid'=>$userInfo['openid']])->update(['score'=>$decScore]);
+            Db::name('customer')->where(['openid'=>$orderInfo['openid']])->update(['score'=>$decScore]);
             #记录
             $scoreLog=[];
-            $scoreLog['openid']=$userInfo['openid'];
+            $scoreLog['openid']=$orderInfo['openid'];
             $scoreLog['source']=7;
             $scoreLog['source_id']=0;
             $scoreLog['uid']=$user['id'];
@@ -167,7 +170,7 @@ class Wechatpay extends Controller
             #付款成功通知
             include_once "sendMsg/SDK/WeiXin.php";
             $wx = new \WeiXin();
-            $wx->buySuccess($goodsname,$userInfo['openid'],$order['total_price']);
+            $wx->buySuccess($goodsname,$orderInfo['openid'],$order['total_price']);
         }
     }
 
