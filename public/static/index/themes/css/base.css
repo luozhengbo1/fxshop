@@ -598,6 +598,20 @@ body{
     background-color: #696767!important;
     color: white;
 }
+.param_table {
+    width: 100%;
+    margin-bottom: 10px;
+    border-collapse: collapse;
+    font-size: 12px;
+    border-spacing: 0;
+    line-height: 18px;
+    padding: 0;
+}
+.param_table th, .param_table td {
+    padding: 8px;
+    border: 1px solid #dadada;
+    text-align: left;
+}
 /*
 .swiper-pagination .swiper-pagination-bullet {
     width: 10px;

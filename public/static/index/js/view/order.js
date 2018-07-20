@@ -20,6 +20,20 @@ function refund(order_id,goods_id,sku_id) {
         }
     });
 }
+//取消订单
+function cancelOrder(order_id,goods_id,sku_id) {
+        layer.open({
+            content: '你确定要取消订单吗？'
+            ,btn: ['确定', '不要']
+            ,yes: function(index){
+                pub_save({
+                    url:url.cancelOrder,
+                    data:{'order_id':order_id,'goods_id':goods_id,'sku_id':sku_id},
+                    complete:loadOrderData,
+                })
+            }
+        });
+}
 //确认收货
 function sureDeliver(order_id,goods_id,sku_id) {
     layer.open({
