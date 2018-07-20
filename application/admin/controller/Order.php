@@ -141,7 +141,7 @@ class Order extends Controller
             return $this->error('缺少参数订单id');
         }
         $orderDetail = Db::name('order')
-            ->field(' fy_order.id,
+            ->field(' fy_order.id,fy_order.pay_status,
             fy_order.order_id,fy_order.order_status,fy_order.total_price,fy_order.customer_name,fy_order.customer_name,fy_order.create_time,fy_order.pay_time,
             fy_order_goods.*, fy_goods_attribute.store,fy_goods_attribute.price')
             ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
@@ -275,8 +275,11 @@ class Order extends Controller
                 #如果订单在父订单中支付，需要找到父订单用父订单id发起退款
                 $orderId = substr($order_id,'0',strlen($order_id)-4);
                 $orderAll = Db::name('order_all')->where(['order_id'=>$orderId,'status'=>1])->find();
+//                dump($orderAll);
                 if( empty($orderAll)  ){
                     $orderId = $order_id;
+                }else{
+                    $order['total_price']=$orderAll['total_price'];
                 }
                 $orderGoods =  Db::name('order_goods')->where(['id'=>$data['id']])->find();
                 $orderGoods['goods_detail']=json_decode($orderGoods['goods_detail'],true);
@@ -293,6 +296,7 @@ class Order extends Controller
                     file_put_contents("wx_refund_error.log",print_r($result, true)."\r", 8);
                    return ajax_return_error('没有退款订单');
                 }
+//                dump($order['total_price']);
                 $input = new \WxPayRefund();
                 $input->SetOut_trade_no($orderId);   //自己的订单号
                 //$input->SetTransaction_id($order['transaction_id']);  //微信官方生成的订单流水号，在支付成功中有返回
@@ -307,11 +311,10 @@ class Order extends Controller
                 if( $res['return_code'] == 'SUCCESS' &&  $res['result_code']=="SUCCESS" ){
                     file_put_contents("wx_refund_success.log",print_r($res, true)."\r", 8);
                     //修改订单状态 将订单总金额减少退款金额
-
                     $orderData = Db::name('order')->field('total_price')->where( [ 'order_id'=>$order_id ] )->find();
                     $decPrice = $orderData['total_price'] -$orderGoods['return_price'] ;#减去订单总价
                     if($decPrice<0)$decPrice=0;
-                    if(($order['return_price_all']+$orderGoods['return_price'])== $order['total_price']){#全额退款
+                    if(($order['return_price_all'])== $order['total_price']){#全额退款
                         $order_status = 6;
                     }else {
                         $order_status =5;
@@ -321,25 +324,23 @@ class Order extends Controller
                     $result['code'] = 200;
                     $result['msg'] = '退款成功';
                     #退款加上库存
-                    $orderGoods =  Db::name('order_goods')->where( [ 'id'=>$data['id'] ] )->find();
                     Db::name('goods_attribute')->where(['id'=>$orderGoods['sku_id']])->setInc('store',$orderGoods['goods_num']);
-
-                    #退款通知
+//                    #退款通知
                     include_once APP_PATH."/index/controller/sendMsg/SDK/WeiXin.php";
                     $wx = new \WeiXin();
-                    $wx->refund($orderGoods['goods_detail']['name'],$orderGoods['openid'],$orderGoods['order_id'],$orderGoods['return_price']);
+                    $wx->refund($orderGoods['goods_detail']['name'],$orderGoods['openid'],$orderGoods['order_id'],$orderData['total_price']);
                     return ajax_return('','退款成功');
                 }else{
-                    file_put_contents("wx_refund_error.log",$res."\r", 8);
+                    file_put_contents("wx_refund_error.log",print_r($res, true)."\r", 8);
                     $result['code'] = 402;
-                    $result['msg'] = '退款异常请联系客服人员';
-                    return ajax_return('','退款异常请联系客服人员');
+                    $result['msg'] = $res['err_code_des'];
+                    return ajax_return('',$res['err_code_des']);
                 }
             }else{
                 $result['code'] = 404;
-                $result['msg'] = '订单号不存在';
-                file_put_contents("wx_refund_error.log",json_encode($result."\r"), 8);
-                return ajax_return('','订单号不存在');
+                $result['msg'] = '订单id不能为空';
+//                file_put_contents("wx_refund_error.log",json_encode($result."\r"), 8);
+                return ajax_return('','订单id不能为空');
             }
         }
 

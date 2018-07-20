@@ -83,4 +83,100 @@ Array
     [total_fee] => 3
     [transaction_id] => 4200000155201807189358410455
 )
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ORDERNOTEXIST
+    [err_code_des] => 订单不存在
+    [mch_id] => 1441217402
+    [nonce_str] => 66XDiSLxJuiNxtP5
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 7115B5390B946FEF1C60345F20617FA7
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ORDERNOTEXIST
+    [err_code_des] => 订单不存在
+    [mch_id] => 1441217402
+    [nonce_str] => Ap8VcfPr2rTuJxEy
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 9F8A0036BB39E26CDAB2CCEC59875CED
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ORDERNOTEXIST
+    [err_code_des] => 订单不存在
+    [mch_id] => 1441217402
+    [nonce_str] => wW17AKIIZp4LtlrY
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 4F081186D8338F77654CFFB3E23DCB14
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ORDERNOTEXIST
+    [err_code_des] => 订单不存在
+    [mch_id] => 1441217402
+    [nonce_str] => VOkwQv1U2sVGmM1m
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => A2235244C0447F631E55C29560D3ED49
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [cash_fee] => 2
+    [cash_refund_fee] => 1
+    [coupon_refund_count] => 0
+    [coupon_refund_fee] => 0
+    [mch_id] => 1441217402
+    [nonce_str] => 1VnToUWdNnc4DWXX
+    [out_refund_no] => 5b5188dbc11e71532070107
+    [out_trade_no] => 144121740220180720145045
+    [refund_channel] => Array
+        (
+        )
+
+    [refund_fee] => 1
+    [refund_id] => 50000507542018072005471606359
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => CF238B7EC90320D7DA6CA0C26D7F100E
+    [total_fee] => 2
+    [transaction_id] => 4200000155201807205136826429
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [cash_fee] => 2
+    [cash_refund_fee] => 1
+    [coupon_refund_count] => 0
+    [coupon_refund_fee] => 0
+    [mch_id] => 1441217402
+    [nonce_str] => huUNkc4KycUbKvHV
+    [out_refund_no] => 5b518f3c6b0bc1532071740
+    [out_trade_no] => 144121740220180720152038
+    [refund_channel] => Array
+        (
+        )
+
+    [refund_fee] => 1
+    [refund_id] => 50000107532018072005468494098
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => DA91456A43BF87C7C72D6428B1648768
+    [total_fee] => 2
+    [transaction_id] => 4200000147201807200070521457
+)
 

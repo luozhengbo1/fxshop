@@ -1,0 +1,112 @@
+Array
+(
+    [return_code] => FAIL
+    [return_msg] => 签名错误
+)
+Array
+(
+    [return_code] => FAIL
+    [return_msg] => 签名错误
+)
+Array
+(
+    [return_code] => FAIL
+    [return_msg] => 签名错误
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ORDERNOTEXIST
+    [err_code_des] => 订单不存在
+    [mch_id] => 1441217402
+    [nonce_str] => jFxD6TLwEcp1bEki
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 09DEAEA5DF4C1CD36143BD293A7DBD2B
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ORDERNOTEXIST
+    [err_code_des] => 订单不存在
+    [mch_id] => 1441217402
+    [nonce_str] => Ymx1BGxRwVifkQoe
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => AA6CA5C798B9BA6A543C34004536C00D
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ORDERNOTEXIST
+    [err_code_des] => 订单不存在
+    [mch_id] => 1441217402
+    [nonce_str] => 5WweVxq59zHEoixy
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 4516221DEC7F27A02D3B2808EFBE6407
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ORDERNOTEXIST
+    [err_code_des] => 订单不存在
+    [mch_id] => 1441217402
+    [nonce_str] => JqxZn0SQxhYZ4oJg
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 57E3B12EE7C511FCCA925CAAA49F50C7
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ORDERNOTEXIST
+    [err_code_des] => 订单不存在
+    [mch_id] => 1441217402
+    [nonce_str] => 199MAuluBax8tL38
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 6282878528514DD90DBF9CB9E5C58175
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => REFUND_FEE_MISMATCH
+    [err_code_des] => 订单金额或退款金额与之前请求不一致，请核实后再试
+    [mch_id] => 1441217402
+    [nonce_str] => r1NceJYzyUcbmYXt
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 6A8B861367F412B7376392909412EE64
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => REFUND_FEE_MISMATCH
+    [err_code_des] => 订单金额或退款金额与之前请求不一致，请核实后再试
+    [mch_id] => 1441217402
+    [nonce_str] => KOIdmVPQrRP5RCED
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 5822C8BD4AB6831578B6541008AFF43D
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => REFUND_FEE_MISMATCH
+    [err_code_des] => 订单金额或退款金额与之前请求不一致，请核实后再试
+    [mch_id] => 1441217402
+    [nonce_str] => alVZse1HhffUHpQt
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 9FDB980323FCDF8063A6660EA5AD8260
+)
+

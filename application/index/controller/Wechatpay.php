@@ -26,6 +26,7 @@ class Wechatpay extends Controller
         $notify->Handle(false);
         $orderInfo = \WxPayResults::Init($xml);
 //        $orderInfo['out_trade_no']="144121740220180718160315";
+//        $orderInfo['out_trade_no']="144121740220180720145045";
         if (empty($orderInfo)) {
             file_put_contents("wx_pay_error.log",$xml."\r", 8);
         } else {
@@ -118,7 +119,7 @@ class Wechatpay extends Controller
         $notify = new \PayNotifyCallBack();
         $notify->Handle(false);
         $orderInfo = \WxPayResults::Init($xml);
-//        $orderInfo['out_trade_no']="1441217402201807181603153772";
+//        $orderInfo['out_trade_no']="144121740220180720145045";
         $userInfo =Session::get('wx_user');
         $user = Db::name('customer')->where(['openid'=>$userInfo['openid']])->find();
         if (empty($orderInfo)) {
@@ -151,7 +152,7 @@ class Wechatpay extends Controller
             #减去对应商品的积分
             $totalScore = $this->totalScore($goodsOrder);
             #将用户积分扣取，并将扣取记录记下来
-
+//            dump($order);die;
             $decScore = $user['score']-$totalScore;
             if($decScore<0)$decScore=0;
             Db::name('customer')->where(['openid'=>$userInfo['openid']])->update(['score'=>$decScore]);
