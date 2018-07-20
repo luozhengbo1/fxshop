@@ -320,6 +320,9 @@ class Order extends Controller
                     Db::name('order_goods')->where( [ 'id'=>$data['id'] ] )->update(['is_return'=>2,'is_send'=>4]);#已退款，退货完成
                     $result['code'] = 200;
                     $result['msg'] = '退款成功';
+                    #退款加上库存
+                    $orderGoods =  Db::name('order_goods')->where( [ 'id'=>$data['id'] ] )->find();
+                    Db::name('goods_attribute')->where(['id'=>$orderGoods['sku_id']])->setInc('store',$orderGoods['goods_num']);
 
                     #退款通知
                     include_once APP_PATH."/index/controller/sendMsg/SDK/WeiXin.php";
