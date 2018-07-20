@@ -224,7 +224,7 @@ Class Lottery extends Mustlogin
             $input->SetOpenid($this->userInfo['openid']);
             $unifiedOrder = \WxPayApi::unifiedOrder($input);
             $jsApiParameters= $tools->GetJsApiParameters($unifiedOrder);
-            if(){}
+//            if(){}
 
             $jsApiParameters = base64_encode($jsApiParameters);
             $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}");

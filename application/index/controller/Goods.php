@@ -181,9 +181,10 @@
                 $searcId =array_unique( array_column($searchList,'goods_id'));
                 $goodsId =join( array_unique(explode(',',join($broseData,',').','.join($searcId,','))),',' );
             }
+            $thisGoods = Db::name('goods')->field('show_area')->where(['id'=>$id])->find();
             if( !empty($goodsId) ){
                 $goodsList = Db::name('goods')
-                    ->where(['status'=>1,'isdelete'=>0,'id'=>['in',$goodsId]])
+                    ->where(['status'=>1,'isdelete'=>0,'id'=>['in',$goodsId],'show_area'=>$thisGoods['show_area']])
                     ->limit(24)
                     ->select();
             }else{
@@ -192,7 +193,7 @@
                    ->where(['id'=>$id,'status'=>1,'isdelete'=>0])
                    ->find();
                 $goodsList = Db::name('goods')
-                   ->where(['status'=>1,'isdelete'=>'0','goods_class_id'=>['=',$goodsClass['goods_class_id'] ]])
+                   ->where(['status'=>1,'isdelete'=>'0','goods_class_id'=>$goodsClass['goods_class_id'],'show_area'=>$thisGoods['show_area' ] ])
                     ->limit(24)
                    ->select();
 
