@@ -324,11 +324,12 @@ class Order extends Controller
                     $result['code'] = 200;
                     $result['msg'] = '退款成功';
                     #退款加上库存
-                    Db::name('goods_attribute')->where(['id'=>$orderGoods['sku_id']])->setInc('store',$orderGoods['goods_num']);
+                    $goodsAttribute = Db::name('goods_attribute')->where(['id'=>$orderGoods['sku_id']])->find();
+                    $storeRes = Db::name('goods_attribute')->where(['id'=>$orderGoods['sku_id']])->update(['store'=>$orderGoods['goods_num']+$goodsAttribute['store']]);
 //                    #退款通知
                     include_once APP_PATH."/index/controller/sendMsg/SDK/WeiXin.php";
                     $wx = new \WeiXin();
-                    $wx->refund($orderGoods['goods_detail']['name'],$orderGoods['openid'],$orderGoods['order_id'],$orderData['total_price']);
+                    $wx->refund($orderGoods['goods_detail']['name'],$orderGoods['openid'],$orderGoods['order_id'],$orderGoods['return_price']);
                     return ajax_return('','退款成功');
                 }else{
                     file_put_contents("wx_refund_error.log",print_r($res, true)."\r", 8);
