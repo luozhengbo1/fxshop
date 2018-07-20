@@ -549,8 +549,8 @@ function backTime(){
                 var secondTime = parseInt(sulfTime/60);
                 var millTime = sulfTime%60;
                 var showText = '剩余支付时间'+secondTime+'分'+millTime+'秒';
-
-                $(ele).html(showText);
+                if(sulfTime>0)
+                  $(ele).html(showText);
             },1000)
         }else{
             var showText = '订单已过期，重新下单吧';

@@ -3,18 +3,17 @@
 {include file="Public/header-title"}
 <style>
 </style>
-<section>
+<section class="orderWrap">
     <div class="clear" style="background: #FF9000; padding: .14rem 0; color: white;">
         <div class="fl ml20">
-            <p class="f16 mt20">
+            <div class="f16 mt20">
                 <!-- order_status 0未支付1已支付2待评价，3待回复，4,待退款 5部分退款，6全部退款，7已取消订单，8订单完成
                         is_send  1已发货，0未发货2，已收货。3退货中，4退货完成 -->
+                {php}
+                $status   = $orderDetail[0]['order_status'];
+                {/php}
                 {if condition="$status eq 0"}
-                等待买家付款
-                {elseif condition="$status eq 1 && $is_send eq 0" /}<!--代发货-->
-                等待卖家发货
-                {elseif condition="$status eq 1 && $is_send eq 1" /}<!-- 待收货-->
-                等待买家收货
+                <p class="sulfTime fl f16" data-createtime="{$orderDetail[0]['create_time']}">剩余支付时间</p>
                 {elseif condition="$status eq 4" /}<!--待退款-->
                 等待卖家退款
                 {elseif condition="$status eq 2" /}  <!--待评价-->
@@ -22,7 +21,7 @@
                 {elseif condition="$status eq 8" /}  <!--待评价-->
                 交易成功
                 {/if}
-            </p>
+            </div>
         </div>
         <div class="fr"><img width="100" src="__STATIC__/index/images/sell_pay.png"></div>
     </div>
@@ -111,11 +110,10 @@
             {/volist}
             <div class="module clear tr pt10 pr10" style="border-top: 1px dotted lightgrey" >
                 {if condition="$status eq 0"}<!--待付款-->
-                <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="pay('{$orderDetail[0][\'order_id\']}')">付款</button>
-                {elseif condition="$status eq 1" /} <!--代发货-->
-                <button class="layui-btn layui-btn-primary layui-btn-sm">联系卖家</button>
-                {else /}
+                <button class="layui-btn layui-btn-primary layui-btn-sm orderCancel" onclick="cancelOrder('{$orderDetail[0][\'order_id\']}')">取消订单</button>
+                <button class="layui-btn layui-btn-primary layui-btn-sm orderPay" onclick="pay('{$orderDetail[0][\'order_id\']}')">付款</button>
                 {/if}
+                <button class="layui-btn layui-btn-primary layui-btn-sm">联系卖家</button>
             </div>
         </li>
     </ul>
