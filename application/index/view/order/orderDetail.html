@@ -88,6 +88,7 @@
                         $is_send   = $vo['is_send'];
                         $goodsId = $vo['goods_id'];
                         $skuid   = $vo['sku_id'];
+                         $status   = $vo['order_status'];
                         $is_get_status = $vo['is_get_status'];
                     {/php}
                    <!-- order_status 0未支付1已支付2待评价，3待回复，4,待退款 5部分退款，6全部退款，7已取消订单，8订单完成
@@ -138,6 +139,7 @@
         sureDeliver:"{:url('index/order/sureDeliver')}",
         refund:"{:url('index/order/refund')}",
     }
+    backTime();
     function modifyComplete() {
         setTimeout(function () {
             location.reload();

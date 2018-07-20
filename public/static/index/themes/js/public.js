@@ -534,3 +534,29 @@ function tagParse(tag){
     detailTag = detailTag.replace(/&gt;/g,">");
     return detailTag
 }
+
+//倒计时
+function backTime(){
+    //28分株
+    $('.sulfTime').each(function (index, ele) {
+        var endTime = (parseInt($(ele).attr('data-createtime')) +28*60);
+        var currentTime = parseInt(new Date().getTime()/1000);
+        console.log(endTime,currentTime)
+        if(endTime > currentTime){
+            setInterval(function () {
+                currentTime = parseInt(new Date().getTime()/1000);
+                var sulfTime = endTime-currentTime;
+                var secondTime = parseInt(sulfTime/60);
+                var millTime = sulfTime%60;
+                var showText = '剩余支付时间'+secondTime+'分'+millTime+'秒';
+
+                $(ele).html(showText);
+            },1000)
+        }else{
+            var showText = '订单已过期，重新下单吧';
+            $(ele).html(showText);
+            var $orderCancel =  $(ele).parents('.orderWrap').find('.orderCancel').remove();
+            var $orderPay =  $(ele).parents('.orderWrap').find('.orderPay').remove();
+        }
+    })
+}
