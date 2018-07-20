@@ -7,6 +7,7 @@
 <!--商品图片轮播-->
 
 <!--轮播图-->
+<a  name="good-detail-content"></a>
 <div class="swiper-container header-banner">
     <ul class="swiper-wrapper" style="min-height: 2rem" >
         {volist name="goods['pic']" id="vo"}
@@ -22,7 +23,6 @@
     <div class="swiper-pagination"></div>
 </div>
 <!--商品-->
-<a  name="good-detail-content"></a>
 <div class="good-detail-content">
     <p class="good-price">{php}
         if($goods['show_area']==2){
@@ -120,16 +120,16 @@
     </ul>
     <div class="good-detail-module">
         <div class="tab-content">
-            <div class="tab-content-item" id="goodDetail"></div>
-            <div class="tab-content-item">
+            <div class="tab-content-item" id="goodDetail" style="position: relative;"></div>
+            <div class="tab-content-item"  >
+                <table class="param_table w100p"  >
                 {foreach name="$goods['routine']" item="vo" key="k"}
-                    <table class="table">
                         <tr>
-                            <td>{$k}：</td>
+                            <td class="w30p">{$k}：</td>
                             <td>{$vo}</td>
                         </tr>
-                    </table>
                 {/foreach}
+                </table>
             </div>
             <div class="tab-content-item">{$goods['after_sale']??''}</div>
         </div>
@@ -239,11 +239,19 @@
 {include file="Public/footer-shop"}
 {include file="Public/footer-quick-nav"}
 <script>
+    /**
+     *
+     &lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321369074.jpg&quot; title=&quot;1532056321369074.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321102126.jpg&quot; title=&quot;1532056321102126.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321126105.jpg&quot; title=&quot;1532056321126105.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321294887.jpg&quot; title=&quot;1532056321294887.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321335156.jpg&quot; title=&quot;1532056321335156.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321400333.jpg&quot; title=&quot;1532056321400333.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;234567&lt;br/&gt;&lt;/p&gt;
+
+
+     */
+
     //showarea  展示区域1-限时抢购2-积分商城3-日常售卖4-热销产品
     var show_area = $('#popupMain').attr('data-showarea');
     var detailTag = "{$goods['detail']??''}";
     detailTag = detailTag.replace(/&lt;/g,"<");
     detailTag = detailTag.replace(/&gt;/g,">");
+    detailTag = detailTag.replace(/&quot;/g,"'");
     var url = {
         getSku:"{:url('index/goods/getSku')}",
         addCar:"{:url('index/car/addCar')}",

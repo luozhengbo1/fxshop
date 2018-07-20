@@ -53,15 +53,16 @@
                     }
                     //$where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status'],'fy_order_goods.is_return'=>1];
                 }
+                $where['fy_order.order_status'] = ['<>',7];
                 $orderList = Db::name('order')
                     ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-//                    ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id','left')
+                    ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id')
                     ->where($where)
                     ->order('fy_order.create_time desc')
                     ->page($page,$size)
                     ->select();
-//                echo Db::name('order')->getLastSql();
-//                dump($orderList);
+                echo Db::name('order')->getLastSql();
+                dump($orderList);
                 foreach ($orderList as $k=>$v ){
                     $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
                 }
@@ -299,6 +300,7 @@
                         $scoreLog=[];
                         $scoreLog['openid']=$this->userInfo['openid'];
                         $scoreLog['source']=7;
+                        $scoreLog['source_id']=0;
                         $scoreLog['uid']=$user['id'];
                         $scoreLog['score']=-$decScore;
                         $scoreLog['time']=time();
@@ -342,6 +344,25 @@
                     return ajax_return_error('缺少订单id');
                 }
                 $orderData = Db::name('order')->where(['order_id'=>$data['id']])->find();
+                $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
+                if($user['score']<$orderData['total_point']){
+                    return ajax_return_error('你的积分不足');
+                }
+                if($orderData['type']==1){#存积分
+                    #扣去用户积分 将订单状态修改已支付
+                    $decScore = $user['score']-$orderData['total_point'];
+                    Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->update(['score'=>$decScore]);
+                    $scoreLog=[];
+                    $scoreLog['openid']=$this->userInfo['openid'];
+                    $scoreLog['source']=7;
+                    $scoreLog['source_id']=0;
+                    $scoreLog['uid']=$user['id'];
+                    $scoreLog['score']=-$decScore;
+                    $scoreLog['time']=time();
+                    Db::name('score_log')->insert($scoreLog);
+                    $backData = array("msg" => "购买成功", 'code' => 200, 'redirect' => url("order/index"));
+                    return json($backData);
+                }
                 #超过半小时过期
                 if($orderData['create_time'] + 1800 < time() ){
                     return ajax_return_error('该订单已经失效');
@@ -430,6 +451,26 @@
             }
             return $pay;
 //            return 0.01;
+        }
+
+        #取消订单
+        public function cancelOrder()
+        {
+            if($this->request->isAjax()){
+                $data=$this->request->post();
+                if(!$data['order_id']){
+                    return ajax_return_error('缺少订单id');
+                }
+                $order =Db::name('order')->where(['order_id'=>$data['order_id']])->find();
+                if($order['pay_status']==1){#
+                    return ajax_return_error('已经支付只能退货');
+                }
+                $res =Db::name('order')->where(['order_id'=>$data['order_id']])->update(['order_status'=>7]);
+                return ajax_return('','取消成功','200
+                
+                ');
+            }
+
         }
 
         #确认收货状态

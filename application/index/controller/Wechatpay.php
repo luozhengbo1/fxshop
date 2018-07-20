@@ -72,6 +72,7 @@ class Wechatpay extends Controller
                 $scoreLog['openid']=$userInfo['openid'];
                 $scoreLog['source']=7;
                 $scoreLog['uid']=$user['id'];
+                $scoreLog['source_id']=0;
                 $scoreLog['score']=-$decScore;
                 $scoreLog['time']=time();
                 Db::name('score_log')->insert($scoreLog);
@@ -147,6 +148,22 @@ class Wechatpay extends Controller
                 $goodsDa  = Db::name('goods')->where(['id'=>$goodsStore['goods_id']])->find();
                 $goodsname .= $goodsDa['name']."  ".$v['sku_val']."*".$v['goods_num']."   ";
             }
+            #减去对应商品的积分
+            $totalScore = $this->totalScore($goodsOrder);
+            #将用户积分扣取，并将扣取记录记下来
+
+            $decScore = $user['score']-$totalScore;
+            if($decScore<0)$decScore=0;
+            Db::name('customer')->where(['openid'=>$userInfo['openid']])->update(['score'=>$decScore]);
+            #记录
+            $scoreLog=[];
+            $scoreLog['openid']=$userInfo['openid'];
+            $scoreLog['source']=7;
+            $scoreLog['source_id']=0;
+            $scoreLog['uid']=$user['id'];
+            $scoreLog['score']=-$decScore;
+            $scoreLog['time']=time();
+            Db::name('score_log')->insert($scoreLog);
             #付款成功通知
             include_once "sendMsg/SDK/WeiXin.php";
             $wx = new \WeiXin();

@@ -3320,6 +3320,9 @@ a {
 	overflow: hidden;
 	padding: 10px;
 }
+.tab-content-item img{
+	width: 100%;
+}
 .tab-content-item:nth-child(1) {
 	left: 0%;
 }
@@ -3495,7 +3498,8 @@ a {
 }
 .good-detail-module{
 	background: white;
-	width: 100%;overflow: hidden
+	width: 100%;
+	overflow: hidden
 }
 
 #origin-img{
@@ -3608,7 +3612,7 @@ a {
 	background-position: -2px -71px;
 }
 .detail_popup .body {
-	max-height: 250px;
+	max-height: 170px;
 	overflow: auto;
 }
 .detail_popup .sku_kind {

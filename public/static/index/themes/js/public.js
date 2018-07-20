@@ -158,6 +158,8 @@ function navTab(){
         $tabNavItem.removeClass('active');
         $(this).addClass('active');
         var index = $tabNavItem.index(this),tranlateWidth = index*100;
+        var  contentH = $('.tab-content').find('.tab-content-item').eq(index).outerHeight();
+        $('.tab-content').css('height',contentH)
         $('.tab-content').css('transform','translate3d(-'+tranlateWidth+'%, 0px, 0px)');
     })
 }
@@ -228,8 +230,19 @@ countCalculate.prototype.init =function (watchFun) {
         }*/
     });
     sumInput.keyup(function () {
+        var input = $(this).parents('.count-wrap').find('.sumInput');
         var value =$(this).val();
         value=(parseInt((value=value.replace(/\D/g,''))==''?'1':value,10));
+        var store = parseInt(input.attr('data-store'));
+        if(store >=200){
+            if(value>store) value = 200;
+        }else if(store<200){
+            if(value>store) value = store;
+        }
+        if(value<1){
+            value = 1;
+        }
+
         $(this).val(value);
         if(watchFun){
             watchFun();
@@ -514,7 +527,7 @@ function enterKey(complete){
     })
 }
 
-//标签解析
+//
 function tagParse(tag){
     var detailTag = tag;
     detailTag = detailTag.replace(/&lt;/g,"<");
