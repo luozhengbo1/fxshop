@@ -385,6 +385,29 @@ class Customer extends Mustlogin
     }
 
     /**
+     * 会员权益
+     */
+    public function memberrule(){
+        $this->assign('titleName', "会员权益规则");
+        return $this->view->fetch("memberRule");
+    }
+
+    /**
+     * 会员权益
+     */
+    public function userinfo(){
+        $this->assign('titleName', "完善用户信息");
+        return $this->view->fetch("userInfo");
+    }
+    /**
+     * 赚积分
+     */
+    public function getscore(){
+        $this->assign('titleName', "赚积分");
+        return $this->view->fetch("getScore");
+    }
+
+    /**
      * 消息中心
      */
     public function message($page = '1', $size = '4')
