@@ -196,19 +196,19 @@
 <div class="page-container div-panel">
     <h4>待处理事项</h4>
     <div class="div-deal">
-        <p class="p-center">{$count_pay}</p>
+        <p class="p-center">{$count_need_pay}</p>
         <p class="p-center">待付款订单</p>
     </div>
     <div class="div-deal">
-        <p class="p-center">{$count_deliver}</p>
+        <p class="p-center">{$count_need_deliver}</p>
         <p class="p-center">待发货订单</p>
     </div>
     <div class="div-deal">
-        <p class="p-center">{$count_refund}</p>
+        <p class="p-center">{$count_need_refund}</p>
         <p class="p-center">退款售后订单</p>
     </div>
     <div class="div-deal">
-        <p class="p-center">0.00</p>
+        <p class="p-center">{$count_need_drawcash}</p>
         <p class="p-center">待提现金额</p>
     </div>
 </div>
@@ -217,18 +217,18 @@
     <div class="">
         <div class="div-table-border">
             <p class="p-center"><strong>访问人数</strong></p>
-            <div id="container_people" style="width: 600px;height: 400px"></div>
+            <div id="container_visitor" style="width: 600px;height: 400px"></div>
         </div>
         <div class="div-table-border">
             <p class="p-center"><strong>成交客户</strong></p>
-            <div id="container_customer" style="width: 600px;height: 400px"></div>
+            <div id="container_finish" style="width: 600px;height: 400px"></div>
         </div>
     </div>
 
     <div class="">
         <div class="div-table-border">
             <p class="p-center"><strong>支付订单</strong></p>
-            <div id="container_order" style="width: 600px;height: 400px"></div>
+            <div id="container_pay" style="width: 600px;height: 400px"></div>
         </div>
         <div class="div-table-border">
             <p class="p-center"><strong>支付金额</strong></p>
@@ -257,102 +257,120 @@
     </div>
 </footer>
 <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
-<script type="text/javascript" src="__LIB__/jquery/1.9.1/jquery.min.js"></script>
 
-<script type="text/javascript">
-    //获取本周的第一天
-    var time = new Date().getTime();
-    var day = new Date().getDay();
-    var first_date = new Date(time - 60 * 60 * 24 * (day - 1) * 1000);
-    var year = first_date.getFullYear();
-    var month = first_date.getMonth();
-    var day = first_date.getDate();
-
+<script>
+    //图表：全局配置
+    Highcharts.setOptions({
+        chart: {
+            zoomType: 'x',
+        },
+        subtitle: {
+            text: document.ontouchstart === undefined ?
+                '鼠标拖动可以进行缩放' : '手势操作进行缩放'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: {
+                millisecond: '%H:%M:%S.%L',
+                second: '%H:%M:%S',
+                minute: '%H:%M',
+                hour: '%H:%M',
+                day: '%m-%d',
+                week: '%m-%d',
+                month: '%Y-%m',
+                year: '%Y'
+            }
+        },
+        tooltip: {
+            dateTimeLabelFormats: {
+                millisecond: '%H:%M:%S.%L',
+                second: '%H:%M:%S',
+                minute: '%H:%M',
+                hour: '%H:%M',
+                day: '%Y-%m-%d',
+                week: '%m-%d',
+                month: '%Y-%m',
+                year: '%Y'
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            area: {
+                fillColor: {
+                    linearGradient: {
+                        x1: 0,
+                        y1: 0,
+                        x2: 0,
+                        y2: 1
+                    },
+                    stops: [
+                        [0, Highcharts.getOptions().colors[0]],
+                        [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                    ]
+                },
+                marker: {
+                    radius: 2
+                },
+                lineWidth: 1,
+                states: {
+                    hover: {
+                        lineWidth: 1
+                    }
+                },
+                threshold: null
+            }
+        },
+    });
     //图表：访问人数
-    var options_people = {
-        chart: {
-            type: 'line'                          //指定图表的类型，默认是折线图（line）
-        },
+    var chart_visitor = Highcharts.chart('container_visitor', {
         title: {
-            text: '一周内访问人数'                 // 标题
+            text: '年度访问人数统计表'
         },
         yAxis: {
             title: {
-                text: '访问人数'                // y 轴标题
-            }
-        },
-        xAxis: {
-            type: 'datetime',
-            labels: {
-                format: '{value:%Y-%m-%d}',
-                rotation: 80,
-                align: 'center'
+                text: '人数'
             }
         },
         series: [{
-            data: [{$count_visitor}],
-            pointStart: Date.UTC(year, month, day),
-            pointInterval: 24 * 36e5
+            type: 'area',
+            name: '访问人数',
+            data: {$count_visitor}
         }]
-    };
-    var chart1 = Highcharts.chart('container_people', options_people);
+    });
     //图表：成交客户
-    var options_customer = {
-        chart: {
-            type: 'line'                          //指定图表的类型，默认是折线图（line）
-        },
+    var chart_finish = Highcharts.chart('container_finish', {
         title: {
-            text: '一周内成交客户'                 // 标题
+            text: '年度成交客户统计表'
         },
         yAxis: {
             title: {
-                text: '成交客户'                // y 轴标题
-            }
-        },
-        xAxis: {
-            type: 'datetime',
-            labels: {
-                format: '{value:%Y-%m-%d}',
-                rotation: 80,
-                align: 'center'
+                text: '成交数量'
             }
         },
         series: [{
-            data: [{$count_accomplish}],
-            pointStart: Date.UTC(year, month, day),
-            pointInterval: 24 * 36e5
+            type: 'area',
+            name: '成交数量',
+            data: {$count_finish}
         }]
-    };
-    var chart2 = Highcharts.chart('container_customer', options_customer);
+    });
     //图表：支付订单
-    var options_order = {
-        chart: {
-            type: 'line'                          //指定图表的类型，默认是折线图（line）
-        },
+    var chart_pay = Highcharts.chart('container_pay', {
         title: {
-            text: '一周内支付订单'                 // 标题
+            text: '年度支付订单统计表'
         },
         yAxis: {
             title: {
-                text: '支付订单'                // y 轴标题
-            }
-        },
-        xAxis: {
-            type: 'datetime',
-            labels: {
-                format: '{value:%Y-%m-%d}',
-                rotation: 80,
-                align: 'center'
+                text: '支付数量'
             }
         },
         series: [{
-            data: [{$count_pay_accomplish}],
-            pointStart: Date.UTC(year, month, day),
-            pointInterval: 24 * 36e5
+            type: 'area',
+            name: '支付数量',
+            data: {$count_pay}
         }]
-    };
-    var chart3 = Highcharts.chart('container_order', options_order);
-
+    });
     //锁屏
     var parentDoc = window.parent.document;
 
