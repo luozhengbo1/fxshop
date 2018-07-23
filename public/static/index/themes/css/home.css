@@ -3246,7 +3246,7 @@ a {
 	height: .7rem;
 }
 .child_category li span{
-	padding: .06rem 0 ;
+	/*padding: .06rem 0 ;*/
 }
 .child_category .title{
     height: .3rem;
@@ -3350,7 +3350,7 @@ a {
 .good-detail-content .good-title{
 	font-size: .14rem;
 }
-.good-detail-content .good-service li{
+.good-detail-content .good-service li:nth-child(1){
 	width: 40%;
 }
 .good-detail-content .good-service li:nth-child(2){

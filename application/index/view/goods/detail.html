@@ -1,5 +1,17 @@
 {include file="Public/header-resource"}
-
+<style>
+    .count-down{
+        height: 50px;
+        width: 100%;
+        background: #de181b;
+        line-height: 50px;
+        padding: 0 10px;
+        color: white;
+    }
+    .fm-cusive{
+        font-family: cursive;
+    }
+</style>
 <link rel="stylesheet" type="text/css" href="__STATIC__/index/plugins/swiper3/css/swiper.css">
 <script src="__STATIC__/index/plugins/swiper.js"></script>
 <body class="title-top footer-boottom">
@@ -20,9 +32,25 @@
         <!--</li>-->
     </ul>
     <!-- 如果需要分页器 -->
-    <div class="swiper-pagination"></div>
+    <div class="swiper-pagination">
+
+    </div>
 </div>
 <!--商品-->
+
+{if condition="$goods['show_area'] eq 1" /}  <!---->
+<div class="count-down clear">
+    <span class="fl f18 blod fm-cusive">疯狂抢购</span>
+    <div class="fr blod">
+        距开抢：
+        <span  id="countDown"  data-end="{$goods['end_date']}" data-start="{$goods['start_date']}">
+
+        </span>
+        <img class="fr ml10" height="50px" src="__STATIC__/index/images/shandian.png">
+    </div>
+</div>
+{/if}
+
 <div class="good-detail-content">
     <p class="good-price">{php}
         if($goods['show_area']==2){
@@ -32,12 +60,14 @@
             echo ($goods['basic_price'])?$goods['basic_price']:$goods['price_real'];
         }{/php}</p>
     <p class="good-title">{$goods['name']??''}</p>
+
     <ul class="clear good-service">
         <li class="fl">快递¥<?php if($goods['free_type']==1) echo 0;
                                 else echo $goods['postage']; ?></li>
         <li class="fl tc">销量{$goods['buy_num']??''}</li>
-        <li class="fr tr">{$goods['yieldly']??'贵州贵阳'}</li>
+        <li class="fr tr">{$goods['yieldly']??'贵阳'}</li>
     </ul>
+
     <p class="mt10 detail-block" onclick="showPop('goodsVoucher')">
         <span class="title">优惠</span>
         <span class="content"><span class="icon-couple"></span>{$lottery?$lottery['id']:'无'}</span>
@@ -243,9 +273,29 @@
      *
      &lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321369074.jpg&quot; title=&quot;1532056321369074.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321102126.jpg&quot; title=&quot;1532056321102126.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321126105.jpg&quot; title=&quot;1532056321126105.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321294887.jpg&quot; title=&quot;1532056321294887.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321335156.jpg&quot; title=&quot;1532056321335156.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321400333.jpg&quot; title=&quot;1532056321400333.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;234567&lt;br/&gt;&lt;/p&gt;
 
-
      */
-
+    if($('#countDown').size()>0){
+        var start = $("#countDown").data('start'),end=$("#countDown").data('end');
+        countDown(start,end);
+        var activeStatus=activeStatus(start,end);
+        switch(activeStatus)
+        {
+            case 0:
+                $('.buyPage').html('抢购即将开始')
+                break;
+            case 1:
+                $('.buyPage').attr('id','buyPage').removeClass('collectTip');
+                $('.carPage').attr('id','carPage').removeClass('collectTip');
+                $('.buyPage').html('立即抢购')
+                break;
+            case 2:
+                $('.buyPage').html('已结束')
+                break;
+        }
+        $('.collectTip').click(function () {
+            layer_msg('不在活动期间内，加入收藏关注吧，亲！')
+        })
+    }
     //showarea  展示区域1-限时抢购2-积分商城3-日常售卖4-热销产品
     var show_area = $('#popupMain').attr('data-showarea');
     var detailTag = "{$goods['detail']??''}";
