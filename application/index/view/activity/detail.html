@@ -1,0 +1,23 @@
+{include file="Public/header-resource"}
+<style>
+    .content img{
+        width: 100%;
+    }
+</style>
+<body class="title-top">
+{include file="Public/header-title"}
+
+<section class="bg_white pb30" data-id="{$activity.id}">
+   <!-- <div class="tc f16 bold pt20 pb10">{$activity.name}</div>-->
+    <div><img width="100%" src="{$activity.main_pic}"></div>
+    <div class="pb10 pt10 content"></div>
+    <div class="clear">
+        <span class="grey fr timeWrap" >{}</span>
+    </div>
+</section>
+<script>
+    $('.content').html(tagParse("{$activity.detail}"));
+    $('.timeWrap').html(new Date(parseInt("{$activity.create_time}")*1000).Format("yyyy-MM-dd hh:mm:ss"));
+</script>
+</body>
+</html>

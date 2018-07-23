@@ -532,6 +532,7 @@ function tagParse(tag){
     var detailTag = tag;
     detailTag = detailTag.replace(/&lt;/g,"<");
     detailTag = detailTag.replace(/&gt;/g,">");
+    detailTag = detailTag.replace(/&quot;/g,"'");
     return detailTag
 }
 

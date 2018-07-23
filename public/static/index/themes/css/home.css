@@ -2897,7 +2897,8 @@ span.pink-bg {
     width: .44rem;
 }
 .module-active img{
-	height: 1rem;
+	/*height: 1rem;*/
+	max-height: 2rem;
 	width: 100%;
 }
 .module-active ul li:nth-child(1){
@@ -4348,4 +4349,31 @@ a {
 	background: #BDBDBD;
 	border: 2px solid #EEE;
 }
-
+/*活动中心*/
+.activity-list li{
+	margin-bottom: 2px;
+	position: relative;
+	min-height: 1.4rem;
+}
+.activity-list li img{
+	width: 100%;
+	min-height: 1rem;
+}
+.activity-list .status-wrap{
+	position: absolute;
+	top: .4rem;
+	width: 100%;
+	text-align: center;
+}
+.activity-list li .status{
+	width: .5rem;
+	height: .5rem;
+	line-height: .5rem;
+	text-align: center;
+	border-radius: 50%;
+	display: inline-block;
+	background: black;
+	color: white;
+	font-size: 12px;
+	opacity: .8;
+}
