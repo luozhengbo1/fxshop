@@ -479,7 +479,7 @@
                 }
                 $res =Db::name('order')->where(['order_id'=>$data['order_id']])->update(['order_status'=>7]);
                 #回滚库存
-                $orderGoods = =Db::name('order_goods')->where(['order_id'=>$data['order_id']])->select();
+                $orderGoods =Db::name('order_goods')->where(['order_id'=>$data['order_id']])->select();
                 if( !empty($orderGoods) ){
                     foreach ($orderGoods as $v){
                         Db::name('goods_attribute')->where(['id'=>$v['sku_id']])->setInc('store',$v['goods_num']);
