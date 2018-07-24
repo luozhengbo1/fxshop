@@ -4378,3 +4378,14 @@ a {
 	font-size: 12px;
 	opacity: .8;
 }
+
+
+.right-side-arrow{
+	color: #de181b;
+}
+.right-side-arrow.active{
+	color: #15b25b;
+}
+.right-side-arrow .icon-right-arrow{
+	font-size: 12px;
+}

@@ -175,6 +175,7 @@
             }
         })
         var html='';
+        totalPrice = totalPrice.toFixed(2);
         if(totalPrice>0 && totalPoint>0) html =totalPrice+'+'+totalPoint+'积分';
         else{
             if(totalPrice>0)   html +=totalPrice;
