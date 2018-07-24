@@ -330,6 +330,14 @@ class Customer extends Mustlogin
     public function myset()
     {
         $this->assign('titleName', "设置");
+        $user = session('wx_user');
+        $userData = Db::table('fy_customer')->where('openid', $user['openid'])->find();
+        $userAddress = Db::table('fy_customer_address')->where(
+            [ 'uid'=>$userData['id'],'status'=>1]
+        )->find();
+        //dump($userAddress);
+        $this->assign('userData', $userData);
+        $this->assign('userAddress', $userAddress);
         return $this->view->fetch();
     }
 

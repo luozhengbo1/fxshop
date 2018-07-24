@@ -3,13 +3,20 @@
 {include file="Public/header-title"}
 <section class="mt5">
     <div class="aui-product-set">
-        <a href="{:\\think\\Url::build(\'Address/index\')}" class="aui-address-cell aui-fl-arrow aui-fl-arrow-clear" >
+
+        <a href="{:\\think\\Url::build(\'Address/index\')}" class="aui-address-cell" >
             <div class="aui-address-cell-bd">我的收货地址</div>
-            <div class="aui-address-cell-ft"></div>
+            <div class="right-side-arrow {if condition='$userAddress.id neq null' /}active{/if}">
+                {$userAddress.address ??'设置默认地址'}
+                <i class="iconfont icon-right-arrow"></i>
+            </div>
         </a>
-        <a href="#" class="aui-address-cell aui-fl-arrow aui-fl-arrow-clear">
+
+        <a href="#" class="aui-address-cell ">
             <div class="aui-address-cell-bd">关于我们</div>
-            <div class="aui-address-cell-ft">v5</div>
+            <div class="right-side-arrow active">v5
+                <i class="iconfont icon-right-arrow"></i>
+            </div>
         </a>
     </div>
   <!--  <div class="btn-wrap">
