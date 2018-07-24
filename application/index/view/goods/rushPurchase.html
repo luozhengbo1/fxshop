@@ -38,6 +38,7 @@
     </div>
     {include file="Public/footer-quick-nav"}
     <script>
+
         $(function () {
             getGoods();
         })
@@ -60,7 +61,8 @@
             });
         }
         function dealData(data) {
-            var html='';
+	console.log(data)    
+	var html='';
             for(var i = 0; i < data.length; i++){
                 var skuData=data[i].skuData,totalNum=data[i].buy_num;
                 for(var n=0; n<skuData.length; n++){

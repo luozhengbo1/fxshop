@@ -540,7 +540,7 @@ function tagParse(tag){
 function backTime(){
     //28分株
     $('.sulfTime').each(function (index, ele) {
-        var endTime = (parseInt($(ele).attr('data-createtime')) +28*60);
+        var endTime = (parseInt($(ele).attr('data-createtime')) +1*60);
         var currentTime = parseInt(new Date().getTime()/1000);
         console.log(endTime,currentTime)
         if(endTime > currentTime){
@@ -552,13 +552,17 @@ function backTime(){
                 var showText = '剩余支付时间'+secondTime+'分'+millTime+'秒';
                 if(sulfTime>0)
                   $(ele).html(showText);
-                else  $(ele).html('订单已过期，重新下单吧');
+                else{
+                    $(ele).html('订单已过期，重新下单吧');
+                    $(ele).parents('.orderWrap').find('.orderCancel').remove();
+                    $(ele).parents('.orderWrap').find('.orderPay').remove();
+                }
             },1000)
         }else{
             var showText = '订单已过期，重新下单吧';
             $(ele).html(showText);
-            var $orderCancel =  $(ele).parents('.orderWrap').find('.orderCancel').remove();
-            var $orderPay =  $(ele).parents('.orderWrap').find('.orderPay').remove();
+             $(ele).parents('.orderWrap').find('.orderCancel').remove();
+             $(ele).parents('.orderWrap').find('.orderPay').remove();
         }
     })
 }

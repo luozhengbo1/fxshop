@@ -1,0 +1,87 @@
+{include file="Public/header-resource"}
+<body>
+{include file="Public/header-search"}
+<div class="module-hot-goods margin-top-header">
+    <div id="dataListWrap" class="data-refresh-list-wrap">
+        <ul class="goods-list list clear" id="goodsList">
+            <!--<li>
+
+                 <p class="tc"> <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg"></p>
+                 <p class="good-desc ellipsis">Lay’s/乐2事薯片清爽酸奶零食 </p>
+                  <div class="layui-progress layui-progress-big">
+                      <div class="clear text-show" >
+                          <p class="fl">已抢38件</p>
+                          <p class="fr">3%</p>
+                      </div>
+                      <div class="layui-progress-bar layui-bg-red" ></div>
+                  </div>
+                 <p class="lh30 h30">活动时间：2017.10.18-2017.10.20</p>
+                 <div class="clear">
+                     <p class="fl">
+                         <span class="goods-price">¥45.00</span>
+                         <span class="goods-old-price">¥45.00</span>
+                     </p>
+                     <div class="fr">
+                         &lt;!&ndash;<button class="layui-btn layui-btn-xs layui-btn-danger">马上抢</button>&ndash;&gt;
+                         <button class="layui-btn layui-btn-xs layui-btn-disabled">已结束</button>
+                     </div>
+                 </div>
+            </li>-->
+        </ul>
+    </div>
+    <script>
+        alert(234234)
+        //滚动条添加
+        getGoods()
+        function getGoods() {
+            pageload({
+                targetWarp:'dataListWrap',
+                target:'goodsList',
+                page:1,
+                size:4,
+                ajaxData:{
+                    url:"{:url('index/index/return_json')}",
+                    data:formData('form'),
+                },
+                dealFun:dealData,
+                complete:dataComplete
+            });
+        }
+        function dealData(data) {
+
+            var html='';
+            for(var i = 0; i < data.length; i++){
+                var width=100
+                html +='<li>';
+                html +='     <p class="tc"> <img class="good-img" src="http://scsc.top/images/201710/thumb_img/0_thumb_G_1508379649946.jpg"></p>';
+                html +='     <p class="good-desc ellipsis">Lay’s/乐事薯片清爽酸奶零食 </p>';
+                html +='      <div class="layui-progress layui-progress-big">';
+                html +='          <div class="clear text-show" >';
+                html +='              <p class="fl">已抢38件</p>';
+                html +='              <p class="fr">3%</p>';
+                html +='          </div>';
+                html +='          <div class="layui-progress-bar layui-bg-red" style="width: '+width+'px"></div>';
+                html +='      </div>';
+                html +='     <p class="lh30 h30">时间2017.10.18-2017.10.20</p>';
+                html +='     <div class="clear">';
+                html +='         <p class="fl">';
+                html +='             <span class="goods-price">¥45.00</span>';
+                html +='             <span class="goods-old-price">¥45.00</span>';
+                html +='         </p>';
+                html +='         <div class="fr">';
+                html +='             <!--<button class="layui-btn layui-btn-xs layui-btn-danger">马上抢</button>-->';
+                html +='             <button class="layui-btn layui-btn-xs layui-btn-disabled">已结束</button>';
+                html +='         </div>';
+                html +='     </div>';
+                html +='</li>';
+            }
+            return html;
+        }
+        //请求完成页面数据加上后需要的处理操作
+       function dataComplete(){
+
+       }
+
+    </script>
+</body>
+</html>
