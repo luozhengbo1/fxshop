@@ -55,8 +55,8 @@ class Customer extends Mustlogin
             ->count();
         #退货退款
         $count_refund = Db::table('fy_order')
-            ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid'=> $user_session['openid'],'fy_order.order_status'=>['in',4],'fy_order.pay_status'=>1])
+            ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
+            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order.order_status' => ['in', 4], 'fy_order.pay_status' => 1])
             ->count();
         $count_evaluate = Db::table('fy_order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
@@ -310,6 +310,7 @@ class Customer extends Mustlogin
                 }
             }
         } else {
+            //判断今天是否签到
             $time = time();
             $today_start = strtotime(date('Y-m-d', $time) . ' 00:00:00');
             $today_end = strtotime(date('Y-m-d', $time) . ' 23:59:59');
@@ -317,6 +318,14 @@ class Customer extends Mustlogin
                 ->where('uid', $userData['id'])
                 ->where('addtime', 'between', [$today_start, $today_end])
                 ->find();
+            //判断前一天是否签到
+            $beforeSign = Db::table('fy_customer_sign')->where('uid', $userData['id'])->order('addtime', 'desc')->find();//获取最新一条签到记录
+            $noSignDay1 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 00:00:00')) / 86400;//2天
+            $noSignDay2 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 23:59:59')) / 86400;//1天
+            //前一天未签到，continue_day重置为1，score+1更新到customer表
+            if (floor($noSignDay1) > 1 && $noSignDay2 > 1 && floor($noSignDay1) == $noSignDay2) {
+                $this->assign('continuity_day',0);
+            }
             $this->assign('flag', $res ? 1 : 0);
             $this->assign('user', $userData);
             $this->assign('titleName', '签到');
@@ -333,7 +342,7 @@ class Customer extends Mustlogin
         $user = session('wx_user');
         $userData = Db::table('fy_customer')->where('openid', $user['openid'])->find();
         $userAddress = Db::table('fy_customer_address')->where(
-            [ 'uid'=>$userData['id'],'status'=>1]
+            ['uid' => $userData['id'], 'status' => 1]
         )->find();
         //dump($userAddress);
         $this->assign('userData', $userData);
@@ -403,9 +412,9 @@ class Customer extends Mustlogin
                     $money[$t] = number_format(floatval($item[$t]['money']), '2');
                 }
                 //计算总计金额
-                $total_money=0;
+                $total_money = 0;
                 for ($y = 0; $y < count($item); $y++) {
-                    $total_money = $total_money+$money[$y];
+                    $total_money = $total_money + $money[$y];
                 }
                 $all_pay_record[$i]['record_money'] = $total_money;
                 //下一次计算的判断值自增
@@ -435,20 +444,22 @@ class Customer extends Mustlogin
     /**
      * 会员权益
      */
-    public function memberrule(){
+    public function memberrule()
+    {
         $this->assign('titleName', "会员权益规则");
         return $this->view->fetch("memberRule");
     }
 
     /**
-     * 会员权益
+     * 用户信息查询
      */
-    public function userinfo(){
+    public function userinfo()
+    {
         $this->assign('titleName', "完善用户信息");
         $user = session('wx_user');
         $userData = Db::table('fy_customer')->where('openid', $user['openid'])->find();
         $userAddress = Db::table('fy_customer_address')->where(
-            [ 'uid'=>$userData['id'],'status'=>1]
+            ['uid' => $userData['id'], 'status' => 1]
         )->find();
         //dump($userAddress);
         $this->assign('userData', $userData);
@@ -456,36 +467,38 @@ class Customer extends Mustlogin
         //dump($userData);
         return $this->view->fetch("userInfo");
     }
+
     /**
      * 用户信息修改
      */
-    public function userInfoEdit(){
+    public function userInfoEdit()
+    {
         $this->assign('titleName', "修改信息");
         $user = session('wx_user');
         $userData = Db::table('fy_customer')->where('openid', $user['openid'])->find();
         $oldUser = $userData;
         $userAddress = Db::table('fy_customer_address')->where(
-            [ 'uid'=>$userData['id'],'status'=>1]
+            ['uid' => $userData['id'], 'status' => 1]
         )->find();
         if ($this->request->isAjax()) {
             $nickname = $this->request->param('nickname');
             $mobile = $this->request->param('mobile');
             $email = $this->request->param('email');
-            if(!empty($nickname)) $userData['nickname'] = $nickname;
-            if(!empty($mobile)) $userData['mobile'] = $mobile;
-            if(!empty($email)) $userData['email'] = $email;
-            if(empty($nickname) && empty($mobile) && empty($email)) return ajax_return('', '修改数据不能为空', 200);
+            if (!empty($nickname)) $userData['nickname'] = $nickname;
+            if (!empty($mobile)) $userData['mobile'] = $mobile;
+            if (!empty($email)) $userData['email'] = $email;
+            if (empty($nickname) && empty($mobile) && empty($email)) return ajax_return('', '修改数据不能为空', 200);
 
             //如果用户信息都已经完善了，奖励100积分  $oldUser中信息没有完善   $userData中数据完善了，说明数据第一次完善 奖励100积分
-            $oldUserStatus = empty($oldUser['nickname']) || empty($oldUser['mobile']) || empty($oldUser['email'])|| empty($userAddress['id']);// true未完善
-            $userDataStatus =  !empty($userData['nickname']) && !empty($userData['mobile']) && !empty($userData['email']) && !empty($userAddress['id']);//true 已完善
+            $oldUserStatus = empty($oldUser['nickname']) || empty($oldUser['mobile']) || empty($oldUser['email']) || empty($userAddress['id']);// true未完善
+            $userDataStatus = !empty($userData['nickname']) && !empty($userData['mobile']) && !empty($userData['email']) && !empty($userAddress['id']);//true 已完善
             //dump($oldUserStatus);
             //dump($userDataStatus);
-            $msg ='修改成功';
+            $msg = '修改成功';
             $time = time();
-            if($oldUserStatus && $userDataStatus){
-                $userData['score'] +=100;
-                $msg ='信息已完善,恭喜获得100积分';
+            if ($oldUserStatus && $userDataStatus) {
+                $userData['score'] += 100;
+                $msg = '信息已完善,恭喜获得100积分';
                 Db::table('fy_score_log')->insert([
                     'uid' => $userData['id'],
                     'openid' => $userData['openid'],
@@ -509,7 +522,8 @@ class Customer extends Mustlogin
     /**
      * 赚积分
      */
-    public function getscore(){
+    public function getscore()
+    {
         $this->assign('titleName', "赚积分");
         return $this->view->fetch("getScore");
     }

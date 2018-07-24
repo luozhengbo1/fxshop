@@ -122,6 +122,11 @@ class Index extends Controller
             ->where('pay_status', 1)
             ->group('days')
             ->select();
+        $count_pay_money = Db::table('fy_wx_pay_refund_log')
+            ->field(['FROM_UNIXTIME(create_time,"%Y-%m-%d")' => 'days', 'sum(money)' => 'money'])
+            ->where('isdelete', 0)
+            ->group('days')
+            ->select();
         foreach ($count_visitor as $k => $v) {
             $count_visitor[$k] = [strtotime($v['days']) * 1000, $v['count']];
         }
@@ -131,12 +136,17 @@ class Index extends Controller
         foreach ($count_pay as $k => $v) {
             $count_pay[$k] = [strtotime($v['days']) * 1000, $v['count']];
         }
+        foreach ($count_pay_money as $k => $v) {
+            $count_pay_money[$k] = [strtotime($v['days']) * 1000, floatval($v['money'])];//注意将money转为float类型
+        }
         $count_visitor = json_encode($count_visitor);
         $this->view->assign('count_visitor', $count_visitor);
         $count_finish = json_encode($count_finish);
         $this->view->assign('count_finish', $count_finish);
         $count_pay = json_encode($count_pay);
         $this->view->assign('count_pay', $count_pay);
+        $count_pay_money = json_encode($count_pay_money);
+        $this->view->assign('count_pay_money', $count_pay_money);
 
         //查询公告
         $notice_list = Model('Notice')->where(['status' => 1, 'isdelete' => 0])->select();

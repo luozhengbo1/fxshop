@@ -4,6 +4,24 @@
     <form class="form form-horizontal" id="form" method="post" action="{:\\think\\Request::instance()->baseUrl()}">
         <input type="hidden" name="id" value="{$vo.id ?? ''}">
         <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3">规则类型：</label>
+            <div class="formControls col-xs-6 col-sm-6 skin-minimal">
+                <div class="radio-box">
+                    <input type="radio" name="type" id="type-1" value="1">
+                    <label for="type-1">会员等级规则</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="type" id="type-2" value="2">
+                    <label for="type-2">会员升级攻略</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="type" id="type-3" value="3">
+                    <label for="type-3">会员权益说明</label>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>会员等级规则说明：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <textarea id="container" name="detail" nullmsg="请输入任务内容">{$vo.detail ?? ''}</textarea>
@@ -59,7 +77,8 @@
 </script>
 <script>
     $(function () {
-        $("[name='status'][value='{$vo.status ?? '1'}']").prop("checked", true);
+        $("[name='status'][value='{$vo.status ?? '1#0'}']").prop("checked", true);
+        $("[name='type'][value='{$vo.type ?? '1#2#3'}']").prop("checked", true);
 
         $('.skin-minimal input').iCheck({
             checkboxClass: 'icheckbox-blue',

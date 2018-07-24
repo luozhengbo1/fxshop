@@ -1,3 +1,12 @@
 <td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
+<td ><?php
+    if($vo['type']==1){
+        echo '会员等级规则';
+    }else if($vo['type']==2){
+        echo '会员升级攻略';
+    }else if($vo['type']==3){
+        echo '会员权益说明';
+    }
+    ?></td>
 <td >{:htmlspecialchars_decode($vo['detail'])}</td>
-<td>{$vo.addtime}</td>
+<!--<td>{$vo.addtime}</td>-->
