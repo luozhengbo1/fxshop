@@ -314,11 +314,12 @@ class Order extends Controller
                     $orderData = Db::name('order')->field('total_price')->where( [ 'order_id'=>$order_id ] )->find();
                     $decPrice = $orderData['total_price'] -$orderGoods['return_price'] ;#减去订单总价
                     if($decPrice<0)$decPrice=0;
-                    if(($order['return_price_all'])== $order['total_price']){#全额退款
-                        $order_status = 6;
-                    }else {
-                        $order_status =5;
-                    }
+                    $order_status = 6;
+//                    if(($order['return_price_all'])== $order['total_price']){#全额退款
+//                        $order_status = 6;
+//                    }else {
+//                        $order_status =5;
+//                    }
                     $updateRes = Db::name('order')->where( [ 'order_id'=>$order_id ] )->update(['order_status'=>$order_status,'total_price'=>$decPrice]);
                     Db::name('order_goods')->where( [ 'id'=>$data['id'] ] )->update(['is_return'=>2,'is_send'=>4]);#已退款，退货完成
                     $result['code'] = 200;
