@@ -56,7 +56,7 @@ class Customer extends Mustlogin
         #退货退款
         $count_refund = Db::table('fy_order')
             ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid'=> $user_session['openid'],'fy_order.order_status'=>['in',5,6],'fy_order.pay_status'=>1])
+            ->where(['fy_order.openid'=> $user_session['openid'],'fy_order.order_status'=>['in',4],'fy_order.pay_status'=>1])
             ->count();
         $count_evaluate = Db::table('fy_order')
             ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
@@ -444,21 +444,15 @@ class Customer extends Mustlogin
             $msg ='修改成功';
             $time = time();
             if($oldUserStatus && $userDataStatus){
-                $scoreLog = Db::table('fy_score_log')->where([
-                    'openid'=>$user['openid'],
+                $userData['score'] +=100;
+                $msg ='信息已完善,恭喜获得100积分';
+                Db::table('fy_score_log')->insert([
+                    'uid' => $userData['id'],
+                    'openid' => $userData['openid'],
                     'source' => 11,
-                ])->find();
-                if(empty($scoreLog)){
-                    $userData['score'] +=100;
-                    $msg ='信息已完善,恭喜获得100积分';
-                    Db::table('fy_score_log')->insert([
-                        'uid' => $userData['id'],
-                        'openid' => $userData['openid'],
-                        'source' => 11,
-                        'score' => 100,
-                        'time' => $time
-                    ]);
-                }
+                    'score' => 100,
+                    'time' => $time
+                ]);
             }
             Db::table('fy_customer')->where('openid', $user['openid'])->update($userData);
             return ajax_return('', $msg, 200);

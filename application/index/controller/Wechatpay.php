@@ -93,9 +93,7 @@ class Wechatpay extends Controller
                 include_once "sendMsg/SDK/WeiXin.php";
                 $wx = new \WeiXin();
                 $result = $wx->buySuccess($goodsname,$orderInfo['openid'],$sonId['total_price']);
-                if($result['status']==1){
-                    Db::name('order_all')->where(['order_id'=>$orderInfo['out_trade_no']])->update(['is_tui'=>1]);
-                }
+                Db::name('order_all')->where(['order_id'=>$orderInfo['out_trade_no']])->update(['is_tui'=>1]);
             }
 
             #交易记录
@@ -189,9 +187,7 @@ class Wechatpay extends Controller
                 include_once "sendMsg/SDK/WeiXin.php";
                 $wx = new \WeiXin();
                 $result = $wx->buySuccess($goodsname,$orderInfo['openid'],$order['total_price']);
-                if($result['status']==1){
-                    Db::name('order')->where(['order_id'=>$orderInfo['out_trade_no']])->update(['is_tui'=>1]);
-                }
+                Db::name('order')->where(['order_id'=>$orderInfo['out_trade_no']])->update(['is_tui'=>1]);
             }
 
 
