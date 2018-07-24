@@ -63,6 +63,8 @@
                     return ajax_return_error('缺少商品id');
                 }
                 $check =  Db::name('goods_attribute')->where(['id'=>$data['skuId']])->find();
+//                dump($check);
+//                dump($data['skuId']);
                 if($check['store']<$data['num']){
                     return ajax_return_error('库存不足');
                 }

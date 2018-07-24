@@ -85,6 +85,7 @@
             $lottery = Db::name('lottery')
                 ->where(['goods_id'=>$id,'isdelete'=>0,'status'=>1])
                 ->find();
+
             $this->view->assign('goods',$goods);
             $this->view->assign('skuData',$skuData);
 //            dump($skuData);die;

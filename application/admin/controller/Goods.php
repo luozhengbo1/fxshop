@@ -391,6 +391,7 @@ class Goods extends Controller
                         $tmpid = $skuV['id'];
                         Db::name('goods_attribute')->where(['id'=>$tmpid])->update($update);
                     }else{#新增
+			
                         Db::name('goods_attribute')->insert($update);
                     }
                 }
@@ -411,6 +412,7 @@ class Goods extends Controller
 
                 #将没有sku 的商品添加上价格和库存
             }else{
+		Db::name('goods_attribute')->where(['goods_id'=>$data['id'] ])->delete();
                 $goodsAttribute = Db::name('goods_attribute')->where(['goods_id'=>$data['id']])->find();
                 if($goodsAttribute){
                     Db::name('goods_attribute')->where(['goods_id'=>$data['id']])->delete();
