@@ -41,17 +41,17 @@ class Customer extends Mustlogin
         //会员订单数量
         #代付款
         $count_pay = Db::table('fy_order')
-            ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid'=> $user_session['openid'], 'fy_order.order_status'=>0,'fy_order.pay_status'=>0])->count();
+            ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
+            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order.order_status' => 0, 'fy_order.pay_status' => 0])->count();
         #待发货
         $count_deliver = Db::table('fy_order')
-            ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid'=> $user_session['openid'],'fy_order.order_status'=>1,'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>0])
+            ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
+            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order.order_status' => 1, 'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 0])
             ->count();
         #待收货
         $count_take_delivery = Db::table('fy_order')
-            ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid'=> $user_session['openid'],'fy_order.order_status'=>1,'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>1])
+            ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
+            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order.order_status' => 1, 'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 1])
             ->count();
         #退货退款
         $count_refund = Db::table('fy_order')
@@ -59,8 +59,8 @@ class Customer extends Mustlogin
             ->where(['fy_order.openid'=> $user_session['openid'],'fy_order.order_status'=>['in',4],'fy_order.pay_status'=>1])
             ->count();
         $count_evaluate = Db::table('fy_order')
-            ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid'=> $user_session['openid'],'fy_order.order_status'=>1,'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>2])
+            ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
+            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order.order_status' => 1, 'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 2])
             ->count();
         $this->assign('count_pay', $count_pay);
         $this->assign('count_deliver', $count_deliver);
@@ -370,24 +370,64 @@ class Customer extends Mustlogin
     /**
      * 我的钱包
      */
-    public function mywallet($page='1',$size='4')
+    public function mywallet($page = '1', $size = '4')
     {
-        $user_session = session('wx_user');
-        $user_data = Db::table('fy_customer')->where('openid', $user_session['openid'])->find();
-        $this->assign('user_data',$user_data);
         //到交易记录表中查询交易记录
-//        if($this->request->isAjax()){
-//
-//
-//        }
-        $this->assign('titleName', "我的钱包");
-        return $this->view->fetch("myWallet");
+        if ($this->request->isAjax()) {
+            $user_session = session('wx_user');
+            $pay_record = Db::table('fy_wx_pay_refund_log')
+                ->where(['isdelete' => 0, 'openid' => $user_session['openid']])
+                ->order('create_time', 'desc')
+                ->page($page, $size)
+                ->select();
+            foreach ($pay_record as $k => $v) {
+                $pay_record[$k]['day'] = date('d', $v['create_time']);
+                $pay_record[$k]['month'] = date('m月', $v['create_time']);
+                $pay_record[$k]['end_time'] = date("Y年m月", $v['create_time']);
+            }
+            //按时间对数据分组：时间为键值
+            $res = array();
+            foreach ($pay_record as $key => $val) {
+                $res[$val['end_time']][] = $val;
+            }
+            //将分组情况赋给一个空数组以便返回
+            $i = 0;
+            $all_pay_record = array();
+            foreach ($res as $item) {
+                $all_pay_record[$i] = $item;
+                //获取分组的时间
+                $j = 0;
+                $all_pay_record[$i]['record_month'] = $item[$j]['end_time'];
+                //将money转为float类型并存入数组
+                for ($t = 0; $t < count($item); $t++) {
+                    $money[$t] = number_format(floatval($item[$t]['money']), '2');
+                }
+                //计算总计金额
+                $total_money=0;
+                for ($y = 0; $y < count($item); $y++) {
+                    $total_money = $total_money+$money[$y];
+                }
+                $all_pay_record[$i]['record_money'] = $total_money;
+                //下一次计算的判断值自增
+                if ($i < count($res)) {
+                    $i++;
+                }
+            }
+            return ajax_return($all_pay_record, 'OK', 200);
+        } else {
+            $user_session = session('wx_user');
+            $user_data = Db::table('fy_customer')->where('openid', $user_session['openid'])->find();
+            $this->assign('user_data', $user_data);
+            $this->assign('titleName', "我的钱包");
+            return $this->view->fetch("myWallet");
+        }
     }
 
     /**
      * 会员权益
      */
-    public function memberbenefits(){
+    public function memberbenefits()
+    {
         $this->assign('titleName', "会员权益");
         return $this->view->fetch("memberBenefits");
     }
@@ -485,7 +525,7 @@ class Customer extends Mustlogin
             $message_list = Db::table('fy_message_user')
                 ->alias('u')
                 ->join('fy_message m', 'u.message_id=m.id')
-                ->order('u.create_time','desc')
+                ->order('u.create_time', 'desc')
                 ->where(['u.openid' => $user_session['openid'], 'm.status' => 1, 'm.isdelete' => 0, 'm.is_send' => 1])
                 ->page($page, $size)
                 ->select();
