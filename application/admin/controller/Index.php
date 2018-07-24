@@ -22,7 +22,6 @@ use think\Db;
 
 class Index extends Controller
 {
-
     public function index()
     {
         // 读取数据库模块列表生成菜单项
@@ -85,52 +84,64 @@ class Index extends Controller
 //        $this->view->assign("info", $info);
 //
 //        return $this->view->fetch();
-        //查询订单
-        $count_pay = Db::table('fy_order')
+
+        //待处理事项
+        $count_need_pay = Db::table('fy_order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
             ->where(['fy_order.order_status' => 0, 'fy_order.pay_status' => 0])->count();
-        $this->view->assign('count_pay', $count_pay);
+        $this->view->assign('count_need_pay', $count_need_pay);
 
-        $count_deliver = Db::table('fy_order')
+        $count_need_deliver = Db::table('fy_order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
             ->where(['fy_order.order_status' => 1, 'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 0])
             ->count();
-        $this->view->assign('count_deliver', $count_deliver);
+        $this->view->assign('count_need_deliver', $count_need_deliver);
 
-        $count_refund = Db::table('fy_order')
+        $count_need_refund = Db::table('fy_order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
             ->where(['fy_order.order_status' => ['in', 5, 6], 'fy_order.pay_status' => 1])
             ->count();
-        $this->view->assign('count_refund', $count_refund);
+        $this->view->assign('count_need_refund', $count_need_refund);
 
-        $date = new \DateTime();
-        $date->modify('this week');
-        $first_day_of_week = $date->format('Y-m-d');
-        $date->modify('this week +6 days');
-        $end_day_of_week = $date->format('Y-m-d');
-        $first_day_time = strtotime($first_day_of_week);
-        $end_day_time = strtotime($end_day_of_week);
-        //查询一周内访问人数
-        $count_visitor = Model('LoginLog')->where('login_time', 'between', [$first_day_of_week, $end_day_of_week])->count('login_time');
+        $admin_data = Db::table('fy_admin_user')->where('id', UID)->find();
+        $count_need_drawcash=$admin_data['balance'];
+        $this->view->assign('count_need_drawcash', $count_need_drawcash);
+
+        //指标展示
+        $count_visitor = Db::table('fy_customer_login_log')
+            ->field(['date_format(login_time,"%Y-%m-%d")' => 'days', 'count(id)' => 'count'])
+            ->group('days')
+            ->select();
+        $count_finish = Db::table('fy_order')
+            ->field(['FROM_UNIXTIME(create_time,"%Y-%m-%d")' => 'days', 'count(id)' => 'count'])
+            ->where('order_status', 8)
+            ->group('days')
+            ->select();
+        $count_pay = Db::table('fy_order')
+            ->field(['FROM_UNIXTIME(create_time,"%Y-%m-%d")' => 'days', 'count(id)' => 'count'])
+            ->where('pay_status', 1)
+            ->group('days')
+            ->select();
+        foreach ($count_visitor as $k => $v) {
+            $count_visitor[$k] = [strtotime($v['days']) * 1000, $v['count']];
+        }
+        foreach ($count_finish as $k => $v) {
+            $count_finish[$k] = [strtotime($v['days']) * 1000, $v['count']];
+        }
+        foreach ($count_pay as $k => $v) {
+            $count_pay[$k] = [strtotime($v['days']) * 1000, $v['count']];
+        }
+        $count_visitor = json_encode($count_visitor);
         $this->view->assign('count_visitor', $count_visitor);
-
-        //查询一周内成交客户
-        $count_accomplish = Db::table('fy_order')
-            ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
-            ->where(['order_status' => 8, 'create_time' => ['between', [$first_day_time, $end_day_time]]])
-            ->count('order_status');
-        $this->view->assign('count_accomplish', $count_accomplish);
-
-        //查询一周内支付的订单
-        $count_pay_accomplish = Db::table('fy_order')
-            ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
-            ->where(['order_status' => 1, 'pay_status' => 1, 'create_time' => ['between', [$first_day_time, $end_day_time]]])
-            ->count('order_status');
-        $this->view->assign('count_pay_accomplish', $count_pay_accomplish);
+        $count_finish = json_encode($count_finish);
+        $this->view->assign('count_finish', $count_finish);
+        $count_pay = json_encode($count_pay);
+        $this->view->assign('count_pay', $count_pay);
 
         //查询公告
         $notice_list = Model('Notice')->where(['status' => 1, 'isdelete' => 0])->select();
         $this->view->assign("notice_list", $notice_list);
         return $this->view->fetch();
     }
+
 }
