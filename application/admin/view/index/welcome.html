@@ -177,68 +177,63 @@
         ?>&nbsp;&nbsp;{$Think.session.user_name}</p>
         <p>级别：&nbsp;{$Think.session.real_name}</p>
         <div class="div-head">
-            <!--<img src="info">-->
             <div>
                 <button type="button" class="btn btn-default radius ml-20"
                         onClick="layer_open('个人信息', '{:\\think\\Url::build(\'Pub/profile\')}')">&nbsp;&nbsp;个人信息&nbsp;&nbsp;
                 </button>
             </div>
-            <!--<a href="javascript:;" onclick="layer_open('个人信息', '{:\\think\\Url::build(\'Pub/profile\')}')">个人信息</a>-->
-            <!--<img src="lock">-->
             <div>
-                <button type="button" class="btn btn-default radius ml-20" onClick="">&nbsp;&nbsp;锁屏&nbsp;&nbsp;
+                <button type="button" class="btn btn-default radius ml-20" onClick="lockScreen()">&nbsp;&nbsp;锁屏&nbsp;&nbsp;
                 </button>
             </div>
-            <!--<a href="javascript:;">锁屏</a>-->
-            <!--<img src="loginout">-->
             <div>
                 <button type="button" class="btn btn-default radius ml-20" onClick="loginout()">&nbsp;&nbsp;注销&nbsp;&nbsp;
                 </button>
             </div>
-            <!--<a href="javascript:;" onclick="logout()">注销</a>-->
         </div>
     </div>
 </div>
 <div class="page-container div-panel">
     <h4>待处理事项</h4>
     <div class="div-deal">
-        <p class="p-center">{$count_pay}</p>
+        <p class="p-center">{$count_need_pay}</p>
         <p class="p-center">待付款订单</p>
     </div>
     <div class="div-deal">
-        <p class="p-center">{$count_deliver}</p>
+        <p class="p-center">{$count_need_deliver}</p>
         <p class="p-center">待发货订单</p>
     </div>
     <div class="div-deal">
-        <p class="p-center">{$count_refund}</p>
+        <p class="p-center">{$count_need_refund}</p>
         <p class="p-center">退款售后订单</p>
     </div>
     <div class="div-deal">
-        <p class="p-center">0.00</p>
+        <p class="p-center">{$count_need_drawcash}</p>
         <p class="p-center">待提现金额</p>
     </div>
 </div>
 <div class="page-container div-panel">
     <h4>指标展示</h4>
-    <div class="div-deal">
-        <p class="p-center">{$count_visitor}</p>
-        <p class="p-center"><strong>访问人数</strong></p>
-        <!--<img src="0" class="img-target">-->
+    <div class="">
+        <div class="div-table-border">
+            <p class="p-center"><strong>访问人数</strong></p>
+            <div id="container_visitor" style="width: 600px;height: 400px"></div>
+        </div>
+        <div class="div-table-border">
+            <p class="p-center"><strong>成交客户</strong></p>
+            <div id="container_finish" style="width: 600px;height: 400px"></div>
+        </div>
     </div>
-    <div class="div-deal">
-        <p class="p-center">{$count_accomplish}</p>
-        <p class="p-center"><strong>成交客户</strong></p>
-        <!--<img src="0" class="img-target">-->
-    </div>
-    <div class="div-deal">
-        <p class="p-center">{$count_pay_accomplish}</p>
-        <p class="p-center"><strong>支付订单</strong></p>
-        <!--<img src="0" class="img-target">-->
-    </div>
-    <div class="div-deal">
-        <p class="p-center">0.00</p>
-        <p class="p-center"><strong>支付金额</strong></p>
-        <!--<img src="0" class="img-target">-->
+
+    <div class="">
+        <div class="div-table-border">
+            <p class="p-center"><strong>支付订单</strong></p>
+            <div id="container_pay" style="width: 600px;height: 400px"></div>
+        </div>
+        <div class="div-table-border">
+            <p class="p-center"><strong>支付金额</strong></p>
+            <div id="container_money" style="width: 600px;height: 400px"></div>
+        </div>
     </div>
 </div>
 <div class="page-container div-panel">
@@ -261,8 +256,129 @@
         </p>
     </div>
 </footer>
+<script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
 
-<script type="text/javascript">
+<script>
+    //图表：全局配置
+    Highcharts.setOptions({
+        chart: {
+            zoomType: 'x',
+        },
+        subtitle: {
+            text: document.ontouchstart === undefined ?
+                '鼠标拖动可以进行缩放' : '手势操作进行缩放'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: {
+                millisecond: '%H:%M:%S.%L',
+                second: '%H:%M:%S',
+                minute: '%H:%M',
+                hour: '%H:%M',
+                day: '%m-%d',
+                week: '%m-%d',
+                month: '%Y-%m',
+                year: '%Y'
+            }
+        },
+        tooltip: {
+            dateTimeLabelFormats: {
+                millisecond: '%H:%M:%S.%L',
+                second: '%H:%M:%S',
+                minute: '%H:%M',
+                hour: '%H:%M',
+                day: '%Y-%m-%d',
+                week: '%m-%d',
+                month: '%Y-%m',
+                year: '%Y'
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            area: {
+                fillColor: {
+                    linearGradient: {
+                        x1: 0,
+                        y1: 0,
+                        x2: 0,
+                        y2: 1
+                    },
+                    stops: [
+                        [0, Highcharts.getOptions().colors[0]],
+                        [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                    ]
+                },
+                marker: {
+                    radius: 2
+                },
+                lineWidth: 1,
+                states: {
+                    hover: {
+                        lineWidth: 1
+                    }
+                },
+                threshold: null
+            }
+        },
+    });
+    //图表：访问人数
+    var chart_visitor = Highcharts.chart('container_visitor', {
+        title: {
+            text: '年度访问人数统计表'
+        },
+        yAxis: {
+            title: {
+                text: '人数'
+            }
+        },
+        series: [{
+            type: 'area',
+            name: '访问人数',
+            data: {$count_visitor}
+        }]
+    });
+    //图表：成交客户
+    var chart_finish = Highcharts.chart('container_finish', {
+        title: {
+            text: '年度成交客户统计表'
+        },
+        yAxis: {
+            title: {
+                text: '成交数量'
+            }
+        },
+        series: [{
+            type: 'area',
+            name: '成交数量',
+            data: {$count_finish}
+        }]
+    });
+    //图表：支付订单
+    var chart_pay = Highcharts.chart('container_pay', {
+        title: {
+            text: '年度支付订单统计表'
+        },
+        yAxis: {
+            title: {
+                text: '支付数量'
+            }
+        },
+        series: [{
+            type: 'area',
+            name: '支付数量',
+            data: {$count_pay}
+        }]
+    });
+    //锁屏
+    var parentDoc = window.parent.document;
+
+    function lockScreen() {
+        $(parentDoc).find('.lockScreen').fadeIn();//使用淡入效果进行锁屏
+    }
+
+    //退出登录
     function loginout() {
         layer.confirm('您确定要退出登录？', {title: '登出提醒'}, function (index) {
             location.href = '{:\\think\\Url::build("Pub/logout")}'

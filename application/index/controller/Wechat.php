@@ -74,6 +74,15 @@ class WeChat extends Controller
             $up['login_ip'] = get_client_ip();
             $customer->where(array('openid' => $userInfo['openid']))->update($up);
         }
+        //新增前端登录日志记录
+        $userData = Db::table('fy_customer')->field('id')->where('openid', $userInfo['openid'])->find();
+        $time = date('Y-m-d H:i:s', time());
+        $loginData  =[
+            'uid' => $userData['id'],
+            'openid' => $userInfo['openid'],
+            'login_time' => $time
+        ];
+        Db::table('fy_customer_login_log')->insert($loginData);
         Session::set('wx_user', $userInfo);
         # 从哪里来回哪里去
         $this->redirect(urldecode($this->request->param('state')) ? urldecode($this->request->param('state')) : 'index/index/index');
