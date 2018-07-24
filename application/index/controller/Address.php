@@ -144,15 +144,21 @@ class Address extends Mustlogin
                 $msg ='设置默认地址成功';
                 $time = time();
                 if( $userDataStatus){
-                    $userData['score'] +=100;
-                    $msg ='信息已完善,恭喜获得100积分';
-                    Db::table('fy_score_log')->insert([
-                        'uid' => $userData['id'],
-                        'openid' => $userData['openid'],
+                    $scoreLog = Db::table('fy_score_log')->where([
+                        'openid'=>$user['openid'],
                         'source' => 11,
-                        'score' => 100,
-                        'time' => $time
-                    ]);
+                    ])->find();
+                    if(empty($scoreLog)) {
+                        $userData['score'] += 100;
+                        $msg = '信息已完善,恭喜获得100积分';
+                        Db::table('fy_score_log')->insert([
+                            'uid' => $userData['id'],
+                            'openid' => $userData['openid'],
+                            'source' => 11,
+                            'score' => 100,
+                            'time' => $time
+                        ]);
+                    }
                 }
                 Db::table('fy_customer')->where('openid', $user['openid'])->update($userData);
 
