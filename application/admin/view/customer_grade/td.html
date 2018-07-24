@@ -3,5 +3,15 @@
 <td>{$vo.experience_start}</td>
 <td>{$vo.experience_end}</td>
 <td>{$vo.goods_score_rate}</td>
-<td>{$vo.all}</td>
+<td><?php
+$all = explode('<br/>', $vo['all']);
+    $right_name=\think\Db::table('fy_customer_right')->field('id,name')->where(['status'=>1,'isdelete'=>0])->select();
+    foreach($all as $rk=>$av){
+        foreach($right_name as $rk=>$rv){
+            if(in_array($av,$rv)){
+                echo $rv['name'].'<br/>';
+            }
+        }
+    }
+?></td>
 <td>{$vo.addtime}</td>
