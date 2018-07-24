@@ -385,6 +385,88 @@ class Customer extends Mustlogin
     }
 
     /**
+     * 会员权益
+     */
+    public function memberrule(){
+        $this->assign('titleName', "会员权益规则");
+        return $this->view->fetch("memberRule");
+    }
+
+    /**
+     * 会员权益
+     */
+    public function userinfo(){
+        $this->assign('titleName', "完善用户信息");
+        $user = session('wx_user');
+        $userData = Db::table('fy_customer')->where('openid', $user['openid'])->find();
+        $userAddress = Db::table('fy_customer_address')->where(
+            [ 'uid'=>$userData['id'],'status'=>1]
+        )->find();
+        //dump($userAddress);
+        $this->assign('userData', $userData);
+        $this->assign('userAddress', $userAddress);
+        //dump($userData);
+        return $this->view->fetch("userInfo");
+    }
+    /**
+     * 用户信息修改
+     */
+    public function userInfoEdit(){
+        $this->assign('titleName', "修改信息");
+        $user = session('wx_user');
+        $userData = Db::table('fy_customer')->where('openid', $user['openid'])->find();
+        $oldUser = $userData;
+        $userAddress = Db::table('fy_customer_address')->where(
+            [ 'uid'=>$userData['id'],'status'=>1]
+        )->find();
+        if ($this->request->isAjax()) {
+            $nickname = $this->request->param('nickname');
+            $mobile = $this->request->param('mobile');
+            $email = $this->request->param('email');
+            if(!empty($nickname)) $userData['nickname'] = $nickname;
+            if(!empty($mobile)) $userData['mobile'] = $mobile;
+            if(!empty($email)) $userData['email'] = $email;
+            if(empty($nickname) && empty($mobile) && empty($email)) return ajax_return('', '修改数据不能为空', 200);
+
+            //如果用户信息都已经完善了，奖励100积分  $oldUser中信息没有完善   $userData中数据完善了，说明数据第一次完善 奖励100积分
+            $oldUserStatus = empty($oldUser['nickname']) || empty($oldUser['mobile']) || empty($oldUser['email'])|| empty($userAddress['id']);// true未完善
+            $userDataStatus =  !empty($userData['nickname']) && !empty($userData['mobile']) && !empty($userData['email']) && !empty($userAddress['id']);//true 已完善
+            //dump($oldUserStatus);
+            //dump($userDataStatus);
+            $msg ='修改成功';
+            $time = time();
+            if($oldUserStatus && $userDataStatus){
+                $userData['score'] +=100;
+                $msg ='信息已完善,恭喜获得100积分';
+                Db::table('fy_score_log')->insert([
+                    'uid' => $userData['id'],
+                    'openid' => $userData['openid'],
+                    'source' => 11,
+                    'score' => 100,
+                    'time' => $time
+                ]);
+            }
+            Db::table('fy_customer')->where('openid', $user['openid'])->update($userData);
+            return ajax_return('', $msg, 200);
+        } else {
+
+            //dump($userAddress);
+            $this->assign('userData', $userData);
+            $this->assign('userAddress', $userAddress);
+            //dump($userData);
+            return $this->view->fetch("userInfoEdit");
+        }
+    }
+
+    /**
+     * 赚积分
+     */
+    public function getscore(){
+        $this->assign('titleName', "赚积分");
+        return $this->view->fetch("getScore");
+    }
+
+    /**
      * 消息中心
      */
     public function message($page = '1', $size = '4')

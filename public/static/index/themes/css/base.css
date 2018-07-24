@@ -172,7 +172,7 @@ body{
     color: orange;
 }
 .red{ color: #FD6568}
-
+.sred{ color: #de181b!important;}
 
 
 .bg_grey{background: grey!important;}
@@ -612,7 +612,14 @@ body{
     border: 1px solid #dadada;
     text-align: left;
 }
-
+.layer-shadow-bg {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background-color: rgba(0,0,0,.5);
+}
 /*
 .swiper-pagination .swiper-pagination-bullet {
     width: 10px;

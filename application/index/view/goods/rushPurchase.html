@@ -68,7 +68,7 @@
                 }
                 var width=parseInt((data[i].buy_num)/totalNum *100)+'%';
                 var price=notEmpty(data[i].basic_price);
-                var activeFlag = new Date().getTime()>parseInt(data[i].start_date)*1000  &&　new Date().getTime()<parseInt(data[i].end_date)*1000;//活动区间
+                var activeFlag =activeStatus(parseInt(data[i].start_date),parseInt(data[i].end_date))!=2?true:false;//活动区间
                 if(data[i].price_real && data[i].price_real!=0){
                     price = notEmpty(data[i].price_real);
                 }
