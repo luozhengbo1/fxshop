@@ -87,10 +87,23 @@ class Wechatpay extends Controller
             $update = ['status' => 1];
             $res = Db::name("order_all")->where($orderWhere)->update($update);
 //             file_put_contents("wx_pay_success.log",Db::name('order_all')->getLastSql()."\r", 8);
+            $orderAllData = Db::name('order_all')->where(['order_id'=>$orderInfo['out_trade_no']])->find();
             #付款成功通知
-            include_once "sendMsg/SDK/WeiXin.php";
-            $wx = new \WeiXin();
-            $wx->buySuccess($goodsname,$orderInfo['openid'],$sonId['total_price']);
+            if($orderAllData['is_tui']==0){
+                include_once "sendMsg/SDK/WeiXin.php";
+                $wx = new \WeiXin();
+                $result = $wx->buySuccess($goodsname,$orderInfo['openid'],$sonId['total_price']);
+                Db::name('order_all')->where(['order_id'=>$orderInfo['out_trade_no']])->update(['is_tui'=>1]);
+            }
+
+            #交易记录
+            $wx_pay_refund_log_insert=[];
+            $wx_pay_refund_log_insert['openid']= $user['openid'];
+            $wx_pay_refund_log_insert['username']= $user['nickname'];
+            $wx_pay_refund_log_insert['create_time']= time();
+            $wx_pay_refund_log_insert['money']= $sonId['total_price'];
+            $wx_pay_refund_log_insert['type']=1;#购买商品
+            Db::name('wx_pay_refund_log')->insert($wx_pay_refund_log_insert);
         }
         exit;
     }
@@ -167,10 +180,25 @@ class Wechatpay extends Controller
             $scoreLog['score']=-$decScore;
             $scoreLog['time']=time();
             Db::name('score_log')->insert($scoreLog);
+
+            $orderData = Db::name('order')->where(['order_id'=>$orderInfo['out_trade_no']])->find();
             #付款成功通知
-            include_once "sendMsg/SDK/WeiXin.php";
-            $wx = new \WeiXin();
-            $wx->buySuccess($goodsname,$orderInfo['openid'],$order['total_price']);
+            if($orderData['is_tui']==0){
+                include_once "sendMsg/SDK/WeiXin.php";
+                $wx = new \WeiXin();
+                $result = $wx->buySuccess($goodsname,$orderInfo['openid'],$order['total_price']);
+                Db::name('order')->where(['order_id'=>$orderInfo['out_trade_no']])->update(['is_tui'=>1]);
+            }
+
+
+            #交易记录
+            $wx_pay_refund_log_insert=[];
+            $wx_pay_refund_log_insert['openid']= $user['openid'];
+            $wx_pay_refund_log_insert['username']= $user['nickname'];
+            $wx_pay_refund_log_insert['create_time']= time();
+            $wx_pay_refund_log_insert['money']= $order['total_price'];
+            $wx_pay_refund_log_insert['type']=1;#购买商品
+            Db::name('wx_pay_refund_log')->insert($wx_pay_refund_log_insert);
         }
     }
 
@@ -178,92 +206,92 @@ class Wechatpay extends Controller
     /**
      *  array转xml
      */
-    public function arrayToXml($arr)
-    {
-        $xml = "<xml>";
-        foreach ($arr as $key => $val){
-            if (is_numeric($val)){
-                $xml .= "<".$key.">".$val."</".$key.">";
-            }else{
-                $xml .= "<".$key."><![CDATA[".$val."]]></".$key.">";
-            }
-        }
-        $xml .= "</xml>";
-        return $xml;
-    }
-    //使用证书，以post方式提交xml到对应的接口url
-
-    /**
-     *   作用：使用证书，以post方式提交xml到对应的接口url
-     */
-    function curl_post_ssl($url, $vars, $second=30)
-    {
-        $ch = curl_init();
-        //超时时间
-        curl_setopt($ch,CURLOPT_TIMEOUT,$second);
-        curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
-
-        curl_setopt($ch,CURLOPT_URL,$url);
-        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
-        curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,false);
-
-        //以下两种方式需选择一种
-        /******* 此处必须为文件服务器根目录绝对路径 不可使用变量代替*********/
-        curl_setopt($ch,CURLOPT_SSLCERT,"/home/lzb/tpAdmin/application/index/controller/WxPaySDK/cert/apiclient_cert.pem");
-        curl_setopt($ch,CURLOPT_SSLKEY,"/home/lzb/tpAdmin/application/index/controller/WxPaySDK/cert/apiclient_key.pem");
-
-        curl_setopt($ch,CURLOPT_POST, 1);
-        curl_setopt($ch,CURLOPT_POSTFIELDS,$vars);
-
-        $data = curl_exec($ch);
-        if($data){
-//            echo 234;
-            curl_close($ch);
-            return $data;
-        }else {
-            $error = curl_errno($ch);
-            echo "call faild, errorCode:$error\n";
-            curl_close($ch);
-            return false;
-        }
-    }
-
-    //企业向个人付款
-    public function payToUser($openid='omQYXwNAT5uC15TQqMGxajJzqo4s',$desc='提现成功',$amount='1')
-    {
-        //微信付款到个人的接口
-        $url = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers';
-        $params["mch_appid"]        = \think\Config::get('app_id');   //公众账号appid
-        #商户号生成
-        include_once 'WxPaySDK/WxPay.Api.php';
-        $merchid = \WxPayConfig::MCHID;
-        $params["mchid"]            = $merchid;   //商户号 微信支付平台账号
-        $params["nonce_str"]        = 'longdongzhiye99'.mt_rand(100,999);   //随机字符串
-        $params["partner_trade_no"] = mt_rand(10000000,99999999);           //商户订单号
-        $params["amount"]           = $amount;          //金额
-        $params["desc"]             = $desc;            //企业付款描述
-        $params["openid"]           = $openid;          //用户openid
-        $params["check_name"]       = 'NO_CHECK';       //不检验用户姓名
-        $params['spbill_create_ip'] = get_client_ip();   //获取IP
-
-           //生成签名(签名算法后面详细介绍)
-        $str = 'amount='.$params["amount"].'&check_name='.$params["check_name"].'&desc='.$params["desc"].'&mch_appid='.$params["mch_appid"].'&mchid='.$params["mchid"].'&nonce_str='.$params["nonce_str"].'&openid='.$params["openid"].'&partner_trade_no='.$params["partner_trade_no"].'&spbill_create_ip='.$params['spbill_create_ip'].'&key=7c82dcb3c8437f7c654b57fb0509944b';
-        $sign = strtoupper(md5($str));
-//        var_dump($sign);
-//        $sign =strtoupper(hash('sha256',$sign));
-//        var_dump($sign);
-        $params["sign"] = $sign;//签名
-        $xml = $this->arrayToXml($params);
-        return $this->curl_post_ssl($url, $xml);
-
-    }
-
-    public function  index()
-    {
-        $Wechatpay=new Wechatpay;
-        $res = $Wechatpay -> payToUser();
-//        var_dump($res);
-    }
+//    public function arrayToXml($arr)
+//    {
+//        $xml = "<xml>";
+//        foreach ($arr as $key => $val){
+//            if (is_numeric($val)){
+//                $xml .= "<".$key.">".$val."</".$key.">";
+//            }else{
+//                $xml .= "<".$key."><![CDATA[".$val."]]></".$key.">";
+//            }
+//        }
+//        $xml .= "</xml>";
+//        return $xml;
+//    }
+//    //使用证书，以post方式提交xml到对应的接口url
+//
+//    /**
+//     *   作用：使用证书，以post方式提交xml到对应的接口url
+//     */
+//    function curl_post_ssl($url, $vars, $second=30)
+//    {
+//        $ch = curl_init();
+//        //超时时间
+//        curl_setopt($ch,CURLOPT_TIMEOUT,$second);
+//        curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
+//
+//        curl_setopt($ch,CURLOPT_URL,$url);
+//        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
+//        curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,false);
+//
+//        //以下两种方式需选择一种
+//        /******* 此处必须为文件服务器根目录绝对路径 不可使用变量代替*********/
+//        curl_setopt($ch,CURLOPT_SSLCERT,"/home/lzb/tpAdmin/application/index/controller/WxPaySDK/cert/apiclient_cert.pem");
+//        curl_setopt($ch,CURLOPT_SSLKEY,"/home/lzb/tpAdmin/application/index/controller/WxPaySDK/cert/apiclient_key.pem");
+//
+//        curl_setopt($ch,CURLOPT_POST, 1);
+//        curl_setopt($ch,CURLOPT_POSTFIELDS,$vars);
+//
+//        $data = curl_exec($ch);
+//        if($data){
+////            echo 234;
+//            curl_close($ch);
+//            return $data;
+//        }else {
+//            $error = curl_errno($ch);
+//            echo "call faild, errorCode:$error\n";
+//            curl_close($ch);
+//            return false;
+//        }
+//    }
+//
+//    //企业向个人付款
+//    public function payToUser($openid='omQYXwNAT5uC15TQqMGxajJzqo4s',$desc='提现成功',$amount='1')
+//    {
+//        //微信付款到个人的接口
+//        $url = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers';
+//        $params["mch_appid"]        = \think\Config::get('app_id');   //公众账号appid
+//        #商户号生成
+//        include_once 'WxPaySDK/WxPay.Api.php';
+//        $merchid = \WxPayConfig::MCHID;
+//        $params["mchid"]            = $merchid;   //商户号 微信支付平台账号
+//        $params["nonce_str"]        = 'longdongzhiye99'.mt_rand(100,999);   //随机字符串
+//        $params["partner_trade_no"] = mt_rand(10000000,99999999);           //商户订单号
+//        $params["amount"]           = $amount;          //金额
+//        $params["desc"]             = $desc;            //企业付款描述
+//        $params["openid"]           = $openid;          //用户openid
+//        $params["check_name"]       = 'NO_CHECK';       //不检验用户姓名
+//        $params['spbill_create_ip'] = get_client_ip();   //获取IP
+//
+//           //生成签名(签名算法后面详细介绍)
+//        $str = 'amount='.$params["amount"].'&check_name='.$params["check_name"].'&desc='.$params["desc"].'&mch_appid='.$params["mch_appid"].'&mchid='.$params["mchid"].'&nonce_str='.$params["nonce_str"].'&openid='.$params["openid"].'&partner_trade_no='.$params["partner_trade_no"].'&spbill_create_ip='.$params['spbill_create_ip'].'&key=7c82dcb3c8437f7c654b57fb0509944b';
+//        $sign = strtoupper(md5($str));
+////        var_dump($sign);
+////        $sign =strtoupper(hash('sha256',$sign));
+////        var_dump($sign);
+//        $params["sign"] = $sign;//签名
+//        $xml = $this->arrayToXml($params);
+//        return $this->curl_post_ssl($url, $xml);
+//
+//    }
+//
+//    public function  index()
+//    {
+//        $Wechatpay=new Wechatpay;
+//        $res = $Wechatpay -> payToUser();
+////        var_dump($res);
+//    }
 
 
 }

@@ -1,0 +1,63 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+{include file="Public/header-title"}
+<!--用户信息-->
+<style>
+
+</style>
+<section class="mt5">
+    <div class="aui-product-set">
+        <a href="{:url('customer/userInfoEdit',['param'=>'nickname'])}" class="aui-address-cell">
+            <div class="aui-address-cell-bd">用户昵称</div>
+            <div class="right-side-arrow {if condition='$userData.nickname neq null' /}active{/if}" >
+                {$userData.nickname}
+                {if condition='$userData.nickname eq null' /}修改{/if}
+                <i class="iconfont icon-right-arrow"></i>
+            </div>
+        </a>
+        <!--<a href="#" class="aui-address-cell aui-fl-arrow aui-fl-arrow-clear">
+            <div class="aui-address-cell-bd">登录密码</div>
+            <div class="aui-address-cell-ft sred">修改</div>
+        </a>-->
+        <a href="{:url('customer/userInfoEdit',['param'=>'email'])}" class="aui-address-cell">
+            <div class="aui-address-cell-bd">绑定邮箱</div>
+            <div class="right-side-arrow {if condition='$userData.email neq null' /}active{/if}">
+                {$userData.email}
+                {if condition='$userData.email eq null' /}修改{/if}
+                <i class="iconfont icon-right-arrow"></i>
+            </div>
+        </a>
+        <a href="{:url('customer/userInfoEdit',['param'=>'mobile'])}" class="aui-address-cell">
+            <div class="aui-address-cell-bd">绑定手机</div>
+            <div class="right-side-arrow {if condition='$userData.mobile neq null' /}active{/if}">
+                {$userData.mobile}
+                {if condition='$userData.mobile eq null' /}修改{/if}
+                <i class="iconfont icon-right-arrow"></i>
+            </div>
+        </a>
+        <a href="javascript:;" class="aui-address-cell">
+            <div class="aui-address-cell-bd">设置安全密码</div>
+            <div class="right-side-arrow active">
+                默认微信密码，不可改
+            </div>
+        </a>
+       <!-- <a href="#" class="aui-address-cell aui-fl-arrow aui-fl-arrow-clear">
+            <div class="aui-address-cell-bd">设置安全密码</div>
+            <div class="aui-address-cell-ft sred">修改</div>
+        </a>-->
+        <a href="{:\\think\\Url::build(\'Address/index\')}" class="aui-address-cell" >
+            <div class="aui-address-cell-bd">我的收货地址</div>
+            <div class="right-side-arrow {if condition='$userAddress.id neq null' /}active{/if}">
+                {$userAddress.address ??'设置默认地址'}
+                <i class="iconfont icon-right-arrow"></i>
+            </div>
+        </a>
+        <!--<a href="#" class="aui-address-cell aui-fl-arrow aui-fl-arrow-clear">
+            <div class="aui-address-cell-bd">注销账户<span class="f10 ml10">注销后账户无法恢复，请谨慎操作</span></div>
+            <div class="aui-address-cell-ft grey">修改</div>
+        </a>-->
+    </div>
+</section>
+{include file="Public/footer-quick-nav"}
+</body>
+</html>

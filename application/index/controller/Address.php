@@ -135,7 +135,34 @@ class Address extends Mustlogin
                 Db::table('fy_customer_address')->where('id', $id)->setField('status', 1);
                 Db::table('fy_customer_address')->where('id', $id)->setField('updatetime', $time);
                 Db::table('fy_customer_address')->where('id', 'not in', $id)->where('uid', $uid)->setField('status', 0);
-                return ajax_return('', '设置默认地址成功', 200);
+
+
+                //如果用户信息都已经完善了，奖励100积分  $oldUser中信息没有完善   $userData中数据完善了，说明数据第一次完善 奖励100积分
+                $user = session('wx_user');
+                $userData = Db::table('fy_customer')->where('openid', $user['openid'])->find();
+                $userDataStatus =  !empty($userData['nickname']) && !empty($userData['mobile']) && !empty($userData['email']);//true 已完善
+                $msg ='设置默认地址成功';
+                $time = time();
+                if( $userDataStatus){
+                    $scoreLog = Db::table('fy_score_log')->where([
+                        'openid'=>$user['openid'],
+                        'source' => 11,
+                    ])->find();
+                    if(empty($scoreLog)) {
+                        $userData['score'] += 100;
+                        $msg = '信息已完善,恭喜获得100积分';
+                        Db::table('fy_score_log')->insert([
+                            'uid' => $userData['id'],
+                            'openid' => $userData['openid'],
+                            'source' => 11,
+                            'score' => 100,
+                            'time' => $time
+                        ]);
+                    }
+                }
+                Db::table('fy_customer')->where('openid', $user['openid'])->update($userData);
+
+                return ajax_return('', $msg, 200);
             }
         }
     }

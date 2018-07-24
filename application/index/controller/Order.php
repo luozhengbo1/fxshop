@@ -33,7 +33,7 @@
                 }else{
                     #待付款
                     if($data['status']==0){
-                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>0];
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>0,'fy_order.order_status'=>0];
                     }
                     #待發貨
                     if($data['status']==1 ){
@@ -45,7 +45,8 @@
                     }
                     #待退款
                     if($data['status']==3){
-                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order_goods.is_return'=>1];
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>4,'fy_order.pay_status'=>1,'fy_order_goods.is_return'=>1];
+//                        $where = ['fy_order.openid'=>'omQYXwM8TEkiBZR7Ldm891OOWbNQ','fy_order.order_status'=>4,'fy_order.pay_status'=>1,'fy_order_goods.is_return'=>1];
                     }
                     #待评价
                     if($data['status']==4){
@@ -53,7 +54,8 @@
                     }
                     //$where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status'],'fy_order_goods.is_return'=>1];
                 }
-                $where['fy_order.order_status'] = ['<>',7];
+//                dump($where);
+//                $where['fy_order.order_status'] = ['<>',7];
                 $orderList = Db::name('order')
                     ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
                     ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id')
@@ -61,7 +63,7 @@
                     ->order('fy_order.create_time desc')
                     ->page($page,$size)
                     ->select();
-               // echo Db::name('order')->getLastSql();
+//                echo Db::name('order')->getLastSql();
                // dump($orderList);
                 foreach ($orderList as $k=>$v ){
                     $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
@@ -189,6 +191,7 @@
                 include_once 'WxPaySDK/log.php';
                 #订单总价的计算
                 $price = $this->calculateOrderValue($data);
+//                dump($price);die;
                 if ($price == 0) {
                     $price = 0.01; #至少支付一分钱
                 }
@@ -208,12 +211,14 @@
 //                dump($dataUser);die;
                 foreach ( $dataUser as $k=>$v ){
                     $sonId[] = rand(1000,9999);
+                    $userPrice[] = $this->calculateOrderValue($v);
+//                    dump($userPrice[$k]);
                     $orderRow[$k] = array(
                         "order_id" => $orderId.$sonId[$k],
                         "address_id" => $data[$k]['addressId'],
                         "openid" => $this->userInfo['openid'],
                         "customer_name" => $this->userInfo['nickname'],
-                        "total_price" => $this->calculateOrderValue($v),
+                        "total_price" => $userPrice[$k],
                         "goods_all" => join(array_column($v,'goodsId'),','),
                         "create_time" => $time,
                         "pay_status" => 0,#支付状态;0未付款;1已付款
@@ -221,6 +226,7 @@
                         "type"=>$type,
                         "total_point"=>$totalScore,
                     );
+
                     #添加上商户id
                     foreach ($v as $val){
                         $orderRow[$k]["user_id"] =Db::name('goods')->field('user_id')->where(['id'=> $val['goodsId']])->find()['user_id'];
@@ -233,6 +239,7 @@
                     }
                     $orderRow[$k]["buy_list"] =json_encode($getNameSkuNum);
                 }
+//                dump($userPrice);die;
                 $orderAll['son_id']= join($sonId,',');
                 $orderGoods=[];
                 foreach ($data as $k=> $v){
@@ -422,10 +429,12 @@
         {
             $pay = 0;
             foreach ($data  as $val) {
+                $goods = Db::name('goods')->where(['id'=>$val['goodsId']])->find();
                 $res = Db::name('goods_attribute')->field('price,point_score')->where(['id'=>$val['skuId']])->find();
-//                $goods = Db::name('goods')->where(['id'=>$val['goodsId']])->find();
-                if (isset($val['num'])) {
-                    $pay += $res['point_score'] * $val['num'];
+                if($goods['show_area']==2){
+                    if (isset($val['num'])) {
+                        $pay += $res['point_score'] * $val['num'];
+                    }
                 }
 //                if($goods['free_type']==0){
 //                    $pay +=$goods['postage'];
@@ -444,7 +453,7 @@
                     $pay += $res['price'] * $val['num'];
                 }
                 if($goods['free_type']==0){
-                    $pay +=$goods['postage'];
+                    $pay +=$goods['postage']* $val['num'];
                 }
             }
             return $pay;
@@ -542,14 +551,14 @@
                     'order_id'=>$data['order_id'],'is_lottery'=>1])->find();
                 #扣去奖券金额   #未使用优惠券直接退款商品价格 如果不包邮直接商品价格，
                 $goodsAttribute = Db::name('goods_attribute')->field('price')->where(['id'=>$data['sku_id']])->find();
-                $returnMoney = $goodsAttribute['price'];
-//                if($order){
-//                    if($order['pay_status']!=1){
-//                        return ajax_return_error('未付款商品不能退款');
-//                    }
-//                    Db::name('lottery')->where(['id'=>$order['lottery_id'],''])->
-//                }
-//                dump($goodsAttribute['price']);die;
+                $returnMoney = $orderGoods['goods_num']*$goodsAttribute['price'];
+                #如果商品包邮，退款时减去邮费
+                if($goods['free_type']==0){
+                    $returnMoney-=$orderGoods['goods_num']*10;
+                }
+                if($returnMoney<0)$returnMoney=0.01;
+//                $returnMoney = $goodsAttribute['price'];
+
                 $res1 = Db::name('order_goods')->where([
                     'order_id'=>$data['order_id'],
                     'goods_id'=>$data['goods_id'],

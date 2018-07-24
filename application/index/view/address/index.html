@@ -36,7 +36,7 @@
         editDefaultAddr:"{:url('address/setDefault')}",
         orderIndex:"{:url('index/order/affirmOrder')}",
     }
-
+    console.log(window.history)
    getListData();
 
   function dealData(data) {
@@ -82,9 +82,16 @@
   function editAddr(id) {
       pub_save({
           url:url.editDefaultAddr,
-          return_url:url.orderIndex,
+         // return_url:url.orderIndex,
           data:{id:id},
+          complete:editComplete,
       })
+  }
+  function editComplete() {
+      setTimeout(function () {
+          window.history.back();
+      },1500)
+
   }
   // function editDefaultAddr(){
   //     alert()

@@ -711,7 +711,7 @@
                         url:$("form").attr('action'),
                         success:function(ret){
                             if(ret.code==200){
-                                alert(ret.msg)
+                                ajax_progress(ret);
                             }
                             console.log(ret);
                         }

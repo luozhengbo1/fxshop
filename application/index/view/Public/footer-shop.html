@@ -78,23 +78,18 @@
 	</ul>
 	<ul class="clear important-nav fl">
 		<li>
-			<a href="javascript:;"  class="bg_orange">
-				<p id="carPage">加入购物车</p>
-			</a>
+			{if condition="$goods['show_area'] eq 1" /}
+			<a href="javascript:;"  class="bg_orange"><p class="collectTip carPage">加入购物车</p></a>
+			{/if}
+			{if condition="$goods['show_area'] neq 1" /}
+			<a href="javascript:;"  class="bg_orange"><p id="carPage">加入购物车</p></a>
+			{/if}
+
 		</li>
 		<li>
-			<a  href="javascript:;" class="bg_red">
-				<p id="buyPage">
-
-				{php}
-					if($goods['show_area']==2){
-					echo'积分兑换';
-					}else{
-					echo'立即购买';
-					}
-				{/php}
-				</p>
-			</a>
+		{if condition="$goods['show_area'] eq 1" /}<a  href="javascript:;" class="bg_red"><p class="buyPage collectTip" >立即抢购</p> </a>{/if}
+		{if condition="$goods['show_area'] eq 2" /}<a  href="javascript:;" class="bg_red"><p id="buyPage">积分兑换</p> </a>{/if}
+		{if condition="$goods['show_area'] eq 3 || $goods['show_area'] eq 4" /} <a  href="javascript:;" class="bg_red"><p id="buyPage">立即购买</p></a>{/if}
 		</li>
 	</ul>
 </div>

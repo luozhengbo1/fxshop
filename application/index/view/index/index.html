@@ -39,47 +39,21 @@
 		</li>
 	{/volist}
 
-	<!--<li>
-		<a href="{:\\think\\Url::build(\'rushPurchase\')}" >
-			<img src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg">
-			<p>限时抢购</p>
-		</a>
-	</li>
-	<li>
-		<a href="{:\\think\\Url::build(\'vouchermarket\')}" >
-			<img src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg">
-			<p>券集市</p>
-		</a>
-	</li>
-	<li>
-		<a href="{:\\think\\Url::build(\'goodsPoints\')}" >
-			<img src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg">
-			<p>积分商城</p>
-		</a>
-	</li>
-	<li>
-		<img src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg">
-		<p>充值中心</p>
-	</li>
-	<li>
-		<a  href="{:\\think\\Url::build(\'mysign\')}">
-			<img src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg">
-			<p>会员签到</p>
-		</a>
-	</li>-->
 </ul>
 <div class="module-active clear mt10">
 	<p class="item-title clear">
-		<a href="{:\\think\\Url::build(\'myactivity\')}" >
+		<a href="{:url('activity/activity')}"  >
 			<span class="fl">互动活动</span>
 			<span class="fr">查看更多<i class="iconfont icon-right-arrow f12 grey"></i></span>
 		</a>
 	</p>
-	<img class="big-img" src="http://scsc.top/data/gallery_album/original_img/5b109f656e378.jpg">
-	<ul class="fl mt5 clear w100p">
-		<li class="fl"><img src="http://scsc.top/data/gallery_album/original_img/5b109f656e378.jpg"></li>
-		<li class="fl"><img src="http://scsc.top/data/gallery_album/original_img/5b109f656e378.jpg"></li>
-	</ul>
+	<div id="activeWrap">
+		<!--<img class="big-img" src="http://scsc.top/data/gallery_album/original_img/5b109f656e378.jpg">
+		<ul class="fl mt5 clear w100p">
+			<li class="fl"><img src="http://scsc.top/data/gallery_album/original_img/5b109f656e378.jpg"></li>
+			<li class="fl"><img src="http://scsc.top/data/gallery_album/original_img/5b109f656e378.jpg"></li>
+		</ul>-->
+	</div>
 </div>
 <!--商品列表-->
 <div class="module-hot-goods">
@@ -105,6 +79,7 @@
         getNotice();
         loadGoodsData();
         changeSearchBg();
+        getActive();
         var headerBanner = new Swiper('.header-banner', {
             autoplay: 6000,//可选选项，自动滑动
             pagination : '.swiper-pagination',
@@ -174,6 +149,36 @@
                                 autoplay: 2000,//可选选项，自动滑动
                             })
                         },100)
+                    }
+
+                }
+            })
+        }
+        function getActive() {
+            $.ajax({
+                type:'post',
+                data:{page:1, size:3},
+                url:"{:url('index/activity/activity')}",
+                success:function (data) {
+                    var code = data.code, result = data.data;
+                    var html='';
+                    if(code=='200' ){
+                        if( result.length>1){
+                            html +='	<a href="'+urlConnect("{:url('activity/detail')}",{id:result[0].id})+'" >';
+                            html +='<img class="big-img" src="'+result[0].main_pic+'">';
+                            html +='</a>'
+						}
+						if(result.length>2){
+                            html +='<ul class="fl mt5 clear w100p">';
+                            html +='	<a href="'+urlConnect("{:url('activity/detail')}",{id:result[1].id})+'" >';
+                            html +='	<li class="fl"><img src="'+result[1].main_pic+'"></li>';
+                            html +='</a>'
+                            html +='	<a href="'+urlConnect("{:url('activity/detail')}",{id:result[2].id})+'" >';
+                            html +='	<li class="fl"><img src="'+result[2].main_pic+'"></li>';
+                            html +='</a>'
+                            html +='</ul>';
+						}
+                        $('#activeWrap').empty().append(html);
                     }
 
                 }

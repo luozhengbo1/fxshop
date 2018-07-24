@@ -259,7 +259,7 @@ class Order extends Controller
     public function refund()
     {
         if($this->request->isAjax()){
-            include_once 'WxPaySDK/WxPay.Api.php';
+            include_once APP_PATH.'/index/controller/WxPaySDK/WxPay.Api.php';
             $data = $this->request->post();
             $order_id = $data['order_id'];
             $result = ['code'=>400,'msg'=>''];
@@ -314,11 +314,12 @@ class Order extends Controller
                     $orderData = Db::name('order')->field('total_price')->where( [ 'order_id'=>$order_id ] )->find();
                     $decPrice = $orderData['total_price'] -$orderGoods['return_price'] ;#减去订单总价
                     if($decPrice<0)$decPrice=0;
-                    if(($order['return_price_all'])== $order['total_price']){#全额退款
-                        $order_status = 6;
-                    }else {
-                        $order_status =5;
-                    }
+                    $order_status = 6;
+//                    if(($order['return_price_all'])== $order['total_price']){#全额退款
+//                        $order_status = 6;
+//                    }else {
+//                        $order_status =5;
+//                    }
                     $updateRes = Db::name('order')->where( [ 'order_id'=>$order_id ] )->update(['order_status'=>$order_status,'total_price'=>$decPrice]);
                     Db::name('order_goods')->where( [ 'id'=>$data['id'] ] )->update(['is_return'=>2,'is_send'=>4]);#已退款，退货完成
                     $result['code'] = 200;
@@ -330,6 +331,16 @@ class Order extends Controller
                     include_once APP_PATH."/index/controller/sendMsg/SDK/WeiXin.php";
                     $wx = new \WeiXin();
                     $wx->refund($orderGoods['goods_detail']['name'],$orderGoods['openid'],$orderGoods['order_id'],$orderGoods['return_price']);
+                    #交易记录 退款
+                    $user = Db::name('customer')->where(['openid'=>$orderGoods['openid']])->find();
+                    $wx_pay_refund_log_insert=[];
+                    $wx_pay_refund_log_insert['openid']= $orderGoods['openid'];
+                    $wx_pay_refund_log_insert['username']= $user['nickname'];
+                    $wx_pay_refund_log_insert['create_time']= time();
+                    $wx_pay_refund_log_insert['money']= -$orderGoods['return_price'];
+                    $wx_pay_refund_log_insert['type']=2;#退款
+                    Db::name('wx_pay_refund_log')->insert($wx_pay_refund_log_insert);
+
                     return ajax_return('','退款成功');
                 }else{
                     file_put_contents("wx_refund_error.log",print_r($res, true)."\r", 8);

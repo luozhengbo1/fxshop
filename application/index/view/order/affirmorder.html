@@ -170,11 +170,12 @@
                     totalPrice += parseInt(num)*parseFloat(price);
                     break;
             }
-            if(freetype==1 && !isNaN(postage)){
-                totalPrice += postage;//加上邮费
+            if(freetype==0 && !isNaN(postage)){
+                totalPrice += postage*num;//加上邮费
             }
         })
         var html='';
+        totalPrice = totalPrice.toFixed(2);
         if(totalPrice>0 && totalPoint>0) html =totalPrice+'+'+totalPoint+'积分';
         else{
             if(totalPrice>0)   html +=totalPrice;

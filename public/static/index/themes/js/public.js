@@ -532,6 +532,7 @@ function tagParse(tag){
     var detailTag = tag;
     detailTag = detailTag.replace(/&lt;/g,"<");
     detailTag = detailTag.replace(/&gt;/g,">");
+    detailTag = detailTag.replace(/&quot;/g,"'");
     return detailTag
 }
 
@@ -574,8 +575,57 @@ var order_status_param={
     2:'待评价',
     3:'待回复',
     4:'待退款',
-    5:'部分退款',
-    6:'全部退款',
+    // 5:'部分退款',
+    // 6:'全部退款',
+     6:'退款',
     7:'已取消订单',
     8:'订单完成',
+}
+function countDown(start,end){
+    var currentTime = parseInt(new Date().getTime()/1000),html='';
+    if(activeStatus(start,end) ==1){
+        //活动中
+        $('#countDown').html('正在抢购中');
+    }else if(activeStatus(start,end)==0){
+        var intDiff = start-currentTime;
+        timer(intDiff)
+    }else if(activeStatus(start,end) ==2){
+        //活动已经结束
+        $('#countDown').html('活动已经结束');
+    }
+}
+function timer(intDiff){
+    var interTimer = window.setInterval(function(){
+        var day=0,
+            hour=0,
+            minute=0,
+            second=0;//时间默认值       
+        if(intDiff > 0){
+            day = Math.floor(intDiff / (60 * 60 * 24));
+            hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+            minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+            second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+            if (minute <= 9) minute = '0' + minute;
+            if (second <= 9) second = '0' + second;
+            var html = day+'天'+hour+'时'+minute+'分'+second+'秒';
+            $('#countDown').html(html);
+            intDiff--;
+        }else {
+            clearInterval(interTimer);
+        }
+
+    }, 1000);
+}
+
+/**
+ *
+ * @param start
+ * @param end
+ * @returns {number} 0未开始 1 活动中 2 已结束
+ */
+function activeStatus(start,end) {
+    var currentTime = new Date().getTime()/1000;
+    if(currentTime<start) return 0;
+    else if(currentTime>start && currentTime<end) return 1;
+    else if(currentTime>end) return 2;
 }
