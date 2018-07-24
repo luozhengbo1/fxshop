@@ -422,10 +422,12 @@
         {
             $pay = 0;
             foreach ($data  as $val) {
+                $goods = Db::name('goods')->where(['id'=>$val['goodsId']])->find();
                 $res = Db::name('goods_attribute')->field('price,point_score')->where(['id'=>$val['skuId']])->find();
-//                $goods = Db::name('goods')->where(['id'=>$val['goodsId']])->find();
-                if (isset($val['num'])) {
-                    $pay += $res['point_score'] * $val['num'];
+                if($goods['show_area']==2){
+                    if (isset($val['num'])) {
+                        $pay += $res['point_score'] * $val['num'];
+                    }
                 }
 //                if($goods['free_type']==0){
 //                    $pay +=$goods['postage'];

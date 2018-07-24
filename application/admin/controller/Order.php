@@ -330,6 +330,16 @@ class Order extends Controller
                     include_once APP_PATH."/index/controller/sendMsg/SDK/WeiXin.php";
                     $wx = new \WeiXin();
                     $wx->refund($orderGoods['goods_detail']['name'],$orderGoods['openid'],$orderGoods['order_id'],$orderGoods['return_price']);
+                    #交易记录 退款
+                    $user = Db::name('customer')->where(['openid'=>$orderGoods['openid']])->find();
+                    $wx_pay_refund_log_insert=[];
+                    $wx_pay_refund_log_insert['openid']= $orderGoods['openid'];
+                    $wx_pay_refund_log_insert['username']= $user['nickname'];
+                    $wx_pay_refund_log_insert['create_time']= time();
+                    $wx_pay_refund_log_insert['money']= $orderGoods['return_price'];
+                    $wx_pay_refund_log_insert['type']=2;#退款
+                    Db::name('wx_pay_refund_log')->insert($wx_pay_refund_log_insert);
+
                     return ajax_return('','退款成功');
                 }else{
                     file_put_contents("wx_refund_error.log",print_r($res, true)."\r", 8);

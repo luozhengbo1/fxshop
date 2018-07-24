@@ -14,34 +14,19 @@
     </div>
     <div class="select-box" style="width:250px">
         <select name="show_area" class="select">
-            <?php
-                $a ='';
-                if(isset($_GET['show_area'])){
-                    if($_GET['show_area']  ) {
-                     $a = "selected";
-                  }
-                }
-            ?>
             <option value="">上架展示区</option>
-            <option value="1" "{$a}" >限时抢购</option>
-            <option value="2"  "{$a}" >积分商城</option>
-            <option value="3"  "{$a}">日常售卖</option>
-            <option value="4"  "{$a}" >热销商品</option>
+            <option value="1"  {if condition="$Request.param.show_area eq 1"}selected{/if}>限时抢购</option>
+            <option value="2"   {if condition="$Request.param.show_area eq 2"}selected{/if}>积分商城</option>
+            <option value="3"   {if condition="$Request.param.show_area eq 3"}selected{/if}>日常售卖</option>
+            <option value="4"   {if condition="$Request.param.show_area eq 4"}selected{/if} >热销商品</option>
         </select>
     </div>
     <div class="select-box" style="width:250px">
         <select name="is_real" class="select">
-            <?php
-            $b ='';
-                if(isset($_GET['is_real'])){
-                    if($_GET['is_real']  ) {
-                     $b = "selected";
-                  }
-                }
-            ?>
+
             <option value="" >实物</option>
-            <option value="1" {$b}>是</option>
-            <option value="0" {$b}>否</option>
+            <option value="1"  {if condition="$Request.param.is_real eq 1"}selected{/if}>是</option>
+            <option value="0"  {if condition="$Request.param.is_real eq 0"}selected{/if}>否</option>
         </select>
     </div>
     <div class="select-box" style="width:250px">
