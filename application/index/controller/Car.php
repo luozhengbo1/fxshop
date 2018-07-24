@@ -39,6 +39,7 @@
                     ->page($page,$size)
                     ->order('c.create_time desc')
                     ->select();
+//                dump($carList);
 //                echo   Db::name('car')->getLastSql();die;
                 //if(!empty($carList )){
                     return ajax_return($carList,'ok','200');

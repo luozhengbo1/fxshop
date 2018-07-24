@@ -350,12 +350,14 @@ class Goods extends Controller
                         $propty_name[] =trim( strstr( $v1,':',-1 ),':');
                         $propty_name_val[] = trim(strrchr( $v1,':' ),':');
                     }
+
                 }
 
                 #把数组去重
                 Db::name('goods_proprety_name')->where(['goods_id'=>$data['id']])->delete();
                 Db::name('goods_proprety_val')->where(['goods_id'=>$data['id']])->delete();
-                Db::name('goods_attribute')->where(['goods_id'=>$data['id']])->delete();
+
+//                Db::name('goods_attribute')->where(['goods_id'=>$data['id']])->delete();
                 foreach (array_unique($propty_name) as $k=>$v){
                     Db::name('goods_proprety_name')->insert(['goods_id'=>$data['id'],'name'=>$v]);
                     $ids[]=Db::name('goods_proprety_name')->getLastInsID();
@@ -375,20 +377,37 @@ class Goods extends Controller
             }
             #sku插入
             if(!empty($allData['skuZuheData'])){
-                $skuData=[];
-                $where=[];
-                foreach ($allData['skuZuheData'] as $k=>$v){
-                    $where[$k][]=$v['id'];
-                    $skuData[$k]['price']=$v['price'];
-                    $skuData[$k]['store']=$v['num'];
-                    $skuData[$k]['goods_code']=$v['code'];
-                    $skuData[$k]['point_score']=$v['pointPrice'];
-                    #条形码
-                    $skuData[$k]['bar_code']=$v['bar'];
-                    $skuData[$k]['goods_id']= $data['id'];
-                    $skuData[$k]['attribute_name']=$v['SkuId'];
+
+                #遍历 ，如果存在skuid 进行修改，不存在，新增
+                foreach ($allData['skuZuheData']  as $skuK =>$skuV){
+                    $update['goods_id']=$data['id'];
+                    $update['attribute_name']=$skuV['SkuId'];
+                    $update['price']=$skuV['price'];
+                    $update['bar_code']=$skuV['bar'];
+                    $update['store']=$skuV['num'];
+                    $update['point_score']=$skuV['pointPrice'];
+                    $update['goods_code']=$skuV['code'];
+                    if($skuV['id']){
+                        $tmpid = $skuV['id'];
+                        Db::name('goods_attribute')->where(['id'=>$tmpid])->update($update);
+                    }else{#新增
+                        Db::name('goods_attribute')->insert($update);
+                    }
                 }
-                 $res = Db::name('goods_attribute')->insertAll($skuData);
+//                $skuData=[];
+//                $where=[];
+//                foreach ($allData['skuZuheData'] as $k=>$v){
+//                    $where[$k][]=$v['id'];
+//                    $skuData[$k]['price']=$v['price'];
+//                    $skuData[$k]['store']=$v['num'];
+//                    $skuData[$k]['goods_code']=$v['code'];
+//                    $skuData[$k]['point_score']=$v['pointPrice'];
+//                    #条形码
+//                    $skuData[$k]['bar_code']=$v['bar'];
+//                    $skuData[$k]['goods_id']= $data['id'];
+//                    $skuData[$k]['attribute_name']=$v['SkuId'];
+//                }
+//                 $res = Db::name('goods_attribute')->insertAll($skuData);
 
                 #将没有sku 的商品添加上价格和库存
             }else{
@@ -405,9 +424,7 @@ class Goods extends Controller
                 $insert['store'] = $data['store'];
                 $res = Db::name('goods_attribute')->insert($insert);
             }
-
-
-            return ajax_return('','操作成功','200');
+            return ajax_return_adv('操作成功','','',true,'parent','','200');
 
         }else{
             $id = $this->request->param('id');

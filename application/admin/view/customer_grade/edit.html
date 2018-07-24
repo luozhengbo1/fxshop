@@ -20,14 +20,6 @@
             <div class="col-xs-3 col-sm-3"></div>
         </div>
         <div class="row cl">
-            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>购物返积分倍率：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <input type="number" class="input-text" placeholder="购物返积分倍率" name="goods_score_rate"
-                     step="0.1"  value="{$vo.goods_score_rate ?? ''}" datatype="*" nullmsg="请输入购物返积分倍率" autocomplete="off">倍
-            </div>
-            <div class="col-xs-3 col-sm-3"></div>
-        </div>
-        <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>结束经验值：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <input type="text" class="input-text" placeholder="结束经验值" name="experience_end"
@@ -36,7 +28,16 @@
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
-        <!-- 判断$vo是否已被定义 -->
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>购物返积分倍率：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="number" class="input-text" placeholder="购物返积分倍率" name="goods_score_rate"
+                       step="0.1" value="{$vo.goods_score_rate ?? ''}" datatype="*" nullmsg="请输入购物返积分倍率"
+                       autocomplete="off">倍
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <!-- 判断该条记录是否已被定义 -->
         <?php
             if(isset($vo)){  $checkbox_val=explode('<br/>', $vo['all']); }
         ?>
@@ -44,60 +45,32 @@
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>权益列表：</label>
             <div class="formControls col-xs-6 col-sm-6 skin-minimal">
+                <!--查出特权列表并生成checkbox-->
+                <?php
+                  $right_list = \think\Db::table('fy_customer_right')->field('id,name')->where(['status'=>1,'isdelete'=>0])->select();
+                    foreach($right_list as $k=>$v){
+                        //判断哪些CheckBox被选中
+                        if(isset($checkbox_val)){
+                            if(in_array($v['id'],$checkbox_val)){
+                ?>
+                <!-- 若checkbox值不为空，则为选中状态-->
                 <div class="radio-box">
-                    <input type="checkbox" name="all[]" id="all-1" value="新人礼包"
-                    <?php if(isset($checkbox_val)){ if(in_array("新人礼包",$checkbox_val)){  echo 'checked="checked"'; }  } ?>
-                    >
-                    <label for="all-1">新人礼包</label>
+                    <input type="checkbox" name="all[]" id="all-1" value="{$v['id']?$v['id']:''}" checked="checked">
+                    <label for="all-1">{$v['name']}</label>
                 </div>
+                <?php      }else{  ?>
+                <!-- 若checkbox值为空，则为非选中状态-->
                 <div class="radio-box">
-                    <input type="checkbox" name="all[]" id="all-2" value="购物积分"
-                    <?php if(isset($checkbox_val)){ if(in_array("购物积分",$checkbox_val)){  echo 'checked="checked"'; }  } ?>
-                    >
-                    <label for="all-2">购物积分</label>
+                    <input type="checkbox" name="all[]" id="all-1" value="{$v['id']?$v['id']:''}">
+                    <label for="all-1">{$v['name']}</label>
                 </div>
+                <?php      }  }else{?>
+                <!-- 若后台传递的权益列表数据$checkbox_val值为空，则展示空的CheckBox列表-->
                 <div class="radio-box">
-                    <input type="checkbox" name="all[]" id="all-3" value="会员优惠活动"
-                    <?php if(isset($checkbox_val)){ if(in_array("会员优惠活动",$checkbox_val)){  echo 'checked="checked"'; }  } ?>
-                    >
-                    <label for="all-3">会员优惠活动</label>
+                    <input type="checkbox" name="all[]" id="all-1" value="{$v['id']?$v['id']:''}">
+                    <label for="all-1">{$v['name']}</label>
                 </div>
-                <div class="radio-box">
-                    <input type="checkbox" name="all[]" id="all-4" value="游戏抽奖"
-                    <?php if(isset($checkbox_val)){ if(in_array("游戏抽奖",$checkbox_val)){  echo 'checked="checked"'; }  } ?>
-                    >
-                    <label for="all-4">游戏抽奖</label>
-                </div>
-                <div class="radio-box">
-                    <input type="checkbox" name="all[]" id="all-5" value="会员升级送积分"
-                    <?php if(isset($checkbox_val)){ if(in_array("会员升级送积分",$checkbox_val)){  echo 'checked="checked"'; }  } ?>
-                    >
-                    <label for="all-5">会员升级送积分</label>
-                </div>
-                <div class="radio-box">
-                    <input type="checkbox" name="all[]" id="all-6" value="免邮券"
-                    <?php if(isset($checkbox_val)){ if(in_array("免邮券",$checkbox_val)){  echo 'checked="checked"'; }  } ?>
-                    >
-                    <label for="all-6">免邮券</label>
-                </div>
-                <div class="radio-box">
-                    <input type="checkbox" name="all[]" id="all-7" value="生日礼包"
-                    <?php if(isset($checkbox_val)){ if(in_array("生日礼包",$checkbox_val)){  echo 'checked="checked"'; }  } ?>
-                    >
-                    <label for="all-7">生日礼包</label>
-                </div>
-                <div class="radio-box">
-                    <input type="checkbox" name="all[]" id="all-8" value="超值优惠券"
-                    <?php if(isset($checkbox_val)){ if(in_array("超值优惠券",$checkbox_val)){  echo 'checked="checked"'; }  } ?>
-                    >
-                    <label for="all-8">超值优惠券</label>
-                </div>
-                <div class="radio-box">
-                    <input type="checkbox" name="all[]" id="all-9" value="钻石会员尊享体验"
-                    <?php if(isset($checkbox_val)){ if(in_array("钻石会员尊享体验",$checkbox_val)){  echo 'checked="checked"'; }  } ?>
-                    >
-                    <label for="all-9">钻石会员尊享体验</label>
-                </div>
+                <?php  } } ?>
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>

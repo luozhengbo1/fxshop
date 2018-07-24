@@ -84,7 +84,7 @@
     <tr>
       <td>订单总价</td>
       <td>
-        <input type="text" placeholder="订单总金额"  name="total_price"  value="{$vo['total_price']??''}" class="form_control w120 lh30 h30" >
+        <input type="text" placeholder="订单总金额"  step="0.01" name="total_price"  value="{$vo['total_price']??''}" class="form_control w120 lh30 h30" >
         {if condition="$vo['pay_status'] eq 0"}
         <a href="javascript:;" onclick="editTotalPrice('{$vo[\'order_id\']}')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 修改总金额</a>
         {/if}
