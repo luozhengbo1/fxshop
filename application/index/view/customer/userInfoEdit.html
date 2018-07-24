@@ -1,0 +1,41 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+{include file="Public/header-title"}
+<section class="mt5">
+    <form id="form">
+    <div class="aui-product-set bg_white">
+            {if condition="$param eq 'nickname' " /}
+            <div class="aui-address-cell clear">
+                <div class="fl mr10 f14">用户昵称:</div>
+                <div class="fr" >
+                    <input type="text" class="form_control" name="nickname" nullmsg="请输入昵称" datatype="*"  value="{$userData.nickname}">
+                </div>
+            </div>
+            {/if}
+            {if condition="$param eq 'email' " /}
+            <div class="aui-address-cell clear">
+                <div class="fl mr10 f14">绑定邮箱:</div>
+                <div class="fr" >
+                    <input type="text" class="form_control" name="email" nullmsg="请输入邮箱" errormsg="请输入正确的邮箱" datatype="e" value="{$userData.email}">
+                </div>
+            </div>
+            {/if}
+            {if condition="$param eq 'mobile' " /}
+            <div class="aui-address-cell clear">
+                <div class="fl mr10 f14">绑定手机:</div>
+                <div class="fr" >
+                    <input type="text" class="form_control" name="mobile" nullmsg="请输入联系方式" errormsg="请输入正确的联系方式" datatype="m" value="{$userData.mobile}">
+                </div>
+            </div>
+            {/if}
+    </div>
+    <div class="btn-wrap">
+        <input type="submit"  class="btn-dark-red w100p bootstrap-btn" value="保存信息" />
+    </div>
+    </form>
+</section>
+<script>
+    submitForm('form',"{:url('customer/userInfoEdit')}","{:url('customer/userInfo')}");
+</script>
+</body>
+</html>

@@ -1482,7 +1482,7 @@ input.check:checked {
 }
 
 .aui-address-cell {
-	padding: 14px 15px;
+	padding: 14px 10px;
 	position: relative;
 	display: -webkit-box;
 	display: -webkit-flex;
@@ -1498,7 +1498,7 @@ input.check:checked {
 	-webkit-box-flex: 1;
 	-webkit-flex: 1;
 	flex: 1;
-	font-size: 16px;
+	font-size: 14px;
 }
 
 .aui-address-cell-ft {
@@ -3725,6 +3725,7 @@ a {
 	bottom: 0;
 	top: 0;
 	background-color: rgba(0,0,0,.5);
+	z-index: 60;
 }
 
 
