@@ -544,14 +544,14 @@
                     'order_id'=>$data['order_id'],'is_lottery'=>1])->find();
                 #扣去奖券金额   #未使用优惠券直接退款商品价格 如果不包邮直接商品价格，
                 $goodsAttribute = Db::name('goods_attribute')->field('price')->where(['id'=>$data['sku_id']])->find();
-                $returnMoney = $goodsAttribute['price'];
-//                if($order){
-//                    if($order['pay_status']!=1){
-//                        return ajax_return_error('未付款商品不能退款');
-//                    }
-//                    Db::name('lottery')->where(['id'=>$order['lottery_id'],''])->
-//                }
-//                dump($goodsAttribute['price']);die;
+                $returnMoney = $orderGoods['goods_num']*$goodsAttribute['price'];
+                #如果商品包邮，退款时减去邮费
+                if($goods['free_type']==0){
+                    $returnMoney-=$orderGoods['goods_num']*10;
+                }
+                if($returnMoney<0)$returnMoney=0.01;
+//                $returnMoney = $goodsAttribute['price'];
+
                 $res1 = Db::name('order_goods')->where([
                     'order_id'=>$data['order_id'],
                     'goods_id'=>$data['goods_id'],

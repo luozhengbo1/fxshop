@@ -259,7 +259,7 @@ class Order extends Controller
     public function refund()
     {
         if($this->request->isAjax()){
-            include_once 'WxPaySDK/WxPay.Api.php';
+            include_once APP_PATH.'/index/controller/WxPaySDK/WxPay.Api.php';
             $data = $this->request->post();
             $order_id = $data['order_id'];
             $result = ['code'=>400,'msg'=>''];
@@ -336,7 +336,7 @@ class Order extends Controller
                     $wx_pay_refund_log_insert['openid']= $orderGoods['openid'];
                     $wx_pay_refund_log_insert['username']= $user['nickname'];
                     $wx_pay_refund_log_insert['create_time']= time();
-                    $wx_pay_refund_log_insert['money']= $orderGoods['return_price'];
+                    $wx_pay_refund_log_insert['money']= -$orderGoods['return_price'];
                     $wx_pay_refund_log_insert['type']=2;#退款
                     Db::name('wx_pay_refund_log')->insert($wx_pay_refund_log_insert);
 
