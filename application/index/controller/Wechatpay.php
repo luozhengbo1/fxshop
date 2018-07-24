@@ -87,10 +87,17 @@ class Wechatpay extends Controller
             $update = ['status' => 1];
             $res = Db::name("order_all")->where($orderWhere)->update($update);
 //             file_put_contents("wx_pay_success.log",Db::name('order_all')->getLastSql()."\r", 8);
+            $orderAllData = Db::name('order_all')->where(['order_id'=>$orderInfo['out_trade_no']])->find();
             #付款成功通知
-            include_once "sendMsg/SDK/WeiXin.php";
-            $wx = new \WeiXin();
-            $wx->buySuccess($goodsname,$orderInfo['openid'],$sonId['total_price']);
+            if($orderAllData['is_tui']==0){
+                include_once "sendMsg/SDK/WeiXin.php";
+                $wx = new \WeiXin();
+                $result = $wx->buySuccess($goodsname,$orderInfo['openid'],$sonId['total_price']);
+                if($result['status']==1){
+                    Db::name('order_all')->where(['order_id'=>$orderInfo['out_trade_no']])->update(['is_tui'=>1]);
+                }
+            }
+
             #交易记录
             $wx_pay_refund_log_insert=[];
             $wx_pay_refund_log_insert['openid']= $user['openid'];
@@ -175,10 +182,18 @@ class Wechatpay extends Controller
             $scoreLog['score']=-$decScore;
             $scoreLog['time']=time();
             Db::name('score_log')->insert($scoreLog);
+
+            $orderData = Db::name('order')->where(['order_id'=>$orderInfo['out_trade_no']])->find();
             #付款成功通知
-            include_once "sendMsg/SDK/WeiXin.php";
-            $wx = new \WeiXin();
-            $wx->buySuccess($goodsname,$orderInfo['openid'],$order['total_price']);
+            if($orderData['is_tui']==0){
+                include_once "sendMsg/SDK/WeiXin.php";
+                $wx = new \WeiXin();
+                $result = $wx->buySuccess($goodsname,$orderInfo['openid'],$order['total_price']);
+                if($result['status']==1){
+                    Db::name('order')->where(['order_id'=>$orderInfo['out_trade_no']])->update(['is_tui'=>1]);
+                }
+            }
+
 
             #交易记录
             $wx_pay_refund_log_insert=[];
