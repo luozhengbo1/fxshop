@@ -636,3 +636,18 @@ body{
 .swiper-pagination-bullet-active{
     background: orange!important;
 }*/
+.icon-num {
+    position: absolute;
+    top: 2px;
+    left: 70%;
+    display: inline-block;
+    background: #e4393c;
+    color: #fff;
+    font-size: 7px;
+    margin-left: -10px;
+    line-height: 9px;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    padding: 2px 3px;
+    font-weight: 700;
+}
