@@ -25,7 +25,7 @@
                $count = count($newarr);
                $i =0;
                foreach ($newarr as $value){
-                   if($value==2 || $value==4 ){
+                   if($value==2 || $value==4 || $value==6){#收货的，退货的，6完成的
                        $i+=1;
                    }
                }
@@ -39,11 +39,13 @@
         }
     }
     #查询订单  部分退款、 全部退款、   订单完成 结算给商户
-    $orderSql="select * from fy_order  where pay_status=1 and order_status in( 5,6,8) and is_settlement=0 ";
+    $orderSql="select * from fy_order  where pay_status=1 and order_status in(8) and is_settlement=0 ";
     $orderResult = mysqli_query($conn,$orderSql);
     if ( $orderResult->num_rows > 0) {
         while ($row1 = $orderResult->fetch_assoc()){
-            $setUserSql = "update fy_admin_user set balance=balance+'{$row1['total_price']}' where id={$row1['user_id']}";
+            #结算金额
+            $settMoney = $row1['total_price']-$row1['return_price_all'];
+            $setUserSql = "update fy_admin_user set balance=balance+'{$settMoney}' where id={$row1['user_id']}";
             mysqli_query($conn,$setUserSql);
         }
     }

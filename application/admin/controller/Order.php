@@ -17,26 +17,27 @@ class Order extends Controller
         if ($this->request->param("order_id")) {
             $map['fy_order.order_id'] = ["like", "%" . $this->request->param("order_id") . "%"];
         }
-        #0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成
+        #0未支付1已支付2待评价，3待回复，6全部退款，7取消订单，8订单完成
         if ($this->request->param("order_status")) {
             $orderStatus  = $this->request->param("order_status");
             if($orderStatus==0){#未支付
-                $map['fy_order.order_status'] = 0;
+                $map['fy_order.pay_status'] = 0;
             }
             if($orderStatus==1){#待发货
-                $map['fy_order.order_status'] = 1;
+                $map['fy_order.pay_status'] = 1;
                 $map['fy_order_goods.is_send'] = 0;
             }
             if($orderStatus==2){#待收货
-                $map['fy_order.order_status'] = 1;
+                $map['fy_order.pay_status'] = 1;
                 $map['fy_order_goods.is_send'] = 1;
             }
             if($orderStatus==3){#待退款
-                $map['fy_order.order_status'] = 5;
-                $map['fy_order.order_status'] = 6;
+                $map['fy_order.pay_status'] = 1;
+                $map['fy_order.is_return'] = 1;
             }
             if($orderStatus==4){#待评价
-                $map['fy_order.order_status'] = 2;
+                $map['fy_order.pay_status'] = 1;
+                $map['fy_order.is_send'] = 2;
             }
             if($orderStatus==5){#取消订单
                 $map['fy_order.order_status'] = 7;
@@ -314,13 +315,12 @@ class Order extends Controller
                     $orderData = Db::name('order')->field('total_price')->where( [ 'order_id'=>$order_id ] )->find();
                     $decPrice = $orderData['total_price'] -$orderGoods['return_price'] ;#减去订单总价
                     if($decPrice<0)$decPrice=0;
-                    $order_status = 6;
 //                    if(($order['return_price_all'])== $order['total_price']){#全额退款
 //                        $order_status = 6;
 //                    }else {
 //                        $order_status =5;
 //                    }
-                    $updateRes = Db::name('order')->where( [ 'order_id'=>$order_id ] )->update(['order_status'=>$order_status,'total_price'=>$decPrice]);
+                    $updateRes = Db::name('order')->where( [ 'order_id'=>$order_id ] )->update(['total_price'=>$decPrice]);
                     Db::name('order_goods')->where( [ 'id'=>$data['id'] ] )->update(['is_return'=>2,'is_send'=>4]);#已退款，退货完成
                     $result['code'] = 200;
                     $result['msg'] = '退款成功';

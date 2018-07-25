@@ -50,11 +50,11 @@
         <td class="f-14">{$vo['goods_num']}</td>
           <td class="f-14">{$vo['goods_detail']['postage']??'0'}</td>
           <td class="f-14">
-             {php} if($vo['is_get_status']==1){{/php}
-              已收货
-              {php} }else{{/php}
-              待收货
-              {php} }{/php}
+             {php} if($vo['is_send']==2){
+                echo "已收货";
+             }else{
+                echo "待收货";
+              }{/php}
           </td>
 
         <td class="f-14">
