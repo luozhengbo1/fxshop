@@ -50,20 +50,20 @@
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>类型：</label>
             <div class="formControls col-xs-6 col-sm-6 skin-minimal">
                 <div class="radio-box">
-                    <input type="radio" name="type" id="status-1" value="1">
-                    <label for="status-1">积分清零提醒</label>
+                    <input type="radio" name="type" id="type-1" value="1">
+                    <label for="type-1">积分清零提醒</label>
                 </div>
                 <div class="radio-box">
-                    <input type="radio" name="type" id="status-2" value="2">
-                    <label for="status-2">积分清零</label>
+                    <input type="radio" name="type" id="type-2" value="2">
+                    <label for="type-2">积分清零</label>
                 </div>
                 <div class="radio-box">
-                    <input type="radio" name="type" id="status-3" value="3">
-                    <label for="status-3">生日</label>
+                    <input type="radio" name="type" id="type-3" value="3">
+                    <label for="type-3">生日</label>
                 </div>
                 <div class="radio-box">
-                    <input type="radio" name="type" id="status-4" value="4">
-                    <label for="status-4">其他</label>
+                    <input type="radio" name="type" id="type-4" value="4">
+                    <label for="type-4">其他</label>
                 </div>
             </div>
             <div class="col-xs-3 col-sm-3"></div>
@@ -123,6 +123,7 @@
     $(function () {
         $("[name='status'][value='{$vo.status ?? '1#0'}']").prop("checked", true);
         $("[name='lottery_id']").find("[value='{$vo.lottery_id ?? ''}']").attr("selected", true);
+        $("[name='type'][value='{$vo.type ?? '1#2#3#4'}']").prop("checked", true);
 
         $('.skin-minimal input').iCheck({
             checkboxClass: 'icheckbox-blue',

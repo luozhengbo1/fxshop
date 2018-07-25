@@ -371,6 +371,22 @@
             data: {$count_pay}
         }]
     });
+    //图表：支付金额
+    var chart_money = Highcharts.chart('container_money', {
+        title: {
+            text: '年度支付金额统计表'
+        },
+        yAxis: {
+            title: {
+                text: '金额'
+            }
+        },
+        series: [{
+            type: 'area',
+            name: '支付金额',
+            data: {$count_pay_money}
+        }]
+    });
     //锁屏
     var parentDoc = window.parent.document;
 

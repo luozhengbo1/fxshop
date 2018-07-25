@@ -163,8 +163,8 @@ Class Lottery extends Mustlogin
                     ->field('lott.*,log.uid,log.updatetime,log.is_use,log.status')
                     ->join('fy_lottery lott', 'log.lottery_id=lott.id')
                     ->join('fy_customer custo', 'log.uid=custo.id')
-                    ->where('custo.id', $userdata['id'])
-                    ->where('log.is_use', $status)
+                    ->where(['custo.id'=>$userdata['id'],'log.is_use'=>$status])
+                    ->order('expire_end_date','desc')
                     ->page($page, $size)
                     ->select();
                 if ($lottery_no_use) {
@@ -178,8 +178,8 @@ Class Lottery extends Mustlogin
                     ->field('lott.*,log.uid,log.updatetime,log.is_use,log.status')
                     ->join('fy_lottery lott', 'log.lottery_id=lott.id')
                     ->join('fy_customer custo', 'log.uid=custo.id')
-                    ->where('custo.id', $userdata['id'])
-                    ->where('log.is_use', $status)
+                    ->where(['custo.id'=>$userdata['id'],'log.is_use'=>$status])
+                    ->order('expire_end_date','desc')
                     ->page($page, $size)
                     ->select();
                 if ($lottery_use) {
