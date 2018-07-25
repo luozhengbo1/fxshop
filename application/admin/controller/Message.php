@@ -45,6 +45,9 @@ class Message extends Controller
         return $lottery;
     }
 
+    /**
+     * 添加
+     */
     public function add()
     {
         $controller = $this->request->controller();
@@ -52,20 +55,14 @@ class Message extends Controller
         if ($this->request->isAjax()) {
             // 插入
             $data = $this->request->except(['id']);
-            #根据类型检测出是否有积分清零提醒、积分清零、生日消息
-            if ($data['type'] == 1) {
-                $score_remind_res = Db::table('fy_message')->where(['type' => 1, 'isdelete' => 0])->select();
-                if ($score_remind_res) {
+            //根据类型检测出是否有积分清零提醒、积分清零、生日消息
+            $message_res = Model('Message')->where(['type' => $data['type'], 'isdelete' => 0])->select();
+            if ($message_res) {
+                if ($data['type'] == 1) {
                     return ajax_return_error('积分清零提醒消息模板只能有一个', '200');
-                }
-            } else if ($data['type'] == 2) {
-                $score_empty_res = Db::table('fy_message')->where(['type' => 2, 'isdelete' => 0])->select();
-                if ($score_empty_res) {
+                } else if ($data['type'] == 2) {
                     return ajax_return_error('积分清零消息模板只能有一个', '200');
-                }
-            } else if ($data['type'] == 3) {
-                $birthday_res = Db::table('fy_message')->where(['type' => 3, 'isdelete' => 0])->select();
-                if ($birthday_res) {
+                } else if ($data['type'] == 3) {
                     return ajax_return_error('生日消息模板只能有一个', '200');
                 }
             }
@@ -110,6 +107,86 @@ class Message extends Controller
         }
     }
 
+    /**
+     * 编辑
+     */
+    public function edit()
+    {
+        $controller = $this->request->controller();
+
+        if ($this->request->isAjax()) {
+            // 更新
+            $data = $this->request->post();
+            if (!$data['id']) {
+                return ajax_return_adv_error("缺少参数ID");
+            }
+            //根据类型检测出是否有积分清零提醒、积分清零、生日消息
+            $message_list = Model('Message')->where('isdelete', 0)->select();
+            foreach ($message_list as $item) {
+                $item = $item->toArray();
+                //不与本身做对比，避免出现编辑不成功
+                if ($data['id'] != $item['id']) {
+                    $message_res = Model('Message')->where(['id' => ['not in', $data['id']], 'type' => $data['type'], 'isdelete' => 0])->select();
+                    if ($message_res) {
+                        if ($data['type'] == 1) {
+                            return ajax_return_error('积分清零提醒消息模板只能有一个', '200');
+                        } else if ($data['type'] == 2) {
+                            return ajax_return_error('积分清零消息模板只能有一个', '200');
+                        } else if ($data['type'] == 3) {
+                            return ajax_return_error('生日消息模板只能有一个', '200');
+                        }
+                    }
+                }
+            }
+            // 验证
+            if (class_exists($validateClass = Loader::parseClass(Config::get('app.validate_path'), 'validate', $controller))) {
+                $validate = new $validateClass();
+                if (!$validate->check($data)) {
+                    return ajax_return_adv_error($validate->getError());
+                }
+            }
+
+            // 更新数据
+            if (
+                class_exists($modelClass = Loader::parseClass(Config::get('app.model_path'), 'model', $this->parseCamelCase($controller)))
+                || class_exists($modelClass = Loader::parseClass(Config::get('app.model_path'), 'model', $controller))
+            ) {
+                // 使用模型更新，可以在模型中定义更高级的操作
+                $model = new $modelClass();
+                $ret = $model->isUpdate(true)->save($data, ['id' => $data['id']]);
+            } else {
+                // 简单的直接使用db更新
+                Db::startTrans();
+                try {
+                    $model = Db::name($this->parseTable($controller));
+                    $ret = $model->where('id', $data['id'])->update($data);
+                    // 提交事务
+                    Db::commit();
+                } catch (\Exception $e) {
+                    // 回滚事务
+                    Db::rollback();
+
+                    return ajax_return_adv_error($e->getMessage());
+                }
+            }
+
+            return ajax_return_adv("编辑成功");
+        } else {
+            // 编辑
+            $id = $this->request->param('id');
+            if (!$id) {
+                throw new HttpException(404, "缺少参数ID");
+            }
+            $vo = $this->getModel($controller)->find($id);
+            if (!$vo) {
+                throw new HttpException(404, '该记录不存在');
+            }
+
+            $this->view->assign("vo", $vo);
+
+            return $this->view->fetch();
+        }
+    }
 
     public
     function sendUser()
