@@ -37,25 +37,24 @@
                     }
                     #待發貨
                     if($data['status']==1 ){
-                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order.order_status'=>1,'fy_order_goods.is_send'=>0];
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>0];
+//                        $where = ['fy_order.openid'=>'omQYXwM8TEkiBZR7Ldm891OOWbNQ','fy_order.pay_status'=>1,'fy_order_goods.is_send'=>0];
                     }
                     #待收货
                     if($data['status']==2){
-                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order.order_status'=>1,'fy_order_goods.is_send'=>1];
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>1];
                     }
                     #待退款
                     if($data['status']==3){
-                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>4,'fy_order.pay_status'=>1,'fy_order_goods.is_return'=>1];
+                        $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order_goods.is_return'=>1];
 //                        $where = ['fy_order.openid'=>'omQYXwM8TEkiBZR7Ldm891OOWbNQ','fy_order.order_status'=>4,'fy_order.pay_status'=>1,'fy_order_goods.is_return'=>1];
                     }
                     #待评价
                     if($data['status']==4){
                         $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>2];
                     }
-                    //$where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.order_status'=>$data['status'],'fy_order_goods.is_return'=>1];
                 }
 //                dump($where);
-//                $where['fy_order.order_status'] = ['<>',7];
                 $orderList = Db::name('order')
                     ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
                     ->join('fy_goods_attribute','fy_goods_attribute.id=fy_order_goods.sku_id')
@@ -64,7 +63,6 @@
                     ->page($page,$size)
                     ->select();
 //                echo Db::name('order')->getLastSql();
-               // dump($orderList);
                 foreach ($orderList as $k=>$v ){
                     $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
                 }
@@ -105,7 +103,6 @@
 //                dump($address);die;
                 $this->view->assign('address',$address?$address:'');
                 $this->view->assign('storeData',$storeData);
-              // dump($storeData);
                 return $this->view->fetch();
             }
         }
@@ -579,11 +576,11 @@
                 #退款价
                 $order = Db::name('order')->where('order_id',$data['order_id'])->find();
                 $update =[];
-                if($goodsAttribute['price']+$ordertmp['return_price_all']==$order['total_price'] ){
-                    $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all'],'order_status'=>4];
-                }else{
-                    $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all'],'order_status'=>4];
-                }
+                $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all']];
+//                if($goodsAttribute['price']+$ordertmp['return_price_all']==$order['total_price'] ){
+//                }else{
+//                    $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all'],'order_status'=>4];
+//                }
                 $res= Db::name('order')
                     ->where('order_id',$data['order_id'])
                     #总退款加上0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成
@@ -693,7 +690,7 @@
                         'goods_id'=>$data['goods_id'],
                         'sku_id'=>$data['sku_id']
                     ])
-                    ->update(['comment'=>1]);
+                    ->update(['is_send'=>5]);#待回复
                 #记录评价内容
                 $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'],true);
                 $insert=[];
@@ -711,7 +708,7 @@
                 $res1 = Db::name('goods_comment')->insert($insert);
 
                 #将这个订单修改为已评价
-                Db::name('order')->where(['order_id'=>$data['order_id']])->update(['order_status'=>8]);
+//                Db::name('order_')->where(['order_id'=>$data['order_id']])->update(['order_status'=>8]);
                 //echo Db::name('order_goods')->getLastSql();
                 // dump($res);
                 if($res && $res1){
