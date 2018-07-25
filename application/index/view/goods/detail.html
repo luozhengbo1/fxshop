@@ -451,6 +451,8 @@
                 data:saveData,
                 dataType:'json',
                 success: function(data){
+                    //修改快捷导航购物车显示
+                    $('#carNum').html(parseInt($('#carNum').html())+parseInt(saveData.num));
                     layer_msg(data.msg);
                 }
             })
