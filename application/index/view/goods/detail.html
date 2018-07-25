@@ -386,7 +386,7 @@
         if (skuZhuhe != null) {
             skuZhuhe.forEach(function (item) {
                 var id='';
-                if(!namearr){
+                if(!(item.attribute_name)){
                     //没事sku规格时
                     saveData.skuId = item.id;
                     saveData.val = '';
