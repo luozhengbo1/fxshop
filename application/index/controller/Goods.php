@@ -102,13 +102,13 @@
 //            die;
 
             $bad = Db::name('goods_comment')
-                ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[0,1] ]])
+                ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'id'=>$id,'avg_score'=>['between',[0,1] ]])
                 ->count();
             $mid = Db::name('goods_comment')
-                ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[2,3] ]])
+                ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'id'=>$id,'avg_score'=>['between',[2,3] ]])
                 ->count();
             $good = Db::name('goods_comment')
-                ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[4,5] ]])
+                ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'id'=>$id,'avg_score'=>['between',[4,5] ]])
                 ->count();
             $this->view->assign('bad',   $bad);
             $this->view->assign('mid',   $mid);
@@ -239,11 +239,11 @@
                     return ajax_return_error('缺少参数id');
                 }
                 $comment = Db::name('goods_comment')
-                    ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[$data['start'],$data['end'] ]]])
+                    ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'id'=>$data['id'], 'avg_score'=>['between',[$data['start'],$data['end'] ]]])
                     ->page($page,$size)
                     ->select();
                 $count = Db::name('goods_comment')
-                    ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[$data['start'],$data['end'] ]]])
+                    ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'id'=>$data['id'],'avg_score'=>['between',[$data['start'],$data['end'] ]]])
                     ->page($page,$size)
                     ->count();
 
@@ -251,13 +251,13 @@
 
             }else{
                 $bad = Db::name('goods_comment')
-                    ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[0,1] ]])
+                    ->where(['openid'=>$this->userInfo['openid'],'id'=>$this->request->param('goods_id'),'status'=>1,'avg_score'=>['between',[0,1] ]])
                     ->count();
                 $mid = Db::name('goods_comment')
-                    ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[2,3] ]])
+                    ->where(['openid'=>$this->userInfo['openid'],'id'=>$this->request->param('goods_id'),'status'=>1,'avg_score'=>['between',[2,3] ]])
                     ->count();
                 $good = Db::name('goods_comment')
-                    ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'avg_score'=>['between',[4,5] ]])
+                    ->where(['openid'=>$this->userInfo['openid'],'id'=>$this->request->param('goods_id'),'status'=>1,'avg_score'=>['between',[4,5] ]])
                     ->count();
                 $this->view->assign('bad',   $bad);
                 $this->view->assign('mid',   $mid);
