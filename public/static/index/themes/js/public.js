@@ -541,9 +541,9 @@ function backTime(){
     //28分株
     $('.sulfTime').each(function (index, ele) {
         var endTime = (parseInt($(ele).attr('data-createtime')) +28*60);
-        var currentTime = parseInt(new Date().getTime()/1000);
-        console.log(endTime,currentTime)
         if(endTime > currentTime){
+            var currentTime = parseInt(new Date().getTime()/1000);
+            console.log(endTime,currentTime)
             setInterval(function () {
                 currentTime = parseInt(new Date().getTime()/1000);
                 var sulfTime = endTime-currentTime;
@@ -557,8 +557,8 @@ function backTime(){
         }else{
             var showText = '订单已过期，重新下单吧';
             $(ele).html(showText);
-            var $orderCancel =  $(ele).parents('.orderWrap').find('.orderCancel').remove();
-            var $orderPay =  $(ele).parents('.orderWrap').find('.orderPay').remove();
+            $(ele).parents('.orderWrap').find('.orderCancel').remove();
+            $(ele).parents('.orderWrap').find('.orderPay').remove();
         }
     })
 }

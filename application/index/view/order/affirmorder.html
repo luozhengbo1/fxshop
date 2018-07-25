@@ -170,8 +170,8 @@
                     totalPrice += parseInt(num)*parseFloat(price);
                     break;
             }
-            if(freetype==0 && !isNaN(postage)){
-                totalPrice += postage*num;//加上邮费
+            if(freetype==1 && !isNaN(postage)){
+                totalPrice += postage;//加上邮费
             }
         })
         var html='';

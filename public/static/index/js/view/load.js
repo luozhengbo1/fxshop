@@ -88,7 +88,7 @@ MyPageload.prototype.init = function(options){
     }
     //下拉卡加载执行函数
     function loadDownFn(me) {
-        var data=$.extend(true, {}, {
+        var data=$.extend(true, {$t:new Date().getTime()}, {
             page:me.opts.page,
             size:me.opts.size,
         },me.opts.ajaxData.data);
