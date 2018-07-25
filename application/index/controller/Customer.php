@@ -440,11 +440,16 @@ class Customer extends Mustlogin
     public function memberbenefits()
     {
         $this->assign('titleName', "会员权益");
-        return $this->view->fetch("memberBenefits");
+        if ($this->request->isAjax()) {
+
+        }else{
+            return $this->view->fetch("memberBenefits");
+        }
+
     }
 
     /**
-     * 会员权益
+     * 会员权益规则
      */
     public function memberrule()
     {

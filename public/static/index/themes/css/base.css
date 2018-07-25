@@ -39,7 +39,10 @@ body{
     text-align: center;
 }
 .positionR{
-    position: relative;
+     position: relative;
+ }
+.pos-b{
+    position: absolute;
 }
 .auto{
     display: block;

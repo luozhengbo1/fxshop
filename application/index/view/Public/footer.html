@@ -1,4 +1,20 @@
-
+<style>
+	.icon-num {
+		position: absolute;
+		top: 2px;
+		left: 70%;
+		display: inline-block;
+		background: #e4393c;
+		color: #fff;
+		font-size: 7px;
+		margin-left: -10px;
+		line-height: 9px;
+		border: 1px solid #fff;
+		border-radius: 10px;
+		padding: 2px 3px;
+		font-weight: 700;
+	}
+</style>
 <ul class="footer-nav footer-fixed clear">
 	<li id="nav_index">
 		<a href="{:url('index/index',['param'=>'index'])}" >
@@ -17,6 +33,7 @@
 	</li>
 	<li  id="nav_car">
 		<a href="{:url('car/index',['param'=>'car'])}" >
+			<span class="icon-num">{$carNum}</span>
 			<i class="iconfont icon-gouwuche"></i><p>购物车</p>
 		</a>
 	</li>

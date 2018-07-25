@@ -187,11 +187,12 @@
                 html +='            <span class="f14">共<b>'+data[i].goods_num+'</b>件商品</span>';
                 switch(show_area){
                     case 2:
-                        html +='            <span class="f14">合计:<b>'+(data[i].point_score * data[i].goods_num)+'积分</b></span>';
+                        var totalScore = (data[i].point_score * data[i].goods_num)//+parseFloat(detail.postage*data[i].goods_num)
+                        html +='            <span class="f14">合计:<b>'+totalScore.toFixed(2)+'积分</b></span>';
                         break;
                     default:
                         var totalPrice =parseFloat(data[i].price* data[i].goods_num)+parseFloat(detail.postage*data[i].goods_num);
-                        html +='            <span class="f14">合计:<b>￥'+totalPrice+'</b></span>';
+                        html +='            <span class="f14">合计:<b>￥'+totalPrice.toFixed(2)+'</b></span>';
                         break;
                 }
 
