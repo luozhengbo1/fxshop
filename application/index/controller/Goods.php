@@ -126,7 +126,12 @@
             $page = $this->request->param('page');
             $size = $this->request->param('size');
             $goodsList = Db::name('goods')
-                ->where(['status'=>1,'isdelete'=>0,'name'=>['like',"%$name%"] ])
+                ->where([
+                    'status'=>1,
+                    'isdelete'=>0,
+                    'name'=>['like',"%$name%"],
+                ])
+                ->where('show_area', 'in', [3,4])
                 ->page( $page,$size)
                 ->select();
             #记录搜索词

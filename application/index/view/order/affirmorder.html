@@ -61,10 +61,11 @@
                 <span class="fl">服务信息</span>
                 <span class="fr">
                     <!--<img width="20px"  src="__STATIC__/index/images/day7.png">支持7天无理由退货
+                    -->
+                    {$vo['after_sale']}
                     <a href="javascript:;" onclick="showServiceInfo()">
                          <img width="20px"  src="__STATIC__/index/images/info.png">价格说明
-                    </a>-->
-                    {$vo['after_sale']}
+                    </a>
                  </span>
             </li>
             <li class="clear">
@@ -161,7 +162,7 @@
             ;
 
            // console.log('test'+isNaN(23))
-            //freetype=1不包邮
+            //freetype 包邮1不包邮0
             switch(show_area){
                 case 2:
                     totalPoint +=(parseInt(num)*parseFloat(pointScore));
@@ -170,7 +171,7 @@
                     totalPrice += parseInt(num)*parseFloat(price);
                     break;
             }
-            if(freetype==1 && !isNaN(postage)){
+            if(freetype==0 && !isNaN(postage)){
                 totalPrice += postage;//加上邮费
             }
         })

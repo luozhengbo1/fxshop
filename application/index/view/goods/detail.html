@@ -171,6 +171,7 @@
             <img alt="商品图" class="avt" id="popupImg"  src="{$goods['main_image']}" />
             <p class="price"><em id="goodPrice"></em></p>
             <p class="prop" id="goodChoseSku"><!--<span>已选</span> cs10藏青+浅蓝,XL,1个--></p>
+            <p class="price f12 grey " id="sulfStore"></p>
             <i class="close" id="popupClose"></i>
         </div>
         <div class="body">
@@ -413,6 +414,7 @@
                     }
                     $('#goodPrice').empty().append(showPrice);
                     $('#goodChoseSku').empty().append('<span>已选</span> '+zhuheVal+'<i class="ml10" id="showBuyNum"></i>个');
+                    $('#sulfStore').html('剩余数量:'+item.store);
                     $('#buyNum').attr('data-store',item.store);//item.pointPrice  item.id
                     saveData.skuId = item.id;
                     saveData.val = zhuheVal;
