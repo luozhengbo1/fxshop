@@ -19,7 +19,9 @@
 	</li>
 	<li  id="nav_car">
 		<a href="{:url('car/index',['param'=>'car'])}" >
-			<span class="icon-num">{$carNum}</span>
+			{if condition="$carNum neq 0" /}
+			<span class="icon-num">{$carNum}</span>{/if}
+
 			<i class="iconfont icon-gouwuche"></i><p>购物车</p>
 		</a>
 	</li>
