@@ -32,7 +32,7 @@
                 if($data['status']=='all'){
                     $where = ['fy_order.openid'=>$this->userInfo['openid']];
                 }else{
-//                    $this->userInfo['openid']="omQYXwM8TEkiBZR7Ldm891OOWbNQ";
+                    $this->userInfo['openid']="omQYXwM8TEkiBZR7Ldm891OOWbNQ";
                     #待付款
                     if($data['status']==0){
                         $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>0,'fy_order.order_status'=>0];
@@ -685,7 +685,7 @@
                 if($goods['is_comment']==0){
                     return ajax_return_error('该商品不可已评论');
                 }
-                if($orderGoods['comment']==1){
+                if($orderGoods['is_send']==5){
                     return ajax_return_error('该商品已经评论');
                 }
                 $res = Db::name('order_goods')
