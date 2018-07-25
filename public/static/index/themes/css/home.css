@@ -4036,8 +4036,9 @@ a {
 }
 .product-order-list .order-serviceinfo {
 	box-sizing: border-box;
+    width: 100%;
 }
-.product-order-list .order-serviceinfo li {
+.product-order-list .order-serviceinfo .service {
 	display: inline-block;
 	background: #ff5000;
 	color: #fff;
