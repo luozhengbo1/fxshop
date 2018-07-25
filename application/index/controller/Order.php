@@ -28,9 +28,11 @@
                 $page = $this->request->param('page')?$this->request->param('page'):1;
                 $size = $this->request->param('size')?$this->request->param('size'):4;
                 $data = $this->request->post();
+
                 if($data['status']=='all'){
                     $where = ['fy_order.openid'=>$this->userInfo['openid']];
                 }else{
+//                    $this->userInfo['openid']="omQYXwM8TEkiBZR7Ldm891OOWbNQ";
                     #待付款
                     if($data['status']==0){
                         $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>0,'fy_order.order_status'=>0];
@@ -504,25 +506,27 @@
                     ->update(['is_send'=>2]);#表示确认收货
                 if($res){
                     #将这个商品的积分返给用户。
-                    $goods = Db::name('order_goods')
-                        ->field('fy_goods.return_score,fy_goods.id')
-                        ->join('fy_goods','fy_goods.id=fy_order_goods.id')
-                        ->where([
-                            'fy_order_goods.order_id'=>$data['order_id'],
-                            'fy_order_goods.goods_id'=>$data['goods_id'],
-                            'fy_order_goods.sku_id'=>$data['sku_id']
-                        ])->find();
+                    $goods = Db::name('goods')
+                        ->where(['id'=>$data['goods_id']])->find();
+
                     #加上同样多的价格和
                     $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
-                    $grade = Db::name('customer_grade')->where(['experience_start'=>['<=',$user['experience']],'experience_end'=>['>=',$user['experience'] ]])->find();
-                    Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->setInc('experience',$goods['return_score']);
+                    $grade = Db::name('customer_grade')
+                        ->where(['experience_start'=>['<=',$user['experience']],'experience_end'=>['>=',$user['experience'] ]])
+                        ->find();
+
+                    Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->update([
+                        'experience'=>$user['experience']+$goods['return_score'],
+                        'score'=>$user['experience']+$goods['return_score']*$grade['goods_score_rate'],
+                    ]);
+//                    echo Db::name('customer')->getLastSql();die;
                     #不同等级得到不同积分。
-                    Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->setInc('score',$goods['return_score']*$grade['goods_score_rate']);
+//                    Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->setInc('score',$goods['return_score']*$grade['goods_score_rate']);
                     $insert =[];
                     $insert['openid']=$this->userInfo['openid'];
                     $insert['source_id']=$goods['id'];
                     $insert['source']=5;
-                    $insert['score']=$goods['return_score'];
+                    $insert['score']=$goods['return_score']*$grade['goods_score_rate'];
                     $insert['time']=time();
                     Db::name('score_log')->insert($insert);
                     return  ajax_return('','确认成功','200');
