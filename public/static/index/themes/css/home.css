@@ -3375,7 +3375,7 @@ a {
 .detail_footer-icon{
 	position: absolute;
 	right: .12rem;
-	top: .22rem;
+	top: .18rem;
 	cursor: pointer;
 }
 .detail_footer-icon:after{
@@ -3677,6 +3677,7 @@ a {
 	position: absolute;
 	-webkit-transform: translate3d(0,0px,0);
 	transform: translate3d(0,0px,0);
+	z-index: 99;
 }
 .detail_popup .main-voucher{
 	position: absolute;
@@ -4035,8 +4036,9 @@ a {
 }
 .product-order-list .order-serviceinfo {
 	box-sizing: border-box;
+    width: 100%;
 }
-.product-order-list .order-serviceinfo li {
+.product-order-list .order-serviceinfo .service {
 	display: inline-block;
 	background: #ff5000;
 	color: #fff;
