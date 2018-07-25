@@ -11,6 +11,30 @@
     .fm-cusive{
         font-family: cursive;
     }
+    #addcartmover {
+        position: fixed;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        -webkit-animation: addcart .7s linear;
+        z-index: 9999;
+        -webkit-transform: translateY(-50%);
+        opacity: 1;
+        background-color: #ff0604;
+        color: #fff;
+        text-align: center;
+        line-height: 30px;
+    }
+    @-webkit-keyframes addcart {
+        0%  { right: 130px;top: 94%; opacity: 1; }
+        25% { right: 200px;top: 80%; opacity: 1; }
+        50% { right: 240px;top: 60%; opacity: 0.7; }
+        65% { right: 190px;top: 46%; opacity: 0.7; }
+        75% { right: 140px;top: 30%; opacity: 0.6; }
+        85% { right: 60px;top: 50%; opacity: 0.5; }
+        100% {right: 30px;top: 60%;; opacity: 0.3; }
+    }
+
 </style>
 <link rel="stylesheet" type="text/css" href="__STATIC__/index/plugins/swiper3/css/swiper.css">
 <script src="__STATIC__/index/plugins/swiper.js"></script>
@@ -452,8 +476,17 @@
                 dataType:'json',
                 success: function(data){
                     //修改快捷导航购物车显示
-                    $('#carNum').html(parseInt($('#carNum').html())+parseInt(saveData.num));
-                    layer_msg(data.msg);
+
+                  //  layer_msg(data.msg);
+                    setTimeout(function () {
+                        jQuery('#carPage').parent().append('<span id="addcartmover" class="iconfont icon-iconmygoods white">'+saveData.num+'</span>');
+                        setTimeout(function () {
+                            jQuery('#addcartmover').remove();
+                            $('.carNum').each(function (index,ele) {
+                                $(ele).html(parseInt($(ele).html())+parseInt(saveData.num))
+                            })
+                        }, 700)
+                    }, 400);
                 }
             })
         }else if(type =='buy'){
