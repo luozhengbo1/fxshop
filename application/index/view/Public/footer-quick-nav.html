@@ -11,7 +11,9 @@
     }
 </style>
 <nav class="commom-nav dis-box ts-5" id="ectouch-top">
+    {if condition="$carNum neq 0" /}
     <span class="icon-num nav-icon-num carNum"  >{$carNum}</span>
+    {/if}
 	<!--快捷导航-->
 	<div class="left-icon">
 		<div class="nav-icon"><i class="iconfont icon-jiantou1"></i>快速<br>导航</div>
