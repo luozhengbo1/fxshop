@@ -26,8 +26,18 @@ class Customer extends Mustlogin
         //会员信息
         $user_session = session('wx_user');
         $user_data = Db::table('fy_customer')->where('openid', $user_session['openid'])->find();
-        $this->assign('userdata', $user_data);
-
+        //会员签到信息
+        $beforeSign = Db::table('fy_customer_sign')->where('uid', $user_data['id'])->order('addtime', 'desc')->find();//获取最新一条签到记录
+        $noSignDay1 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 00:00:00')) / 86400;//2天
+        $noSignDay2 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 23:59:59')) / 86400;//1天
+        //前一天未签到，continue_day重置为0,将最新数据渲染到页面
+        if (floor($noSignDay1) > 1 && $noSignDay2 > 1 && floor($noSignDay1) == $noSignDay2) {
+            Db::table('fy_customer')->where('openid', $user_session['openid'])->update(['continuity_day' => 0]);
+            $user_sign_data = Db::table('fy_customer')->where('openid', $user_session['openid'])->find();
+            $this->assign('userdata', $user_sign_data);
+        } else {
+            $this->assign('userdata', $user_data);
+        }
         //会员收藏数量
         $count_collect = Db::table('fy_customer_collect')
             ->where('uid', $user_data['id'])
@@ -318,16 +328,8 @@ class Customer extends Mustlogin
                 ->where('uid', $userData['id'])
                 ->where('addtime', 'between', [$today_start, $today_end])
                 ->find();
-            //判断前一天是否签到
-            $beforeSign = Db::table('fy_customer_sign')->where('uid', $userData['id'])->order('addtime', 'desc')->find();//获取最新一条签到记录
-            $noSignDay1 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 00:00:00')) / 86400;//2天
-            $noSignDay2 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 23:59:59')) / 86400;//1天
-            //前一天未签到，continue_day重置为1，score+1更新到customer表
-            if (floor($noSignDay1) > 1 && $noSignDay2 > 1 && floor($noSignDay1) == $noSignDay2) {
-                $this->assign('continuity_day',0);
-            }
-            $this->assign('flag', $res ? 1 : 0);
             $this->assign('user', $userData);
+            $this->assign('flag', $res ? 1 : 0);
             $this->assign('titleName', '签到');
             return $this->view->fetch('mysign');
         }
