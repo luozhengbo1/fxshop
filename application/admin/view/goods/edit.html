@@ -575,6 +575,8 @@
 
 
     function refeashskus() {
+        salelist=[];
+        arrayInforList =[];
         ChangeSku().Creat_Table("{$vo.id??''}","{:url('goods/getSkuData')}");
         SetValue();
     }
@@ -709,9 +711,11 @@
                         data:data,//$form.serialize(),
                         url:$("form").attr('action'),
                         success:function(ret){
-                            if(ret.code==200){
+                            // if(ret.code==200){
                                 ajax_progress(ret);
-                            }
+                            // }
+                            // document.location.reload();
+
                             console.log(ret);
                         }
                     })

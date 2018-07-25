@@ -68,9 +68,12 @@
                 if($check['store']<$data['num']){
                     return ajax_return_error('库存不足');
                 }
-                $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
-                if($user['score']<$check['point_score']){
-                    return ajax_return_error('你的积分不足，暂时不能加入购物车');
+                $goods = Db::name('goods')->where(['id'=>$data['goodsId']])->find();
+                if($goods['show_area']==2){
+                    $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
+                    if($user['score']<$check['point_score']){
+                        return ajax_return_error('你的积分不足，暂时不能加入购物车');
+                    }
                 }
                $carData = Db::name('car')
                     ->where([
