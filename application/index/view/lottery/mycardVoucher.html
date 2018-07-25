@@ -67,11 +67,8 @@
             html += '    <div class="grey mt5 mb5">' + desc + '</div>';
             html += '    <div class="clear">';
             //转换时间戳
-            Date.prototype.toLocaleString = function () {
-                return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate() + " " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
-            };
-            var expire_start_date = new Date(parseInt(data[i].expire_start_date) * 1000).toLocaleString();
-            var expire_end_date = new Date(parseInt(data[i].expire_end_date) * 1000).toLocaleString();
+            var expire_start_date = new Date(parseInt(data[i].expire_start_date) * 1000).Format("yyyy-MM-dd hh:mm:ss");
+            var expire_end_date = new Date(parseInt(data[i].expire_end_date) * 1000).Format("yyyy-MM-dd hh:mm:ss");
             var time = Date.parse(new Date()) / 1000;
             html += '        <p class="fl grey">使用有效期：' + expire_start_date + '－' + expire_end_date + '</p>';
             if (data[i].is_use == 0) {

@@ -105,7 +105,7 @@ class Customer extends Mustlogin
                 $this->view->assign('list_collect', $list_collect);
                 return ajax_return($list_collect, 'OK', 200);
             } else {
-                return ajax_return('', '您还没有收藏商品哦', 203);
+                return ajax_return('', '您还没有收藏商品哦', 200);
             }
         } else {
             return $this->view->fetch('goodsCollect');
@@ -370,7 +370,7 @@ class Customer extends Mustlogin
             if ($activity_list) {
                 return ajax_return($activity_list, 'OK', 200);
             } else {
-                return ajax_return('123', '没有参与过活动', 204);
+                return ajax_return('', '没有参与过活动', 200);
             }
         } else {
             $this->assign('titleName', "我的活动中心");
@@ -435,26 +435,69 @@ class Customer extends Mustlogin
     }
 
     /**
-     * 会员权益
+     * 会员权益中心
      */
-    public function memberbenefits()
+    public function memberrights($page = '1', $size = '20')
     {
-        $this->assign('titleName', "会员权益");
-        if ($this->request->isAjax()) {
+        //会员信息：等级、加入时间、现有经验值、下一等级名称、下一等级起始经验值、达到下一等级所需经验值
+        $user_session = session('wx_user');
+        $user_data = Db::table('fy_customer')
+            ->alias('c')
+            ->join('fy_customer_grade g', 'g.experience_start <= c.experience and g.experience_end >= c.experience')
+            ->where('openid', $user_session['openid'])
+            ->find();
 
-        }else{
+        if ($this->request->isAjax()) {
+            //处理权益数据字段all
+            $all_str = htmlspecialchars_decode($user_data['all']);
+            $user_data['all'] = explode('<br/>', $all_str);
+            //权益列表
+            $rights_list = Db::table('fy_customer_right')->where(['status' => 1, 'isdelete' => 0])->page($page, $size)->select();
+            $user_rights = array();
+            foreach ($user_data['all'] as $all_datum) {
+                foreach ($rights_list as $item) {
+                    if ($all_datum == $item['id']) {
+                        $user_rights[] = $item;
+                    }
+                }
+            }
+            return ajax_return($user_rights, 'OK', 200);
+        } else {
+            $this->assign('user_data', $user_data);
+            $this->assign('titleName', "会员权益");
             return $this->view->fetch("memberBenefits");
         }
-
     }
 
     /**
-     * 会员权益规则
+     * 会员等级规则
      */
-    public function memberrule()
+    public function memberrule($type)
     {
-        $this->assign('titleName', "会员权益规则");
+        $user_session = session('wx_user');
+        $user_data = Db::table('fy_customer')
+            ->alias('c')
+            ->join('fy_customer_grade g', 'g.experience_start <= c.experience and g.experience_end >= c.experience')
+            ->where('openid', $user_session['openid'])
+            ->find();
+        $user_data['create_time'] = date('Y年m月d日', $user_data['create_time']);
+        $grade_data = Db::table('fy_customer_grade')->where(['experience_start' => ['>', $user_data['experience']]])->find();
+        if ($user_data['experience'] < $grade_data['experience_start']) {
+            $user_data['next_grade_experience'] = $grade_data['experience_start'];
+            $user_data['next_grade_name'] = $grade_data['name'];
+            $user_data['how_many_exp'] = $grade_data['experience_start'] - $user_data['experience'];
+        }
+        //会员等级规则/权益说明/升级攻略
+        $grade_res = Db::table('fy_customer_grade_desc')->where(['status' => 1, 'isdelete' => 0, 'type' => $type])->find();
+        $this->assign('grade_res', $grade_res);
+        $this->assign('user_data', $user_data);
+        if($type==1){
+            $this->assign('titleName', "会员等级规则");
+        }else if($type==2){
+            $this->assign('titleName', "会员升级攻略");
+        }
         return $this->view->fetch("memberRule");
+
     }
 
     /**
