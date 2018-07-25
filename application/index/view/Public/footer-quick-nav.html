@@ -29,7 +29,10 @@
 			</li>
 			<li class="positionR">
 				<a href="{:url('car/index',['param'=>'car'])}" >
-					<span class="icon-num" style="top: 0px;">{$carNum}</span>
+
+					{if condition="$carNum neq 0" /}
+					<span class="icon-num" style="top: 0px;" id="carNum">{$carNum}</span>
+					{/if}
 					<i class="iconfont icon-gouwuche"></i>
 					<p>购物车</p>
 				</a>
