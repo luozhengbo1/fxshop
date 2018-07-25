@@ -482,6 +482,7 @@
                         jQuery('#carPage').parent().append('<span id="addcartmover" class="iconfont icon-iconmygoods white">'+saveData.num+'</span>');
                         setTimeout(function () {
                             jQuery('#addcartmover').remove();
+                            $('.carNum').show();
                             $('.carNum').each(function (index,ele) {
                                 $(ele).html(parseInt($(ele).html())+parseInt(saveData.num))
                             })
