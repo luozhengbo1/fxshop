@@ -389,7 +389,15 @@ class Customer extends Mustlogin
      */
     public function memberbenefits(){
         $this->assign('titleName', "会员权益");
-        return $this->view->fetch("memberBenefits");
+        if ($this->request->isAjax()) {
+            $userData = Db::table('fy_customer')->where('openid', $user['openid'])->find();
+            $userAddress = Db::table('fy_customer_address')->where(
+                [ 'uid'=>$userData['id'],'status'=>1]
+            )->find();
+        }else{
+            return $this->view->fetch("memberBenefits");
+        }
+
     }
 
     /**

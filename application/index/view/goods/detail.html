@@ -386,6 +386,12 @@
         if (skuZhuhe != null) {
             skuZhuhe.forEach(function (item) {
                 var id='';
+                if(!namearr){
+                    //没事sku规格时
+                    saveData.skuId = item.id;
+                    saveData.val = '';
+                    return;
+                }
                 var namearr=(item.attribute_name).split(',');
                 for(var i=0; i<namearr.length; i++){
                     id += (namearr[i].split(':')[1]).split('_')[0]+'_';
