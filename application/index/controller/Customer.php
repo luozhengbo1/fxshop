@@ -26,8 +26,18 @@ class Customer extends Mustlogin
         //会员信息
         $user_session = session('wx_user');
         $user_data = Db::table('fy_customer')->where('openid', $user_session['openid'])->find();
-        $this->assign('userdata', $user_data);
-
+        //会员签到信息
+        $beforeSign = Db::table('fy_customer_sign')->where('uid', $user_data['id'])->order('addtime', 'desc')->find();//获取最新一条签到记录
+        $noSignDay1 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 00:00:00')) / 86400;//2天
+        $noSignDay2 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 23:59:59')) / 86400;//1天
+        //前一天未签到，continue_day重置为0,将最新数据渲染到页面
+        if (floor($noSignDay1) > 1 && $noSignDay2 > 1 && floor($noSignDay1) == $noSignDay2) {
+            Db::table('fy_customer')->where('openid', $user_session['openid'])->update(['continuity_day' => 0]);
+            $user_sign_data = Db::table('fy_customer')->where('openid', $user_session['openid'])->find();
+            $this->assign('userdata', $user_sign_data);
+        } else {
+            $this->assign('userdata', $user_data);
+        }
         //会员收藏数量
         $count_collect = Db::table('fy_customer_collect')
             ->where('uid', $user_data['id'])
@@ -41,26 +51,26 @@ class Customer extends Mustlogin
         //会员订单数量
         #代付款
         $count_pay = Db::table('fy_order')
-            ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid'=> $user_session['openid'], 'fy_order.order_status'=>0,'fy_order.pay_status'=>0])->count();
+            ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
+            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order.order_status' => 0, 'fy_order.pay_status' => 0])->count();
         #待发货
         $count_deliver = Db::table('fy_order')
-            ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid'=> $user_session['openid'],'fy_order.order_status'=>1,'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>0])
+            ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
+            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order.order_status' => 1, 'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 0])
             ->count();
         #待收货
         $count_take_delivery = Db::table('fy_order')
-            ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid'=> $user_session['openid'],'fy_order.order_status'=>1,'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>1])
+            ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
+            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order.order_status' => 1, 'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 1])
             ->count();
         #退货退款
         $count_refund = Db::table('fy_order')
-            ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid'=> $user_session['openid'],'fy_order.order_status'=>['in',4],'fy_order.pay_status'=>1])
+            ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
+            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order.order_status' => ['in', 4], 'fy_order.pay_status' => 1])
             ->count();
         $count_evaluate = Db::table('fy_order')
-            ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid'=> $user_session['openid'],'fy_order.order_status'=>1,'fy_order.pay_status'=>1,'fy_order_goods.is_send'=>2])
+            ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
+            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order.order_status' => 1, 'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 2])
             ->count();
         $this->assign('count_pay', $count_pay);
         $this->assign('count_deliver', $count_deliver);
@@ -310,6 +320,7 @@ class Customer extends Mustlogin
                 }
             }
         } else {
+            //判断今天是否签到
             $time = time();
             $today_start = strtotime(date('Y-m-d', $time) . ' 00:00:00');
             $today_end = strtotime(date('Y-m-d', $time) . ' 23:59:59');
@@ -317,8 +328,8 @@ class Customer extends Mustlogin
                 ->where('uid', $userData['id'])
                 ->where('addtime', 'between', [$today_start, $today_end])
                 ->find();
-            $this->assign('flag', $res ? 1 : 0);
             $this->assign('user', $userData);
+            $this->assign('flag', $res ? 1 : 0);
             $this->assign('titleName', '签到');
             return $this->view->fetch('mysign');
         }
@@ -333,7 +344,7 @@ class Customer extends Mustlogin
         $user = session('wx_user');
         $userData = Db::table('fy_customer')->where('openid', $user['openid'])->find();
         $userAddress = Db::table('fy_customer_address')->where(
-            [ 'uid'=>$userData['id'],'status'=>1]
+            ['uid' => $userData['id'], 'status' => 1]
         )->find();
         //dump($userAddress);
         $this->assign('userData', $userData);
@@ -370,24 +381,64 @@ class Customer extends Mustlogin
     /**
      * 我的钱包
      */
-    public function mywallet($page='1',$size='4')
+    public function mywallet($page = '1', $size = '4')
     {
-        $user_session = session('wx_user');
-        $user_data = Db::table('fy_customer')->where('openid', $user_session['openid'])->find();
-        $this->assign('user_data',$user_data);
         //到交易记录表中查询交易记录
-//        if($this->request->isAjax()){
-//
-//
-//        }
-        $this->assign('titleName', "我的钱包");
-        return $this->view->fetch("myWallet");
+        if ($this->request->isAjax()) {
+            $user_session = session('wx_user');
+            $pay_record = Db::table('fy_wx_pay_refund_log')
+                ->where(['isdelete' => 0, 'openid' => $user_session['openid']])
+                ->order('create_time', 'desc')
+                ->page($page, $size)
+                ->select();
+            foreach ($pay_record as $k => $v) {
+                $pay_record[$k]['day'] = date('d', $v['create_time']);
+                $pay_record[$k]['month'] = date('m月', $v['create_time']);
+                $pay_record[$k]['end_time'] = date("Y年m月", $v['create_time']);
+            }
+            //按时间对数据分组：时间为键值
+            $res = array();
+            foreach ($pay_record as $key => $val) {
+                $res[$val['end_time']][] = $val;
+            }
+            //将分组情况赋给一个空数组以便返回
+            $i = 0;
+            $all_pay_record = array();
+            foreach ($res as $item) {
+                $all_pay_record[$i] = $item;
+                //获取分组的时间
+                $j = 0;
+                $all_pay_record[$i]['record_month'] = $item[$j]['end_time'];
+                //将money转为float类型并存入数组
+                for ($t = 0; $t < count($item); $t++) {
+                    $money[$t] = number_format(floatval($item[$t]['money']), '2');
+                }
+                //计算总计金额
+                $total_money = 0;
+                for ($y = 0; $y < count($item); $y++) {
+                    $total_money = $total_money + $money[$y];
+                }
+                $all_pay_record[$i]['record_money'] = $total_money;
+                //下一次计算的判断值自增
+                if ($i < count($res)) {
+                    $i++;
+                }
+            }
+            return ajax_return($all_pay_record, 'OK', 200);
+        } else {
+            $user_session = session('wx_user');
+            $user_data = Db::table('fy_customer')->where('openid', $user_session['openid'])->find();
+            $this->assign('user_data', $user_data);
+            $this->assign('titleName', "我的钱包");
+            return $this->view->fetch("myWallet");
+        }
     }
 
     /**
      * 会员权益
      */
-    public function memberbenefits(){
+    public function memberbenefits()
+    {
         $this->assign('titleName', "会员权益");
         if ($this->request->isAjax()) {
 
@@ -400,20 +451,22 @@ class Customer extends Mustlogin
     /**
      * 会员权益规则
      */
-    public function memberrule(){
+    public function memberrule()
+    {
         $this->assign('titleName', "会员权益规则");
         return $this->view->fetch("memberRule");
     }
 
     /**
-     * 会员权益
+     * 用户信息查询
      */
-    public function userinfo(){
+    public function userinfo()
+    {
         $this->assign('titleName', "完善用户信息");
         $user = session('wx_user');
         $userData = Db::table('fy_customer')->where('openid', $user['openid'])->find();
         $userAddress = Db::table('fy_customer_address')->where(
-            [ 'uid'=>$userData['id'],'status'=>1]
+            ['uid' => $userData['id'], 'status' => 1]
         )->find();
         //dump($userAddress);
         $this->assign('userData', $userData);
@@ -421,36 +474,38 @@ class Customer extends Mustlogin
         //dump($userData);
         return $this->view->fetch("userInfo");
     }
+
     /**
      * 用户信息修改
      */
-    public function userInfoEdit(){
+    public function userInfoEdit()
+    {
         $this->assign('titleName', "修改信息");
         $user = session('wx_user');
         $userData = Db::table('fy_customer')->where('openid', $user['openid'])->find();
         $oldUser = $userData;
         $userAddress = Db::table('fy_customer_address')->where(
-            [ 'uid'=>$userData['id'],'status'=>1]
+            ['uid' => $userData['id'], 'status' => 1]
         )->find();
         if ($this->request->isAjax()) {
             $nickname = $this->request->param('nickname');
             $mobile = $this->request->param('mobile');
             $email = $this->request->param('email');
-            if(!empty($nickname)) $userData['nickname'] = $nickname;
-            if(!empty($mobile)) $userData['mobile'] = $mobile;
-            if(!empty($email)) $userData['email'] = $email;
-            if(empty($nickname) && empty($mobile) && empty($email)) return ajax_return('', '修改数据不能为空', 200);
+            if (!empty($nickname)) $userData['nickname'] = $nickname;
+            if (!empty($mobile)) $userData['mobile'] = $mobile;
+            if (!empty($email)) $userData['email'] = $email;
+            if (empty($nickname) && empty($mobile) && empty($email)) return ajax_return('', '修改数据不能为空', 200);
 
             //如果用户信息都已经完善了，奖励100积分  $oldUser中信息没有完善   $userData中数据完善了，说明数据第一次完善 奖励100积分
-            $oldUserStatus = empty($oldUser['nickname']) || empty($oldUser['mobile']) || empty($oldUser['email'])|| empty($userAddress['id']);// true未完善
-            $userDataStatus =  !empty($userData['nickname']) && !empty($userData['mobile']) && !empty($userData['email']) && !empty($userAddress['id']);//true 已完善
+            $oldUserStatus = empty($oldUser['nickname']) || empty($oldUser['mobile']) || empty($oldUser['email']) || empty($userAddress['id']);// true未完善
+            $userDataStatus = !empty($userData['nickname']) && !empty($userData['mobile']) && !empty($userData['email']) && !empty($userAddress['id']);//true 已完善
             //dump($oldUserStatus);
             //dump($userDataStatus);
-            $msg ='修改成功';
+            $msg = '修改成功';
             $time = time();
-            if($oldUserStatus && $userDataStatus){
-                $userData['score'] +=100;
-                $msg ='信息已完善,恭喜获得100积分';
+            if ($oldUserStatus && $userDataStatus) {
+                $userData['score'] += 100;
+                $msg = '信息已完善,恭喜获得100积分';
                 Db::table('fy_score_log')->insert([
                     'uid' => $userData['id'],
                     'openid' => $userData['openid'],
@@ -474,7 +529,8 @@ class Customer extends Mustlogin
     /**
      * 赚积分
      */
-    public function getscore(){
+    public function getscore()
+    {
         $this->assign('titleName', "赚积分");
         return $this->view->fetch("getScore");
     }
@@ -490,7 +546,7 @@ class Customer extends Mustlogin
             $message_list = Db::table('fy_message_user')
                 ->alias('u')
                 ->join('fy_message m', 'u.message_id=m.id')
-                ->order('u.create_time','desc')
+                ->order('u.create_time', 'desc')
                 ->where(['u.openid' => $user_session['openid'], 'm.status' => 1, 'm.isdelete' => 0, 'm.is_send' => 1])
                 ->page($page, $size)
                 ->select();

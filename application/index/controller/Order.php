@@ -283,6 +283,11 @@
                 $addId1 =Db::name("order_all")->insert($orderAll);
                 $addId2 =Db::name("order")->insertAll($orderRow);
                 $addId3 =Db::name("order_goods")->insertAll($orderGoods);
+
+                #减少库存。
+                foreach ($orderGoods as $value ){
+                    Db::name('goods_attribute')->where(['id'=>$value['sku_id']])->setDec('store',$value['goods_num']);
+                }
                 #将库存减少，半小时后不付款恢复 或者支付成功减库存
                 if ($addId1 > 0 && $addId2 > 0 && $addId3 > 0 ) {
                     # 清空购物车^M
@@ -473,9 +478,14 @@
                     return ajax_return_error('已经支付只能退货');
                 }
                 $res =Db::name('order')->where(['order_id'=>$data['order_id']])->update(['order_status'=>7]);
-                return ajax_return('','取消成功','200
-                
-                ');
+                #回滚库存
+                $orderGoods =Db::name('order_goods')->where(['order_id'=>$data['order_id']])->select();
+                if( !empty($orderGoods) ){
+                    foreach ($orderGoods as $v){
+                        Db::name('goods_attribute')->where(['id'=>$v['sku_id']])->setInc('store',$v['goods_num']);
+                    }
+                }
+                return ajax_return('','取消成功','200');
             }
 
         }

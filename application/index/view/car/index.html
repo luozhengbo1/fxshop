@@ -53,7 +53,7 @@
     </p>
     <div class="fr w80p tr">
         <span class="f10">不含运费</span>
-        <span class="red">¥ <em class="" id="totalPrice"></em></span>
+        <span class="red"> <em class="" id="totalPrice"></em></span>
         <button class="bootstrap-btn btn-pink" onclick="save()">结算（<i id=totalNum>0</i>）</button>
     </div>
 </div>
@@ -220,10 +220,11 @@
         $('#totalNum').empty().append(plusNum);
         var html ='';
         totalPrice = totalPrice.toFixed(2);
-        if(totalPrice>0 && totalPoint>0) html =totalPrice+'+'+totalPoint+'积分';
+        if(totalPrice>0 && totalPoint>0) html ='¥'+totalPrice+'+'+totalPoint+'积分';
         else{
-            if(totalPrice>0)   html +=totalPrice;
+            if(totalPrice>0)   html +='¥'+totalPrice;
             if (totalPoint>0) html +=totalPoint+'积分'
+            if(!(totalPrice>0) && !(totalPoint>0)) html +=0;
         }
         $('#totalPrice').empty().append(html);
     }

@@ -109,4 +109,52 @@ Array
     [return_msg] => OK
     [sign] => 9FDB980323FCDF8063A6660EA5AD8260
 )
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => NOTENOUGH
+    [err_code_des] => 基本账户余额不足，请充值后重新发起
+    [mch_id] => 1441217402
+    [nonce_str] => 7R0hkjn7ZY1u4MBm
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => C18245DCDA50CD19C67199E3CC8C6B0E
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => NOTENOUGH
+    [err_code_des] => 基本账户余额不足，请充值后重新发起
+    [mch_id] => 1441217402
+    [nonce_str] => 1Rq8ghsy4tNmpDev
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => A1903CA3D531F88E7EBDA8C6B4285EC3
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => NOTENOUGH
+    [err_code_des] => 基本账户余额不足，请充值后重新发起
+    [mch_id] => 1441217402
+    [nonce_str] => neJW9W77HEUoX6rW
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => E08C8FF99D482FE51E051FBB0B2D42CF
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => NOTENOUGH
+    [err_code_des] => 基本账户余额不足，请充值后重新发起
+    [mch_id] => 1441217402
+    [nonce_str] => M41nlmPEWAyYjBM4
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => F38C5BDE8071CCB0D477C610F1372476
+)
 

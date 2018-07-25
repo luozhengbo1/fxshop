@@ -209,9 +209,9 @@ class Order extends Controller
             if(!$order){
                 return ajax_return_error('参数异常');
             }
-            include_once "WxPaySDK/WxPay.Api.php";
-            include_once "WxPaySDK/WxPay.JsApiPay.php";
-            include_once 'WxPaySDK/log.php';
+            include_once APP_PATH."/index/controller/WxPaySDK/WxPay.Api.php";
+            include_once APP_PATH."/index/controller/WxPaySDK/WxPay.JsApiPay.php";
+            include_once APP_PATH."/index/controller/WxPaySDK/log.php";
             $orderId = \WxPayConfig::MCHID.date("YmdHis");
             $res = $this->getModel()
                 ->where(['order_id'=>$data['order_id']])

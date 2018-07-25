@@ -147,10 +147,10 @@
                     <input type="radio" name="store_type"   {$vo.store_type==1?'checked':''} id="status-1" value="1" datatype="*" nullmsg="请选择商品状态" errormsg="">
                     <label for="status-1">下单减库存</label>
                 </div>
-                <div class="radio-box">
-                    <input type="radio" name="store_type" {$vo.store_type==2?'checked':''}  id="status-0" value="2" datatype="*" nullmsg="请选择商品状态" errormsg="">
-                    <label for="status-0">拍下减库存</label>
-                </div>
+                <!--<div class="radio-box">-->
+                    <!--<input type="radio" name="store_type" {$vo.store_type==2?'checked':''}  id="status-0" value="2" datatype="*" nullmsg="请选择商品状态" errormsg="">-->
+                    <!--<label for="status-0">拍下减库存</label>-->
+                <!--</div>-->
             </div>
             <div class="col-xs-3 col-sm-2"></div>
         </div>
@@ -369,7 +369,6 @@
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>结算类型：</label>
             <div class="formControls col-xs-6 col-sm-7 skin-minimal">
                 <div class="radio-box">
-
                     <input type="radio" checked name="settlement_type" style="width:150px;" {$vo.settlement_type==1?'checked':''} id="status-0" value="1" datatype="*" nullmsg="请选择商品状态" errormsg="">
                     <label for="status-0">现价</label>
                 </div>
@@ -576,6 +575,8 @@
 
 
     function refeashskus() {
+        salelist=[];
+        arrayInforList =[];
         ChangeSku().Creat_Table("{$vo.id??''}","{:url('goods/getSkuData')}");
         SetValue();
     }
@@ -710,9 +711,11 @@
                         data:data,//$form.serialize(),
                         url:$("form").attr('action'),
                         success:function(ret){
-                            if(ret.code==200){
+                            // if(ret.code==200){
                                 ajax_progress(ret);
-                            }
+                            // }
+                            // document.location.reload();
+
                             console.log(ret);
                         }
                     })
