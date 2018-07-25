@@ -82,11 +82,8 @@
             html += '     <a href="' + data[i].url + '">';
             html += '         <img  src="' + data[i].main_pic + '">';
             //转换时间戳
-            Date.prototype.toLocaleString = function () {
-                return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate() + " " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
-            };
-            var start_date = new Date(parseInt(data[i].start_date) * 1000).toLocaleString();
-            var end_date = new Date(parseInt(data[i].end_date) * 1000).toLocaleString();
+            var start_date = new Date(parseInt(data[i].start_date)*1000).Format("yyyy-MM-dd hh:mm:ss");
+            var end_date =  new Date(parseInt(data[i].end_date)*1000).Format("yyyy-MM-dd hh:mm:ss");
             html += '         <p  class="f12 grey lh30 h30 pl10">' + start_date + '－' + end_date + '</p>';
             html += '         <div class="status-wrap"  >';
             //判断所参与活动是否结束
