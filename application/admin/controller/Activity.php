@@ -30,6 +30,8 @@ class Activity extends Controller
     {
         if($this->request->isPost()){
             $data = $this->request->post();
+            #图片处理
+            $data = picHandle($data);
             $validate = \think\Loader::validate('Activity');
             if(!$validate->check($data)){
                 return $validate->getError();
@@ -73,6 +75,8 @@ class Activity extends Controller
     {
         if($this->request->isPost()){
             $data = $this->request->post();
+            #图片处理
+            $data = picHandle($data);
             $validate = \think\Loader::validate('Activity');
             if(!$validate->check($data)){
                 return $validate->getError();

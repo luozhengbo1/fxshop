@@ -102,7 +102,9 @@ class Wechatpay extends Controller
             $wx_pay_refund_log_insert['username']= $user['nickname'];
             $wx_pay_refund_log_insert['create_time']= time();
             $wx_pay_refund_log_insert['money']= $sonId['total_price'];
-            $wx_pay_refund_log_insert['type']=1;#购买商品
+            $wx_pay_refund_log_insert['type']=1;
+            $wx_pay_refund_log_insert['order_id']=$orderInfo['order_id'];
+            #购买商品
             Db::name('wx_pay_refund_log')->insert($wx_pay_refund_log_insert);
         }
         exit;
@@ -198,6 +200,7 @@ class Wechatpay extends Controller
             $wx_pay_refund_log_insert['create_time']= time();
             $wx_pay_refund_log_insert['money']= $order['total_price'];
             $wx_pay_refund_log_insert['type']=1;#购买商品
+            $wx_pay_refund_log_insert['order_id']=$orderInfo['order_id'];
             Db::name('wx_pay_refund_log')->insert($wx_pay_refund_log_insert);
         }
     }

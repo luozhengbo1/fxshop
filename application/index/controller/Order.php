@@ -671,6 +671,7 @@
                 if(!$data['order_id'] ){
                     return ajax_return_error('缺少参数id');
                 }
+                $data = picHandle($data);
                 $orderGoods = Db::name('order_goods')
                     ->where([
                         'order_id'=>$data['order_id'],

@@ -61,13 +61,14 @@ class Customer extends Mustlogin
         #待收货
         $count_take_delivery = Db::table('fy_order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order.order_status' => 1, 'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 1])
+            ->where(['fy_order.openid' => $user_session['openid'],  'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 1])
             ->count();
         #退货退款
         $count_refund = Db::table('fy_order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order.order_status' => ['in', 4], 'fy_order.pay_status' => 1])
+            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order_goods.is_return' =>1 , 'fy_order.pay_status' => 1])
             ->count();
+        #待评价
         $count_evaluate = Db::table('fy_order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
             ->where(['fy_order.openid' => $user_session['openid'], 'fy_order.order_status' => 1, 'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 2])
