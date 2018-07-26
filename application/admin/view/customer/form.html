@@ -14,10 +14,15 @@
     <div class="select-box" style="width:250px">
         <select name="grade" class="select" id="grade">
             <option value="">请选择会员等级</option>
-            <?php
-                $grade_list = \think\Db::table('fy_customer_grade')->where(['isdelete'=>0])->select();
-                  foreach($grade_list as $item){   ?>
-            <option value="<?php echo $item['id']; ?>"><?php  echo $item['name']; ?></option>
+                <?php
+                    $grade_list = \think\Db::table('fy_customer_grade')->where(['isdelete'=>0])->select();
+                        foreach($grade_list as $item){   ?>
+            <option value="<?php echo $item['id']; ?>"
+                <?php
+                    if( isset($_GET['grade'])){
+                        echo $_GET['grade']==$item['id']?'selected':'';
+                    } ?>
+            ><?php  echo $item['name']; ?></option>
                  <?php  }  ?>
         </select>
     </div>&nbsp;
