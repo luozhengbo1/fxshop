@@ -596,9 +596,16 @@ function countDown(start,end){
     if(activeStatus(start,end) ==1){
         //活动中
         $('#countDown').html('正在抢购中');
+        var endActive = setInterval(function () {
+            var curr= new Date().getTime();
+            if(curr>end){
+                clearTimeout(endActive);
+                window.location.reload();
+            }
+        },1000)
     }else if(activeStatus(start,end)==0){
         var intDiff = start-currentTime;
-        timer(intDiff)
+        timer(intDiff);
     }else if(activeStatus(start,end) ==2){
         //活动已经结束
         $('#countDown').html('活动已经结束');
