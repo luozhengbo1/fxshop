@@ -5,6 +5,7 @@ namespace app\admin\controller;
 \think\Loader::import('controller/Controller', \think\Config::get('traits_path'), EXT);
 
 use app\admin\Controller;
+use think\Db;
 
 class Customer extends Controller
 {
@@ -27,7 +28,9 @@ class Customer extends Controller
 
         //按会员等级搜索
         if ($this->request->param("grade")) {
-            $map['grade_id'] = $this->request->param("grade");
+            $id = $this->request->param("grade");
+            $grade = Db::table('fy_customer_grade')->where('id', $id)->find();
+            $map['experience']=['between',[$grade['experience_start'],$grade['experience_end']]];
         }
 
         //按创建时间段搜索

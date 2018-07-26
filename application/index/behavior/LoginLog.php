@@ -12,22 +12,25 @@
 
 namespace app\index\behavior;
 
+use think\Cache;
 use think\Db;
 use think\Session;
 
 class LoginLog
 {
 
-    public function run()
+    public function run(&$params)
     {
-        $user_session = Session::get('wx_user');
-        $user_data = Db::table('fy_customer')->where('openid', $user_session['openid'])->find();
-        $time = time();
-        Db::table('fy_customer_login_log')->insert([
-            'uid' => $user_data['id'],
-            'openid' => $user_session['openid'],
-            'login_ip'=>$user_session['login_ip'],
-            'login_time' => $time,
-        ]);
+        if ($params && !Cache::get('lock')) {
+            $time = date('Y-m-d H:i:s', time());
+            Db::table('fy_customer_login_log')->insert([
+                'uid' => $params['uid'],
+                'openid' => $params['openid'],
+                'login_ip' => $params['login_ip'],
+                'login_time' => $time,
+            ]);
+            //30分钟内多次访问/刷新首页，只计算为一次访问
+            Cache::set('lock', '1', 30*60);
+        }
     }
 }
