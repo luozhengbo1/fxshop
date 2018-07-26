@@ -60,6 +60,9 @@ class Brand extends Controller
         if ( $this->request->isPost() ) {
             // 插入
             $data = $this->request->except(['id']);
+
+            #图片处理
+            $data = picHandle($data);
             // 验证
            if( empty($data['name']) ) {
   				return ajax_return_adv_error('品牌名不能为空');
