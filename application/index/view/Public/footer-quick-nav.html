@@ -1,4 +1,17 @@
+<style>
+    .commom-nav .nav-icon-num{
+        position: absolute;
+        left: 5%;
+        top: 28px!important;
+        padding: 4px;
+        z-index: 9;
+    }
+    .commom-nav.active .nav-icon-num{
+        display: none!important;
+    }
+</style>
 <nav class="commom-nav dis-box ts-5" id="ectouch-top">
+    <span class="icon-num nav-icon-num carNum"  >{$carNum}</span>
 	<!--快捷导航-->
 	<div class="left-icon">
 		<div class="nav-icon"><i class="iconfont icon-jiantou1"></i>快速<br>导航</div>
@@ -30,9 +43,10 @@
 			<li class="positionR">
 				<a href="{:url('car/index',['param'=>'car'])}" >
 
-					{if condition="$carNum neq 0" /}
-					<span class="icon-num" style="top: 0px;" id="carNum">{$carNum}</span>
-					{/if}
+
+					<span class="icon-num carNum" style="top: 0px;" >
+                        {$carNum}
+                    </span>
 					<i class="iconfont icon-gouwuche"></i>
 					<p>购物车</p>
 				</a>
@@ -49,6 +63,11 @@
 </nav>
 <div class="common-show"></div>
 <script>
+    $('.carNum').each(function (index,ele) {
+        if(parseInt($(ele).html()) ==0){
+            $(ele).hide();
+        }
+    })
     //快捷导航
     $(".commom-nav .left-icon .nav-icon,.common-show").click(function () {
         $(".commom-nav").toggleClass("active");
