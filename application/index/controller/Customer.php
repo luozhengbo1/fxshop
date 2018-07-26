@@ -574,7 +574,15 @@ class Customer extends Mustlogin
      */
     public function getscore()
     {
+        //会员信息：等级、加入时间、现有经验值、下一等级名称、下一等级起始经验值、达到下一等级所需经验值
+        $user_session = session('wx_user');
+        $user_data = Db::table('fy_customer')
+            ->alias('c')
+            ->join('fy_customer_grade g', 'g.experience_start <= c.experience and g.experience_end >= c.experience')
+            ->where('openid', $user_session['openid'])
+            ->find();
         $this->assign('titleName', "赚积分");
+        $this->assign('user_data', $user_data);
         return $this->view->fetch("getScore");
     }
 
