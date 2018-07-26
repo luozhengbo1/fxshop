@@ -116,9 +116,9 @@
 <!--商品评价-->
 <a name="good-evaluate"></a>
 <p class="good-evaluate-bar clear bg_white">
-    <span class="fl">评价</span>
-    <span class="fl">好评97%</span>
-    <span class="fr">共2800条</span>
+    <span class="fl">商品评价</span>
+    <!--<span class="fl">好评</span>-->
+    <span class="fr">共{$good+$mid+$bad}条</span>
 </p>
 <ul class="good-evaluate-all clear pt10">
     <li id="evaluate_all"   class=""><a href="{:url('goods/goodsComment',['goods_id'=>$goods['id'],'param'=>'all'])}">所有</a></li>
@@ -216,7 +216,7 @@
                 <div class="layui-btn-group fr count-wrap ">
                     <button class="layui-btn layui-btn-primary layui-btn-sm fr24 minus">-</button>
                     <div class="layui-btn layui-btn-primary layui-btn-sm">
-                        <input class="sumInput" type="text" data-store ="1" value="1" id="buyNum"  onkeyup="buyNumShow();">
+                        <input class="sumInput tc" type="text" data-store ="1" value="1" id="buyNum"  onkeyup="buyNumShow();">
                     </div>
                     <button class="layui-btn layui-btn-primary layui-btn-sm fr24 add">+</button>
                 </div>
@@ -252,7 +252,37 @@
                     <div class="f14 tc mt30">立即领取</div>
                 </div>
             </div>
-        </div>
+            </div>
+            <div class="tax-box">
+                <div class="clear">
+                    <div class="fl w70p" style="">
+                        <p class="tc f16 mt5">天猫购物券</p>
+                        <p class="tc mt5">100%刮中奖 最高50元</p>
+                        <p class="tc mt5">有效期：7天</p>
+                    </div>
+                    <div class="tax-split fl" >
+                        <div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>
+                    </div>
+                    <div class="fl" style="width: 28%" >
+                        <div class="f14 tc mt30">立即领取</div>
+                    </div>
+                </div>
+            </div>
+            <div class="tax-box">
+                <div class="clear">
+                    <div class="fl w70p" style="">
+                        <p class="tc f16 mt5">天猫购物券</p>
+                        <p class="tc mt5">100%刮中奖 最高50元</p>
+                        <p class="tc mt5">有效期：7天</p>
+                    </div>
+                    <div class="tax-split fl" >
+                        <div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>
+                    </div>
+                    <div class="fl" style="width: 28%" >
+                        <div class="f14 tc mt30">立即领取</div>
+                    </div>
+                </div>
+            </div>
             <div class="tax-box">
                 <div class="clear">
                     <div class="fl w70p" style="">

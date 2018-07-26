@@ -4,7 +4,7 @@
 
 <div id="dataListWrap">
     <ul class="cart-list" id="dataList">
-      <!--  <li class="singer-good clear">
+        <li class="singer-good clear">
             <i class="no-selected-icon selected-icon chose-btn"></i>
             <div class="image-info">
                 <img src="//img14.360buyimg.com/n7/jfs/t18583/328/1437914946/111140/3b067386/5aca247aNba85643c.jpg.dpg">
@@ -20,20 +20,21 @@
                </span>
                 </p>
                 <div class="mt10 clear">
-                    <p class="red fl">¥ <em class="f16">999</em>.00</p>
+                   <!-- <p class="red fl">¥ <em class="f16">999</em>.00</p>
                     <div class="layui-btn-group fr count-wrap">
                         <button class="layui-btn layui-btn-primary layui-btn-xs fr24 minus">-</button>
                         <div class="layui-btn layui-btn-primary layui-btn-xs">
                             <input class="sumInput" type="text" value="1">
                         </div>
                         <button class="layui-btn layui-btn-primary layui-btn-xs fr24 add">+</button>
-                    </div>
+                    </div>-->
+                    <p class="grey">失效</p>
                 </div>
                 <div class="tr mt10">
                     <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="delGood()">删除</button>
                 </div>
             </div>
-        </li>-->
+        </li>
     </ul>
     <div class="empty-wrap" style="display: none">
         <div class="empty-image">
@@ -98,50 +99,69 @@
     }
     function dealData(data) {
         var html='';
-        for(var i = 0; i < data.length; i++){
+        for(var i = 0; i < data.length; i++) {
             var show_area = data[i].show_area;
-            html +='<li class="singer-good clear carGoods" data-checked="false">';
-            html +='    <i class="no-selected-icon chose-btn " onclick="choseGoods(this)" ></i>';
-            html +='    <a  href="'+urlConnect("{:url('goods/detail')}",{id:data[i].goods_id})+'">';
-            html +='    <div class="image-info">';
-            html +='        <img src="'+data[i].main_image+'">';
-            if(data[i].store<1){
-            html +='        <p class="image_tag" attr-stock="stock_4390094" lowestbuy="0">无货</p>';
-            }
-            html +='    </div>';
-            html +='    </a>';
-            html +='    <div class="content"  attr-tag="jumpHrefEve" >';
-            html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].goods_id})+'">';
-            html +='        <div class="name ellipsis">'+data[i].name+'</div>';
-            html +='    </a>';
-            html +='        <p class="mt5" >';
-            html +='        <span class="sku">'+data[i].val+'</span>';
-            html +='        </p>';
-            html +='        <div class="mt10 clear">';
-            switch(show_area){
-                case 2:
-                    html +='            <p class="red fl"> <em class="f14">'+data[i].point_score+'积分</em></p>';
-                    break;
-                default:
-                    html +='            <p class="red fl">¥ <em class="f14">'+data[i].price1+'</em></p>';
-                    break;
+            //商品既没有价格也没有积分，说明该规格商品 sku规格不存在，该规格商品失效
+            var isDiscard = data[i].point_score == null && data[i].price1 == null;
+
+            if (isDiscard){
+                html += '<li class="singer-good clear">';
+                html += '    <i class="no-selected-icon chose-btn selected-no-use" ></i>';
+                html += '    <a  href="javascript:;">';
+            } else{
+                html += '<li class="singer-good clear carGoods" data-checked="false">';
+                html += '    <i class="no-selected-icon chose-btn " onclick="choseGoods(this)" ></i>';
+                html += '    <a  href="' + urlConnect("{:url('goods/detail')}", {id: data[i].goods_id}) + '">';
             }
 
-            html +='            <div class="layui-btn-group fr count-wrap">';
-            html +='                <button class="layui-btn layui-btn-primary layui-btn-xs fr24 minus">-</button>';
-            html +='                <div class="layui-btn layui-btn-primary layui-btn-xs">';
-            // onkeyup="value=(parseInt((value=value.replace(/\D/g,''))==''?'0':value,10))"
-
-            if(data[i].price1!=0) {
-                html += '  <input class="sumInput tc"  data-score="' + data[i].point_score + '" data-showarea="' + data[i].show_area + '" data-image="' + data[i].main_image + '" data-name="' + data[i].name + '" data-store="' + data[i].store + '" data-goodsid="' + data[i].goods_id + '" data-carid="' + data[i].carId + '"  data-price="' + data[i].price1 + '" data-skuid="' + data[i].sku_id + '" data-skuval="' + data[i].val + '"   type="text" value="' + data[i].goods_num + '">';
-            }else{
-                html +='   <input  class="sumInput tc"  data-score="' + data[i].point_score + '" data-showarea="' + data[i].show_area + '" data-image="'+data[i].main_image+'" data-name="'+data[i].name+'" data-store="'+data[i].store+'" data-goodsid="'+data[i].goods_id+'" data-carid="'+data[i].carId+'"  data-price="'+data[i].price_real+'" data-skuid="'+data[i].sku_id+'" data-skuval="'+data[i].val+'"   type="text" value="'+data[i].goods_num+'">';
-
+            html += '    <div class="image-info">';
+            html += '        <img src="' + data[i].main_image + '">';
+            if (data[i].store < 1 && !isDiscard) {
+                html += '        <p class="image_tag" attr-stock="stock_4390094" lowestbuy="0">无货</p>';
             }
-            html +='                </div>';
-            html +='                <button class="layui-btn layui-btn-primary layui-btn-xs fr24 add">+</button>';
-            html +='            </div>';
-            html +='        </div>';
+            html += '    </div>';
+            html += '    </a>';
+            html += '    <div class="content"  attr-tag="jumpHrefEve" >';
+            if (isDiscard)
+                html += '    <a  href="javascript:;">';
+            else
+                html += '    <a href="' + urlConnect("{:url('goods/detail')}", {id: data[i].goods_id}) + '">';
+            html += '        <div class="name ellipsis">' + data[i].name + '</div>';
+            html += '    </a>';
+            html += '        <p class="mt5" >';
+            html += '        <span class="sku">' + data[i].val + '</span>';
+            html += '        </p>';
+            if (isDiscard) {
+                html += '        <div class="mt10 clear grey">失效</div>';
+            } else {
+
+
+                html += '        <div class="mt10 clear">';
+                switch (show_area) {
+                    case 2:
+                        html += '            <p class="red fl"> <em class="f14">' + data[i].point_score + '积分</em></p>';
+                        break;
+                    default:
+                        html += '            <p class="red fl">¥ <em class="f14">' + data[i].price1 + '</em></p>';
+                        break;
+                }
+
+                html += '            <div class="layui-btn-group fr count-wrap">';
+                html += '                <button class="layui-btn layui-btn-primary layui-btn-xs fr24 minus">-</button>';
+                html += '                <div class="layui-btn layui-btn-primary layui-btn-xs">';
+                // onkeyup="value=(parseInt((value=value.replace(/\D/g,''))==''?'0':value,10))"
+
+                if (data[i].price1 != 0) {
+                    html += '  <input class="sumInput tc"  data-score="' + data[i].point_score + '" data-showarea="' + data[i].show_area + '" data-image="' + data[i].main_image + '" data-name="' + data[i].name + '" data-store="' + data[i].store + '" data-goodsid="' + data[i].goods_id + '" data-carid="' + data[i].carId + '"  data-price="' + data[i].price1 + '" data-skuid="' + data[i].sku_id + '" data-skuval="' + data[i].val + '"   type="text" value="' + data[i].goods_num + '">';
+                } else {
+                    html += '   <input  class="sumInput tc"  data-score="' + data[i].point_score + '" data-showarea="' + data[i].show_area + '" data-image="' + data[i].main_image + '" data-name="' + data[i].name + '" data-store="' + data[i].store + '" data-goodsid="' + data[i].goods_id + '" data-carid="' + data[i].carId + '"  data-price="' + data[i].price_real + '" data-skuid="' + data[i].sku_id + '" data-skuval="' + data[i].val + '"   type="text" value="' + data[i].goods_num + '">';
+
+                }
+                html += '                </div>';
+                html += '                <button class="layui-btn layui-btn-primary layui-btn-xs fr24 add">+</button>';
+                html += '            </div>';
+                html += '        </div>';
+            }
             html +='        <div class="tr mt10">';
             html +='            <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="req_opt(0,{carId:'+data[i].carId+'})">删除</button>';
             html +='        </div>';

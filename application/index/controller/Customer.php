@@ -153,14 +153,14 @@ class Customer extends Mustlogin
                         'status' => 0,
                         'addtime' => $time
                     ];
-                    $msg = '已取消收藏该商品';
+                    $msg = '取消收藏';
                 } else if ($collect['status'] == 0) {
                     //未收藏的     添加收藏
                     $data = [
                         'status' => 1,
                         'addtime' => $time
                     ];
-                    $msg = '已收藏该商品';
+                    $msg = '收藏成功';
                 }
                 Db::table('fy_customer_collect')->where('id', $collect['id'])->update($data);
                 return ajax_return($data, $msg, 200);
@@ -175,7 +175,7 @@ class Customer extends Mustlogin
                 ];
                 Db::table('fy_customer_collect')->insert($data);
                 //dump('添加');
-                return ajax_return($data, '已收藏该商品', 200);
+                return ajax_return($data, '收藏成功', 200);
             }
 
         }

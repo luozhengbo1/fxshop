@@ -37,7 +37,8 @@
     <ul class="product-order-list ">
         <li class="pb10" data-orderid="{$orderDetail[0]['order_id']}">
             {volist name="orderDetail" id="vo" empty=""}
-            <div class="item-list pt10 module clear">
+            <a href="{:url('goods/detail',array('id'=>$vo['goods_id']))}" >
+                <div class="item-list pt10 module clear">
                 <div class="item-img">
                     <p> <img class="" src="{$vo['goods_detail']['main_image']}" /> </p>
                 </div>
@@ -64,6 +65,7 @@
                 </div>
 
             </div>
+            </a>
             <div class="module  clear pr10 pt5 mb5" >
                 <div class="cont tr">
                     <span class="f14">共<b>{$vo['goods_num']}</b>件商品</span>

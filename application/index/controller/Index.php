@@ -2,13 +2,26 @@
 
 namespace app\index\controller;
 
+use think\Cache;
 use think\Controller;
 use think\Db;
+use think\Hook;
+use think\Session;
 
 class Index extends Mustlogin
 {
     public function index()
     {
+        //监听访问情况
+        $user_session = Session::get('wx_user');
+        $user_data = Db::table('fy_customer')
+            ->field('id')
+            ->where('openid', $user_session['openid'])
+            ->find();
+        $user_session['uid'] = $user_data['id'];
+//        if (!$this->request->isAjax()) {
+        Hook::exec('app\\index\\behavior\\LoginLog', 'run', $user_session);
+//        }
         #获取轮播图数据
         $sildeShow = new  Sildeshow($num = 6);
         $getSildeShow = $sildeShow->getSildeShow();
