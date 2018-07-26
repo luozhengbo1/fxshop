@@ -9,15 +9,15 @@
     <div class="member-benefits">
        <div class="benefit-header clear">
             <div class="user-info">
-                <img class="user-header fl" src="">
+                <img class="user-header fl" src="{$user_data.headimgurl}">
                 <div class="fl ml10">
-                    <p class="lh20 grey white">算个<span class="user-score ml10">砖石</span></p>
-                    <div class="user-score mt5 f10">我的积分：21345</div>
+                    <p class="lh20 grey white">{$user_data.nickname}<span class="user-score ml10">{$user_data.name}</span></p>
+                    <div class="user-score mt5 f10">我的积分：{$user_data.score}</div>
                 </div>
             </div>
             <img class="benefit-bg2" src="__STATIC__/index/images/benefit-bg2.png">
        </div>
-        <div class="tc h40 lh40 bg_white mb5"><a href="{:\\think\\Url::build(\'customer/memberrule\')}" >会员等级规则</a></div>
+        <div class="tc h40 lh40 bg_white mb5"><a href="{:url('customer/memberrule',['type'=>1])}">会员等级规则</a></div>
         <div id="dataListWrap">
             <ul id="dataList" class="content">
               <!--  <li class="clear">
@@ -31,7 +31,7 @@
                 </li>-->
              </ul>
         </div>
-        <div class=" footer-fixed member-update-method">会员升级攻略</div>
+        <div class=" footer-fixed member-update-method"><a href="{:url('customer/memberrule',['type'=>2])}">会员升级攻略</a></div>
     </div>
 </section>
 <script>
@@ -42,9 +42,9 @@
             targetWarp:'dataListWrap',
             target:'dataList',
             page:1,
-            size:4,
+            size:20,
             ajaxData:{
-                url:"{:url('index/customer/memberbenefits')}",
+                url:"{:url('index/customer/memberrights')}",
                 data:{},
             },
             dealFun:dealData
@@ -55,10 +55,10 @@
         for(var i = 0; i < data.length; i++){
             html +='<li class="clear">';
             html +='    <a  href="javascript:;" >';
-            html +='        <div class="w20p fl"><img class="image" src="https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike116%2C5%2C5%2C116%2C38/sign=86f7c2bd3dd12f2eda08a6322eabbe07/5d6034a85edf8db13608df0e0223dd54564e74b2.jpg"></div>';
+            html +='        <div class="w20p fl"><img class="image" src="'+data[i].pic+'"></div>';
             html +='        <div class="w80p fr mt5 mb10 pl10">';
-            html +='            <p class="f14 bold ">体现特权</p>';
-            html +='            <p class="mt10 ">1000元以内，体现免手续费</p>';
+            html +='            <p class="f14 bold ">'+data[i].name+'</p>';
+            html +='            <p class="mt10 ">'+data[i].desc+'</p>';
             html +='        </div>';
             html +='    </a>';
             html +='</li>';
