@@ -86,7 +86,7 @@
         for(var i = 0; i < data.length; i++){
             html +='<li class="tc radius4">';
             html +='    <a class="clear" href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'">';
-            html +='        <img class="good-img " alt="'+data[i].name+'" src="'+data[i].main_image+'">';
+            html +='        <img class="good-img "  src="'+data[i].main_image+'">';
             html +='        <span class="ellipsis-oneline">'+data[i].name+'</span>';
             html +='    </a>';
             html +='</li>';

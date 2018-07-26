@@ -621,6 +621,7 @@ function timer(intDiff){
             $('#countDown').html(html);
             intDiff--;
         }else {
+            window.location.reload()
             clearInterval(interTimer);
         }
 

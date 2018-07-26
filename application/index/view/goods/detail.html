@@ -332,7 +332,13 @@
     if($('#countDown').size()>0){
         var start = $("#countDown").data('start'),end=$("#countDown").data('end');
         countDown(start,end);
-        var activeStatus=activeStatus(start,end);
+        /*var activeStatus=activeStatus(start,end);
+        activeChange(activeStatus)*/
+        $('.collectTip').click(function () {
+            layer_msg('不在活动期间内，加入收藏关注吧，亲！')
+        })
+    }
+    function activeChange(activeStatus){
         switch(activeStatus)
         {
             case 0:
@@ -347,9 +353,6 @@
                 $('.buyPage').html('已结束')
                 break;
         }
-        $('.collectTip').click(function () {
-            layer_msg('不在活动期间内，加入收藏关注吧，亲！')
-        })
     }
     //showarea  展示区域1-限时抢购2-积分商城3-日常售卖4-热销产品
     var show_area = $('#popupMain').attr('data-showarea');
