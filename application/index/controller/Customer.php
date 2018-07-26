@@ -331,7 +331,7 @@ class Customer extends Mustlogin
             $this->assign('user', $userData);
             $this->assign('flag', $res ? 1 : 0);
             $this->assign('titleName', '签到');
-            return $this->view->fetch('mysign');
+            return $this->view->fetch('mySign');
         }
     }
 
