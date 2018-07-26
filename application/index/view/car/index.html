@@ -133,9 +133,9 @@
             // onkeyup="value=(parseInt((value=value.replace(/\D/g,''))==''?'0':value,10))"
 
             if(data[i].price1!=0) {
-                html += '  <input class="sumInput"  data-score="' + data[i].point_score + '" data-showarea="' + data[i].show_area + '" data-image="' + data[i].main_image + '" data-name="' + data[i].name + '" data-store="' + data[i].store + '" data-goodsid="' + data[i].goods_id + '" data-carid="' + data[i].carId + '"  data-price="' + data[i].price1 + '" data-skuid="' + data[i].sku_id + '" data-skuval="' + data[i].val + '"   type="text" value="' + data[i].goods_num + '">';
+                html += '  <input class="sumInput tc"  data-score="' + data[i].point_score + '" data-showarea="' + data[i].show_area + '" data-image="' + data[i].main_image + '" data-name="' + data[i].name + '" data-store="' + data[i].store + '" data-goodsid="' + data[i].goods_id + '" data-carid="' + data[i].carId + '"  data-price="' + data[i].price1 + '" data-skuid="' + data[i].sku_id + '" data-skuval="' + data[i].val + '"   type="text" value="' + data[i].goods_num + '">';
             }else{
-                html +='   <input  class="sumInput"  data-score="' + data[i].point_score + '" data-showarea="' + data[i].show_area + '" data-image="'+data[i].main_image+'" data-name="'+data[i].name+'" data-store="'+data[i].store+'" data-goodsid="'+data[i].goods_id+'" data-carid="'+data[i].carId+'"  data-price="'+data[i].price_real+'" data-skuid="'+data[i].sku_id+'" data-skuval="'+data[i].val+'"   type="text" value="'+data[i].goods_num+'">';
+                html +='   <input  class="sumInput tc"  data-score="' + data[i].point_score + '" data-showarea="' + data[i].show_area + '" data-image="'+data[i].main_image+'" data-name="'+data[i].name+'" data-store="'+data[i].store+'" data-goodsid="'+data[i].goods_id+'" data-carid="'+data[i].carId+'"  data-price="'+data[i].price_real+'" data-skuid="'+data[i].sku_id+'" data-skuval="'+data[i].val+'"   type="text" value="'+data[i].goods_num+'">';
 
             }
             html +='                </div>';

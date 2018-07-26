@@ -339,8 +339,8 @@ class Order extends Controller
                     $wx_pay_refund_log_insert['create_time']= time();
                     $wx_pay_refund_log_insert['money']= -$orderGoods['return_price'];
                     $wx_pay_refund_log_insert['type']=2;#退款
+                    $wx_pay_refund_log_insert['order_id']=$orderGoods['order_id'];
                     Db::name('wx_pay_refund_log')->insert($wx_pay_refund_log_insert);
-
                     return ajax_return('','退款成功');
                 }else{
                     file_put_contents("wx_refund_error.log",print_r($res, true)."\r", 8);

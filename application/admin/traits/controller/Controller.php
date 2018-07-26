@@ -66,9 +66,11 @@ trait Controller
             $this->view->assign('userList',$userList);
         }
         if ($this->request->isAjax()) {
-            // 插入
+            // 插入main_pic
             $data = $this->request->except(['id']);
-
+            #图片处理调用
+            $data = picHandle($data);
+//            dump($data);die;
             // 验证
             if (class_exists($validateClass = Loader::parseClass(Config::get('app.validate_path'), 'validate', $controller))) {
                 $validate = new $validateClass();
@@ -122,7 +124,8 @@ trait Controller
             if (!$data['id']) {
                 return ajax_return_adv_error("缺少参数ID");
             }
-
+            #图片处理调用
+            $data = picHandle($data);
             // 验证
             if (class_exists($validateClass = Loader::parseClass(Config::get('app.validate_path'), 'validate', $controller))) {
                 $validate = new $validateClass();
@@ -252,4 +255,6 @@ trait Controller
 
         return ajax_return_adv('保存排序成功', '');
     }
+
+
 }

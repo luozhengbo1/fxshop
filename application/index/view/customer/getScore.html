@@ -12,6 +12,19 @@
     }
 </style>
 <section>
+    <div class="member-benefits">
+        <div class="benefit-header clear">
+            <div class="user-info">
+                <img class="user-header fl" src="{$user_data.headimgurl}">
+                <div class="fl ml10">
+                    <p class="lh20 grey white">{$user_data.nickname}<span class="user-score ml10">{$user_data.name}</span></p>
+                    <div class="user-score mt5 f10">我的积分：{$user_data.score}</div>
+                </div>
+            </div>
+            <img class="benefit-bg2" src="__STATIC__/index/images/benefit-bg2.png">
+        </div>
+    </div>
+    <p class="lh40 bg_white pl10">做任务赚积分</p>
     <ul class="get-score">
         <li class="bg_white">
             <a class="clear" href="{:url('customer/userinfo')}"  >

@@ -57,7 +57,9 @@ function layer_msg(msg){
         ,time: 2 //2秒后自动关闭
     });
 }
-
+function pc_layer_msg(msg) {
+    return layer.msg(msg);
+}
 /*
 *弹出提示信息后跳转
 */

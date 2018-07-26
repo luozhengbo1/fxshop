@@ -55,6 +55,7 @@ class Goods extends Controller
             $allData['propty_name_val'] = json_decode(str_replace("&quot;", "\"", $allData['propty_name_val'] ),true);
     		$validate = \think\Loader::validate('Goods');
             $data = $allData;
+            $data = picHandle($data);
 			if(!$validate->check($data)){
 			    return $validate->getError();
 			}
@@ -264,6 +265,7 @@ class Goods extends Controller
 //            dump($allData);die;
             $validate = \think\Loader::validate('Goods');
             $data = $allData;
+            $data = picHandle($data);
             if(!$validate->check($data)){
                 return $validate->getError();
             }

@@ -61,13 +61,14 @@ class Customer extends Mustlogin
         #待收货
         $count_take_delivery = Db::table('fy_order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order.order_status' => 1, 'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 1])
+            ->where(['fy_order.openid' => $user_session['openid'],  'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 1])
             ->count();
         #退货退款
         $count_refund = Db::table('fy_order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order.order_status' => ['in', 4], 'fy_order.pay_status' => 1])
+            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order_goods.is_return' =>1 , 'fy_order.pay_status' => 1])
             ->count();
+        #待评价
         $count_evaluate = Db::table('fy_order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
             ->where(['fy_order.openid' => $user_session['openid'], 'fy_order.order_status' => 1, 'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 2])
@@ -331,7 +332,7 @@ class Customer extends Mustlogin
             $this->assign('user', $userData);
             $this->assign('flag', $res ? 1 : 0);
             $this->assign('titleName', '签到');
-            return $this->view->fetch('mysign');
+            return $this->view->fetch('mySign');
         }
     }
 
@@ -574,7 +575,15 @@ class Customer extends Mustlogin
      */
     public function getscore()
     {
+        //会员信息：等级、加入时间、现有经验值、下一等级名称、下一等级起始经验值、达到下一等级所需经验值
+        $user_session = session('wx_user');
+        $user_data = Db::table('fy_customer')
+            ->alias('c')
+            ->join('fy_customer_grade g', 'g.experience_start <= c.experience and g.experience_end >= c.experience')
+            ->where('openid', $user_session['openid'])
+            ->find();
         $this->assign('titleName', "赚积分");
+        $this->assign('user_data', $user_data);
         return $this->view->fetch("getScore");
     }
 

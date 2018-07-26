@@ -574,6 +574,65 @@ function getAllChildcateIds($categoryID)
     //return $array //返回数组
 }
 
+
+
+#图片处理方法 垃圾
+ function  picHandle(&$data)
+{
+    #将确定上传的图片将图片移植到其他目录
+    if(array_key_exists('pic',$data) || array_key_exists('main_image',$data)||  array_key_exists('main_pic',$data)){
+        $pic = 'pic';
+        $main_image = 'main_image';
+        $main_pic = 'main_pic';
+
+        #如果pic是数组 或不是数组
+        if(isset($data['pic']) && is_array($data['pic']) ){
+                foreach ($data['pic'] as $k=>$v){
+                    $pathInfoDatak =  pathinfo($data['pic'][$k]);
+                    $replaceDirk =  str_replace('/tmp','pic',$pathInfoDatak['dirname']);
+                    if(!is_dir($replaceDirk) ){
+                        mkdir($replaceDirk,0777,true);
+                        chown($replaceDirk,'www');
+                    }
+                    $pivPath = ROOT_PATH.'public'.$data['pic'][$k];
+                    $replacePic = str_replace('/tmp','/pic',$data['pic'][$k]);
+                    $descPath = ROOT_PATH.'public'.$replacePic;
+                    if(file_exists( $pivPath)){
+                        copy($pivPath,$descPath);
+                    }
+                    $data['pic'][$k]=$replacePic;
+                }
+        }else{
+            $picKey = $pic;
+        }
+        if(isset($data[$main_image])){
+            $picKey = $main_image;
+        }
+        if(isset($data[$main_pic])){
+            $picKey = $main_pic;
+        }
+        if( isset($data[$picKey]) ){
+            $pathInfoData =  pathinfo($data[$picKey]);
+            $replaceDir =  str_replace('/tmp','pic',$pathInfoData['dirname']);
+            if(!is_dir($replaceDir) ){
+                mkdir($replaceDir,0777,true);
+//                chown($replaceDir,'www');
+            }
+            $pivPath = ROOT_PATH.'public'.$data[$picKey];
+            $replacePic = str_replace('/tmp','/pic',$data[$picKey]);
+            $descPath = ROOT_PATH.'public'.$replacePic;
+            if(file_exists( $pivPath)){
+                copy($pivPath,$descPath);
+            }
+            $data[$picKey]=$replacePic;
+        }
+
+
+
+    }
+//    dump($data);
+    return $data;
+}
 /**
  * 验证规则扩展
  */
@@ -611,3 +670,5 @@ function getAllChildcateIds($categoryID)
         return false;
     }
 ]);
+
+
