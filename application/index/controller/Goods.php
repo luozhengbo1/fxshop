@@ -110,10 +110,10 @@
             $good = Db::name('goods_comment')
                 ->where(['status'=>1,'goods_id'=>$id,'avg_score'=>['between',[4,5] ]])
                 ->count();
-            echo Db::name('goods_comment')->getLastSql();
-            dump($bad);
-            dump($mid);
-            dump($good);
+//            echo Db::name('goods_comment')->getLastSql();
+//            dump($bad);
+//            dump($mid);
+//            dump($good);
             $this->view->assign('bad',   $bad);
             $this->view->assign('mid',   $mid);
             $this->view->assign('good',   $good);
