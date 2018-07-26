@@ -1,4 +1,6 @@
 <td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
+<td>{$vo.openid}</td>
+<td>{$vo.headimgurl}</td>
 <td>{$vo.username|high_light=$Request.param.username}</td>
 <td>{$vo.nickname}</td>
 <td>{if condition="$vo.sex==1"}男{elseif condition="$vo.sex==2"/}女{else /}未知{/if}</td>
@@ -8,15 +10,13 @@
 <td>{$vo.score}</td>
 <td>{$vo.experience}</td>
 <td><?php
-        if($vo['grade_id']==0){
-            echo '未知等级';
-        }else{
-            $grade = \think\Db::name('customer_grade')->where(['id'=>$vo['grade_id']])->find();
-              echo $grade['name'];
-         }
-    ?></td>
-<td>{$vo.headimgurl}</td>
-<td>{$vo.openid}</td>
+$grade_res = \think\Db::table('fy_customer')->alias('c')
+    ->join('fy_customer_grade g','g.experience_start <= c.experience and g.experience_end >= c.experience')
+    ->field('g.name')
+    ->where(['c.id'=>$vo['id'],'c.isdelete'=>'0'])
+    ->find();
+    echo $grade_res['name'];
+?></td>
 <td>{$vo.login_ip}</td>
 <td>{$vo.create_time}</td>
-<td>{$vo.update_time}</td>
+<!--<td>{$vo.update_time}</td>-->
