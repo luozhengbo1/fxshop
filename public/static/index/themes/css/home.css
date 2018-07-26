@@ -4134,10 +4134,12 @@ a {
 }
 .deal-list .deal-time{
 	width: 15%;
+	line-height: 26px;
 
 }
 .deal-list .product-img{
 	width: 15%;
+	line-height: 60px;
 }
 .deal-list .product-img img{
 	max-width: .5rem;

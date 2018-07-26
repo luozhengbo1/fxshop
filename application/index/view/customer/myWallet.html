@@ -12,10 +12,10 @@
                    class="layui-btn layui-btn-sm layui-btn-normal  layui-btn-radius">消息</a>
             </div>
         </div>
-        <div>
+      <!--  <div>
             <p class="tc f14 pb10">余额</p>
             <p class="tc"><i class="f24" id="userMoney" data-value="0"></i></p>
-        </div>
+        </div>-->
     </div>
     <div class="user-deal-info mt10">
         <div class="pl10 pr10 clear">
@@ -43,7 +43,8 @@
                              </div>
                              <div class="product-name">
                                  <p class="f16 bold">-27.00</p>
-                                 <p class="mt5 ellipsis-oneline">回城纸质蛋糕回城纸质蛋糕回城纸质蛋糕回城纸质蛋糕回城纸质蛋糕</p>
+                                 <p class="ellipsis-oneline">回城纸质蛋糕回城纸质蛋糕回城纸质蛋糕回城纸质蛋糕回城纸质蛋糕</p>
+                                 <p class="grey f10">213456789023456345</p>
                              </div>
                              <div class="deal-status pt20 grey">支付成功</div>
                          </li>
@@ -56,7 +57,7 @@
 {include file="Public/footer-quick-nav"}
 <script>
     $(function () {
-        countUpFun('userMoney');
+       /* countUpFun('userMoney');*/
         loadDealData()
     })
 
@@ -95,38 +96,40 @@
             var length = getJsonObjLength(data[i]);
             for (var j = 0, data_i_length = length - 2; j < data_i_length; j++) {
                 console.log(data[i][j]);
+                var type = data[i][j].type
+                    ,image ="__STATIC__/index/images/image/other.jpg"
+                    ,dealName="其他"
+                    ,dealStatus='支付成功'
+                ;
                 html += '    <ul class="deal-list">';
-                html += '        <li class="clear bg_white">';
+                html += '        <li class="clear bg_white" style="border-bottom: 1px dotted grey;">';
                 html += '            <div class="deal-time">';
                 html += '                <p class="tc f14">' + data[i][j].day + '</p>';
                 html += '                <p class="tc f18 bold mt5">' + data[i][j].month + '</p>';
                 html += '            </div>';
-                if (data[i][j].type == 1) {
-                    html += '            <div class="product-img">';
-                    html += '                <img  src="__STATIC__/index/images/image/goods.jpg">';
-                    html += '            </div>';
-                    html += '            <div class="product-name">';
-                    html += '                <p class="mt5 ellipsis-oneline">商品[消费]</p>';
-                } else if (data[i][j].type == 2) {
-                    html += '            <div class="product-img">';
-                    html += '                <img  src="__STATIC__/index/images/image/refund.jpg">';
-                    html += '            </div>';
-                    html += '            <div class="product-name">';
-                    html += '                <p class="mt5 ellipsis-oneline">商品[退款]</p>';
-                } else {
-                    html += '            <div class="product-img">';
-                    html += '                <img  src="__STATIC__/index/images/image/other.jpg">';
-                    html += '            </div>';
-                    html += '            <div class="product-name">';
-                    html += '                <p class="mt5 ellipsis-oneline">其他</p>';
+                switch(type)
+                {
+                    case 1:
+                        image = "__STATIC__/index/images/image/goods.jpg";
+                        dealName="商品[消费]"
+                        dealStatus='支付成功'
+                        break;
+                    case 2:
+                        image = "__STATIC__/index/images/image/refund.jpg";
+                        dealName="商品[退款]"
+                        dealStatus="退款成功"
+                        break;
                 }
-                html += '                <p class="f16 bold">' + data[i][j].money + '</p>';
+
+                html += '            <div class="product-img">';
+                html += '                <img  src="'+image+'">';
                 html += '            </div>';
-                if (data[i][j].type == 2) {
-                    html += '            <div class="deal-status pt20 grey">退款成功</div>';
-                } else {
-                    html += '            <div class="deal-status pt20 grey">支付成功</div>';
-                }
+                html += '            <div class="product-name">';
+                html += '                <p class="ellipsis-oneline lh20">'+dealName+'</p>';
+                html += '                <p class="f16 mb5 bold">' + data[i][j].money + '</p>';
+                html +='                 <p class="grey f10">'+data[i][j].order_id+'</p>'
+                html += '            </div>';
+                html += '            <div class="deal-status pt20 green">'+dealStatus+'</div>';
                 html += '        </li>';
                 html += '    </ul>';
             }
