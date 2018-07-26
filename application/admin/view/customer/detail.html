@@ -70,12 +70,13 @@
             <label class="form-label col-xs-3 col-sm-3">等级：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <input type="text" class="input-text" name="grade" value="<?php
-                       if($vo['grade_id']==0){
-                            echo '未知等级';
-                       } else {
-                            $grade = \think\Db::name('customer_grade')->where(['id'=>$vo['grade_id']])->find();
-                            echo $grade['name'];
-                       } ?>" disabled="disabled">
+                    $grade_res = \think\Db::table('fy_customer')->alias('c')
+                        ->join('fy_customer_grade g','g.experience_start <= c.experience and g.experience_end >= c.experience')
+                        ->field('g.name')
+                        ->where(['c.id'=>$vo['id'],'c.isdelete'=>'0'])
+                        ->find();
+                    echo $grade_res['name'];
+                ?>" disabled="disabled">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
