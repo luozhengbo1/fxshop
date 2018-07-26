@@ -2880,7 +2880,7 @@ span.pink-bg {
 	padding: .08rem;
 	width: 100%;
 	background: white;
-	margin-top: .1rem;
+	margin-top: .05rem;
 }
 .module-nav li{
 	width: 20%;
@@ -2902,8 +2902,8 @@ span.pink-bg {
 	width: 100%;
 }
 .module-active ul li:nth-child(1){
-	width: 48%;
-	margin-right: 2%;
+	width: 49%;
+	margin-right: 1%;
 }
 .module-active ul li:nth-child(2){
 	width: 50%;

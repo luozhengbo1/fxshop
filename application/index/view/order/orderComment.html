@@ -23,14 +23,15 @@
         margin-bottom: 4px;
         position: relative; display: inline-block;
     }
-    .upload-image-show img{ height: 70px; width: 70px;  margin-right: 6px}
+    .upload-image-show .showImg{ height: 66px; width: 66px;  margin-right: 6px}
 
     .upload-icon-wrap{
         border: 1px dotted grey;
-        height: 70px;
-        width: 70px;
+        height: 66px;
+        width: 66px;
         text-align: center;
         padding-top: 16px;
+        display: inline-block;
     }
 
 </style>
@@ -47,9 +48,10 @@
         <section class="section-group p10">
             <textarea style="border: none" name="desc"  data-text="商品描述" placeholder="宝贝满足你的期待吗？说说它的优点和美中不足的地方吧。" class="layui-textarea "></textarea>
             <div class="layui-upload clear">
-                <div id="imageShow" class="upload-image-show fl"></div>
-                <div class="upload-icon-wrap fl " id="uploadBtn">
-                    <img width="30" src="__STATIC__/index/images/photo.png">
+                <div id="imageShow" class="upload-image-show fl">
+                    <div class="upload-icon-wrap mr5" id="uploadBtn">
+                        <img width="30" src="__STATIC__/index/images/photo.png">
+                    </div>
                 </div>
             </div>
         </section>
@@ -70,7 +72,6 @@
     </div>
 </div>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
-<script type="text/javascript" src="__STATIC__/index/plugins/layui-v2.3.0/layui.js"></script>
 
 <script>
     var url={
@@ -135,15 +136,18 @@
                 //预读本地文件示例，不支持ie8
                 obj.preview(function(index, file, result){
                     var html ='<div class="singer-image" style="" >';
-                    html +='<img  src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">';
+                    html +='<img  src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img showImg">';
                     html +='<i class="close-btn" onclick="dele(this)"></i></div>';
-                    $('#imageShow').append(html);
+                    $('#imageShow').prepend(html);
                 });
             }
             ,done: function(data){
                 console.log(data.data.name)
                 $('#imageShow').append('<input type="hidden" class="pic" name="pic" value="'+data.data.name+'">')
                 //上传完毕
+                //上传文件个数大于了5个
+                isShowUploadBtn();
+
             }
             ,error: function(){
                 //演示失败状态，并实现重传
@@ -169,11 +173,11 @@
             data:data,
             dataType:'json',
             success: function(data){
-                layer_msg(data.msg);
+                debugger;
+                pc_layer_msg(data.msg);
                 setTimeout(function () {
                     window.location.href= url.returnUrl;
-
-                },1500)
+                },1500);
             }
 
         })
@@ -181,9 +185,18 @@
     }
     function dele(_this) {
         $(_this).parents('.singer-image').remove();
+        isShowUploadBtn();
     }
     function saveComplete() {
 
+    }
+    function isShowUploadBtn() {
+        var imageNum= $('#imageShow').find('.singer-image').size();
+        if( imageNum >=5){
+            $('#uploadBtn').fadeOut();
+        }else if(imageNum<5){
+            $('#uploadBtn').fadeIn();
+        }
     }
 </script>
 
