@@ -6,13 +6,6 @@
 	
 	Class Goods extends Mustlogin
 	{
-        protected $userInfo;
-		#获取热销商品和其他显示的商品
-        public function __construct()
-        {
-            parent::__construct();
-            $this->userInfo = Session::get('wx_user');
-        }
         #获取商品的
         public function  getGoodsHotOrOther($page,$size,$show_area='3')
         {
@@ -85,10 +78,8 @@
             $lottery = Db::name('lottery')
                 ->where(['goods_id'=>$id,'isdelete'=>0,'status'=>1])
                 ->find();
-
             $this->view->assign('goods',$goods);
             $this->view->assign('skuData',$skuData);
-//            dump($skuData);die;
             $this->view->assign('proprety_name',$proprety_name);
             $this->view->assign('proprety_name_val',$proprety_name_val);
             $this->view->assign('lottery',$lottery);
@@ -98,26 +89,25 @@
 //           dump($proprety_name_val);
            //dump($skuData);die;
             $this->view->assign('guestGoods',$this->guestYouLike($id));
-//            dump($this->guestYouLike($id));
-//            die;
+            $arr = $this->getGoodsgoodOrBad($id);
+            $this->view->assign('bad', $arr['bad']  );
+            $this->view->assign('mid', $arr['mid'] );
+            $this->view->assign('good', $arr['good'] );
+            return $this->view->fetch();
+        }
 
+        public function getGoodsgoodOrBad($id)
+        {
             $bad = Db::name('goods_comment')
-                ->where(['status'=>1,'goods_id'=>$id,'avg_score'=>['between',[0,1] ]])
+                ->where(['status'=>1,'goods_id'=>$id,'avg_score'=>['between',[0,2] ]])
                 ->count();
             $mid = Db::name('goods_comment')
-                ->where(['status'=>1,'goods_id'=>$id,'avg_score'=>['between',[2,3] ]])
+                ->where(['status'=>1,'goods_id'=>$id,'avg_score'=>['between',[2,4] ]])
                 ->count();
             $good = Db::name('goods_comment')
                 ->where(['status'=>1,'goods_id'=>$id,'avg_score'=>['between',[4,5] ]])
                 ->count();
-//            echo Db::name('goods_comment')->getLastSql();
-//            dump($bad);
-//            dump($mid);
-//            dump($good);
-            $this->view->assign('bad',   $bad);
-            $this->view->assign('mid',   $mid);
-            $this->view->assign('good',   $good);
-            return $this->view->fetch();
+            return ['bad'=>$bad,'mid'=>$mid,'good'=>$good];
         }
 
         #商品搜索
@@ -125,6 +115,7 @@
         {
             $name = $this->request->param('goodsName');
             if(empty($name) ){
+
                 return ajax_return_error('缺少搜索参数');
             }
             $page = $this->request->param('page');
@@ -134,14 +125,12 @@
                     'status'=>1,
                     'isdelete'=>0,
                     'name'=>['like',"%$name%"],
+                    'show_area'=>['in',[3,4]],
                 ])
-                ->where('show_area', 'in', [3,4])
                 ->page( $page,$size)
                 ->select();
             #记录搜索词
-            $userInfo=[];
-            $userInfo =  Session::get('wx_user');
-            $data['openid'] =$userInfo['openid'];
+            $data['openid'] =$this->userInfo['openid'];
             $data['search'] =$name;
             $data['create_time'] = time();
             Db::name('search')->insert($data);
@@ -250,23 +239,12 @@
                     ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'goods_id'=>$data['id'],'avg_score'=>['between',[$data['start'],$data['end'] ]]])
                     ->page($page,$size)
                     ->count();
-
                 return ajax_return($comment,'ok','200');
-
             }else{
-//                dump();
-                $bad = Db::name('goods_comment')
-                    ->where(['goods_id'=>$this->request->param('goods_id'),'status'=>1,'avg_score'=>['between',[0,1] ]])
-                    ->count();
-                $mid = Db::name('goods_comment')
-                    ->where(['goods_id'=>$this->request->param('goods_id'),'status'=>1,'avg_score'=>['between',[2,3] ]])
-                    ->count();
-                $good = Db::name('goods_comment')
-                    ->where(['goods_id'=>$this->request->param('goods_id'),'status'=>1,'avg_score'=>['between',[4,5] ]])
-                    ->count();
-                $this->view->assign('bad',   $bad);
-                $this->view->assign('mid',   $mid);
-                $this->view->assign('good',   $good);
+                $arr = $this->getGoodsgoodOrBad( $this->request->param('goods_id'));
+                $this->view->assign('bad', $arr['bad']  );
+                $this->view->assign('mid', $arr['mid'] );
+                $this->view->assign('good', $arr['good'] );
                 $this->view->assign('goods_id',    $this->request->param('goods_id'));
                 return $this->view->fetch('commentsList');
             }

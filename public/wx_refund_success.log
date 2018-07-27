@@ -395,4 +395,52 @@ Array
     [total_fee] => 1
     [transaction_id] => 4200000155201807240520562861
 )
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [cash_fee] => 1
+    [cash_refund_fee] => 1
+    [coupon_refund_count] => 0
+    [coupon_refund_fee] => 0
+    [mch_id] => 1441217402
+    [nonce_str] => 4427kwS1ECwvGZ2m
+    [out_refund_no] => 5b5ad3b5910031532679093
+    [out_trade_no] => 144121740220180727160318
+    [refund_channel] => Array
+        (
+        )
+
+    [refund_fee] => 1
+    [refund_id] => 50000507372018072705720265739
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 2541C4A70E81EC006B26FD74A0B738C2
+    [total_fee] => 1
+    [transaction_id] => 4200000158201807273616568013
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [cash_fee] => 4
+    [cash_refund_fee] => 4
+    [coupon_refund_count] => 0
+    [coupon_refund_fee] => 0
+    [mch_id] => 1441217402
+    [nonce_str] => tGScmKGOmDYFyR89
+    [out_refund_no] => 5b5ad5da8fbdf1532679642
+    [out_trade_no] => 144121740220180727161505
+    [refund_channel] => Array
+        (
+        )
+
+    [refund_fee] => 4
+    [refund_id] => 50000307482018072705820139690
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 8D8BCEFCFDBE2E6CDAE150F1BDBC5767
+    [total_fee] => 4
+    [transaction_id] => 4200000158201807272552454843
+)
 

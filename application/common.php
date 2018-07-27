@@ -584,8 +584,8 @@ function getAllChildcateIds($categoryID)
         $pic = 'pic';
         $main_image = 'main_image';
         $main_pic = 'main_pic';
-
         #如果pic是数组 或不是数组
+        $picKey='';
         if(isset($data['pic']) && is_array($data['pic']) ){
                 foreach ($data['pic'] as $k=>$v){
                     $pathInfoDatak =  pathinfo($data['pic'][$k]);
@@ -593,12 +593,12 @@ function getAllChildcateIds($categoryID)
                         $replaceDirk =  str_replace('/tmp','pic',$pathInfoDatak['dirname']);
                         if(!is_dir($replaceDirk) ){
                             mkdir($replaceDirk,0777,true);
-                            chown($replaceDirk,'www');
                         }
                         $pivPath = ROOT_PATH.'public'.$data['pic'][$k];
                         $replacePic = str_replace('/tmp','/pic',$data['pic'][$k]);
                         $descPath = ROOT_PATH.'public'.$replacePic;
-                        if(file_exists( $pivPath)){
+                        if( is_file( $pivPath) ){
+                            file_put_contents('test.txt',$pivPath."\r".$descPath,8);
                             copy($pivPath,$descPath);
                         }
                         $data['pic'][$k]=$replacePic;
@@ -620,7 +620,6 @@ function getAllChildcateIds($categoryID)
                 $replaceDir =  str_replace('/tmp','pic',$pathInfoData['dirname']);
                 if(!is_dir($replaceDir) ){
                     mkdir($replaceDir,0777,true);
-//                chown($replaceDir,'www');
                 }
                 $pivPath = ROOT_PATH.'public'.$data[$picKey];
                 $replacePic = str_replace('/tmp','/pic',$data[$picKey]);
