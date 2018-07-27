@@ -54,7 +54,7 @@ $js_api_parameters = base64_decode($_GET['js_api_parameters']);
                     if(res.err_msg=='get_brand_wcpay_request:ok'){
                         setTimeout(function(){
                             window.location.href = "{:url('order/index',array('param'=>'all'))}";
-                        },2000);
+                        },4000);
                     }else{
                         history.back(-1);
                     }

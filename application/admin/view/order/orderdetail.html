@@ -59,7 +59,8 @@
 
         <td class="f-14">
           {if condition="$vo.is_return eq 1"}
-          <a href="javascript:;" onclick="refundHandle('{$vo[\'order_id\']}',{$vo['id']})" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 确定退款</a>
+          <a href="javascript:;" onclick="refundHandle('{$vo[\'order_id\']}',{$vo['id']},'yes')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 确定退款</a>
+          <a href="javascript:;" onclick="refundHandle('{$vo[\'order_id\']}',{$vo['id']},'no')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 拒绝退款</a>
           {elseif  condition="$vo.is_return eq 2" /}
           已退款
           {/if}
@@ -127,12 +128,12 @@
                })
            }
        }
-       function refundHandle(order_id,id) {
+       function refundHandle(order_id,id,flag) {
            if(order_id && id ){
                $.ajax({
                    url:"{:url('order/refund')}",
                    type:'post',
-                   data:{'order_id':order_id,'id':id},
+                   data:{'order_id':order_id,'id':id,'flag':flag},
                    success:function (res) {
                        alert(res.msg)
                        document.location.relaod();
