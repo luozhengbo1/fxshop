@@ -108,6 +108,11 @@ class Address extends Mustlogin
             if (!$id) {
                 return $this->error('缺少参数id');
             }
+            $res = Db::table('fy_customer_address')->where('id',$id)->find();
+            if($res['status']==1){
+                $address = Db::table('fy_customer_address')->where(['id'=>['not in',$id],'uid'=>$res['uid']])->order('updatetime','desc')->find();
+                Db::table('fy_customer_address')->where('id',$address['id'])->update(['status'=>1]);
+            }
             Db::table('fy_customer_address')->delete($id);
             return ajax_return('', '删除成功', 200);
         }
