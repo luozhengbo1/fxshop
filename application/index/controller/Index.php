@@ -2,13 +2,18 @@
 
 namespace app\index\controller;
 
+use think\Cache;
 use think\Controller;
 use think\Db;
+use think\Hook;
+use think\Session;
 
 class Index extends Mustlogin
 {
     public function index()
     {
+        $this->userInfo['uid'] = $this->userInfo['id'];
+        Hook::exec('app\\index\\behavior\\LoginLog', 'run',  $this->userInfo);
         #获取轮播图数据
         $sildeShow = new  Sildeshow($num = 6);
         $getSildeShow = $sildeShow->getSildeShow();
@@ -18,10 +23,6 @@ class Index extends Mustlogin
         $getModular = $modular->getModular();
         $this->view->assign('modular', $getModular);
         $this->view->assign('titleName', "泛亚商城");
-        /* dump($getSildeShow);*/
-        /* dump($getModular);*/
-        /* die;*/
-        $this->view->assign('param', $this->request->param('param'));
         return $this->fetch();
     }
 
@@ -31,18 +32,12 @@ class Index extends Mustlogin
         return $this->view->fetch();
     }
 
-
     public function demo()
     {
         $this->assign('titleName', "demo");
         return $this->view->fetch();
     }
 
-    public function wxpay()
-    {
-        $this->assign('titleName', "微信支付");
-        return $this->view->fetch();
-    }
 }
 
 

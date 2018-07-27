@@ -121,7 +121,7 @@
                 foreach ($storeData as $v) {
                     #积分判断
                     $goodsData = Db::name('goods')->where(['id'=>$v['goodsId']])->find();
-                    if($goodsData['show_area']==2){
+                    if($goodsData['show_area']==2 || $goodsData['show_area']==5){
                         $score+=$goodsData['score'];
                     }
                     #库存判断
@@ -166,7 +166,7 @@
                     if ($goodsAttribute['store'] < $v['num']) {
                         return ajax_return($goods['name'], '该商品库存不足，还剩' . $goodsAttribute['store'], '500');
                     }
-                    if($goods['show_area']==2){
+                    if($goods['show_area']==2 || $goods['show_area']==5){
                         $totalType +=1;
                     }
                 }
@@ -215,6 +215,7 @@
                     $orderRow[$k] = array(
                         "order_id" => $orderId.$sonId[$k],
                         "address_id" => $data[$k]['addressId'],
+                        "address_detail" => json_encode(Db::name('address')->where(['id'=>$data[$k]['addressId']])->find()),
                         "openid" => $this->userInfo['openid'],
                         "customer_name" => $this->userInfo['nickname'],
                         "total_price" => $userPrice[$k],
@@ -251,6 +252,7 @@
                     $orderGoods[$k]['goods_detail'] = json_encode($goodsData);
                     $orderGoods[$k]['openid'] = $this->userInfo['openid'];
                     $orderGoods[$k]['address_id'] = $v['addressId'] ;
+                    $orderGoods[$k]['address_detail']= json_encode(Db::name('address')->where(['id'=> $v['addressId'] ])->find());
                     $orderGoods[$k]['user_id'] = $goodsData['user_id'] ;
                     foreach ($orderRow as $value ){
                         if($goodsData['user_id'] ==$value['user_id'] ){
@@ -435,7 +437,7 @@
             foreach ($data  as $val) {
                 $goods = Db::name('goods')->where(['id'=>$val['goodsId']])->find();
                 $res = Db::name('goods_attribute')->field('price,point_score')->where(['id'=>$val['skuId']])->find();
-                if($goods['show_area']==2){
+                if($goods['show_area']==2 ||$goods['show_area']==5 ){
                     if (isset($val['num'])) {
                         $pay += $res['point_score'] * $val['num'];
                     }
@@ -517,7 +519,7 @@
 
                     Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->update([
                         'experience'=>$user['experience']+$goods['return_score'],
-                        'score'=>$user['experience']+$goods['return_score']*$grade['goods_score_rate'],
+                        'score'=>$user['score']+$goods['return_score']*$grade['goods_score_rate'],
                     ]);
 //                    echo Db::name('customer')->getLastSql();die;
                     #不同等级得到不同积分。
@@ -550,7 +552,7 @@
                 ])->find();
                 #积分商品不支持退货退款
                 $goods = Db::name('goods')->where(['id'=>$data['goods_id']])->find();
-                if($goods['show_area']==2){
+                if($goods['show_area']==2 || $goods['show_area']==5){
                     return ajax_return_error('积分商品不支持退换');
                 }
                 $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'],true);

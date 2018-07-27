@@ -589,18 +589,21 @@ function getAllChildcateIds($categoryID)
         if(isset($data['pic']) && is_array($data['pic']) ){
                 foreach ($data['pic'] as $k=>$v){
                     $pathInfoDatak =  pathinfo($data['pic'][$k]);
-                    $replaceDirk =  str_replace('/tmp','pic',$pathInfoDatak['dirname']);
-                    if(!is_dir($replaceDirk) ){
-                        mkdir($replaceDirk,0777,true);
-                        chown($replaceDirk,'www');
+                    if(substr($pathInfoDatak['dirname'],0,4)!="/pic" ){
+                        $replaceDirk =  str_replace('/tmp','pic',$pathInfoDatak['dirname']);
+                        if(!is_dir($replaceDirk) ){
+                            mkdir($replaceDirk,0777,true);
+                            chown($replaceDirk,'www');
+                        }
+                        $pivPath = ROOT_PATH.'public'.$data['pic'][$k];
+                        $replacePic = str_replace('/tmp','/pic',$data['pic'][$k]);
+                        $descPath = ROOT_PATH.'public'.$replacePic;
+                        if(file_exists( $pivPath)){
+                            copy($pivPath,$descPath);
+                        }
+                        $data['pic'][$k]=$replacePic;
                     }
-                    $pivPath = ROOT_PATH.'public'.$data['pic'][$k];
-                    $replacePic = str_replace('/tmp','/pic',$data['pic'][$k]);
-                    $descPath = ROOT_PATH.'public'.$replacePic;
-                    if(file_exists( $pivPath)){
-                        copy($pivPath,$descPath);
-                    }
-                    $data['pic'][$k]=$replacePic;
+
                 }
         }else{
             $picKey = $pic;
@@ -613,18 +616,21 @@ function getAllChildcateIds($categoryID)
         }
         if( isset($data[$picKey]) ){
             $pathInfoData =  pathinfo($data[$picKey]);
-            $replaceDir =  str_replace('/tmp','pic',$pathInfoData['dirname']);
-            if(!is_dir($replaceDir) ){
-                mkdir($replaceDir,0777,true);
+            if(substr($pathInfoData['dirname'],0,4)!="/pic" ){
+                $replaceDir =  str_replace('/tmp','pic',$pathInfoData['dirname']);
+                if(!is_dir($replaceDir) ){
+                    mkdir($replaceDir,0777,true);
 //                chown($replaceDir,'www');
+                }
+                $pivPath = ROOT_PATH.'public'.$data[$picKey];
+                $replacePic = str_replace('/tmp','/pic',$data[$picKey]);
+                $descPath = ROOT_PATH.'public'.$replacePic;
+                if(file_exists( $pivPath)){
+                    copy($pivPath,$descPath);
+                }
+                $data[$picKey]=$replacePic;
             }
-            $pivPath = ROOT_PATH.'public'.$data[$picKey];
-            $replacePic = str_replace('/tmp','/pic',$data[$picKey]);
-            $descPath = ROOT_PATH.'public'.$replacePic;
-            if(file_exists( $pivPath)){
-                copy($pivPath,$descPath);
-            }
-            $data[$picKey]=$replacePic;
+
         }
 
 

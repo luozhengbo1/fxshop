@@ -103,7 +103,7 @@ class Wechatpay extends Controller
             $wx_pay_refund_log_insert['create_time']= time();
             $wx_pay_refund_log_insert['money']= $sonId['total_price'];
             $wx_pay_refund_log_insert['type']=1;
-            $wx_pay_refund_log_insert['order_id']=$orderInfo['order_id'];
+            $wx_pay_refund_log_insert['order_id']=$orderInfo['out_trade_no'];
             #购买商品
             Db::name('wx_pay_refund_log')->insert($wx_pay_refund_log_insert);
         }
@@ -200,7 +200,7 @@ class Wechatpay extends Controller
             $wx_pay_refund_log_insert['create_time']= time();
             $wx_pay_refund_log_insert['money']= $order['total_price'];
             $wx_pay_refund_log_insert['type']=1;#购买商品
-            $wx_pay_refund_log_insert['order_id']=$orderInfo['order_id'];
+            $wx_pay_refund_log_insert['order_id']=$orderInfo['out_trade_no'];
             Db::name('wx_pay_refund_log')->insert($wx_pay_refund_log_insert);
         }
     }
@@ -281,7 +281,7 @@ class Wechatpay extends Controller
 //        $str = 'amount='.$params["amount"].'&check_name='.$params["check_name"].'&desc='.$params["desc"].'&mch_appid='.$params["mch_appid"].'&mchid='.$params["mchid"].'&nonce_str='.$params["nonce_str"].'&openid='.$params["openid"].'&partner_trade_no='.$params["partner_trade_no"].'&spbill_create_ip='.$params['spbill_create_ip'].'&key=7c82dcb3c8437f7c654b57fb0509944b';
 //        $sign = strtoupper(md5($str));
 ////        var_dump($sign);
-////        $sign =strtoupper(hash('sha256',$sign));
+////        $sign =strtoupper(hassh('sha256',$sign));
 ////        var_dump($sign);
 //        $params["sign"] = $sign;//签名
 //        $xml = $this->arrayToXml($params);

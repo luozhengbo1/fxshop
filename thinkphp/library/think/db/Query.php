@@ -27,6 +27,7 @@ use think\Model;
 use think\model\Relation;
 use think\model\relation\OneToOne;
 use think\Paginator;
+use think\Request;
 
 class Query
 {
@@ -1290,6 +1291,7 @@ class Query
      */
     public function paginate($listRows = null, $simple = false, $config = [])
     {
+        $config['query'] = isset($config['query']) ? $config['query'] : Request::instance()->param();
         if (is_int($simple)) {
             $total  = $simple;
             $simple = false;

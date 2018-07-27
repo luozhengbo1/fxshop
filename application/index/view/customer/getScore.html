@@ -3,7 +3,7 @@
 {include file="Public/header-title"}
 <!--赚积分-->
 <style>
-    .get-score li{
+    .get-score li {
         width: 100%;
         padding: 5px;
         border-radius: 6px;
@@ -17,7 +17,8 @@
             <div class="user-info">
                 <img class="user-header fl" src="{$user_data.headimgurl}">
                 <div class="fl ml10">
-                    <p class="lh20 grey white">{$user_data.nickname}<span class="user-score ml10">{$user_data.name}</span></p>
+                    <p class="lh20 grey white">{$user_data.nickname}<span
+                            class="user-score ml10">{$user_data.name}</span></p>
                     <div class="user-score mt5 f10">我的积分：{$user_data.score}</div>
                 </div>
             </div>
@@ -27,17 +28,60 @@
         </div>
     </div>
     <p class="lh40 bg_white pl10">做任务赚积分</p>
-    <ul class="get-score">
-        <li class="bg_white">
-            <a class="clear" href="{:url('customer/userinfo')}"  >
-                 <img width="40" class="fl mr10" src="__STATIC__/index/images/info-green.png">
-                <div class="fl">
-                    <p class="lh20">完善会员赢积分</p>
-                    <p class="lh20">完善任务奖励100积分</p>
-                </div>
-            </a>
-        </li>
-    </ul>
+    <div id="taskListWrap">
+        <ul class="get-score">
+            <li class="bg_white">
+                <a class="clear" href="{:url('customer/userinfo')}">
+                    <img width="40" class="fl mr10" src="__STATIC__/index/images/info-green.png">
+                    <div class="fl">
+                        <p class="lh20">完善会员赢积分</p>
+                        <p class="lh20">完善任务奖励100积分</p>
+                    </div>
+                </a>
+            </li>
+        </ul>
+        <ul id="taskList" class="get-score">
+
+        </ul>
+    </div>
 </section>
+<script>
+    $(function () {
+        loadOrderData()
+    })
+
+    function loadOrderData() {
+        initData('taskList');
+        pageload({
+            targetWarp: 'taskListWrap',
+            target: 'taskList',
+            page: 1,
+            size: 10,
+            ajaxData: {
+                url: "{:url('index/Customer/getscore')}",
+                data: {},
+            },
+            dealFun: dealData
+        });
+    }
+
+    function dealData(data) {
+        console.log(data)
+        var html = '';
+        for (var i = 0; i < data.length; i++) {
+            html += '<li class="bg_white">';
+            html += '   <a class="clear" href="'+data[i].url+'"  >';
+            html += '       <img width="40" class="fl mr10" src="'+data[i].main_pic+'">';
+            html += '       <div class="fl">';
+            html += '           <p class="lh20">'+data[i].name+'</p>';
+            html += '           <p class="lh20">'+data[i].desc+'</p>';
+            html += '       </div>';
+            html += '   </a>';
+            html += '</li>';
+        }
+        return html;
+    }
+
+</script>
 </body>
 </html>
