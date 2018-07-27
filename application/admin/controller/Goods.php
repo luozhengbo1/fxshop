@@ -216,7 +216,7 @@ class Goods extends Controller
     		}else{
                 $brandList = Db::name('brand')->select();
             }
-            $userList = Db::name('admin_user')->where('id>1')->select();
+            $userList = Db::name('admin_user')->where('id>1')->where('status',1)->select();
             $this->view->assign('userList',$userList);
             #渲染商品分类数
     		$this->view->assign('goodsClassList',getGoodsClassTree($this->uid));
@@ -491,7 +491,7 @@ class Goods extends Controller
             }else{
                 $brandList = Db::name('brand')->select();
             }
-            $userList = Db::name('admin_user')->where('id>1')->select();
+            $userList = Db::name('admin_user')->where('id>1')->where('status',1)->select();
             #商戶
             $this->view->assign('userList',$userList);
             #渲染商品分类数

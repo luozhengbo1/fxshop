@@ -61,12 +61,12 @@ class Customer extends Mustlogin
         #待收货
         $count_take_delivery = Db::table('fy_order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid' => $user_session['openid'],  'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 1])
+            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 1])
             ->count();
         #退货退款
         $count_refund = Db::table('fy_order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order_goods.is_return' =>1 , 'fy_order.pay_status' => 1])
+            ->where(['fy_order.openid' => $user_session['openid'], 'fy_order_goods.is_return' => 1, 'fy_order.pay_status' => 1])
             ->count();
         #待评价
         $count_evaluate = Db::table('fy_order')
@@ -329,8 +329,17 @@ class Customer extends Mustlogin
                 ->where('uid', $userData['id'])
                 ->where('addtime', 'between', [$today_start, $today_end])
                 ->find();
-            $this->assign('user', $userData);
             $this->assign('flag', $res ? 1 : 0);
+
+            //判断前一天是否签到
+            $beforeSign = Db::table('fy_customer_sign')->where('uid', $userData['id'])->order('addtime', 'desc')->find();//获取最新一条签到记录
+            $noSignDay1 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 00:00:00')) / 86400;//2天
+            $noSignDay2 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 23:59:59')) / 86400;//1天
+            //前一天未签到，continue_day重置为1，score+1更新到customer表
+            if (floor($noSignDay1) > 1 && $noSignDay2 > 1 && floor($noSignDay1) == $noSignDay2) {
+                $userData['continuity_day'] = 0;
+            }
+            $this->assign('user', $userData);
             $this->assign('titleName', '签到');
             return $this->view->fetch('mySign');
         }
@@ -492,9 +501,9 @@ class Customer extends Mustlogin
         $grade_res = Db::table('fy_customer_grade_desc')->where(['status' => 1, 'isdelete' => 0, 'type' => $type])->find();
         $this->assign('grade_res', $grade_res);
         $this->assign('user_data', $user_data);
-        if($type==1){
+        if ($type == 1) {
             $this->assign('titleName', "会员等级规则");
-        }else if($type==2){
+        } else if ($type == 2) {
             $this->assign('titleName', "会员升级攻略");
         }
         return $this->view->fetch("memberRule");
