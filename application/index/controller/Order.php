@@ -215,6 +215,7 @@
                     $orderRow[$k] = array(
                         "order_id" => $orderId.$sonId[$k],
                         "address_id" => $data[$k]['addressId'],
+                        "address_detail" => json_encode(Db::name('address')->where(['id'=>$data[$k]['addressId']])->find()),
                         "openid" => $this->userInfo['openid'],
                         "customer_name" => $this->userInfo['nickname'],
                         "total_price" => $userPrice[$k],
@@ -251,6 +252,7 @@
                     $orderGoods[$k]['goods_detail'] = json_encode($goodsData);
                     $orderGoods[$k]['openid'] = $this->userInfo['openid'];
                     $orderGoods[$k]['address_id'] = $v['addressId'] ;
+                    $orderGoods[$k]['address_detail']= json_encode(Db::name('address')->where(['id'=> $v['addressId'] ])->find());
                     $orderGoods[$k]['user_id'] = $goodsData['user_id'] ;
                     foreach ($orderRow as $value ){
                         if($goodsData['user_id'] ==$value['user_id'] ){
