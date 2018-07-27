@@ -6,7 +6,7 @@
 
 </style>
 <section>
-    <div id="dataListWrap">
+    <div id="dataListWrap" data-current="">
         <ul id="dataList" class="activity-list">
           <!-- <li>
                 <a href="javascript:;">
@@ -53,7 +53,7 @@
             html +='         <img  src="'+data[i].main_pic+'">';
             html +='         <p  class="f12 grey lh30 h30 pl10">'+new Date(parseInt(data[i].start_date)*1000).Format("yyyy-MM-dd hh:mm:ss")+'~'+new Date(parseInt(data[i].end_date)*1000).Format("yyyy-MM-dd hh:mm:ss")+'</p>';
             html +='         <div class="status-wrap"  >';
-            if( activeStatus(data[i].start_date,data[i].end_date) ==2){
+            if( activeStatus(data[i].start_date,data[i].end_date,parseInt("{$currentTime}")) ==2){
                 html +='             <span class="status ">已结束</span>';
             }
             html +='         </div>';

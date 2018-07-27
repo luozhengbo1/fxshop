@@ -29,6 +29,8 @@ Class MustLogin extends Controller
             $carNum +=$v['goods_num'];
         }
         if($carNum>999) $carNum=$carNum+'+';
+        $time = time();
+        $this->view->assign('currentTime',  $time);
         $this->assign('carNum', $carNum);
     }
 }

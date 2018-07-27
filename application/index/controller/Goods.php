@@ -114,9 +114,11 @@
 //            dump($bad);
 //            dump($mid);
 //            dump($good);
+
             $this->view->assign('bad',   $bad);
             $this->view->assign('mid',   $mid);
             $this->view->assign('good',   $good);
+
             return $this->view->fetch();
         }
 
