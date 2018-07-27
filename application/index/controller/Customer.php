@@ -326,9 +326,9 @@ class Customer extends Mustlogin
             $noSignDay2 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 23:59:59')) / 86400;//1天
             //前一天未签到，continue_day重置为1，score+1更新到customer表
             if (floor($noSignDay1) > 1 && $noSignDay2 > 1 && floor($noSignDay1) == $noSignDay2) {
-                $userData['continuity_day'] = 0;
+                $this->userInfo['continuity_day'] = 0;
             }
-            $this->assign('user', $userData);
+            $this->assign('user', $this->userInfo);
             $this->assign('titleName', '签到');
             return $this->view->fetch('mySign');
         }
