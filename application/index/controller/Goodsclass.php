@@ -22,7 +22,7 @@
         public  function  getGoodsClass()
         {
             $goodsClass = $this->model->where(['pid'=>0])->select();
-            return ajax_return($goodsClass,'no','500');
+            return ajax_return($goodsClass,'ok','200');
         }
 
         #获该分类或者子分类下的所有商品
