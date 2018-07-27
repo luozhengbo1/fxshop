@@ -22,10 +22,7 @@
         public  function  getGoodsClass()
         {
             $goodsClass = $this->model->where(['pid'=>0])->select();
-            if($goodsClass){
-                return ajax_return($goodsClass,'ok','200');
-            }
-            return ajax_return($goodsClass,'no','500');
+            return ajax_return($goodsClass,'ok','200');
         }
 
         #获该分类或者子分类下的所有商品
@@ -37,15 +34,10 @@
             #查询所有的子分类
             $goodsClassAllChild = getAllChildcateIds($goodsClassId);
             $goodsList = Db::name('goods')
-                ->where(['goods_class_id'=>['in',$goodsClassAllChild],'status'=>1,'isdelete'=>'0'])
+                ->where(['goods_class_id'=>['in',$goodsClassAllChild],'status'=>1,'isdelete'=>'0','show_area'=>['in',[3,4]]])
                 ->page($page,$size)
                 ->select();
-            if( empty($goodsList) ){
-                return ajax_return('','ok','200');
-            }else{
-                return ajax_return($goodsList,'ok','200');
-
-            }
+            return ajax_return($goodsList?$goodsList:'','ok','200');
         }
 
 	}

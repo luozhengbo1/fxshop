@@ -20,8 +20,9 @@ class Order extends Controller
         #0未支付1已支付2待评价，3待回复，6全部退款，7取消订单，8订单完成
         if ($this->request->param("order_status")) {
             $orderStatus  = $this->request->param("order_status");
-            if($orderStatus==0){#未支付
+            if($orderStatus==99){#未支付
                 $map['fy_order.pay_status'] = 0;
+                $map['fy_order.order_status'] = 0;
             }
             if($orderStatus==1){#待发货
                 $map['fy_order.pay_status'] = 1;
@@ -33,11 +34,11 @@ class Order extends Controller
             }
             if($orderStatus==3){#待退款
                 $map['fy_order.pay_status'] = 1;
-                $map['fy_order.is_return'] = 1;
+                $map['fy_order_goods.is_return'] = 1;
             }
             if($orderStatus==4){#待评价
                 $map['fy_order.pay_status'] = 1;
-                $map['fy_order.is_send'] = 2;
+                $map['fy_order_goods.is_send'] = 2;
             }
             if($orderStatus==5){#取消订单
                 $map['fy_order.order_status'] = 7;
@@ -91,6 +92,8 @@ class Order extends Controller
             $map['fy_order.user_id'] = $_SESSION['think']['auth_id'];
         }
         $map['fy_order.isdelete'] =0;
+//        dump($map);die;
+
         $userList = Db::name('admin_user')->where(['isdelete'=>0,'id'=>['>',1]])->select();
         $orderList = Db::name('order')
            ->field('fy_order.id,fy_order.buy_list,fy_order.address_id,fy_order.pay_status,
@@ -102,8 +105,11 @@ class Order extends Controller
             ->group('fy_order.order_id')
             ->paginate(5);
 //        dump($orderList);
+        // 获取分页显示
+//        $page = $orderList->render();
         $this->view->assign ('userList',$userList);
         $this->view->assign('list',$orderList);
+//        $this->view->assign('page', $page);
         $this->view->assign('count',count($orderList));
         return $this->  view->fetch();
     }
