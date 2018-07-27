@@ -40,7 +40,7 @@
                     <p>{$vo['val']}</p>
                     <div class="clear mt10">
                         <span class="fl red f16">
-                            <em class="goodPriceTitle" data-type="{$vo['settlement_type']}" data-score="{$vo['score']}" data-price="{$vo['price1']}" >
+                            <em class="goodPriceTitle" data-type="{$vo['settlement_type']}"  data-score="{$vo['point_score']??''}" data-price="{$vo['price1']}" >
                             </em>
                         </span>
                         <span class="fr"><em id="purchaseNum">{$vo['num']}</em>件</span>
@@ -176,7 +176,7 @@
                     totalPoint +=(parseInt(num)*parseFloat(pointScore));
                     break;
                 case 3:
-                    totalPoint=parseInt(num)*parseFloat(price);
+                    totalPoint +=(parseInt(num)*parseFloat(pointScore));
                     totalPrice += parseInt(num)*parseFloat(price);
                     break;
             }
