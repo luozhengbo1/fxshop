@@ -98,7 +98,7 @@ class Goods extends Controller
     		#原价
     		$goods['original_price'] = $data['original_price'];
     		#结算类型
-//    		$goods['settlement_type'] = $data['settlement_type'];
+    		$goods['settlement_type'] = $data['settlement_type'];
     		$goods['goods_class_id'] = $data['goods_class_id'];
     		$goods['goods_brand_id'] = $data['goods_brand_id'];
     		$goods['detail'] = $data['detail'];
@@ -303,7 +303,7 @@ class Goods extends Controller
             #原价
             $goods['original_price'] = $data['original_price'];
             #结算类型
-//            $goods['settlement_type'] = $data['settlement_type'];
+            $goods['settlement_type'] = $data['settlement_type'];
             $goods['goods_class_id'] = $data['goods_class_id'];
             $goods['goods_brand_id'] = $data['goods_brand_id'];
             $goods['detail'] = $data['detail'];
