@@ -616,7 +616,7 @@ function getAllChildcateIds($categoryID)
         }
         if( isset($data[$picKey]) ){
             $pathInfoData =  pathinfo($data[$picKey]);
-            if(substr($pathInfoDatak['dirname'],0,4)!="/pic" ){
+            if(substr($pathInfoData['dirname'],0,4)!="/pic" ){
                 $replaceDir =  str_replace('/tmp','pic',$pathInfoData['dirname']);
                 if(!is_dir($replaceDir) ){
                     mkdir($replaceDir,0777,true);
