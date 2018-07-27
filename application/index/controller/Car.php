@@ -69,7 +69,7 @@
                     return ajax_return_error('库存不足');
                 }
                 $goods = Db::name('goods')->where(['id'=>$data['goodsId']])->find();
-                if($goods['show_area']==2){
+                if($goods['show_area']==2 || $goods['show_area']==5 ){
                     $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
                     if($user['score']<$check['point_score']){
                         return ajax_return_error('你的积分不足，暂时不能加入购物车');

@@ -134,8 +134,8 @@
                     'status'=>1,
                     'isdelete'=>0,
                     'name'=>['like',"%$name%"],
+                    'show_area'=>['in',[3,4]],
                 ])
-                ->where('show_area', 'in', [3,4])
                 ->page( $page,$size)
                 ->select();
             #记录搜索词
