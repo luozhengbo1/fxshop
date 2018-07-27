@@ -9,17 +9,6 @@ use think\Session;
 
 Class Lottery extends Mustlogin
 {
-    protected $userInfo;
-
-    #获取热销商品和其他显示的商品
-    public function __construct()
-    {
-        parent::__construct();
-        $this->userInfo = Session::get('wx_user');
-        if (empty($this->userInfo['openid'])) {
-            $this->redirect(substr(url('Wechat/wxLogin', ['state' => myUrl()]), 0, -5));
-        }
-    }
 
     #券集市  取出没有结算，并且没有过期的奖券
     #根据分类id 查找商品 过滤条件：商品有券
@@ -155,8 +144,7 @@ Class Lottery extends Mustlogin
     public function mycardvoucher($page = '1', $size = '4', $status = '0')
     {
         if ($this->request->isAjax()) {
-            $user_session = session('wx_user');
-            $userdata = Db::table('fy_customer')->field('id')->where('openid', $user_session['openid'])->find();
+            $userdata = Db::table('fy_customer')->field('id')->where('openid', $this->userInfo['openid'])->find();
             //取未使用过的奖券
             if ($status == 0) {
                 $lottery_no_use = Db::table('fy_lottery_log')->alias('log')

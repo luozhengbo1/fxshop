@@ -7,24 +7,10 @@
 
 	Class Car extends Mustlogin
 	{
-        protected $userInfo;
-		#获取热销商品和其他显示的商品
-        public function __construct()
-        {
-            parent::__construct();
-            $this->model = Db::name('car');
-            $this->userInfo = Session::get('wx_user');
-            if( empty( $this->userInfo['openid']) ){
-                $this->redirect( substr(url('Wechat/wxLogin',['state'=>myUrl()]),0,-5) );
-            }
-        }
-
         #取出没有结算，并且没有过期的商品
         public function index()
         {
             if($this->request->isAjax()){
-                //$time2 + 3600*24*30<time();#过期
-                // $time=time()-3600*24*30;
                 $page = $this->request->param('page')?$this->request->param('page'):'1';
                 $size =  $this->request->param('size')?$this->request->param('size'):'10';
                 $carList =    Db::name('car')
@@ -39,20 +25,13 @@
                     ->page($page,$size)
                     ->order('c.create_time desc')
                     ->select();
-//                dump($carList);
-//                echo   Db::name('car')->getLastSql();die;
-                //if(!empty($carList )){
                     return ajax_return($carList,'ok','200');
-               /* }else{
-                    return ajax_return($carList,'no','400');
-                }*/
             }else{
                 $this->view->assign('titleName','购物车');
                 $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
                 $this->view->assign('user',  $user );
                 return $this->view->fetch();
             }
-
         }
         #未完成待续
         public function  addCar()
@@ -109,7 +88,6 @@
                     return ajax_return('','添加失败','500');
                 }
             }
-
 
         }
 

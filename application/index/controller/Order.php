@@ -517,7 +517,7 @@
 
                     Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->update([
                         'experience'=>$user['experience']+$goods['return_score'],
-                        'score'=>$user['experience']+$goods['return_score']*$grade['goods_score_rate'],
+                        'score'=>$user['score']+$goods['return_score']*$grade['goods_score_rate'],
                     ]);
 //                    echo Db::name('customer')->getLastSql();die;
                     #不同等级得到不同积分。

@@ -6,13 +6,6 @@
 	
 	Class Goods extends Mustlogin
 	{
-        protected $userInfo;
-		#获取热销商品和其他显示的商品
-        public function __construct()
-        {
-            parent::__construct();
-            $this->userInfo = Session::get('wx_user');
-        }
         #获取商品的
         public function  getGoodsHotOrOther($page,$size,$show_area='3')
         {
@@ -85,10 +78,8 @@
             $lottery = Db::name('lottery')
                 ->where(['goods_id'=>$id,'isdelete'=>0,'status'=>1])
                 ->find();
-
             $this->view->assign('goods',$goods);
             $this->view->assign('skuData',$skuData);
-//            dump($skuData);die;
             $this->view->assign('proprety_name',$proprety_name);
             $this->view->assign('proprety_name_val',$proprety_name_val);
             $this->view->assign('lottery',$lottery);
@@ -98,9 +89,6 @@
 //           dump($proprety_name_val);
            //dump($skuData);die;
             $this->view->assign('guestGoods',$this->guestYouLike($id));
-//            dump($this->guestYouLike($id));
-//            die;
-
             $bad = Db::name('goods_comment')
                 ->where(['status'=>1,'goods_id'=>$id,'avg_score'=>['between',[0,1] ]])
                 ->count();
@@ -110,10 +98,6 @@
             $good = Db::name('goods_comment')
                 ->where(['status'=>1,'goods_id'=>$id,'avg_score'=>['between',[4,5] ]])
                 ->count();
-//            echo Db::name('goods_comment')->getLastSql();
-//            dump($bad);
-//            dump($mid);
-//            dump($good);
             $this->view->assign('bad',   $bad);
             $this->view->assign('mid',   $mid);
             $this->view->assign('good',   $good);
@@ -139,9 +123,7 @@
                 ->page( $page,$size)
                 ->select();
             #记录搜索词
-            $userInfo=[];
-            $userInfo =  Session::get('wx_user');
-            $data['openid'] =$userInfo['openid'];
+            $data['openid'] =$this->userInfo['openid'];
             $data['search'] =$name;
             $data['create_time'] = time();
             Db::name('search')->insert($data);
@@ -250,9 +232,7 @@
                     ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'goods_id'=>$data['id'],'avg_score'=>['between',[$data['start'],$data['end'] ]]])
                     ->page($page,$size)
                     ->count();
-
                 return ajax_return($comment,'ok','200');
-
             }else{
 //                dump();
                 $bad = Db::name('goods_comment')
