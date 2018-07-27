@@ -582,18 +582,23 @@ class Customer extends Mustlogin
     /**
      * 赚积分
      */
-    public function getscore()
+    public function getscore($page = '1', $size = '10')
     {
-        //会员信息：等级、加入时间、现有经验值、下一等级名称、下一等级起始经验值、达到下一等级所需经验值
         $user_session = session('wx_user');
         $user_data = Db::table('fy_customer')
             ->alias('c')
             ->join('fy_customer_grade g', 'g.experience_start <= c.experience and g.experience_end >= c.experience')
             ->where('openid', $user_session['openid'])
             ->find();
-        $this->assign('titleName', "赚积分");
         $this->assign('user_data', $user_data);
-        return $this->view->fetch("getScore");
+        if ($this->request->isAjax()) {
+            $time = time();
+            $task_list = Db::table('fy_customer_task')->where(['status' => 1, 'isdelete' => 0,'start_date'=>['<=',$time],'end_date'=>['>=',$time]])->page($page, $size)->select();
+            return ajax_return($task_list,'OK',200);
+        }else{
+            $this->assign('titleName', "赚积分");
+            return $this->view->fetch("getScore");
+        }
     }
 
     /**
