@@ -34,7 +34,7 @@
         dele:"{:url('address/delete')}",
         list:"{:url('address/index')}",
         editDefaultAddr:"{:url('address/setDefault')}",
-        orderIndex:"{:url('index/order/affirmOrder')}",
+        hitoryUrl:localStorage.getItem('historyUrl'),
     }
     console.log(window.history)
    getListData();
@@ -89,7 +89,8 @@
   }
   function editComplete() {
       setTimeout(function () {
-          window.history.back();
+          window.location.href = url.hitoryUrl;
+       //   history.go(-1)
       },1500)
 
   }

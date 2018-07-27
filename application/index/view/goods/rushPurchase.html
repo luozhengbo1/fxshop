@@ -9,7 +9,7 @@
 </style>
 {include file="Public/header-search"}
 <div class="module-hot-goods  mt10">
-    <div id="dataListWrap" class="data-refresh-list-wrap">
+    <div id="dataListWrap" class="data-refresh-list-wrap" data-current="">
         <ul class="goods-list list clear grid" id="goodsList">
             <!--<li>
 
@@ -70,7 +70,7 @@
                 }
                 var width=parseInt((data[i].buy_num)/totalNum *100)+'%';
                 var price=notEmpty(data[i].basic_price);
-                var activeFlag =activeStatus(parseInt(data[i].start_date),parseInt(data[i].end_date))!=2?true:false;//活动区间
+                var activeFlag =activeStatus(parseInt(data[i].start_date),parseInt(data[i].end_date),parseInt("{$currentTime}"))!=2?true:false;//活动区间
                 if(data[i].price_real && data[i].price_real!=0){
                     price = notEmpty(data[i].price_real);
                 }
