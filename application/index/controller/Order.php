@@ -32,7 +32,7 @@
                 if($data['status']=='all'){
                     $where = ['fy_order.openid'=>$this->userInfo['openid']];
                 }else{
-//                    $this->userInfo['openid']="omQYXwM8TEkiBZR7Ldm891OOWbNQ";
+                    $this->userInfo['openid']="omQYXwM8TEkiBZR7Ldm891OOWbNQ";
 
                     #待付款
                     if($data['status']==0){

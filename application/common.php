@@ -584,8 +584,8 @@ function getAllChildcateIds($categoryID)
         $pic = 'pic';
         $main_image = 'main_image';
         $main_pic = 'main_pic';
-
         #如果pic是数组 或不是数组
+        $picKey='';
         if(isset($data['pic']) && is_array($data['pic']) ){
                 foreach ($data['pic'] as $k=>$v){
                     $pathInfoDatak =  pathinfo($data['pic'][$k]);
