@@ -82,7 +82,7 @@ class Customer extends Mustlogin
         $this->assign('titleName', '收藏夹');
         if ($this->request->isAjax()) {
             //查询用户id
-            $uid = $this->userinfo['id'];
+            $uid = $this->userInfo['id'];
             //根据customer.id=collect.uid查询用户收藏的所有商品信息（goods.id=collect.goods_id）
             $list_collect = Db::table('fy_customer_collect')
                 ->alias('collect')

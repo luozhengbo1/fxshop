@@ -29,10 +29,11 @@
                 $size = $this->request->param('size')?$this->request->param('size'):4;
                 $data = $this->request->post();
 
+                $this->userInfo['openid']="omQYXwM8TEkiBZR7Ldm891OOWbNQ";
                 if($data['status']=='all'){
                     $where = ['fy_order.openid'=>$this->userInfo['openid']];
                 }else{
-//                    $this->userInfo['openid']="omQYXwM8TEkiBZR7Ldm891OOWbNQ";
+
                     #待付款
                     if($data['status']==0){
                         $where = ['fy_order.openid'=>$this->userInfo['openid'],'fy_order.pay_status'=>0,'fy_order.order_status'=>0];
@@ -215,7 +216,7 @@
                     $orderRow[$k] = array(
                         "order_id" => $orderId.$sonId[$k],
                         "address_id" => $data[$k]['addressId'],
-                        "address_detail" => json_encode(Db::name('address')->where(['id'=>$data[$k]['addressId']])->find()),
+                        "address_detail" => json_encode(Db::name('customer_address')->where(['id'=>$data[$k]['addressId']])->find()),
                         "openid" => $this->userInfo['openid'],
                         "customer_name" => $this->userInfo['nickname'],
                         "total_price" => $userPrice[$k],
@@ -252,7 +253,7 @@
                     $orderGoods[$k]['goods_detail'] = json_encode($goodsData);
                     $orderGoods[$k]['openid'] = $this->userInfo['openid'];
                     $orderGoods[$k]['address_id'] = $v['addressId'] ;
-                    $orderGoods[$k]['address_detail']= json_encode(Db::name('address')->where(['id'=> $v['addressId'] ])->find());
+                    $orderGoods[$k]['address_detail']= json_encode(Db::name('customer_address')->where(['id'=> $v['addressId'] ])->find());
                     $orderGoods[$k]['user_id'] = $goodsData['user_id'] ;
                     foreach ($orderRow as $value ){
                         if($goodsData['user_id'] ==$value['user_id'] ){
@@ -673,6 +674,7 @@
                 if(!$data['order_id'] ){
                     return ajax_return_error('缺少参数id');
                 }
+                $data['pic'] = explode(',',$data['pic']);
                 $data = picHandle($data);
                 $orderGoods = Db::name('order_goods')
                     ->where([
@@ -701,7 +703,8 @@
                 #记录评价内容
                 $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'],true);
                 $insert=[];
-                $insert['pic']=$data['pic'];
+
+                $insert['pic']=join($data['pic'],',');
                 $insert['openid']=$this->userInfo['openid'];
                 $insert['username']=$this->userInfo['nickname'];
                 $insert['goods_id']= $data['goods_id'] ;
