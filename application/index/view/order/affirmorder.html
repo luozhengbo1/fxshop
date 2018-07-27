@@ -28,6 +28,7 @@
                data-postage="{$vo['postage']??''}"
                data-score="{$vo['point_score']??''}"
                data-showarea="{$vo['show_area']??''}"
+               data-stype="{$vo['settlement_type']}"
         >
         <a href="{:url('goods/detail',array('id'=>$vo['goodsId']))}">
             <div class="clear pt10 goods-info-wrap">
@@ -39,15 +40,7 @@
                     <p>{$vo['val']}</p>
                     <div class="clear mt10">
                         <span class="fl red f16">
-                            <em id="goodPrice">
-                             {php}
-                                 if($vo['show_area']==2){
-                                    echo $vo['point_score'].'积分' ;
-                                }else{
-                                    echo '¥' ;
-                                    echo ($vo['price1']);
-                                }
-                             {/php}
+                            <em class="goodPriceTitle" data-type="{$vo['settlement_type']}" data-score="{$vo['score']}" data-price="{$vo['price1']}" >
                             </em>
                         </span>
                         <span class="fr"><em id="purchaseNum">{$vo['num']}</em>件</span>
@@ -103,6 +96,9 @@
     </div>
 </section>
 <script>
+    $('.goodPriceTitle').each(function (index,ele) {
+        $(ele).html(priceScoreShow($(ele).data('type'),$(ele).data('price'),$(ele).data('score')))
+    })
     var url = {
         pay:"{:url('index/order/pay')}",
     }
@@ -157,16 +153,30 @@
                 postage =parseFloat($ele.data('postage')),
                 freetype =$ele.data('freetype'),
                 show_area=$ele.data('showarea'),
-                pointScore=$ele.data('score')
+                pointScore=$ele.data('score'),
+                stype = $ele.data('stype')
             ;
 
            // console.log('test'+isNaN(23))
             //freetype 包邮1不包邮0
-            switch(show_area){
+            /*switch(show_area){
                 case 2:
                     totalPoint +=(parseInt(num)*parseFloat(pointScore));
                     break;
                 default:
+                    totalPrice += parseInt(num)*parseFloat(price);
+                    break;
+            }*/
+            //settlementType 结算类型1-货币2-积分3-积分+货币
+            switch(stype){
+                case 1:
+                    totalPrice += parseInt(num)*parseFloat(price);
+                    break;
+                case 2:
+                    totalPoint +=(parseInt(num)*parseFloat(pointScore));
+                    break;
+                case 3:
+                    totalPoint=parseInt(num)*parseFloat(price);
                     totalPrice += parseInt(num)*parseFloat(price);
                     break;
             }

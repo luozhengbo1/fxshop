@@ -75,13 +75,7 @@
 {/if}
 
 <div class="good-detail-content">
-    <p class="good-price">{php}
-        if($goods['show_area']==2){
-            echo $goods['score'].'积分' ;
-        }else{
-            echo '¥' ;
-            echo ($goods['basic_price'])?$goods['basic_price']:$goods['price_real'];
-        }{/php}</p>
+    <p class="good-price" id="goodPriceTitle" data-type="{$goods['settlement_type']}" data-score="{$goods['score']}" data-price="{$goods['basic_price']}" ></p>
     <p class="good-title">{$goods['name']??''}</p>
 
     <ul class="clear good-service">
@@ -356,6 +350,8 @@
         }
     }
 
+    $('#goodPriceTitle').html(priceScoreShow($('#goodPriceTitle').data('type'),$('#goodPriceTitle').data('price'),$('#goodPriceTitle').data('score')));
+
     //showarea  展示区域1-限时抢购2-积分商城3-日常售卖4-热销产品
     var show_area = $('#popupMain').attr('data-showarea');
     var detailTag = "{$goods['detail']??''}";
@@ -462,16 +458,16 @@
                 //匹配id修改页面显示变量
                 if(zhuheId ==id){
                     //showarea  展示区域1-限时抢购2-积分商城3-日常售卖4-热销产品  id="popupMain" data-showarea="{$goods['show_area']}"
-                    var showPrice = '';
+                   /* var showPrice = '';
                     switch(show_area){
                         case '2':
-                            showPrice = item.point_score+'<i class="f12">积分</i>';
+                            showPrice = +'<i class="f12">积分</i>';
                             break;
                         default:
                             showPrice = '&yen;'+item.price;
                             break;
-                    }
-                    $('#goodPrice').empty().append(showPrice);
+                    }*/
+                    $('#goodPrice').html(priceScoreShow($('#goodPriceTitle').data('type'),item.price,item.point_score));
                     $('#goodChoseSku').empty().append('<span>已选</span> '+zhuheVal+'<i class="ml10" id="showBuyNum"></i>个');
                     $('#sulfStore').html('剩余数量:'+item.store);
                     $('#buyNum').attr('data-store',item.store);//item.pointPrice  item.id

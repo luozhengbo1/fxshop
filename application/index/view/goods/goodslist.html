@@ -58,7 +58,7 @@
             html +='    <div class="p5">';
             html +='  		  <p class="fl">已售'+notEmpty(data[i].buy_num)+'</p>';
             html +='  		      <p class="fr">';
-            html +='  		      <span class="goods-price">¥'+notEmpty(data[i].basic_price)+'</span>';
+            html +='  		      <span class="goods-price">'+priceScoreShow(data[i].settlement_type,data[i].basic_price,data[i].score)+'</span>';
             html +='  				<span class="goods-old-price">¥'+notEmpty(data[i].original_price)+'</span>';
             html +='  		  </p>';
             html +='    </div>';

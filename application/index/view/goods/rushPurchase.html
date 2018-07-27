@@ -93,7 +93,7 @@
                 html +='     <div class="p5 clear">';
 
                 html +='         <p class="fl">';
-                html +='             <span class="goods-price">¥'+price+'</span>';
+                html +='             <span class="goods-price">'+priceScoreShow(data[i].settlement_type,price,data[i].score)+'</span>';
                 html +='             <span class="goods-old-price">¥'+notEmpty(data[i].original_price)+'</span>';
                 html +='         </p>';
                 html +='         <div class="fr">';
