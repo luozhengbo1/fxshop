@@ -135,17 +135,16 @@
                 html += '        <div class="mt10 clear grey">失效</div>';
             } else {
 
-
                 html += '        <div class="mt10 clear">';
-                switch (show_area) {
+               /* switch (show_area) {
                     case 2:
                         html += '            <p class="red fl"> <em class="f14">' + data[i].point_score + '积分</em></p>';
                         break;
                     default:
                         html += '            <p class="red fl">¥ <em class="f14">' + data[i].price1 + '</em></p>';
                         break;
-                }
-
+                }*/
+                html += '            <p class="red fl">'+priceScoreShow(data[i].settlement_type,data[i].price1,data[i].point_score)+'</p>';
                 html += '            <div class="layui-btn-group fr count-wrap">';
                 html += '                <button class="layui-btn layui-btn-primary layui-btn-xs fr24 minus">-</button>';
                 html += '                <div class="layui-btn layui-btn-primary layui-btn-xs">';

@@ -664,3 +664,52 @@ function activeStatus(start,end,current) {
 function recodeHistoryUrl() {
     localStorage.setItem('historyUrl',window.location.href);
 }
+
+
+
+function priceScoreShow(settlementType,price,score) {
+    //settlementType 结算类型1-货币2-积分3-积分+货币
+    if(isNaN(price)) price=0;
+    if(isNaN(score)) score=0;
+    var result='';
+    switch(settlementType){
+        case 1:
+            result='¥'+price
+            break;
+        case 2:
+            result=score+'积分'
+            break;
+        case 3:
+            result=score+'积分+¥'+price
+            break;
+    }
+    return result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

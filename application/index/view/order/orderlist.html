@@ -111,7 +111,7 @@
     tabSwitch($('.nav-list-tab li'),loadOrderData);
     $('#nav_'+nav_param).click();
     function loadOrderData(){
-        var status = $('#navListTab').find('.active').data('status');
+        var status = $('#navListTab').find('.active').attr('data-status');
         initData('orderList');
         hideEmptyWrap();
         pageload({
@@ -157,6 +157,7 @@
                     goods_id =data[i].goods_id,
                     sku_id = data[i].sku_id,
                     show_area = detail.show_area,
+                    stype =  detail.settlement_type,
                     is_send= data[i].is_send,
                     order_id = data[i].order_id;
                 console.log(goods_id)
@@ -175,15 +176,15 @@
                 html +='        </div>';
                 html +='        <div class="item-pay">';
                 html +='            <div class="item-pay-data">';
-                switch(show_area){
+               /* switch(show_area){
                     case 2:
                         html +='                <p class="price f14"> '+data[i].point_score+'积分 </p>';
                         break;
                     default:
                         html +='                <p class="price f14"> ￥'+data[i].price+' </p>';
                         break;
-                }
-
+                }*/
+                html +='                <p class="price f14"> '+priceScoreShow(data[i].settlement_type,data[i].price,data[i].point_score)+'</p>';
                 html +='                <p class="nums">x'+data[i].goods_num+'</p>';
                 html +='                <p ><span class="fr lh30 orange mt10">'+is_send_param[is_send]+'</span></p>';
                 html +='            </div>';
@@ -192,17 +193,23 @@
                 html +='    <div class="module  clear pr10 pt5" >';
                 html +='        <div class="cont tr">';
                 html +='            <span class="f14">共<b>'+data[i].goods_num+'</b>件商品</span>';
-                switch(show_area){
-                    case 2:
-                        var totalScore = (data[i].point_score * data[i].goods_num)//+parseFloat(detail.postage*data[i].goods_num)
-                        html +='            <span class="f14">合计:<b>'+totalScore.toFixed(2)+'积分</b></span>';
-                        break;
-                    default:
+
+                //settlementType 结算类型1-货币2-积分3-积分+货币
+                switch(stype){
+                    case 1:
                         var totalPrice =parseFloat(data[i].price* data[i].goods_num)+parseFloat(detail.postage*data[i].goods_num);
                         html +='            <span class="f14">合计:<b>￥'+totalPrice.toFixed(2)+'</b></span>';
                         break;
+                    case 2:
+                        var totalScore = (data[i].point_score * data[i].goods_num)//+parseFloat(detail.postage*data[i].goods_num)
+                        html +='            <span class="f14">合计:<b></b></span>';
+                        break;
+                    case 3:
+                        var totalPrice =parseFloat(data[i].price* data[i].goods_num)+parseFloat(detail.postage*data[i].goods_num);
+                        var totalScore = (data[i].point_score * data[i].goods_num)//+parseFloat(detail.postage*data[i].goods_num)
+                        html +='            <span class="f14">合计:<b>'+totalScore.toFixed(2)+'积分+￥'+totalPrice.toFixed(2)+'</b></span>';
+                        break;
                 }
-
                 // html +='            <span class="f14">合计:<b>￥'+data[i].total_price+'</b></span>';
                 if(detail.postage){
                     html +='            <span class="f14">(含运费<b>￥'+detail.postage+'x'+data[i].goods_num+'</b>)</span>';
@@ -231,13 +238,16 @@
                 switch(order_status)
                 {
                     case 1://已支付
-                        if(is_send==0 || is_send==1 ||is_send==2)
+                        if(is_send==0)
                           html +='        <a class="layui-btn layui-btn-primary layui-btn-xs" onclick="refund(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">退款</a>';
                         if(is_send ==1)
                             html +='        <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="sureDeliver(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">确认收货</button>';
                        //待评价
-                        if(is_send ==2)
-                        html +='        <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="evaluateEdit(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">评价</button>';
+                        if(is_send ==2){
+                            html +='        <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="evaluateEdit(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">评价</button>';
+                            html +='        <a class="layui-btn layui-btn-primary layui-btn-xs" onclick="goOrderService(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">申请售后</a>';
+                        }
+
                         break;
                 }
                 html +='    </div>';
