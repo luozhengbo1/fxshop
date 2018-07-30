@@ -42,7 +42,7 @@
         <td>售后要求</td>
         <td>售后备注</td>
         <td>售后图片</td>
-        <td>售后处理</td>
+        <!--<td>售后处理</td>-->
         {/if}
         <td>退货退款操作</td>
       </tr>
@@ -87,11 +87,11 @@
             }
           }
           {/php}</td>
-        <td class="f-14">
-          {if condition="$vo.after_sale_is eq 1"}
-          <a href="javascript:;" onclick="afterHandle('{$vo[\'order_id\']}',{$vo['id']},'yes')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 售后处理</a>
-          {/if}
-        </td>
+        <!--<td class="f-14">-->
+          <!--{if condition="$vo.after_sale_is eq 1"}-->
+          <!--<a href="javascript:;" onclick="afterHandle('{$vo[\'order_id\']}',{$vo['id']},'yes')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 售后处理</a>-->
+          <!--{/if}-->
+        <!--</td>-->
         {/if}
         <td class="f-14">
           {if condition="$vo.is_return eq 1"}
