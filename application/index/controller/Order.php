@@ -627,6 +627,19 @@
         #商品售后
         public function  orderService()
         {
+            if($this->request->isAjax()){
+                $data =$this->request->post();
+                if(!$data['order_id'] || !$data['goods_id'] || !$data['order_id'] ){
+                    return $this->error('缺少参数id');
+                }
+                $update=[];
+                $update['after_sale_reson'] =$data['after_sale_reson'];
+                $update['after_sale_type'] =$data['after_sale_type'];
+                $update['after_sale_ask'] =$data['after_sale_ask'];
+                $update['after_sale_remark'] =$data['after_sale_remark'];
+                $update['after_sale_pic'] =$data['after_sale_pic'];
+                Db::name('order_goods')->where(['order_id'=>$data['order_id'],'goods_id'=>$data['goods_id'],'sku_id'=>$data['sku_id']])->update($update);
+            }
             $this->assign('titleName', "商品售后");
             $order_id = $this->request->param('order_id');
             $goods_id = $this->request->param('goods_id');
@@ -673,8 +686,10 @@
                 if(!$data['order_id'] ){
                     return ajax_return_error('缺少参数id');
                 }
-                $data['pic'] = explode(',',$data['pic']);
-                $data = picHandle($data);
+                if( $data['pic'] ){
+                    $data['pic'] = explode(',',$data['pic']);
+                    $data = picHandle($data);
+                }
                 $orderGoods = Db::name('order_goods')
                     ->where([
                         'order_id'=>$data['order_id'],
@@ -702,8 +717,9 @@
                 #记录评价内容
                 $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'],true);
                 $insert=[];
-
-                $insert['pic']=join($data['pic'],',');
+                if($data['pic']){
+                    $insert['pic']=join($data['pic'],',');
+                }
                 $insert['openid']=$this->userInfo['openid'];
                 $insert['username']=$this->userInfo['nickname'];
                 $insert['goods_id']= $data['goods_id'] ;
