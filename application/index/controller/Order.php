@@ -639,6 +639,7 @@
                 $update['after_sale_remark'] =$data['after_sale_remark'];
                 $update['after_sale_pic'] =$data['after_sale_pic'];
                 Db::name('order_goods')->where(['order_id'=>$data['order_id'],'goods_id'=>$data['goods_id'],'sku_id'=>$data['sku_id']])->update($update);
+                return  ajax_return('','申请成功','200');
             }
             $this->assign('titleName', "商品售后");
             $order_id = $this->request->param('order_id');
@@ -655,6 +656,7 @@
 //            echo Db::name('order')->getLastSql();
 //            dump($orderDetail);die;
             $this->view->assign('orderDetail',$orderDetail);
+
             return $this->view->fetch('orderService');
         }
         #商品售后
