@@ -117,7 +117,7 @@
                         {/if}
                         {if condition="$is_send eq 2" /} <!--待评价-->
                         <button class="layui-btn layui-btn-xs  layui-btn-danger layui-btn-radius" onclick="evaluateEdit('{$orderId}','{$goodsId}','{$skuid}')">评&nbsp;&nbsp;价</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="goOrderService('{$orderId}','{$goodsId}','{$skuid}')"  >申请售后</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" id="afterSaleService" onclick="goOrderService('{$orderId}','{$goodsId}','{$skuid}')" data-aftersale="{$vo['after_sale_is']}'">申请售后</button>
                         {/if}
                         {if condition="$is_send neq 0 && $status neq 7" /} <!--待评价-->
                         <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="showWul('{$vo[\'logistics_name\']}','{$vo[\'logistics_number\']}')">物流单号</button>
@@ -177,7 +177,11 @@
         }
         html ='￥'+totalPrice+'+'+totalPoint+'积分';
         $(ele).html(html)
-    })
+    });
+    var aftersale_type =parseInt($('#afterSaleService').data('aftersale'));
+    if(aftersale_type==afterSale.yes){
+        $('#afterSaleService').html('取消申请')
+    }else   $('#afterSaleService').html('申请售后')
     var url = {
         orderService:"{:url('index/order/orderService')}",//
         logistics:"{:url('index/order/logistics')}",//物流查看

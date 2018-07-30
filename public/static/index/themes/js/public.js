@@ -596,6 +596,10 @@ var settlement={
     score:2,//积分结算
     money_score:3,//积分+货币结算
 }
+var afterSale={
+    yes:1,
+    no:0
+}
 function countDown(start,end,current){
     var currentTime = current,html='';
     if(activeStatus(start,end,current) ==1){
