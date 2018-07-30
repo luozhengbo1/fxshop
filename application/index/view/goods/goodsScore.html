@@ -46,10 +46,6 @@
         var html='';
         for(var i = 0; i < data.length; i++){
             console.log(data[i]);
-           /* var price=notEmpty(data[i].basic_price);
-            if(data[i].price_real && data[i].price_real!=0){
-                price = notEmpty(data[i].price_real);
-            }*/
             html +='<li class="grid-item">';
             html +='	<a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
             html +='     <p class="tc"><img class="grid-item-image" src="'+data[i].main_image+'"></p>';
@@ -58,7 +54,7 @@
             html +='    <div class="p5 clear">';
             html +='  		  <p class="fl">已售'+notEmpty(data[i].buy_num)+'</p>';
             html +='  		  <p class="fr">';
-            html +='  		      <span class="goods-price">'+data[i].score+'积分</span>';
+            html +='  		      <span class="goods-price">'+priceScoreShow(data[i].settlement_type,data[i].basic_price,data[i].score)+'</span>';
             html +='  		  </p>';
             html +='    </div>';
             html +='  </li>';

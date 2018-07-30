@@ -60,3 +60,12 @@ function goOrderService(order_id,goods_id) {
 function logistic(order_id,goods_id) {
     window.location.href=urlConnect(url.logistics,{order_id:order_id,goods_id:goods_id})
 }
+//物流单号
+function showWul(name,num) {
+    var msg = '<p class="mt10 f14 tl">物流名称：'+name+'</p>'
+    msg += '<p class="mt10 f14 tl">物流单号：'+num+'</p>'
+    layer.open({
+        content:msg
+        ,btn: '确定'
+    });
+}

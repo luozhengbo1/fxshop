@@ -591,6 +591,11 @@ var order_status_param={
     7:'已取消订单',
     8:'订单完成',
 }
+var settlement={
+    money:1,//价格结算
+    score:2,//积分结算
+    money_score:3,//积分+货币结算
+}
 function countDown(start,end,current){
     var currentTime = current,html='';
     if(activeStatus(start,end,current) ==1){
@@ -673,13 +678,13 @@ function priceScoreShow(settlementType,price,score) {
     if(isNaN(score)) score=0;
     var result='';
     switch(settlementType){
-        case 1:
+        case settlement.money:
             result='¥'+price
             break;
-        case 2:
+        case settlement.score:
             result=score+'积分'
             break;
-        case 3:
+        case settlement.money_score:
             result=score+'积分+¥'+price
             break;
     }

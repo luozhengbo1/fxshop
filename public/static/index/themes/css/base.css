@@ -6,6 +6,9 @@ li{
     list-style: none
 ;
 }
+*{
+    white-space:normal; word-break:break-all;
+}
 a{
     outline:none;
     -webkit-user-select: none;
