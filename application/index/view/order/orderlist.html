@@ -246,7 +246,10 @@
                        //待评价
                         if(is_send ==2){
                             html +='        <button class="layui-btn layui-btn-xs  layui-btn-danger layui-btn-radius" onclick="evaluateEdit(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">评&nbsp;&nbsp;价</button>';
-                            html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="goOrderService(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">申请售后</a>';
+                            var text = ''
+                            if(data[i].after_sale_is==afterSale.yes) text='取消申请';
+                            else text='申请售后'
+                            html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="goOrderService(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">'+text+'</a>';
                         }
 
                         break;
