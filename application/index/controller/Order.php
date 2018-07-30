@@ -128,7 +128,7 @@
                     $goods_attribute = Db::name('goods_attribute')->where(['id'=>$v['skuId']])->find();
                     if($goods_attribute['store']<$v['num']){
                         $goods = Db::name('goods')->field('name')->where(['id'=>$v['goodsId']])->find();
-                        return ajax_return('',$goods['name'].'库存数量不足','500');
+                        return ajax_return('','库存不足','500');
                     }
                 }
                 $totalScore = $this->totalScore($storeData);
@@ -320,7 +320,7 @@
                         foreach ($orderRow as $val){
                             $res = Db::name('order')->where(['order_id'=>$val['order_id']])->update(['pay_status'=>1,'order_status'=>1,'pay_time'=>time()]);#将订单状态修改为1
                         }
-                        $backData = array("msg" => "积分扣取成功", 'code' => 200,'redirect' => url("order/index"));
+                        $backData = array("msg" => "积分扣取成功", 'code' => 200,'redirect' => url("order/index",array('param'=>'all')));
                         die(json_encode($backData));
                     }
 
@@ -638,6 +638,7 @@
                 $update['after_sale_ask'] =$data['after_sale_ask'];
                 $update['after_sale_remark'] =$data['after_sale_remark'];
                 $update['after_sale_pic'] =$data['after_sale_pic'];
+                $update['after_sale_is'] =0;
                 Db::name('order_goods')->where(['order_id'=>$data['order_id'],'goods_id'=>$data['goods_id'],'sku_id'=>$data['sku_id']])->update($update);
             }
             $this->assign('titleName', "商品售后");

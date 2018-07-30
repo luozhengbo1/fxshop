@@ -396,6 +396,7 @@ class Goods extends Controller
                 foreach ($diffAttribute as $diffv){
                     Db::name('goods_attribute')->where(['attribute_name'=>$diffv ])->delete();
                 }
+
                 if($goodsAttribute[0]['attribute_name']==""){#之前没有，现在变成成sku
                     Db::name('goods_attribute')->where(['goods_id'=>$data['id']])->delete();
                     foreach ($allData['skuZuheData'] as $k=>$v){
@@ -431,7 +432,7 @@ class Goods extends Controller
                     }
                 }
             }else{#传值为空，之前没有sku，现在也没有sku。之前有sku,现在变成没有。
-                if($goodsAttribute[0]['attribute_name']==''){
+                if(empty($goodsAttribute) || $goodsAttribute[0]['attribute_name']==''){
                     $insert=[];
                     $insert['goods_id'] = $data['id'];
 //                $insert['goods_code'] = $data['bar_code'];

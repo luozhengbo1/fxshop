@@ -69,6 +69,7 @@ class Address extends Mustlogin
             } else {
                 //若前端没有传递参数id，则进行新增操作
                 $uid = $this->getUid();
+
                 $time = time();
                 $data = [
                     'uid' => $uid,
@@ -81,6 +82,8 @@ class Address extends Mustlogin
                     'status' => 0
                 ];
                 Db::table('fy_customer_address')->insert($data);
+                $useraddress = Db::name('fy_customer_address')->where(['uid'=>$uid])->find();
+
                 return ajax_return('', '新增成功', 200);
             }
         } else {
