@@ -121,7 +121,7 @@
                 foreach ($storeData as $v) {
                     #积分判断
                     $goodsData = Db::name('goods')->where(['id'=>$v['goodsId']])->find();
-                    if($goodsData['show_area']==2 || $goodsData['show_area']==5){
+                    if($goodsData['settlement_type']==2 || $goodsData['settlement_type']==3){
                         $score+=$goodsData['score'];
                     }
                     #库存判断
@@ -166,7 +166,7 @@
                     if ($goodsAttribute['store'] < $v['num']) {
                         return ajax_return($goods['name'], '该商品库存不足，还剩' . $goodsAttribute['store'], '500');
                     }
-                    if($goods['show_area']==2 || $goods['show_area']==5){
+                    if($goods['settlement_type']==2 || $goods['settlement_type']==3){
                         $totalType +=1;
                     }
                 }
@@ -437,7 +437,7 @@
             foreach ($data  as $val) {
                 $goods = Db::name('goods')->where(['id'=>$val['goodsId']])->find();
                 $res = Db::name('goods_attribute')->field('price,point_score')->where(['id'=>$val['skuId']])->find();
-                if($goods['show_area']==2 ||$goods['show_area']==5 ){
+                if($goods['settlement_type']==2 ||$goods['settlement_type']==3 ){
                     if (isset($val['num'])) {
                         $pay += $res['point_score'] * $val['num'];
                     }
@@ -552,7 +552,7 @@
                 ])->find();
                 #积分商品不支持退货退款
                 $goods = Db::name('goods')->where(['id'=>$data['goods_id']])->find();
-                if($goods['show_area']==2 || $goods['show_area']==5){
+                if($goods['settlement_type']==2 || $goods['settlement_type']==3){
                     return ajax_return_error('积分商品不支持退换');
                 }
                 $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'],true);
