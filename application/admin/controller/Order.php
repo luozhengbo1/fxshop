@@ -174,6 +174,10 @@ class Order extends Controller
             if(!$data['id']){
                 return ajax_return_error('缺少参数id');
             }
+            $orderGoods = Db::name('order_goods')->where(['id'=>$data['id']])->find();
+            if($orderGoods['is_return']!=0){
+                return ajax_return_error('退款单不能发货');
+            }
             #付款成功通知
             include_once APP_PATH."/index/controller/sendMsg/SDK/WeiXin.php";
             $orderGoods = Db::name('order_goods')->where(['id'=>$data['id']])->find();
