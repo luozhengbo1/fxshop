@@ -36,6 +36,13 @@
         <td>购买数量</td>
           <td>运费</td>
         <td>状态</td>
+        {if condition="$vo['after_sale_is'] eq 1"}
+        <td>售后理由</td>
+        <td>售后类型</td>
+        <td>售后要求</td>
+        <td>售后备注</td>
+        <td>售后图片</td>
+        {/if}
         <td>退货退款操作</td>
       </tr>
       </thead>
@@ -65,7 +72,28 @@
           已退款
           {/if}
         </td>
-
+        {if condition="$vo['after_sale_is'] eq 1 "}
+        <td class="f-14">{$vo['goods_detail']['after_sale_reson']}</td>
+        <td class="f-14">{php}
+                  if($vo['goods_detail']['after_sale_type']==1){
+          echo "未收到货";
+                  }else if($vo['goods_detail']['after_sale_type']==2){
+          echo "已收到货";
+                  }else if($vo['goods_detail']['after_sale_type']==3){
+          echo "退款/退货";
+                  }
+          {/php}</td>
+        <td class="f-14">{$vo['goods_detail']['after_sale_ask']}</td>
+        <td class="f-14">{$vo['goods_detail']['after_sale_remark']}</td>
+        <td class="f-14">{php}
+          if($vo['goods_detail']['after_sale_pic']){
+            $vo['goods_detail']['after_sale_pic'] = explode($vo['goods_detail']['after_sale_pic'],',');
+            foreach(   $vo['goods_detail']['after_sale_pic'] as $vpic){
+              echo "<img src='{$vpic}' width="50" height="50px">";
+            }
+          }
+          {/php}</td>
+        {/if}
       </tr>
 
       </tbody>
