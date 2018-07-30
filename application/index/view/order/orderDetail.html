@@ -117,7 +117,13 @@
                         {/if}
                         {if condition="$is_send eq 2" /} <!--待评价-->
                         <button class="layui-btn layui-btn-xs  layui-btn-danger layui-btn-radius" onclick="evaluateEdit('{$orderId}','{$goodsId}','{$skuid}')">评&nbsp;&nbsp;价</button>
-                        <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" id="afterSaleService" onclick="goOrderService('{$orderId}','{$goodsId}','{$skuid}')" data-aftersale="{$vo['after_sale_is']}'">申请售后</button>
+                            {if condition="$vo['after_sale_is'] eq 1 " /}
+                              <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="cancelAfterSale('{$orderId}','{$goodsId}','{$skuid}')">取消申请</button>
+                            {/if}
+                            {if condition="$vo['after_sale_is'] eq 0 " /}
+                              <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="goOrderService('{$orderId}','{$goodsId}','{$skuid}')">申请售后</button>
+                            {/if}
+
                         {/if}
                         {if condition="$is_send neq 0 && $status neq 7" /} <!--待评价-->
                         <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="showWul('{$vo[\'logistics_name\']}','{$vo[\'logistics_number\']}')">物流单号</button>
@@ -191,6 +197,7 @@
         refund:"{:url('index/order/refund')}",
         evaluateEdit:"{:url('index/order/orderComment')}",
         cancelOrder:"{:url('index/order/cancelOrder')}",
+        cancleAfterSale:"{:url('index/order/cancleAfterSale')}",
     }
     backTime();
 
@@ -207,8 +214,14 @@
     $('#showStatus').html(order_status_param[$('#showStatus').data('status')])
     $('.goodStatus').each(function (index,ele) {
         $(ele).html(is_send_param[$(ele).data('status')])
-
     })
+    function cancelAfterSale(order_id,goods_id,sku_id){
+        pub_edit({
+            url:url.cancleAfterSale,
+            data:{'order_id':order_id,'goods_id':goods_id,'sku_id':sku_id},
+            return_url:window.location.href,
+        })
+    }
 </script>
 <script type="text/javascript" src="__STATIC__/index/js/view/order.js" ></script>
 </body>
