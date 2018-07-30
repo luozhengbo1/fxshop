@@ -318,7 +318,7 @@
                         Db::name('score_log')->insert($scoreLog);
 //                        dump($orderRow);die;
                         foreach ($orderRow as $val){
-                            $res = Db::name('order')->where(['order_id'=>$val['order_id']])->update(['pay_status'=>1,'order_status'=>1]);#将订单状态修改为1
+                            $res = Db::name('order')->where(['order_id'=>$val['order_id']])->update(['pay_status'=>1,'order_status'=>1,'pay_time'=>time()]);#将订单状态修改为1
                         }
                         $backData = array("msg" => "积分扣取成功", 'code' => 200,'redirect' => url("order/index"));
                         die(json_encode($backData));
