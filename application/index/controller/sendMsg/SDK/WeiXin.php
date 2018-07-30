@@ -58,7 +58,11 @@ class WeiXin
 //        $url = "http://m.gzairports.com/manage.php?s=/addon/Flight/Flight/getAccessToken//is_rabbit/true/publicid/2";
         $url="http://vip.fyxtw.com/index.php?s=/addon/DeveloperTool/DeveloperTool/getAccessToken/publicid/3";
         $accessTokenInfo = Http::get($url);
-        file_put_contents('./access_token.txt', $accessTokenInfo);
+        chgrp(__DIR__.'/access_token.txt','www');
+        chown(__DIR__.'/access_token.txt','www');
+        file_put_contents(__DIR__.'/access_token.txt', $accessTokenInfo);
+        chgrp(__DIR__.'/access_token.txt','www');
+        chown(__DIR__.'/access_token.txt','www');
         return $accessTokenInfo;
     }
 /*

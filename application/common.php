@@ -598,7 +598,7 @@ function getAllChildcateIds($categoryID)
                         $replacePic = str_replace('/tmp','/pic',$data['pic'][$k]);
                         $descPath = ROOT_PATH.'public'.$replacePic;
                         if( is_file( $pivPath) ){
-                            file_put_contents('test.txt',$pivPath."\r".$descPath,8);
+//                            file_put_contents('test.txt',$pivPath."\r".$descPath,8);
                             copy($pivPath,$descPath);
                         }
                         $data['pic'][$k]=$replacePic;

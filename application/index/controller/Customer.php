@@ -230,8 +230,8 @@ class Customer extends Mustlogin
                     $noSignDay2 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 23:59:59')) / 86400;//1天
                     //前一天未签到，continue_day重置为1，score+1更新到customer表
                     if (floor($noSignDay1) > 1 && $noSignDay2 > 1 && floor($noSignDay1) == $noSignDay2) {
-                        Db::table('fy_customer')->where('openid', $user['openid'])->setField('continuity_day', 1);
-                        Db::table('fy_customer')->where('openid', $user['openid'])->setInc('score', 2);
+                        Db::table('fy_customer')->where('openid',  $this->userInfo['openid'])->setField('continuity_day', 1);
+                        Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->setInc('score', 2);
                         Db::table('fy_customer_sign')->insert($save);
                         //新增日志记录
                         $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid',  $this->userInfo['id'])->where('addtime', $time)->find();

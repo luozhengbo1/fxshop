@@ -111,15 +111,17 @@ class Wechatpay extends Controller
     }
 
     #统计积分合计
+    #统计积分合计
     public function totalScore($data)
     {
         $pay = 0;
-//        dump($data);
         foreach ($data  as $val) {
-            $res = Db::name('goods_attribute')->field('price,point_score')->where(['id'=>$val['sku_id']])->find();
-//                $goods = Db::name('goods')->where(['id'=>$val['goodsId']])->find();
-            if (isset($val['num'])) {
-                $pay += $res['point_score'] * $val['num'];
+            $goods = Db::name('goods')->where(['id'=>$val['goodsId']])->find();
+            $res = Db::name('goods_attribute')->field('price,point_score')->where(['id'=>$val['skuId']])->find();
+            if($goods['settlement_type']==2 ||$goods['settlement_type']==3 ){
+                if (isset($val['num'])) {
+                    $pay += $res['point_score'] * $val['num'];
+                }
             }
 //                if($goods['free_type']==0){
 //                    $pay +=$goods['postage'];

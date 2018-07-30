@@ -121,7 +121,7 @@
                 foreach ($storeData as $v) {
                     #积分判断
                     $goodsData = Db::name('goods')->where(['id'=>$v['goodsId']])->find();
-                    if($goodsData['show_area']==2 || $goodsData['show_area']==5){
+                    if($goodsData['settlement_type']==2 || $goodsData['settlement_type']==3){
                         $score+=$goodsData['score'];
                     }
                     #库存判断
@@ -166,7 +166,7 @@
                     if ($goodsAttribute['store'] < $v['num']) {
                         return ajax_return($goods['name'], '该商品库存不足，还剩' . $goodsAttribute['store'], '500');
                     }
-                    if($goods['show_area']==2 || $goods['show_area']==5){
+                    if($goods['settlement_type']==2 || $goods['settlement_type']==3){
                         $totalType +=1;
                     }
                 }
@@ -318,7 +318,7 @@
                         Db::name('score_log')->insert($scoreLog);
 //                        dump($orderRow);die;
                         foreach ($orderRow as $val){
-                            $res = Db::name('order')->where(['order_id'=>$val['order_id']])->update(['pay_status'=>1,'order_status'=>1]);#将订单状态修改为1
+                            $res = Db::name('order')->where(['order_id'=>$val['order_id']])->update(['pay_status'=>1,'order_status'=>1,'pay_time'=>time()]);#将订单状态修改为1
                         }
                         $backData = array("msg" => "积分扣取成功", 'code' => 200,'redirect' => url("order/index"));
                         die(json_encode($backData));
@@ -437,7 +437,7 @@
             foreach ($data  as $val) {
                 $goods = Db::name('goods')->where(['id'=>$val['goodsId']])->find();
                 $res = Db::name('goods_attribute')->field('price,point_score')->where(['id'=>$val['skuId']])->find();
-                if($goods['show_area']==2 ||$goods['show_area']==5 ){
+                if($goods['settlement_type']==2 ||$goods['settlement_type']==3 ){
                     if (isset($val['num'])) {
                         $pay += $res['point_score'] * $val['num'];
                     }
@@ -552,7 +552,7 @@
                 ])->find();
                 #积分商品不支持退货退款
                 $goods = Db::name('goods')->where(['id'=>$data['goods_id']])->find();
-                if($goods['show_area']==2 || $goods['show_area']==5){
+                if($goods['settlement_type']==2 || $goods['settlement_type']==3){
                     return ajax_return_error('积分商品不支持退换');
                 }
                 $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'],true);
@@ -627,6 +627,19 @@
         #商品售后
         public function  orderService()
         {
+            if($this->request->isAjax()){
+                $data =$this->request->post();
+                if(!$data['order_id'] || !$data['goods_id'] || !$data['order_id'] ){
+                    return $this->error('缺少参数id');
+                }
+                $update=[];
+                $update['after_sale_reson'] =$data['after_sale_reson'];
+                $update['after_sale_type'] =$data['after_sale_type'];
+                $update['after_sale_ask'] =$data['after_sale_ask'];
+                $update['after_sale_remark'] =$data['after_sale_remark'];
+                $update['after_sale_pic'] =$data['after_sale_pic'];
+                Db::name('order_goods')->where(['order_id'=>$data['order_id'],'goods_id'=>$data['goods_id'],'sku_id'=>$data['sku_id']])->update($update);
+            }
             $this->assign('titleName', "商品售后");
             $order_id = $this->request->param('order_id');
             $goods_id = $this->request->param('goods_id');
@@ -673,8 +686,10 @@
                 if(!$data['order_id'] ){
                     return ajax_return_error('缺少参数id');
                 }
-                $data['pic'] = explode(',',$data['pic']);
-                $data = picHandle($data);
+                if( $data['pic'] ){
+                    $data['pic'] = explode(',',$data['pic']);
+                    $data = picHandle($data);
+                }
                 $orderGoods = Db::name('order_goods')
                     ->where([
                         'order_id'=>$data['order_id'],
@@ -702,8 +717,9 @@
                 #记录评价内容
                 $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'],true);
                 $insert=[];
-
-                $insert['pic']=join($data['pic'],',');
+                if($data['pic']){
+                    $insert['pic']=join($data['pic'],',');
+                }
                 $insert['openid']=$this->userInfo['openid'];
                 $insert['username']=$this->userInfo['nickname'];
                 $insert['goods_id']= $data['goods_id'] ;

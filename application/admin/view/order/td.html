@@ -19,7 +19,7 @@
 ?></td>
 {php} } {/php}
 <td>{$vo.customer_name}</td>
-<td><?php $address = \think\Db::name('customer_address')->where(['id'=> $vo['address_id']])->find();
+<td><?php $address = json_decode($vo['address_detail'],true);
     echo $address['name'];
     echo $address['mobile'];
     echo '<br/>';
