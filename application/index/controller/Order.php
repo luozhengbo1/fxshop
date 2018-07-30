@@ -638,9 +638,8 @@
                 $update['after_sale_ask'] =$data['after_sale_ask'];
                 $update['after_sale_remark'] =$data['after_sale_remark'];
                 $update['after_sale_pic'] =$data['after_sale_pic'];
-                $update['after_sale_is'] =0;
+                $update['after_sale_is'] =1;
                 Db::name('order_goods')->where(['order_id'=>$data['order_id'],'goods_id'=>$data['goods_id'],'sku_id'=>$data['sku_id']])->update($update);
-                return  ajax_return('','申请成功','200');
             }
             $this->assign('titleName', "商品售后");
             $order_id = $this->request->param('order_id');
@@ -657,9 +656,30 @@
 //            echo Db::name('order')->getLastSql();
 //            dump($orderDetail);die;
             $this->view->assign('orderDetail',$orderDetail);
-
             return $this->view->fetch('orderService');
         }
+        #取消售后
+        public function  cancleAfterSale()
+        {
+            if($this->request->isAjax()){
+                $data =$this->request->post();
+                if(!$data['order_id'] || !$data['goods_id'] || !$data['order_id'] ){
+                    return $this->error('缺少参数id');
+                }
+                $update=[];
+                $update['after_sale_reson'] ='';
+                $update['after_sale_type'] ='';
+                $update['after_sale_ask'] ='';
+                $update['after_sale_remark'] ='';
+                $update['after_sale_pic'] ='';
+                $update['after_sale_is'] =0;
+                Db::name('order_goods')->where(['order_id'=>$data['order_id'],'goods_id'=>$data['goods_id'],'sku_id'=>$data['sku_id']])->update($update);
+                return ajax_return('','取消成功','200');
+            }
+
+        }
+
+
         #商品售后
         public function  logistics()
         {
