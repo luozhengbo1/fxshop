@@ -1,4 +1,6 @@
+<style>
 
+</style>
 <div id="dataListWrap">
     <ul  id="evaluateList" class="good-evaluate-content">
        <!-- <li>
@@ -71,12 +73,17 @@
             html +='        <span class="credit fl"><span style="width:'+avg_score+'%"></span></span>';
             html +='        <p class="fr date">'+new Date(parseInt(data[i].create_time)*1000).Format("yyyy-MM-dd hh:mm:ss")+'</p>';
             html +='    </div>';
-            html +='    <p class="good-evaluate-title h30 lh30">'+data[i].content+'</p>';
+            html +='    <p class="good-evaluate-title lh20">'+data[i].content+'</p>';
             html +='    <ul class="good-evaluate-img clear">';
             for(var n=0; n<imgArr.length; n++){
                 html +='        <li onclick="showImage(this,'+n+')"><img src="'+imgArr[n]+'"></li>';
             }
             html +='    </ul>';
+            html +='<div class="good-evaluate-user-info mt10 clear">';
+            html +='    <span class="fl user">卖家回复:</span>';
+           // html +='    <p class="fr date">2018/2/23</p>';
+            html +='</div>';
+            html +='<p class="good-evaluate-title">'+data[i].return_content+'</p>';
             html +='</li>';
         }
         return html;
