@@ -10,9 +10,17 @@
         padding: 12px 4px;
         margin-bottom: 2px;
     }
+    .chose-span input{
+        display: none;
+    }
+    .chose-span label{
+        padding: 2px 2px!important;
+        margin-bottom: 2px;
+        font-size: 12px;
+    }
 </style>
 {include file="Public/header-order"}
-    <ul class="service-list" onclick="serviceSave('{$orderDetail.order_id}')">
+    <!--<ul class="service-list" onclick="serviceSave('{$orderDetail.order_id}')">
 
         <li class="clear" onclick="serviceSave('{$orderDetail.order_id}',0)">
             <div class="fl w10p tc pt10"><img width="20" src="//gw.alicdn.com/tps/TB1qGHoKFXXXXcnaXXXXXXXXXXX-104-104.png"></div>
@@ -34,34 +42,95 @@
                 <i class="icon-right-arrow iconfont f12 grey"></i>
             </div>
         </li>
-    </ul>
+    </ul>-->
+    <form role="form" id="form" class="pr5 pl5 mt10 bg_white pt10 pb10">
+        <input type="hidden" name="order_id" value="{$order_id??''}">
+        <input type="hidden" name="goods_id" value="{$goods_id??''}">
+        <input type="hidden" name="sku_id" value="{$sku_id??''}">
+        <table>
+            <tr>
+                <td width="26%"><label class="grey">货品情况</label></td>
+                <td width="74%">
+                    <span class="chose-span"><input type="radio" id="status1" name="status" ><label class=" btn btn-default" for="status1">未收到货</label></span>
+                    <span class="chose-span"><input type="radio" id="status2" name="status" ><label class=" btn btn-default" for="status2">已收到货</label></span>
+                    <span class="chose-span"><input type="radio" id="status3" name="status" ><label class=" btn btn-default" for="status3">退款/退货</label></span>
+                    <span class="chose-span"><input type="radio" id="status4" name="status" ><label class=" btn btn-default" for="status4">未收到货</label></span>
+                    <span class="chose-span"><input type="radio" id="status5" name="status" ><label class=" btn btn-default" for="status5">已退货</label></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label  class="grey">申请售后原因</label></td>
+                <td> <textarea class="form-control mt5"  nullmsg="填写售后原因" datatype="*"  placeholder="填写售后原因" ></textarea> </td>
+            </tr>
+            <tr>
+                <td><label  class="grey">售后要求</label></td>
+                <td> <textarea class="form-control mt5"  nullmsg="填写售后要求" datatype="*"  placeholder="填写售后要求" class="textarea"></textarea></td>
+            </tr>
+            <tr>
+                <td><label  class="grey">备注说明</label></td>
+                <td> <textarea class="form-control mt5" nullmsg="填写备注说明" datatype="*"   placeholder="填写备注说明" class="textarea"></textarea></td>
+            </tr>
+            <tr>
+                <td><label  class="grey">上传凭证</label></td>
+                <td>
+                    <div class="layui-upload clear mt5">
+                        <div id="imageShow" class="upload-image-show fl">
+                            <div class="upload-icon-wrap mr5" id="uploadBtn">
+                                <img width="30" src="__STATIC__/index/images/photo.png">
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div class="footer-fixed pt5 pb5">
+            <a onclick="" class="btn w50p btn-info fl">客服中心</a>
+            <a onclick="saveService();" class="w50p btn btn-danger fr">立即提交</a>
+        </div>
+    </form>
+
 <script>
-    var url = {
-        serviceForm:"{:url('index/order/serviceForm')}",
+    var url={
+        upload:"{:url('index/upload/upload')}",
+        dele:"",
+        save:"{:url('index/order/orderComment')}",
+        returnUrl:"{:url('order/index',['param'=>'evaluate'])}",
     }
-    function serviceSave(id,type) {
-        if(type ==0 ){
-            layer.open({
-                content: '是否确认退货退款？'
-                ,btn: ['确定', '不要']
-                ,yes: function(index){
+   // submitForm('form',"{:url('order/orderService')}","{:url('order/orderDetail')}");
+    $('.chose-span').each(function (index,ele) {
+        $(ele).click(function () {
+            $('.chose-span label').removeClass('btn-success').addClass('btn-default');
+            if($(ele).find("input").is(':checked')){
+                $(ele).find('label').removeClass('btn-default').addClass('btn-success');
+            }
+        })
+        $('.chose-span').first().find('label').click()
+    })
+    function saveService(){
+        var data= formData('form');
+        var pic='';
+        $('.pic').each(function (index,ele) {
+            pic +=$(ele).val()+',';
+        })
+        pic = pic.substr(0,pic.length-1);
+        data.pic = pic;
+        debugger;
+        $.ajax({
+            url:url.save,
+            type:'post',
+            data:data,
+            dataType:'json',
+            success: function(data){
+                pc_layer_msg(data.msg);
+                setTimeout(function () {
+                    window.location.href= url.returnUrl;
+                },1500);
+            }
 
-                    layer.close(index);
-                }
-            })
-        }else if(type ==1){
-            //换货
-            layer.open({
-                content: '换货请联系卖家'
-                ,btn: ['确定', '不要']
-                ,yes: function(index){
-                    layer.close(index);
-                }
-            })
-        }
+        })
 
-      //  window.location.href = urlConnect(url.serviceForm,{id:id})
     }
 </script>
+<script type="text/javascript" src="__STATIC__/index/js/view/uploadFile.js" ></script>
 </body>
 </html>

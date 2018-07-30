@@ -105,6 +105,7 @@
         sureDeliver:"{:url('index/order/sureDeliver')}",
         refund:"{:url('index/order/refund')}",
         evaluateEdit:"{:url('index/order/orderComment')}",
+        orderService:"{:url('index/order/orderService')}",//
         cancelOrder:"{:url('index/order/cancelOrder')}",
     }
 
@@ -202,7 +203,7 @@
                         break;
                     case 2:
                         var totalScore = (data[i].point_score * data[i].goods_num)//+parseFloat(detail.postage*data[i].goods_num)
-                        html +='            <span class="f14">合计:<b></b></span>';
+                        html +='            <span class="f14">合计:<b>'+totalScore.toFixed(2)+'积分</b></span>';
                         break;
                     case 3:
                         var totalPrice =parseFloat(data[i].price* data[i].goods_num)+parseFloat(detail.postage*data[i].goods_num);
