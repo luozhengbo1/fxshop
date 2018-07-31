@@ -257,7 +257,7 @@
 
                         break;
                 }
-                if(order_status!=7 && is_send!=0){
+                if(order_status!=7 && is_send!=constant.send.nosend && is_send !=constant.send.returnMoney){
                     html +='    <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="showWul(\''+data[i].logistics_name+'\',\''+data[i].logistics_number+'\')">物流单号</button>'
                 }
                 html +='    </div>';

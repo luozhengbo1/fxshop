@@ -8,7 +8,8 @@
         background: white;
     }
     .search-history ul li{
-        padding: 4px;
+        padding: 2px 4px;
+        margin-bottom: 2px;
         background: #dedede;
         float: left;
         margin-right: .08rem;
@@ -67,6 +68,10 @@
         return html;
     }
     function getGoods(json) {
+        var data= {
+            show_area:showArea.normal+','+showArea.hot,
+        }
+        if(json) $.extend(data,json);
         initData('goodsList');
         destoryMasonry();
         pageload({
@@ -76,7 +81,7 @@
             size:10,
             ajaxData:{
                 url:"{:url('index/goods/goodsSearch')}",
-                data:json,
+                data:data,
             },
             dealFun:dealData,
             complete:masonryShow,

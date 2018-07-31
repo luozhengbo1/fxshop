@@ -43,7 +43,10 @@
             getGoods();
         })
         function getGoods(json) {
-            var data= {show_area:1}
+            var data= {
+                show_area:showArea.time,
+                goodsName:'',
+            }
             if(json) $.extend(data,json);
             initData('goodsList');
             destoryMasonry();
@@ -53,7 +56,7 @@
                 page:1,
                 size:10,
                 ajaxData:{
-                    url:"{:url('index/goods/getGoodsHotOrOther')}",
+                    url:"{:url('index/goods/goodsSearch')}",
                     data:data
                 },
                 dealFun:dealData,
