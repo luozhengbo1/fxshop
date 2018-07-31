@@ -563,4 +563,76 @@ Array
     [total_fee] => 1
     [transaction_id] => 4200000140201807249130093329
 )
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [cash_fee] => 1
+    [cash_refund_fee] => 1
+    [coupon_refund_count] => 0
+    [coupon_refund_fee] => 0
+    [mch_id] => 1441217402
+    [nonce_str] => 8uzMAEtIoTQUgA5v
+    [out_refund_no] => 5b5fbd933d8a61533001107
+    [out_trade_no] => 144121740220180731093616
+    [refund_channel] => Array
+        (
+        )
+
+    [refund_fee] => 1
+    [refund_id] => 50000407592018073105813476534
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 470D58B4A664A6E3A98B9960BEB1CDD3
+    [total_fee] => 1
+    [transaction_id] => 4200000152201807313605787756
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [cash_fee] => 1
+    [cash_refund_fee] => 1
+    [coupon_refund_count] => 0
+    [coupon_refund_fee] => 0
+    [mch_id] => 1441217402
+    [nonce_str] => vvP8VUdRBfdsINWU
+    [out_refund_no] => 5b5fbd9ef336b1533001118
+    [out_trade_no] => 144121740220180731093426
+    [refund_channel] => Array
+        (
+        )
+
+    [refund_fee] => 1
+    [refund_id] => 50000607372018073105839708546
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => D39266320A47A0EEF521FEBC6B500E0E
+    [total_fee] => 1
+    [transaction_id] => 4200000154201807310196651214
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [cash_fee] => 1
+    [cash_refund_fee] => 1
+    [coupon_refund_count] => 0
+    [coupon_refund_fee] => 0
+    [mch_id] => 1441217402
+    [nonce_str] => u8OxlmCvHhvJ6m4S
+    [out_refund_no] => 5b5fbdaac7ebd1533001130
+    [out_trade_no] => 144121740220180731093207
+    [refund_channel] => Array
+        (
+        )
+
+    [refund_fee] => 1
+    [refund_id] => 50000107662018073105813477456
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => F91950C65CEFF2D28947F394ABA66968
+    [total_fee] => 1
+    [transaction_id] => 4200000141201807317180940465
+)
 

@@ -288,6 +288,7 @@ class Goods extends Controller
             }
             #是否包邮
             $goods['free_type'] = $data['free_type'];
+            $goods['postage'] = '';
             #显示区域
             $goods['show_area'] = $data['show_area'];
             #s商品名称
