@@ -35,15 +35,14 @@ function formEmptyValid(id) {
     var flag= true
     item.each(function(i,ele){
         type = $(this).attr("type");
-        if(type){
-            var value = $(ele).val();
-            if(value==""){
-                $(ele).focus();
-                layer_msg($(ele).data("text"))
-                flag = false;
-                return flag;
-            }
+        var value = $(ele).val();
+        if(value=="" && $(ele).attr('data-text')!='undefined' &&  $(ele).attr('data-text')!=undefined){
+            $(ele).focus();
+            pc_layer_msg($(ele).data("text"))
+            flag = false;
+            return flag;
         }
+
     });
     return flag;
 }
@@ -516,10 +515,15 @@ var msnry;//瀑布流对象
 function masonryShow() {
     var container = document.querySelector('.grid');
     //图片加载有延长
-    setTimeout(function () {
+  /*  setTimeout(function () {
         msnry = new Masonry( container);
         msnry_destory = true;//表示创建masonry完成
-    },800)//800
+    },800)//800*/
+
+    setTimeout(function () {
+        $('.grid-item-image').height($('.grid-item-image').outerWidth())
+    },800)
+
 }
 function destoryMasonry() {
     if(msnry_destory){
