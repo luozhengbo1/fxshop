@@ -286,10 +286,19 @@ function layerLoad(){
          content: html
         ,skin: 'msg'
         ,time: 200000 //2秒后自动关闭
+        ,shadeClose: false
     });
     return loading;
 }
-
+function layerLoad2() {
+    //loading带文字
+   var loading= layer.open({
+        type: 2
+       ,content: '加载中'
+       ,shadeClose: false,
+    });
+   return loading;
+}
 /*数字跳动*/
 function countUpFun(id){
     var target =$("#"+id).attr("data-value");
@@ -598,7 +607,7 @@ var settlement={
 }
 var afterSale={
     yes:1,
-    no:0
+
 }
 function countDown(start,end,current){
     var currentTime = current,html='';
