@@ -586,6 +586,7 @@ var is_send_param = {
     4:'退货完成',
     5:'待回复',
     6:'交易完成',
+    7:'退款中'
     //0未发货1已发货，2待评价。3退货中，4退货完成,,5待回复，6完成
 }
 var order_status_param={
@@ -600,6 +601,24 @@ var order_status_param={
     7:'已取消订单',
     8:'订单完成',
 }
+var constant={
+    send:{
+        nosend:0//:'未发货',
+        ,issend:1//:'已发货',
+        ,waitComment:2//:'待评价',
+        ,returningGoods:3//:'退货中',
+        ,returnedGoods:4//:'退货完成',
+        ,waitRes:5//:'待回复',
+        ,dealComplete:6//:'交易完成',
+        ,returnMoney:7//:'退款中'
+    },
+    order:{
+       noPay: 0//:'未支付',
+       ,isPay:1//:'已支付',
+       ,cancelOrder: 7//:'已取消订单',
+       ,orderComplete: 8//:'订单完成',
+    }
+}
 var settlement={
     money:1,//价格结算
     score:2,//积分结算
@@ -607,7 +626,13 @@ var settlement={
 }
 var afterSale={
     yes:1,
-
+    no:0
+}
+var showArea={
+    time:1//限时抢购
+    ,score:2//积分
+    ,normal:3//日常售卖
+    ,hot:4//热销产品
 }
 function countDown(start,end,current){
     var currentTime = current,html='';
