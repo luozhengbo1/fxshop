@@ -3752,6 +3752,9 @@ a {
 	margin-right: 0!important;
 }
 .footer-boottom{
+	padding-bottom: .5rem;
+}
+.footer-boottom9{
 	padding-bottom: .9rem;
 }
 .footer-bottom2{

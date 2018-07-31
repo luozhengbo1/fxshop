@@ -8,7 +8,8 @@
         background: white;
     }
     .search-history ul li{
-        padding: 4px;
+        padding: 2px 4px;
+        margin-bottom: 2px;
         background: #dedede;
         float: left;
         margin-right: .08rem;
@@ -54,8 +55,8 @@
             html +='	<a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
             html +='     <p class="tc"><img class="grid-item-image" src="'+data[i].main_image+'"></p>';
             html +='     <p class="good-desc ellipsis">'+notEmpty(data[i].name)+' </p>';
-            html +='   </a>';
-            html +='    <div class="p5">';
+            html +='    </a>';
+            html +='    <div class="p5 h40">';
             html +='  		  <p class="fl">已售'+notEmpty(data[i].buy_num)+'</p>';
             html +='  		      <p class="fr">';
             html +='  		      <span class="goods-price">'+priceScoreShow(data[i].settlement_type,data[i].basic_price,data[i].score)+'</span>';
@@ -67,6 +68,10 @@
         return html;
     }
     function getGoods(json) {
+        var data= {
+            show_area:showArea.normal+','+showArea.hot,
+        }
+        if(json) $.extend(data,json);
         initData('goodsList');
         destoryMasonry();
         pageload({
@@ -76,7 +81,7 @@
             size:10,
             ajaxData:{
                 url:"{:url('index/goods/goodsSearch')}",
-                data:json,
+                data:data,
             },
             dealFun:dealData,
             complete:masonryShow,

@@ -96,6 +96,7 @@
     </div>
 </section>
 <script>
+    recodeHistoryUrl();
     $('.goodPriceTitle').each(function (index,ele) {
         $(ele).html(priceScoreShow($(ele).data('type'),$(ele).data('price'),$(ele).data('score')))
     })

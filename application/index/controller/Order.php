@@ -166,10 +166,12 @@
                     if ($goodsAttribute['store'] < $v['num']) {
                         return ajax_return($goods['name'], '该商品库存不足，还剩' . $goodsAttribute['store'], '500');
                     }
-                    if($goods['settlement_type']==2 || $goods['settlement_type']==3){
+                    if($goods['settlement_type']==2  ){#积分结算
                         $totalType +=1;
                     }
                 }
+//                dump($data);
+//                dump($totalType);
                 if(count($data)==$totalType){#积分
                     $type = 1;
                 }elseif($totalType==0){#钱
@@ -289,6 +291,7 @@
                 foreach ($orderGoods as $value ){
                     Db::name('goods_attribute')->where(['id'=>$value['sku_id']])->setDec('store',$value['goods_num']);
                 }
+//                dump($type);die;
                 #将库存减少，半小时后不付款恢复 或者支付成功减库存
                 if ($addId1 > 0 && $addId2 > 0 && $addId3 > 0 ) {
                     # 清空购物车^M
@@ -298,7 +301,7 @@
 //                            dump($res);die;^M
                         }
                     }
-                    if($type==0 ||  $type==2){
+                    if($type==0 ||  $type==2){ #钱 和积分加钱
                         $jsApiParameters = base64_encode($jsApiParameters);
                         $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$addId1}");
                         die(json_encode($backData));
@@ -433,6 +436,7 @@
         #统计积分合计
         public function totalScore($data)
         {
+//            dump($data);die;
             $pay = 0;
             foreach ($data  as $val) {
                 $goods = Db::name('goods')->where(['id'=>$val['goodsId']])->find();
@@ -640,6 +644,7 @@
                 $update['after_sale_pic'] =$data['after_sale_pic'];
                 $update['after_sale_is'] =1;
                 Db::name('order_goods')->where(['order_id'=>$data['order_id'],'goods_id'=>$data['goods_id'],'sku_id'=>$data['sku_id']])->update($update);
+                return ajax_return('','申请成功','200');
             }
             $this->assign('titleName', "商品售后");
             $order_id = $this->request->param('order_id');

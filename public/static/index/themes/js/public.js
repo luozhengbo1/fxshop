@@ -35,15 +35,14 @@ function formEmptyValid(id) {
     var flag= true
     item.each(function(i,ele){
         type = $(this).attr("type");
-        if(type){
-            var value = $(ele).val();
-            if(value==""){
-                $(ele).focus();
-                layer_msg($(ele).data("text"))
-                flag = false;
-                return flag;
-            }
+        var value = $(ele).val();
+        if(value=="" && $(ele).attr('data-text')!='undefined' &&  $(ele).attr('data-text')!=undefined){
+            $(ele).focus();
+            pc_layer_msg($(ele).data("text"))
+            flag = false;
+            return flag;
         }
+
     });
     return flag;
 }
@@ -286,10 +285,19 @@ function layerLoad(){
          content: html
         ,skin: 'msg'
         ,time: 200000 //2秒后自动关闭
+        ,shadeClose: false
     });
     return loading;
 }
-
+function layerLoad2() {
+    //loading带文字
+   var loading= layer.open({
+        type: 2
+       ,content: '加载中'
+       ,shadeClose: false,
+    });
+   return loading;
+}
 /*数字跳动*/
 function countUpFun(id){
     var target =$("#"+id).attr("data-value");
@@ -507,10 +515,15 @@ var msnry;//瀑布流对象
 function masonryShow() {
     var container = document.querySelector('.grid');
     //图片加载有延长
-    setTimeout(function () {
+  /*  setTimeout(function () {
         msnry = new Masonry( container);
         msnry_destory = true;//表示创建masonry完成
-    },800)//800
+    },800)//800*/
+
+    setTimeout(function () {
+        $('.grid-item-image').height($('.grid-item-image').outerWidth())
+    },800)
+
 }
 function destoryMasonry() {
     if(msnry_destory){
@@ -577,6 +590,7 @@ var is_send_param = {
     4:'退货完成',
     5:'待回复',
     6:'交易完成',
+    7:'退款中'
     //0未发货1已发货，2待评价。3退货中，4退货完成,,5待回复，6完成
 }
 var order_status_param={
@@ -591,6 +605,24 @@ var order_status_param={
     7:'已取消订单',
     8:'订单完成',
 }
+var constant={
+    send:{
+        nosend:0//:'未发货',
+        ,issend:1//:'已发货',
+        ,waitComment:2//:'待评价',
+        ,returningGoods:3//:'退货中',
+        ,returnedGoods:4//:'退货完成',
+        ,waitRes:5//:'待回复',
+        ,dealComplete:6//:'交易完成',
+        ,returnMoney:7//:'退款中'
+    },
+    order:{
+       noPay: 0//:'未支付',
+       ,isPay:1//:'已支付',
+       ,cancelOrder: 7//:'已取消订单',
+       ,orderComplete: 8//:'订单完成',
+    }
+}
 var settlement={
     money:1,//价格结算
     score:2,//积分结算
@@ -599,6 +631,12 @@ var settlement={
 var afterSale={
     yes:1,
     no:0
+}
+var showArea={
+    time:1//限时抢购
+    ,score:2//积分
+    ,normal:3//日常售卖
+    ,hot:4//热销产品
 }
 function countDown(start,end,current){
     var currentTime = current,html='';

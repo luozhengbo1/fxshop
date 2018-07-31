@@ -107,6 +107,7 @@
         evaluateEdit:"{:url('index/order/orderComment')}",
         orderService:"{:url('index/order/orderService')}",//
         cancelOrder:"{:url('index/order/cancelOrder')}",
+        cancleAfterSale:"{:url('index/order/cancleAfterSale')}",
     }
 
     tabSwitch($('.nav-list-tab li'),loadOrderData);
@@ -247,14 +248,16 @@
                         if(is_send ==2){
                             html +='        <button class="layui-btn layui-btn-xs  layui-btn-danger layui-btn-radius" onclick="evaluateEdit(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">评&nbsp;&nbsp;价</button>';
                             var text = ''
-                            if(data[i].after_sale_is==afterSale.yes) text='取消申请';
-                            else text='申请售后'
-                            html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="goOrderService(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">'+text+'</a>';
+                            if(data[i].after_sale_is==afterSale.yes)
+                                html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="cancelAfterSale(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">取消申请</a>';
+                            else
+                                 html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="goOrderService(\''+order_id+'\',\''+goods_id+'\',\''+sku_id+'\')">申请售后</a>';
+
                         }
 
                         break;
                 }
-                if(order_status!=7 && is_send!=0){
+                if(order_status!=7 && is_send!=constant.send.nosend && is_send !=constant.send.returnMoney){
                     html +='    <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="showWul(\''+data[i].logistics_name+'\',\''+data[i].logistics_number+'\')">物流单号</button>'
                 }
                 html +='    </div>';
@@ -280,6 +283,13 @@
         },1500)
     }
 
+    function cancelAfterSale(order_id,goods_id,sku_id){
+        pub_edit({
+            url:url.cancleAfterSale,
+            data:{'order_id':order_id,'goods_id':goods_id,'sku_id':sku_id},
+            complete: modifyComplete,
+        })
+    }
 </script>
 <script type="text/javascript" src="__STATIC__/index/js/view/order.js" ></script>
 {include file="Public/footer"}

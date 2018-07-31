@@ -2,7 +2,7 @@
 <style>
 	.search-box-cover{opacity: .1}
 </style>
-<body class="footer-boottom">
+<body class="footer-bottom2">
 {include file="Public/header"}
 <link rel="stylesheet" type="text/css" type="text/css" href="__STATIC__/index/plugins/swiper3.4/css/swiper.min.css">
 <script type="text/javascript"  src="__STATIC__/index/plugins/swiper3.4/js/swiper.js"></script>
@@ -93,9 +93,9 @@
             //    html +='	<a href="{:url(\'goods/detail\',array(\'id\'=>$vo[\'id\']))}" >';
                 html +='	<a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
                 html +='     <p class="tc"><img class="grid-item-image" src="'+data[i].main_image+'"></p>';
-                html +='     <p class="good-desc ellipsis">'+notEmpty(data[i].name)+' </p>';
+                html +='     <p class="good-desc ellipsis h40">'+notEmpty(data[i].name)+' </p>';
                 html +='    </a>';
-                html +='    <div class="p5 clear">';
+                html +='    <div class="p5 clear h40">';
                 html +='  		  <p class="fl">已售'+notEmpty(data[i].buy_num)+'</p>';
                 html +='  		      <p class="fr">';
                 if(data[i].price_real!=0){

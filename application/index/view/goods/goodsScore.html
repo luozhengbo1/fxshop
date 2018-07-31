@@ -24,7 +24,10 @@
         getGoods();
     })
     function getGoods(json) {
-        var data= {show_area:2}
+        var data= {
+            show_area:showArea.score,
+            goodsName:'',
+        }
         if(json) $.extend(data,json);
         initData('goodsList');
         destoryMasonry();
@@ -34,7 +37,7 @@
             page:1,
             size:10,
             ajaxData:{
-                url:"{:url('index/goods/getGoodsHotOrOther')}",
+                url:"{:url('index/goods/goodsSearch')}",
                 data:data
             },
             dealFun:dealData,
@@ -49,9 +52,9 @@
             html +='<li class="grid-item">';
             html +='	<a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
             html +='     <p class="tc"><img class="grid-item-image" src="'+data[i].main_image+'"></p>';
-            html +='     <p class="good-desc ellipsis">'+notEmpty(data[i].name)+' </p>';
+            html +='     <p class="good-desc ellipsis h40">'+notEmpty(data[i].name)+' </p>';
             html +='    </a>';
-            html +='    <div class="p5 clear">';
+            html +='    <div class="p5 clear h40">';
             html +='  		  <p class="fl">已售'+notEmpty(data[i].buy_num)+'</p>';
             html +='  		  <p class="fr">';
             html +='  		      <span class="goods-price">'+priceScoreShow(data[i].settlement_type,data[i].basic_price,data[i].score)+'</span>';

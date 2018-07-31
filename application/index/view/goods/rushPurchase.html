@@ -43,7 +43,10 @@
             getGoods();
         })
         function getGoods(json) {
-            var data= {show_area:1}
+            var data= {
+                show_area:showArea.time,
+                goodsName:'',
+            }
             if(json) $.extend(data,json);
             initData('goodsList');
             destoryMasonry();
@@ -53,7 +56,7 @@
                 page:1,
                 size:10,
                 ajaxData:{
-                    url:"{:url('index/goods/getGoodsHotOrOther')}",
+                    url:"{:url('index/goods/goodsSearch')}",
                     data:data
                 },
                 dealFun:dealData,
@@ -80,7 +83,7 @@
                 else
                     html +='             <a  href="javascript:;" onclick=" layer_msg(\'活动已经结束了，亲\');">';
                 html +='     <p class="tc"><img class="grid-item-image" src="'+data[i].main_image+'"></p>';
-                html +='     <p class="good-desc ellipsis">'+notEmpty(data[i].name)+' </p>';
+                html +='     <p class="good-desc ellipsis h40">'+notEmpty(data[i].name)+' </p>';
                 html +='      <div class="layui-progress layui-progress-big progress-bar-height ml5 mr5 w90p">';
                 html +='          <div class="clear text-show" >';
                 html +='              <p class="fl">已抢'+notEmpty(data[i].buy_num)+'件</p>';

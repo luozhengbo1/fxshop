@@ -317,11 +317,7 @@
 {include file="Public/footer-quick-nav"}
 <script>
 
-    /**
-     *
-     &lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321369074.jpg&quot; title=&quot;1532056321369074.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321102126.jpg&quot; title=&quot;1532056321102126.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321126105.jpg&quot; title=&quot;1532056321126105.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321294887.jpg&quot; title=&quot;1532056321294887.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321335156.jpg&quot; title=&quot;1532056321335156.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;/ueditor/php/upload/image/20180720/1532056321400333.jpg&quot; title=&quot;1532056321400333.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;234567&lt;br/&gt;&lt;/p&gt;
 
-     */
     //alert($("#countDown").data('current')+"当前时间"+new Date().getTime()/1000)
     if($('#countDown').size()>0){
         var start = $("#countDown").data('start'),end=$("#countDown").data('end'),current=$("#countDown").data('current');
@@ -385,9 +381,13 @@
         var swiper1 = bannerSwiper('header-banner');//顶部banner
         var swiper2 = bannerSwiper('love-goods-banner');//猜你喜欢 滚动
         getEvaluate("{$goods['id']}");
+        //loading带文字
+
+
     })
     //获取商品评论
     function getEvaluate(){
+        var loading =  layerLoad2();
         $.ajax({
             url:url.evaluate_list,
             type:'post',
@@ -397,7 +397,7 @@
                 if(data.code==200){
                     $("#evaluateList").empty().append(dealData(data.data)) ;
                 }
-
+                layer.close(loading);
             }
         })
     }

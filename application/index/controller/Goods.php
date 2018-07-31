@@ -114,21 +114,38 @@
         public function goodsSearch()
         {
             $name = $this->request->param('goodsName');
-            if(empty($name) ){
-
-                return ajax_return_error('缺少搜索参数');
-            }
             $page = $this->request->param('page');
             $size = $this->request->param('size');
-            $goodsList = Db::name('goods')
-                ->where([
+            $showArea = $this->request->param('show_area');
+            $tempArr = explode(",", $showArea);
+            //空查所有
+            if(empty($name) ){
+                //return ajax_return_error('缺少搜索参数');
+                $where = [
+                    'status'=>1,
+                    'isdelete'=>0,
+                    'show_area'=>['in',$tempArr],
+                ];
+            }else{
+                $where =[
                     'status'=>1,
                     'isdelete'=>0,
                     'name'=>['like',"%$name%"],
-                    'show_area'=>['in',[3,4]],
-                ])
+                    'show_area'=>['in',$tempArr],
+                ];
+            }
+            $goodsList = Db::name('goods')
+                ->where($where)
                 ->page( $page,$size)
                 ->select();
+            //商品对应的sku
+            foreach ($goodsList as $k=>$v){
+                $goods_attribute = Db::name('goods_attribute')
+                    ->where(['goods_id'=>$v['id']])
+                    ->page($page,$size)
+                    ->select();
+                $goodsList[$k]['skuData'] =$goods_attribute;
+            }
             #记录搜索词
             $data['openid'] =$this->userInfo['openid'];
             $data['search'] =$name;
