@@ -249,11 +249,11 @@
                     return ajax_return_error('缺少参数id');
                 }
                 $comment = Db::name('goods_comment')
-                    ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'goods_id'=>$data['id'], 'avg_score'=>['between',[$data['start'],$data['end'] ]]])
+                    ->where(['status'=>1,'goods_id'=>$data['id'], 'avg_score'=>['between',[$data['start'],$data['end'] ]]])
                     ->page($page,$size)
                     ->select();
                 $count = Db::name('goods_comment')
-                    ->where(['openid'=>$this->userInfo['openid'],'status'=>1,'goods_id'=>$data['id'],'avg_score'=>['between',[$data['start'],$data['end'] ]]])
+                    ->where(['status'=>1,'goods_id'=>$data['id'],'avg_score'=>['between',[$data['start'],$data['end'] ]]])
                     ->page($page,$size)
                     ->count();
                 return ajax_return($comment,'ok','200');

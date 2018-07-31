@@ -2,7 +2,22 @@
 {php}
 $js_api_parameters = base64_decode($_GET['js_api_parameters']);
 {/php}
+<style>
 
+    .btn-default{
+        width: 80%;
+        margin: 0 auto;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        color: white;
+        background: rgba(20, 20, 20, 0.92);
+        border: none;
+        outline: none;
+        font-size: 14px;
+        display: block;
+    }
+</style>
 <body style="background: white">
 <div >
     <div class="payHead mt40">
@@ -16,8 +31,8 @@ $js_api_parameters = base64_decode($_GET['js_api_parameters']);
             <span>微信支付</span>
         </div>
     </div>
-    <div class="footer-fixed">
-        <button  onClick="callpay()" id="payDom" class="w100p bootstrap-btn lh30" style="background: black; color: white">确认支付</button>
+    <div style="margin-top: 65%">
+        <button  onClick="callpay()" id="payDom" class="btn-default" >确认支付</button>
     </div>
 </div>
     <script type="text/javascript">
@@ -54,7 +69,7 @@ $js_api_parameters = base64_decode($_GET['js_api_parameters']);
                 jsApiCall();
             }
         }
-        callpay();
+        // callpay();
     </script>
 </body>
 </html>

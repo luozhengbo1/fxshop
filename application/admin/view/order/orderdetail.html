@@ -90,6 +90,8 @@
         <td class="f-14">
           {if condition="$vo.after_sale_is eq 1"}
           <a href="javascript:;" onclick="afterHandle('{$vo[\'order_id\']}',{$vo['id']},{$vo['after_sale_type']})" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 售后处理</a>
+          {elseif  condition="$vo.after_sale_is eq 2" /}
+          已处理
           {/if}
         </td>
         {/if}

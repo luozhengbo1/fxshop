@@ -571,7 +571,7 @@
                 $returnMoney = $orderGoods['goods_num']*$goodsAttribute['price'];
                 #如果商品包邮，退款时减去邮费
                 if($goods['free_type']==0){
-                    $returnMoney-=$orderGoods['goods_num']*10;
+                    $returnMoney-=$orderGoods['goods_num']*$goods['postage'];
                 }
                 if($returnMoney<0)$returnMoney=0.01;
 //                $returnMoney = $goodsAttribute['price'];
@@ -580,7 +580,7 @@
                     'order_id'=>$data['order_id'],
                     'goods_id'=>$data['goods_id'],
                     'sku_id'=>$data['sku_id'],
-                ])->update(['is_return'=>1,'return_price'=>$goodsAttribute['price'],'is_send'=>7]); # 待退款7退款中 3退货中
+                ])->update(['is_return'=>1,'return_price'=>$goodsAttribute['price'],'is_send'=>3]); # 待退款  3退款中 7退款中/退货退款
                 $ordertmp = Db::name('order')->field('return_price_all')->where([
                     'order_id'=>$data['order_id']])->find();
                 #退款价
@@ -640,7 +640,7 @@
                 $time = time() ;
                 $day7 = 24*60*60;
                 if($time - $orderGoods['get_goods_time'] > $day7 && ($data['after_sale_type']==1 ||$data['after_sale_type']==3)  ){#大于7天不可以退换货
-                        return ajax_return('','超过七天不可以退货货，请联系卖家','500');
+                    return ajax_return('','超过七天不可以退换货，请联系卖家','500');
                 }
                 $update=[];
                 $update['after_sale_type'] = $data['after_sale_type'];

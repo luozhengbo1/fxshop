@@ -385,4 +385,28 @@ Array
     [return_msg] => OK
     [sign] => 2EBFA596FA12C758890025FA3D80C033
 )
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ORDERNOTEXIST
+    [err_code_des] => 订单不存在
+    [mch_id] => 1441217402
+    [nonce_str] => 2d8D6455AMjMdsWl
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 9D0B3C195BC684DAAAA8B3C2991C1F46
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ORDERNOTEXIST
+    [err_code_des] => 订单不存在
+    [mch_id] => 1441217402
+    [nonce_str] => VAdJ94Rr3FUwpQfd
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 46714AD37EE1C6415323BBAF3BE411AF
+)
 
