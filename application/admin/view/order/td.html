@@ -19,7 +19,7 @@
 ?></td>
 {php} } {/php}
 <td>{$vo.customer_name}</td>
-<td><?php $address = \think\Db::name('customer_address')->where(['id'=> $vo['address_id']])->find();
+<td><?php $address = json_decode($vo['address_detail'],true);
     echo $address['name'];
     echo $address['mobile'];
     echo '<br/>';
@@ -31,16 +31,6 @@
         echo '未支付';
     }else if($vo['order_status']=='1'){
         echo '已支付';
-    }else if($vo['order_status']=='2'){
-        echo '待评价';
-    }else if($vo['order_status']=='3'){
-        echo '待回复';
-    }else if($vo['order_status']=='4'){
-        echo '待退款';
-    } else if($vo['order_status']=='5'){
-        echo '部分退款';
-    }else if($vo['order_status']=='6'){
-        echo '全部退款';
     }else if($vo['order_status']=='7'){
         echo '取消订单';
     }else if($vo['order_status']=='8'){

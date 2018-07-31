@@ -69,24 +69,29 @@
             <div class="module  clear pr10 pt5 mb5" >
                 <div class="cont tr">
                     <span class="f14">共<b>{$vo['goods_num']}</b>件商品</span>
-                    <span class="f14">合计:<b>
-                         {if condition="$showArea eq 2" /}
-                              {$vo['point_score'] * $vo['goods_num']}
-                                积分
-                        {/if}
-                         {if condition="$showArea neq 2" /}￥{$vo['price']*$vo['goods_num']+($vo['goods_num']*$vo['goods_detail']['postage'])}  {/if}
+                    <span class="f14">合计:
+                        <b class="goodPriceTitle"
+                           data-num="{$vo['goods_num']}"
+                           data-postage="{$vo['goods_detail']['postage']}"
+                           data-freetype="{$vo['goods_detail']['free_type']}"
+                           data-stype="{$vo['goods_detail']['settlement_type']}"
+                           data-showarea=""
+                           data-score="{$vo['point_score']}"
+                           data-price="{$vo['price']}">
+                         </b>
+                    </span>
 
-                    </b></span>
                     <span class="f14">(含运费<b>￥{$vo['goods_detail']['postage']??'0'}</b>)</span>
                 </div>
+                {php}
+                $orderId = $orderDetail[0]['order_id'];
+                $is_send   = $vo['is_send'];
+                $goodsId = $vo['goods_id'];
+                $skuid   = $vo['sku_id'];
+                $status   = $vo['order_status'];
+                {/php}
                 <div class="tr">
-                    {php}
-                        $orderId = $orderDetail[0]['order_id'];
-                        $is_send   = $vo['is_send'];
-                        $goodsId = $vo['goods_id'];
-                        $skuid   = $vo['sku_id'];
-                         $status   = $vo['order_status'];
-                    {/php}
+
                    <!--   // var is_send_param =
                    // 0:'未发货',
                    // 1:'已发货',
@@ -102,24 +107,22 @@
                    // 7:'已取消订单',
                    // 8:'订单完成',
                     -->
-                    {if condition="$is_send eq 3" /}  <!--待退款-->
-                    <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="goOrderService('{$orderId}','{$goodsId}','{$skuid}')"  >申请售后</button>
-                    {/if}
+
                     {if condition="$status eq 1"/}
-
-
-
-                        {if condition="$is_send eq 1 || $is_send eq 0 || $is_send eq 2"/}   if(is_send==0 || is_send==1 ||is_send==2)
-                        <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="refund('{$orderId}','{$goodsId}','{$skuid}')">退款</button>
+                        {if condition="$is_send eq 0"/}
+                        <button class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="refund('{$orderId}','{$goodsId}','{$skuid}')">退&nbsp;&nbsp;款</button>
                         {/if}
-                        {if condition="$status eq 1" /} <!--确认收货-->
-                         <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="sureDeliver('{$orderId}','{$goodsId}','{$skuid}')">确认收货</button>
+                        {if condition="$is_send eq 1" /} <!--确认收货-->
+                         <button class="layui-btn  layui-btn-xs  layui-btn-danger layui-btn-radius" onclick="sureDeliver('{$orderId}','{$goodsId}','{$skuid}')">确认收货</button>
                         {/if}
-                        {if condition="$status eq 2" /} <!--待评价-->
-                        <button class="layui-btn layui-btn-primary layui-btn-sm"  onclick="evaluate('{$orderId}','{$goodsId}','{$skuid}')">评价</button>
+                        {if condition="$is_send eq 2" /} <!--待评价-->
+                        <button class="layui-btn layui-btn-xs  layui-btn-danger layui-btn-radius" onclick="evaluateEdit('{$orderId}','{$goodsId}','{$skuid}')">评&nbsp;&nbsp;价</button>
+                        <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" id="afterSaleService" onclick="goOrderService('{$orderId}','{$goodsId}','{$skuid}')" data-aftersale="{$vo['after_sale_is']}'">申请售后</button>
                         {/if}
-
-                   <!-- <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="logistic('{$orderId}','{$goodsId}','{$skuid}')"  >物流信息</button>-->
+                        {if condition="$is_send neq 0 && $status neq 7" /} <!--待评价-->
+                        <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="showWul('{$vo[\'logistics_name\']}','{$vo[\'logistics_number\']}')">物流单号</button>
+                        {/if}
+                   <!-- <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="logistic('{$orderId}','{$goodsId}','{$skuid}')"  >物流信息</button>-->
 
                     {/if}
                 </div>
@@ -127,10 +130,10 @@
             {/volist}
             <div class="module clear tr pt10 pr10" style="border-top: 1px dotted lightgrey" >
                 {if condition="$status eq 0"}<!--待付款-->
-                <button class="layui-btn layui-btn-primary layui-btn-sm orderCancel" onclick="cancelOrder('{$orderDetail[0][\'order_id\']}')">取消订单</button>
-                <button class="layui-btn layui-btn-primary layui-btn-sm orderPay" onclick="pay('{$orderDetail[0][\'order_id\']}')">付款</button>
+                <button class="layui-btn  layui-btn-xs orderCancel layui-btn-radius" onclick="cancelOrder('{$orderDetail[0][\'order_id\']}')">取消订单</button>
+                <button class="layui-btn  layui-btn-xs  layui-btn-danger layui-btn-radius orderPay" onclick="pay('{$orderDetail[0][\'order_id\']}')">付款</button>
                 {/if}
-                <button class="layui-btn layui-btn-primary layui-btn-sm">联系卖家</button>
+                <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius">联系卖家</button>
             </div>
         </li>
     </ul>
@@ -143,9 +146,42 @@
         {if condition="$status eq 0 && $is_send eq 1" /}
         <p class="lh20">发货时间:{$orderDetail[0]['create_time']|date="Y-m-d H:i:s",###}</p>
         {/if}
+
     </div>
 </section>
 <script>
+    $('.goodPriceTitle').each(function (index,ele) {
+        var $ele=$(ele);
+        var freetype =parseFloat($ele.data('freetype')),
+            postage = parseFloat($ele.data('postage')),
+            num=parseInt($ele.data('num')),
+            price=parseFloat($ele.data('price')),
+            pointScore=parseFloat($ele.data('score')),
+            totalPrice=0,
+            totalPoint=0,
+            stype = $ele.data('stype')
+        switch(stype){
+            case 1:
+                totalPrice += parseInt(num)*parseFloat(price);
+                break;
+            case 2:
+                totalPoint +=(parseInt(num)*parseFloat(pointScore));
+                break;
+            case 3:
+                totalPoint=parseInt(num)*parseFloat(price);
+                totalPrice += parseInt(num)*parseFloat(price);
+                break;
+        }
+        if(freetype==0 && !isNaN(postage)){
+            totalPrice += postage;//加上邮费
+        }
+        html ='￥'+totalPrice+'+'+totalPoint+'积分';
+        $(ele).html(html)
+    });
+    var aftersale_type =parseInt($('#afterSaleService').data('aftersale'));
+    if(aftersale_type==afterSale.yes){
+        $('#afterSaleService').html('取消申请')
+    }else   $('#afterSaleService').html('申请售后')
     var url = {
         orderService:"{:url('index/order/orderService')}",//
         logistics:"{:url('index/order/logistics')}",//物流查看
@@ -153,8 +189,11 @@
         againPay:"{:url('index/order/againPay')}",//再次支付
         sureDeliver:"{:url('index/order/sureDeliver')}",
         refund:"{:url('index/order/refund')}",
+        evaluateEdit:"{:url('index/order/orderComment')}",
+        cancelOrder:"{:url('index/order/cancelOrder')}",
     }
     backTime();
+
     function modifyComplete() {
         setTimeout(function () {
             location.reload();

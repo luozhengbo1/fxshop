@@ -46,8 +46,6 @@ class Order extends Controller
             if($orderStatus==6){#完成订单
                 $map['fy_order.order_status'] = 8;
             }
-
-
         }
         #
         if ($this->request->param("user_id")) {
@@ -96,9 +94,9 @@ class Order extends Controller
 
         $userList = Db::name('admin_user')->where(['isdelete'=>0,'id'=>['>',1]])->select();
         $orderList = Db::name('order')
-           ->field('fy_order.id,fy_order.buy_list,fy_order.address_id,fy_order.pay_status,
+           ->field('fy_order.id,fy_order.buy_list,fy_order.address_id,fy_order.pay_status,fy_order.address_detail,
             fy_order.order_id,fy_order.order_status,fy_order.total_price,fy_order.customer_name,fy_order.customer_name,fy_order.create_time,fy_order.pay_time,
-            fy_order_goods.user_id,fy_order_goods.is_send')
+            fy_order_goods.user_id,fy_order_goods.is_send, fy_order_goods.is_send,fy_order_goods.is_return')
             ->join( 'fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
             ->order('fy_order.create_time desc')
             ->where($map)
@@ -124,16 +122,15 @@ class Order extends Controller
         $map['fy_order.isdelete'] =1;
         $userList = Db::name('admin_user')->where(['isdelete'=>0,'id'=>['>',1]])->select();
         $orderList = Db::name('order')
-            ->field(
-
-                'fy_order.id,fy_order.buy_list,fy_order.address_id,
+            ->field('fy_order.id,fy_order.buy_list,fy_order.address_id,fy_order.pay_status,
             fy_order.order_id,fy_order.order_status,fy_order.total_price,fy_order.customer_name,fy_order.customer_name,fy_order.create_time,fy_order.pay_time,
-            fy_order_goods.user_id')
+            fy_order_goods.user_id,fy_order_goods.is_send, fy_order_goods.is_send,fy_order_goods.is_return')
             ->join( 'fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
             ->order('fy_order.create_time desc')
             ->where($map)
             ->group('fy_order.order_id')
-            ->paginate(1);
+            ->paginate(5);
+//        dump($orderList);die;
         $this->view->assign ('userList',$userList);
         $this->view->assign('list',$orderList);
         $this->view->assign('count',Db::name('order')->where($map)->count());
@@ -176,6 +173,10 @@ class Order extends Controller
             $data = $this->request->post();
             if(!$data['id']){
                 return ajax_return_error('缺少参数id');
+            }
+            $orderGoods = Db::name('order_goods')->where(['id'=>$data['id']])->find();
+            if($orderGoods['is_return']!=0){
+                return ajax_return_error('退款单不能发货');
             }
             #付款成功通知
             include_once APP_PATH."/index/controller/sendMsg/SDK/WeiXin.php";
@@ -270,90 +271,104 @@ class Order extends Controller
             $data = $this->request->post();
             $order_id = $data['order_id'];
             $result = ['code'=>400,'msg'=>''];
+
             if( $order_id ){
-                $where = array('order_id' => $order_id);
-                $order = Db::name('order')
-                    ->where([
-                        'order_id'=>$order_id,
-                        'pay_status'=>1,
+                # 拒绝退款
+                if($data['flag']=="yes"){
+                    $where = array('order_id' => $order_id);
+                    $order = Db::name('order')
+                        ->where([
+                            'order_id'=>$order_id,
+                            'pay_status'=>1,
 //                        'order_status'=>['in',[1,2,3]]
-                    ])//支付状态//支付成功，和正在处理中的订单
-                    ->find();
-                #如果订单在父订单中支付，需要找到父订单用父订单id发起退款
-                $orderId = substr($order_id,'0',strlen($order_id)-4);
-                $orderAll = Db::name('order_all')->where(['order_id'=>$orderId,'status'=>1])->find();
+                        ])//支付状态//支付成功，和正在处理中的订单
+                        ->find();
+                    #如果订单在父订单中支付，需要找到父订单用父订单id发起退款
+                    $orderId = substr($order_id,'0',strlen($order_id)-4);
+                    $orderAll = Db::name('order_all')->where(['order_id'=>$orderId,'status'=>1])->find();
 //                dump($orderAll);
-                if( empty($orderAll)  ){
-                    $orderId = $order_id;
-                }else{
-                    $order['total_price']=$orderAll['total_price'];
-                }
-                $orderGoods =  Db::name('order_goods')->where(['id'=>$data['id']])->find();
-                $orderGoods['goods_detail']=json_decode($orderGoods['goods_detail'],true);
-                if($orderGoods['is_return']!=1){
-                    return ajax_return_error('没有退款单');
-                }
-                if($orderGoods['return_price']<=0){
-                    return ajax_return_error('退款金额不能小于0');
-                }
-                $merchid = \WxPayConfig::MCHID;
-                if( !$order ){
-                    $result['code'] = 401;
-                    $result['msg'] = '没有退款订单';
-                    file_put_contents("wx_refund_error.log",print_r($result, true)."\r", 8);
-                   return ajax_return_error('没有退款订单');
-                }
+                    if( empty($orderAll)  ){
+                        $orderId = $order_id;
+                    }else{
+                        $order['total_price']=$orderAll['total_price'];
+                    }
+                    $orderGoods =  Db::name('order_goods')->where(['id'=>$data['id']])->find();
+                    $orderGoods['goods_detail']=json_decode($orderGoods['goods_detail'],true);
+                    if($orderGoods['is_return']!=1){
+                        return ajax_return_error('没有退款单');
+                    }
+                    if($orderGoods['return_price']<=0){
+                        return ajax_return_error('退款金额不能小于0');
+                    }
+                    $merchid = \WxPayConfig::MCHID;
+                    if( !$order ){
+                        $result['code'] = 401;
+                        $result['msg'] = '没有退款订单';
+                        file_put_contents("wx_refund_error.log",print_r($result, true)."\r", 8);
+                        return ajax_return_error('没有退款订单');
+                    }
 //                dump($order['total_price']);
-                $input = new \WxPayRefund();
-                $input->SetOut_trade_no($orderId);   //自己的订单号
-                //$input->SetTransaction_id($order['transaction_id']);  //微信官方生成的订单流水号，在支付成功中有返回
-                $input->SetOut_refund_no( uniqid().time() );   //退款单号
-                $input->SetTotal_fee(  $order['total_price']*100);   //订单标价金额，单位为分
-                $input->SetRefund_fee(  $orderGoods['return_price']*100 );  //退款总金额，订单总金额，单位为分，只能为整数
-                $input->SetOp_user_id($merchid);
-                $res = \WxPayApi::refund($input);
+                    $input = new \WxPayRefund();
+                    $input->SetOut_trade_no($orderId);   //自己的订单号
+                    //$input->SetTransaction_id($order['transaction_id']);  //微信官方生成的订单流水号，在支付成功中有返回
+                    $input->SetOut_refund_no( uniqid().time() );   //退款单号
+                    $input->SetTotal_fee(  $order['total_price']*100);   //订单标价金额，单位为分
+                    $input->SetRefund_fee(  $orderGoods['return_price']*100 );  //退款总金额，订单总金额，单位为分，只能为整数
+                    $input->SetOp_user_id($merchid);
+                    $res = \WxPayApi::refund($input);
 //                dump($input);
 //                dump($res);die;
-                //退款操作
-                if( $res['return_code'] == 'SUCCESS' &&  $res['result_code']=="SUCCESS" ){
-                    file_put_contents("wx_refund_success.log",print_r($res, true)."\r", 8);
-                    //修改订单状态 将订单总金额减少退款金额
-                    $orderData = Db::name('order')->field('total_price')->where( [ 'order_id'=>$order_id ] )->find();
-                    $decPrice = $orderData['total_price'] -$orderGoods['return_price'] ;#减去订单总价
-                    if($decPrice<0)$decPrice=0;
+                    //退款操作
+                    if( $res['return_code'] == 'SUCCESS' &&  $res['result_code']=="SUCCESS" ){
+                        file_put_contents("wx_refund_success.log",print_r($res, true)."\r", 8);
+                        //修改订单状态 将订单总金额减少退款金额
+                        $orderData = Db::name('order')->field('total_price')->where( [ 'order_id'=>$order_id ] )->find();
+                        $decPrice = $orderData['total_price'] -$orderGoods['return_price'] ;#减去订单总价
+                        if($decPrice<0)$decPrice=0;
 //                    if(($order['return_price_all'])== $order['total_price']){#全额退款
 //                        $order_status = 6;
 //                    }else {
 //                        $order_status =5;
 //                    }
-                    $updateRes = Db::name('order')->where( [ 'order_id'=>$order_id ] )->update(['total_price'=>$decPrice]);
-                    Db::name('order_goods')->where( [ 'id'=>$data['id'] ] )->update(['is_return'=>2,'is_send'=>4]);#已退款，退货完成
-                    $result['code'] = 200;
-                    $result['msg'] = '退款成功';
-                    #退款加上库存
-                    $goodsAttribute = Db::name('goods_attribute')->where(['id'=>$orderGoods['sku_id']])->find();
-                    $storeRes = Db::name('goods_attribute')->where(['id'=>$orderGoods['sku_id']])->update(['store'=>$orderGoods['goods_num']+$goodsAttribute['store']]);
+                        $updateRes = Db::name('order')->where( [ 'order_id'=>$order_id ] )->update(['total_price'=>$decPrice]);
+                        Db::name('order_goods')->where( [ 'id'=>$data['id'] ] )->update(['is_return'=>2,'is_send'=>4]);#已退款，退货完成
+                        $result['code'] = 200;
+                        $result['msg'] = '退款成功';
+                        #退款加上库存
+                        $goodsAttribute = Db::name('goods_attribute')->where(['id'=>$orderGoods['sku_id']])->find();
+                        $storeRes = Db::name('goods_attribute')->where(['id'=>$orderGoods['sku_id']])->update(['store'=>$orderGoods['goods_num']+$goodsAttribute['store']]);
 //                    #退款通知
-                    include_once APP_PATH."/index/controller/sendMsg/SDK/WeiXin.php";
-                    $wx = new \WeiXin();
-                    $wx->refund($orderGoods['goods_detail']['name'],$orderGoods['openid'],$orderGoods['order_id'],$orderGoods['return_price']);
-                    #交易记录 退款
-                    $user = Db::name('customer')->where(['openid'=>$orderGoods['openid']])->find();
-                    $wx_pay_refund_log_insert=[];
-                    $wx_pay_refund_log_insert['openid']= $orderGoods['openid'];
-                    $wx_pay_refund_log_insert['username']= $user['nickname'];
-                    $wx_pay_refund_log_insert['create_time']= time();
-                    $wx_pay_refund_log_insert['money']= -$orderGoods['return_price'];
-                    $wx_pay_refund_log_insert['type']=2;#退款
-                    $wx_pay_refund_log_insert['order_id']=$orderGoods['order_id'];
-                    Db::name('wx_pay_refund_log')->insert($wx_pay_refund_log_insert);
-                    return ajax_return('','退款成功');
-                }else{
-                    file_put_contents("wx_refund_error.log",print_r($res, true)."\r", 8);
-                    $result['code'] = 402;
-                    $result['msg'] = $res['err_code_des'];
-                    return ajax_return('',$res['err_code_des']);
+                        include_once APP_PATH."/index/controller/sendMsg/SDK/WeiXin.php";
+                        $wx = new \WeiXin();
+                        $wx->refund($orderGoods['goods_detail']['name'],$orderGoods['openid'],$orderGoods['order_id'],$orderGoods['return_price']);
+                        #交易记录 退款
+                        $user = Db::name('customer')->where(['openid'=>$orderGoods['openid']])->find();
+                        $wx_pay_refund_log_insert=[];
+                        $wx_pay_refund_log_insert['openid']= $orderGoods['openid'];
+                        $wx_pay_refund_log_insert['username']= $user['nickname'];
+                        $wx_pay_refund_log_insert['create_time']= time();
+                        $wx_pay_refund_log_insert['money']= -$orderGoods['return_price'];
+                        $wx_pay_refund_log_insert['type']=2;#退款
+                        $wx_pay_refund_log_insert['order_id']=$orderGoods['order_id'];
+                        Db::name('wx_pay_refund_log')->insert($wx_pay_refund_log_insert);
+                        return ajax_return('','退款成功');
+                    }else{
+                        file_put_contents("wx_refund_error.log",print_r($res, true)."\r", 8);
+                        $result['code'] = 402;
+                        $result['msg'] = $res['err_code_des'];
+                        return ajax_return('',$res['err_code_des']);
+                    }
+                }else{#拒绝退款
+                    Db::name('order_goods')->where(['order_id'=>$order_id])->update(['is_return'=>3]);
+                    #将订单中退款的总价减少。return_all
+                    $order = Db::name('order')->where(['order_id'=>$order_id])->find();
+                    $orderGoods = Db::name('order_goods')->where(['order_id'=>$order_id])->find();
+                    $decsPrice = $order['return_price_all'] - $orderGoods['return_price'];
+                    $decsPrice = ($decsPrice<0)?$decsPrice:'0';
+                    $res = Db::name('order')->where(['order_id'=>$order_id])->update(['return_price_all'=>$decsPrice]);
+                    return ajax_return('','拒绝退款成功','200');
                 }
+
             }else{
                 $result['code'] = 404;
                 $result['msg'] = '订单id不能为空';

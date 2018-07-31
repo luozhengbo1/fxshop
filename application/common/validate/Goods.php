@@ -9,7 +9,6 @@ class Goods extends Validate
         "name|商品名称" => "require",
         "main_image|商品主图" => "require",
         "original_price|商品原价" => "require",
-        "settlement_type|结算类型" => "require",
         "goods_class_id|分类名称" => "require",
         "goods_brand_id|品牌名称" => "require",
         "show_area|显示区域" => "require",

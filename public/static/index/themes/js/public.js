@@ -591,59 +591,134 @@ var order_status_param={
     7:'已取消订单',
     8:'订单完成',
 }
-function countDown(start,end){
-    var currentTime = parseInt(new Date().getTime()/1000),html='';
-    if(activeStatus(start,end) ==1){
+var settlement={
+    money:1,//价格结算
+    score:2,//积分结算
+    money_score:3,//积分+货币结算
+}
+var afterSale={
+    yes:1,
+    no:0
+}
+function countDown(start,end,current){
+    var currentTime = current,html='';
+    if(activeStatus(start,end,current) ==1){
         //活动中
-        $('#countDown').html('正在抢购中');
-        var endActive = setInterval(function () {
-            var curr= new Date().getTime();
-            if(curr>end){
-                clearTimeout(endActive);
-                window.location.reload();
-            }
-        },1000)
-    }else if(activeStatus(start,end)==0){
+        $('#showTime').html('正在抢购中');
+        var endDiff = end-current;
+        endTimer(endDiff,start,end,current);
+    }else if(activeStatus(start,end,current)==0){
         var intDiff = start-currentTime;
-        timer(intDiff);
-    }else if(activeStatus(start,end) ==2){
+        startTimer(intDiff,start,end,current);
+    }else if(activeStatus(start,end,current) ==2){
         //活动已经结束
-        $('#countDown').html('活动已经结束');
+        $('#showTime').html('活动已经结束');
     }
 }
-function timer(intDiff){
+
+function startTimer(intDiff,start,end,current){
     var interTimer = window.setInterval(function(){
-        var day=0,
-            hour=0,
-            minute=0,
-            second=0;//时间默认值       
         if(intDiff > 0){
-            day = Math.floor(intDiff / (60 * 60 * 24));
-            hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
-            minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
-            second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
-            if (minute <= 9) minute = '0' + minute;
-            if (second <= 9) second = '0' + second;
-            var html = day+'天'+hour+'时'+minute+'分'+second+'秒';
-            $('#countDown').html(html);
-            intDiff--;
+            --intDiff;
+            $('#showTime').html('距抢购：'+returnTime(intDiff));
         }else {
-            window.location.reload()
+            //抢购开始了
             clearInterval(interTimer);
+            var endDiff = end-start;
+            endTimer(endDiff);
+            activeChange(1);
         }
 
     }, 1000);
 }
+function endTimer(intDiff) {
+    var eTimer = window.setInterval(function(){
+        if(intDiff > 0){
+            --intDiff;
+            $('#showTime').html('距抢购结束：'+returnTime(intDiff));
+        }else {
+            clearInterval(eTimer);
+            activeChange(2);
+            $('#showTime').html('活动已经结束');
+        }
 
+    }, 1000);
+}
+function returnTime(intDiff) {
+    var day=0,
+        hour=0,
+        minute=0,
+        second=0;//时间默认值       
+        day = Math.floor(intDiff / (60 * 60 * 24));
+        hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+        minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+        second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+        if (minute <= 9) minute = '0' + minute;
+        if (second <= 9) second = '0' + second;
+        return day+'天'+hour+'时'+minute+'分'+second+'秒';
+}
 /**
  *
  * @param start
  * @param end
  * @returns {number} 0未开始 1 活动中 2 已结束
  */
-function activeStatus(start,end) {
-    var currentTime = new Date().getTime()/1000;
+function activeStatus(start,end,current) {
+    var currentTime = current;
     if(currentTime<start) return 0;
     else if(currentTime>start && currentTime<end) return 1;
     else if(currentTime>end) return 2;
 }
+
+function recodeHistoryUrl() {
+    localStorage.setItem('historyUrl',window.location.href);
+}
+
+
+
+function priceScoreShow(settlementType,price,score) {
+    //settlementType 结算类型1-货币2-积分3-积分+货币
+    if(isNaN(price)) price=0;
+    if(isNaN(score)) score=0;
+    var result='';
+    switch(settlementType){
+        case settlement.money:
+            result='¥'+price
+            break;
+        case settlement.score:
+            result=score+'积分'
+            break;
+        case settlement.money_score:
+            result=score+'积分+¥'+price
+            break;
+    }
+    return result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

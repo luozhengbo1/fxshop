@@ -99,9 +99,9 @@
                 html +='  		  <p class="fl">已售'+notEmpty(data[i].buy_num)+'</p>';
                 html +='  		      <p class="fr">';
                 if(data[i].price_real!=0){
-                    html +='  		      <span class="goods-price">¥'+notEmpty(data[i].price_real)+'</span>';
+                    html +='  		      <span class="goods-price">'+priceScoreShow(data[i].settlement_type,data[i].price_real,data[i].score)+'</span>';
 				}else{
-                    html +='  		      <span class="goods-price">¥'+notEmpty(data[i].basic_price)+'</span>';
+                    html +='  		      <span class="goods-price">'+priceScoreShow(data[i].settlement_type,data[i].basic_price,data[i].score)+'</span>';
 				}
 
                 html +='  				<span class="goods-old-price">¥'+notEmpty(data[i].original_price)+'</span>';
@@ -112,6 +112,7 @@
             return html;
 
         }
+
         function loadGoodsData(){
             initData('goodsList');
             pageload({

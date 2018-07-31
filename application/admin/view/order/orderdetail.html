@@ -36,6 +36,14 @@
         <td>购买数量</td>
           <td>运费</td>
         <td>状态</td>
+        {if condition="$vo['after_sale_is'] eq 1"}
+        <td>售后理由</td>
+        <td>售后类型</td>
+        <td>售后要求</td>
+        <td>售后备注</td>
+        <td>售后图片</td>
+        <!--<td>售后处理</td>-->
+        {/if}
         <td>退货退款操作</td>
       </tr>
       </thead>
@@ -57,14 +65,42 @@
               }{/php}
           </td>
 
+
+        {if condition="$vo['after_sale_is'] eq 1 "}
+        <td class="f-14">{$vo['after_sale_reson']}</td>
+        <td class="f-14">{php}
+                  if($vo['after_sale_type']==1){
+          echo "未收到货";
+                  }else if($vo['after_sale_type']==2){
+          echo "已收到货";
+                  }else if($vo['after_sale_type']==3){
+          echo "退款/退货";
+                  }
+          {/php}</td>
+        <td class="f-14">{$vo['after_sale_ask']}</td>
+        <td class="f-14">{$vo['after_sale_remark']}</td>
+        <td class="f-14">{php}
+          if($vo['after_sale_pic']){
+            $vo['after_sale_pic'] = explode(',',$vo['after_sale_pic']);
+            foreach(   $vo['after_sale_pic'] as $vpic){
+              echo "<img src='$vpic' width='50' height='50'>";
+            }
+          }
+          {/php}</td>
+        <!--<td class="f-14">-->
+          <!--{if condition="$vo.after_sale_is eq 1"}-->
+          <!--<a href="javascript:;" onclick="afterHandle('{$vo[\'order_id\']}',{$vo['id']},'yes')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 售后处理</a>-->
+          <!--{/if}-->
+        <!--</td>-->
+        {/if}
         <td class="f-14">
           {if condition="$vo.is_return eq 1"}
-          <a href="javascript:;" onclick="refundHandle('{$vo[\'order_id\']}',{$vo['id']})" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 确定退款</a>
+          <a href="javascript:;" onclick="refundHandle('{$vo[\'order_id\']}',{$vo['id']},'yes')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 确定退款</a>
+          <a href="javascript:;" onclick="refundHandle('{$vo[\'order_id\']}',{$vo['id']},'no')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 拒绝退款</a>
           {elseif  condition="$vo.is_return eq 2" /}
           已退款
           {/if}
         </td>
-
       </tr>
 
       </tbody>
@@ -127,12 +163,12 @@
                })
            }
        }
-       function refundHandle(order_id,id) {
+       function refundHandle(order_id,id,flag) {
            if(order_id && id ){
                $.ajax({
                    url:"{:url('order/refund')}",
                    type:'post',
-                   data:{'order_id':order_id,'id':id},
+                   data:{'order_id':order_id,'id':id,'flag':flag},
                    success:function (res) {
                        alert(res.msg)
                        document.location.relaod();
