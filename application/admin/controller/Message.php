@@ -139,7 +139,7 @@ class Message extends Controller
                 }
             }
             // 验证
-            if (class_exists($validateClass = Loader::parseClass(Config::get('app.validate_path'), 'validate', $controller))) {
+            if (class_exists($validateClass = \think\Loader::parseClass(\think\Config::get('app.validate_path'), 'validate', $controller))) {
                 $validate = new $validateClass();
                 if (!$validate->check($data)) {
                     return ajax_return_adv_error($validate->getError());
@@ -148,8 +148,8 @@ class Message extends Controller
 
             // 更新数据
             if (
-                class_exists($modelClass = Loader::parseClass(Config::get('app.model_path'), 'model', $this->parseCamelCase($controller)))
-                || class_exists($modelClass = Loader::parseClass(Config::get('app.model_path'), 'model', $controller))
+                class_exists($modelClass = \think\Loader::parseClass(\think\Config::get('app.model_path'), 'model', $this->parseCamelCase($controller)))
+                || class_exists($modelClass = \think\Loader::parseClass(\think\Config::get('app.model_path'), 'model', $controller))
             ) {
                 // 使用模型更新，可以在模型中定义更高级的操作
                 $model = new $modelClass();
