@@ -28,6 +28,14 @@
     -webkit-animation: rotate 0.75s linear infinite;
     animation: rotate 0.75s linear infinite;
 }
+/*.dropload-noData:after, .dropload-noData:before{
+    content: '';
+    display: inline-block;
+    width: 20%;
+    height: 1px;
+    overflow: hidden;
+    background: #bfbfbf;
+}*/
 @-webkit-keyframes rotate {
     0% {
         -webkit-transform: rotate(0deg);
