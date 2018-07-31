@@ -184,7 +184,6 @@ class Goods extends Controller
                 }
 
                 $res = Db::name('goods_attribute')->insertAll($skuData);
-
             }else{
                 $insert=[];
                 $goodsAttribute = Db::name('goods_attribute')->where(['goods_id'=>$goods_id])->find();
@@ -285,6 +284,8 @@ class Goods extends Controller
                     return ajax_return_adv_error('请填写邮费');
                 }
                 $goods['postage'] = $data['postage'];
+            }else{
+                $goods['postage'] = '';
             }
             #是否包邮
             $goods['free_type'] = $data['free_type'];
@@ -387,14 +388,15 @@ class Goods extends Controller
                 if( !empty($goodsAttribute) ){
                     $dbAttribute = array_column($goodsAttribute,'attribute_name');
                     sort($dbAttribute);
-                }
-                $postAttribute = array_column($allData['skuZuheData'],'SkuId');
-                sort($postAttribute);
-                #取出 与数据库不同的地方，进行删除
-                $diffAttribute = array_diff($dbAttribute,$postAttribute);
-                #删除数据库中没有的
-                foreach ($diffAttribute as $diffv){
-                    Db::name('goods_attribute')->where(['attribute_name'=>$diffv ])->delete();
+                    $postAttribute = array_column($allData['skuZuheData'],'SkuId');
+                    sort($postAttribute);
+                    #取出 与数据库不同的地方，进行删除
+                    $diffAttribute = array_diff($dbAttribute,$postAttribute);
+                    #删除数据库中没有的
+                    foreach ($diffAttribute as $diffv){
+                        Db::name('goods_attribute')->where(['attribute_name'=>$diffv ])->delete();
+                    }
+
                 }
 
                 if($goodsAttribute[0]['attribute_name']==""){#之前没有，现在变成成sku
