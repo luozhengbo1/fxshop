@@ -509,7 +509,7 @@
                         'goods_id'=>$data['goods_id'],
                         'sku_id'=>$data['sku_id']
                     ])
-                    ->update(['is_send'=>2]);#表示确认收货
+                    ->update(['is_send'=>2,'get_goods_time'=>time()]);#表示确认收货
                 if($res){
                     #将这个商品的积分返给用户。
                     $goods = Db::name('goods')
@@ -521,12 +521,12 @@
                         ->where(['experience_start'=>['<=',$user['experience']],'experience_end'=>['>=',$user['experience'] ]])
                         ->find();
 
+                    #不同等级得到不同积分。
                     Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->update([
                         'experience'=>$user['experience']+$goods['return_score'],
                         'score'=>$user['score']+$goods['return_score']*$grade['goods_score_rate'],
                     ]);
 //                    echo Db::name('customer')->getLastSql();die;
-                    #不同等级得到不同积分。
 //                    Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->setInc('score',$goods['return_score']*$grade['goods_score_rate']);
                     $insert =[];
                     $insert['openid']=$this->userInfo['openid'];
@@ -580,7 +580,7 @@
                     'order_id'=>$data['order_id'],
                     'goods_id'=>$data['goods_id'],
                     'sku_id'=>$data['sku_id'],
-                ])->update(['is_return'=>1,'return_price'=>$goodsAttribute['price'],'is_send'=>3]); # 待退款3退货中
+                ])->update(['is_return'=>1,'return_price'=>$goodsAttribute['price'],'is_send'=>7]); # 待退款7退款中 3退货中
                 $ordertmp = Db::name('order')->field('return_price_all')->where([
                     'order_id'=>$data['order_id']])->find();
                 #退款价
@@ -633,16 +633,22 @@
         {
             if($this->request->isAjax()){
                 $data =$this->request->post();
-                if(!$data['order_id'] || !$data['goods_id'] || !$data['order_id'] ){
+                if(!$data['order_id'] || !$data['goods_id'] || !$data['sku_id'] ){
                     return $this->error('缺少参数id');
                 }
+                $orderGoods = Db::name('order_goods')->where(['order_id'=>$data['order_id'],'goods_id'=>$data['goods_id'],'sku_id'=>$data['sku_id']])->find();
+                $time = time() ;
+                $day7 = 24*60*60;
+                if($time - $orderGoods['get_goods_time'] > $day7 && ($data['after_sale_type']==1 ||$data['after_sale_type']==3)  ){#大于7天不可以退换货
+                        return ajax_return('','超过七天不可以退货货，请联系卖家','500');
+                }
                 $update=[];
-                $update['after_sale_reson'] =$data['after_sale_reson'];
-                $update['after_sale_type'] =$data['after_sale_type'];
-                $update['after_sale_ask'] =$data['after_sale_ask'];
-                $update['after_sale_remark'] =$data['after_sale_remark'];
-                $update['after_sale_pic'] =$data['after_sale_pic'];
-                $update['after_sale_is'] =1;
+                $update['after_sale_type'] = $data['after_sale_type'];
+                $update['after_sale_reson'] = $data['after_sale_reson'];
+                $update['after_sale_ask'] = $data['after_sale_ask'];
+                $update['after_sale_remark'] = $data['after_sale_remark'];
+                $update['after_sale_pic'] = $data['after_sale_pic'];
+                $update['after_sale_is'] = 1;
                 Db::name('order_goods')->where(['order_id'=>$data['order_id'],'goods_id'=>$data['goods_id'],'sku_id'=>$data['sku_id']])->update($update);
                 return ajax_return('','申请成功','200');
             }
@@ -662,6 +668,20 @@
 //            dump($orderDetail);die;
             $this->view->assign('orderDetail',$orderDetail);
             return $this->view->fetch('orderService');
+        }
+
+        #删除订单
+        public function  deleteOrder()
+        {
+            if($this->request->isAjax()){
+                $data =$this->request->post();
+                if(!$data['order_id']  ){
+                    return $this->error('缺少参数id');
+                }
+                Db::name('order')->where(['order_id'=>$data['order_id']])->delete();
+                Db::name('order_goods')->where(['order_id'=>$data['order_id']])->delete();
+                return ajax_return('','删除成功','200');
+            }
         }
         #取消售后
         public function  cancleAfterSale()

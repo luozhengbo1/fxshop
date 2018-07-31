@@ -96,7 +96,7 @@ class Order extends Controller
         $orderList = Db::name('order')
            ->field('fy_order.id,fy_order.buy_list,fy_order.address_id,fy_order.pay_status,fy_order.address_detail,
             fy_order.order_id,fy_order.order_status,fy_order.total_price,fy_order.customer_name,fy_order.customer_name,fy_order.create_time,fy_order.pay_time,
-            fy_order_goods.user_id,fy_order_goods.is_send, fy_order_goods.is_send,fy_order_goods.is_return')
+           fy_order_goods.after_sale_is, fy_order_goods.user_id,fy_order_goods.is_send, fy_order_goods.is_send,fy_order_goods.is_return')
             ->join( 'fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
             ->order('fy_order.create_time desc')
             ->where($map)
@@ -124,7 +124,7 @@ class Order extends Controller
         $orderList = Db::name('order')
             ->field('fy_order.id,fy_order.buy_list,fy_order.address_id,fy_order.pay_status,
             fy_order.order_id,fy_order.order_status,fy_order.total_price,fy_order.customer_name,fy_order.customer_name,fy_order.create_time,fy_order.pay_time,
-            fy_order_goods.user_id,fy_order_goods.is_send, fy_order_goods.is_send,fy_order_goods.is_return')
+            fy_order_goods.after_sale_is,fy_order_goods.user_id,fy_order_goods.is_send, fy_order_goods.is_send,fy_order_goods.is_return')
             ->join( 'fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
             ->order('fy_order.create_time desc')
             ->where($map)
@@ -234,34 +234,23 @@ class Order extends Controller
         }
     }
 
+    #售后处理
+    public function afterSaleHandle()
+    {
+        if($this->request->isAjax()){
+            $data = $this->request->post();
+            if(!$data['order_id'] || !$data['id'] || !$data['after_sale_type']){
+                return ajax_return('','缺少参数');
+            }
+            if($data['after_sale_type']==1 ){#1 换货 2，维修 ， 3 退款/退货
 
-    #确认发货
-//    public  function  sureSend()
-//    {
-//        if($this->request->isAjax()){
-//            $data = $this->request->post();
-//            if(!$data['id']){
-//                return ajax_return_error('缺少参数id');
-//            }
-//            $order = Db::name('order') ->where(['order_id'=>$data['id']])->find();
-//            if($order['pay_status']!=1){
-//                return ajax_return_error('付款了才可以发货');
-//            }
-//            $res = Db::name('order')
-//                ->where(['order_id'=>$data['id']])
-//                ->update([
-//                    'order_status'=>2
-//                ]);
-//            if($res){
-//                #确认物流，提醒买家
-//                return ajax_return('','操作成功','200');
-//            }else{
-//                return ajax_return('','操作失败','500');
-//            }
-//        }
-//
-//    }
+            }else if($data['after_sale_type']==3){#退款
 
+            }
+
+        }
+
+    }
 
     # 微信退款
     public function refund()

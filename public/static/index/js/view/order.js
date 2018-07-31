@@ -34,6 +34,14 @@ function cancelOrder(order_id,goods_id,sku_id) {
             }
         });
 }
+//删除订单
+function deleOrder(order_id,goods_id,sku_id) {
+    pub_save({
+        url:url.deleOrder,
+        data:{'order_id':order_id,'goods_id':goods_id,'sku_id':sku_id},
+        complete:loadOrderData,
+    })
+}
 //确认收货
 function sureDeliver(order_id,goods_id,sku_id) {
     layer.open({

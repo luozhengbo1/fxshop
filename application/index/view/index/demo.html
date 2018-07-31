@@ -1,40 +1,20 @@
 {include file="Public/header-resource"}
-<body class="title-top footer-boottom">
-{include file="Public/header-title"}
-
-<style>
-
-    .grid{
-        width: 100%;
-    }
-
-    .grid-item{
-        width:50%;
-        height: 40px;
-        float: left;
-        background: #d26;
-        border-color: hsla(0,0%,0%,.5);
-        border-radius: 5px;
-    }
-</style>
-<div class="grid">
-    <div class="grid-item">1</div>
-    <div class="grid-item" style="height: 100px;">..22222222.</div>
-    <div class="grid-item">333333333333</div>
-    <div class="grid-item grid-item--width2" style="height: 300px;" >..444444444.</div>
-    <div class="grid-item">..5555555555.</div>
-    <div class="grid-item grid-item--width2">66666666666</div>
-    <div class="grid-item " >7777777777</div>
-    <div class="grid-item grid-item--width2">...</div>
-    <div class="grid-item">...</div>
+<body style="background: white">
+<div >
+    <div class="payHead mt40">
+        <p class="tc">订单金额</p>
+        <p class=" tc mt20 f32" >¥<i class="ml5 f32">22</i></p>
+    </div>
+    <div class="p5 pl10">
+        <p class="grey f12 lh30">请选择支付方式</p>
+        <div class="lh40">
+            <img width="32" src="__STATIC__/index/images/weixin.png">
+            <span>微信支付</span>
+        </div>
+    </div>
+    <div class="footer-fixed">
+        <button  onClick="callpay()" id="payDom" class="w100p bootstrap-btn lh30" style="background: black; color: white">确认支付</button>
+    </div>
 </div>
-<script src="http://www.jq22.com/jquery/1.11.1/jquery.min.js"></script>
-<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
-
-<script>
-    $('.grid').masonry({
-        itemSelector: '.grid-item'
-    });
-</script>
 </body>
 </html>
