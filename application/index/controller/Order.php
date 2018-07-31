@@ -436,6 +436,7 @@
         #统计积分合计
         public function totalScore($data)
         {
+//            dump($data);die;
             $pay = 0;
             foreach ($data  as $val) {
                 $goods = Db::name('goods')->where(['id'=>$val['goodsId']])->find();
