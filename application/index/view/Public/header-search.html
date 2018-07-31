@@ -20,12 +20,11 @@
 <script>
     enterKey(searchGoods);
     function searchGoods(){
-        getGoods(formData('form'))
-        /*if(!formEmptyValid('form')){
+        if(!formEmptyValid('form')){
             return;
         }else{
             getGoods(formData('form'))
-        }*/
+        }
     }
 	function clearSearch(_this) {
 		$('#goodsNameSearch').val('');

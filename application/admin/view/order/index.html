@@ -26,6 +26,9 @@
                 {php}if($vo['order_status']=='1' && $vo['is_return']==0){ {/php}
                 <a href="javascript:;" class="btn" onclick="layer_open('去发货','{:\\think\\Url::build(\'orderDetail\', [\'id\'=>$vo[\'order_id\']])}')">去发货</a>
                 {php}}{/php}
+                {php}if( $vo['after_sale_is']==1){ {/php}
+                <a href="javascript:;" class="btn" onclick="layer_open('售后处理','{:\\think\\Url::build(\'orderDetail\', [\'id\'=>$vo[\'order_id\']])}')">售后处理</a>
+                {php}}{/php}
                 <a class="btn" href="javascript:;" data-href="" data-id="{$vo['order_id']}"  onclick="layer_open('订单详情','{:\\think\\Url::build(\'orderDetail\', [\'id\'=>$vo[\'order_id\']])}')" >订单详情</a>
                 {php}if($vo['is_return']==1){ {/php}
                 <a class="btn" href="javascript:;" data-href="" data-id="{$vo['order_id']}"  onclick="layer_open('确认退款','{:\\think\\Url::build(\'orderDetail\', [\'id\'=>$vo[\'order_id\']])}')" >确认退款</a>

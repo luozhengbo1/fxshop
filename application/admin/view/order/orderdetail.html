@@ -42,7 +42,7 @@
         <td>售后要求</td>
         <td>售后备注</td>
         <td>售后图片</td>
-        <!--<td>售后处理</td>-->
+        <td>售后处理</td>
         {/if}
         <td>退货退款操作</td>
       </tr>
@@ -70,9 +70,9 @@
         <td class="f-14">{$vo['after_sale_reson']}</td>
         <td class="f-14">{php}
                   if($vo['after_sale_type']==1){
-          echo "未收到货";
+          echo "换货";
                   }else if($vo['after_sale_type']==2){
-          echo "已收到货";
+          echo "维修";
                   }else if($vo['after_sale_type']==3){
           echo "退款/退货";
                   }
@@ -87,11 +87,11 @@
             }
           }
           {/php}</td>
-        <!--<td class="f-14">-->
-          <!--{if condition="$vo.after_sale_is eq 1"}-->
-          <!--<a href="javascript:;" onclick="afterHandle('{$vo[\'order_id\']}',{$vo['id']},'yes')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 售后处理</a>-->
-          <!--{/if}-->
-        <!--</td>-->
+        <td class="f-14">
+          {if condition="$vo.after_sale_is eq 1"}
+          <a href="javascript:;" onclick="afterHandle('{$vo[\'order_id\']}',{$vo['id']},{$vo['after_sale_type']})" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 售后处理</a>
+          {/if}
+        </td>
         {/if}
         <td class="f-14">
           {if condition="$vo.is_return eq 1"}
@@ -172,6 +172,19 @@
                    success:function (res) {
                        alert(res.msg)
                        document.location.relaod();
+                   }
+               })
+           }
+       }
+       function  afterHandle(order_id,id,after_sale_type) {
+           if(order_id && id ){
+               $.ajax({
+                   url:"{:url('order/afterSaleHandle')}",
+                   type:'post',
+                   data:{'order_id':order_id,'id':id,'after_sale_type':after_sale_type},
+                   success:function (res) {
+                       alert(res.msg)
+                       // document.location.relaod();
                    }
                })
            }

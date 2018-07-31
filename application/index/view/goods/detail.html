@@ -387,7 +387,6 @@
     })
     //获取商品评论
     function getEvaluate(){
-        var loading =  layerLoad2();
         $.ajax({
             url:url.evaluate_list,
             type:'post',
@@ -397,13 +396,13 @@
                 if(data.code==200){
                     $("#evaluateList").empty().append(dealData(data.data)) ;
                 }
-                layer.close(loading);
             }
         })
     }
 
     //获取sku组合值
     function getSku(id) {
+        var loading =  layerLoad2();
         $.ajax({
             url:url.getSku,
             type:'post',
@@ -414,6 +413,7 @@
                 console.log(data)
                 skuZhuhe= result;
                 choseFirst()//获取到组合sku后选中第一个
+                layer.close(loading);
             }
         })
     }

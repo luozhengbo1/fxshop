@@ -1,0 +1,142 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+{include file="Public/header-title"}
+<!--我的钱包-->
+<section>
+    <div class="wallet-user-info">
+        <div class="clear">
+            <img class="fl user-image" src={$user_data.headimgurl} alt="头像">
+            <span class="fl user-name">{$user_data.nickname}</span>
+            <div class="fr pt30">
+                <a href="{:url('index/customer/message')}"
+                   class="layui-btn layui-btn-sm layui-btn-normal  layui-btn-radius">消息</a>
+            </div>
+        </div>
+      <!--  <div>
+            <p class="tc f14 pb10">余额</p>
+            <p class="tc"><i class="f24" id="userMoney" data-value="0"></i></p>
+        </div>-->
+    </div>
+    <div class="user-deal-info mt10">
+        <div class="pl10 pr10 clear">
+            <p class="fl">交易记录</p>
+            <!--<p class="fr">
+                <span>查看更2多</span>
+                <i class="icon-right-arrow iconfont f12"></i>
+            </p>-->
+        </div>
+        <div id="dataListWrap">
+            <ul id="orderList" class="deal-list-wrap">
+                <!-- <li>
+                     <p class="clear title">
+                         <span class="fl">2018年4月</span>
+                         <span class="fr">总计:293.00</span>
+                     </p>
+                     <ul class="deal-list">
+                         <li class="clear bg_white">
+                             <div class="deal-time">
+                                 <p class="tc f14">27</p>
+                                 <p class="tc f18 bold mt5">4月</p>
+                             </div>
+                             <div class="product-img">
+                                 <img  src="__STATIC__/index/images/image/headImg.jpg">
+                             </div>
+                             <div class="product-name">
+                                 <p class="f16 bold">-27.00</p>
+                                 <p class="ellipsis-oneline">回城纸质蛋糕回城纸质蛋糕回城纸质蛋糕回城纸质蛋糕回城纸质蛋糕</p>
+                                 <p class="grey f10">213456789023456345</p>
+                             </div>
+                             <div class="deal-status pt20 grey">支付成功</div>
+                         </li>
+                     </ul>
+                 </li>-->
+            </ul>
+        </div>
+    </div>
+</section>
+{include file="Public/footer-quick-nav"}
+<script>
+    $(function () {
+       /* countUpFun('userMoney');*/
+        loadDealData()
+    })
+
+    function loadDealData() {
+        initData('orderList');
+        pageload({
+            targetWarp: 'dataListWrap',
+            target: 'orderList',
+            page: 1,
+            size: 10,
+            ajaxData: {
+                url: "{:url('index/customer/mywallet')}",
+                data: {},
+            },
+            dealFun: dealData
+        });
+    }
+
+    //计算json数组的长度
+    function getJsonObjLength(jsonObj) {
+        var Length = 0;
+        for (var item in jsonObj) {
+            Length++;
+        }
+        return Length;
+    }
+
+    function dealData(data) {
+        var html = '';
+        for (var i = 0, data_lenth = data.length; i < data_lenth; i++) {
+            html += '<li>';
+            html += '    <p class="clear title">';
+            html += '        <span class="fl">' + data[i].record_month + '</span>';
+            html += '        <span class="fr">总计:' + data[i].record_money + '元</span>';
+            html += '    </p>';
+            var length = getJsonObjLength(data[i]);
+            for (var j = 0, data_i_length = length - 2; j < data_i_length; j++) {
+                console.log(data[i][j]);
+                var type = data[i][j].type
+                    ,image ="__STATIC__/index/images/image/other.jpg"
+                    ,dealName="其他"
+                    ,dealStatus='支付成功'
+                ;
+                html += '    <ul class="deal-list">';
+                html += '        <li class="clear bg_white" style="border-bottom: 1px dotted grey;">';
+                html += '            <div class="deal-time">';
+                html += '                <p class="tc f14">' + data[i][j].day + '</p>';
+                html += '                <p class="tc f18 bold mt5">' + data[i][j].month + '</p>';
+                html += '            </div>';
+                switch(type)
+                {
+                    case 1:
+                        image = "__STATIC__/index/images/image/goods.jpg";
+                        dealName="商品[消费]"
+                        dealStatus='支付成功'
+                        break;
+                    case 2:
+                        image = "__STATIC__/index/images/image/refund.jpg";
+                        dealName="商品[退款]"
+                        dealStatus="退款成功"
+                        break;
+                }
+
+                html += '            <div class="product-img">';
+                html += '                <img  src="'+image+'">';
+                html += '            </div>';
+                html += '            <div class="product-name">';
+                html += '                <p class="ellipsis-oneline lh20">'+dealName+'</p>';
+                html += '                <p class="f16 mb5 bold">' + data[i][j].money + '</p>';
+                html +='                 <p class="grey f10">'+data[i][j].order_id+'</p>'
+                html += '            </div>';
+                html += '            <div class="deal-status pt20 green">'+dealStatus+'</div>';
+                html += '        </li>';
+                html += '    </ul>';
+            }
+            html += '</li>';
+        }
+        return html;
+    }
+</script>
+</body>
+</html>
