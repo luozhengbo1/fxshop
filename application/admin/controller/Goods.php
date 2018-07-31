@@ -285,10 +285,11 @@ class Goods extends Controller
                     return ajax_return_adv_error('请填写邮费');
                 }
                 $goods['postage'] = $data['postage'];
+            }else{
+                $goods['postage'] = '';
             }
             #是否包邮
             $goods['free_type'] = $data['free_type'];
-            $goods['postage'] = '';
             #显示区域
             $goods['show_area'] = $data['show_area'];
             #s商品名称
