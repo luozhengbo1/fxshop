@@ -520,9 +520,9 @@ function masonryShow() {
         msnry_destory = true;//表示创建masonry完成
     },800)//800*/
 
-    setTimeout(function () {
+   //setTimeout(function () {
         $('.grid-item-image').height($('.grid-item-image').outerWidth())
-    },800)
+    //},500)
 
 }
 function destoryMasonry() {

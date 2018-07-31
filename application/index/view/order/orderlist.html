@@ -107,6 +107,7 @@
         evaluateEdit:"{:url('index/order/orderComment')}",
         orderService:"{:url('index/order/orderService')}",//
         cancelOrder:"{:url('index/order/cancelOrder')}",
+        deleOrder:"{:url('index/order/deleteOrder')}",
         cancleAfterSale:"{:url('index/order/cancleAfterSale')}",
     }
 
@@ -257,7 +258,7 @@
 
                         break;
                 }
-                if(order_status!=7 && is_send!=constant.send.nosend && is_send !=constant.send.returnMoney){
+                if(order_status!=7 && is_send!=constant.send.nosend && is_send !=constant.send){
                     html +='    <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="showWul(\''+data[i].logistics_name+'\',\''+data[i].logistics_number+'\')">物流单号</button>'
                 }
                 html +='    </div>';
@@ -268,6 +269,9 @@
             if(order_status==0) {
                 html +='        <button class="layui-btn layui-btn-primary layui-btn-xs orderCancel  layui-btn-radius" onclick="cancelOrder(\''+order_id+'\')">取消订单</button>';
                 html +='        <button class="layui-btn  layui-btn-danger layui-btn-radius layui-btn-xs orderPay" onclick="pay(\''+order_id+'\')">付&nbsp;&nbsp;款</button>';
+            }
+            if(order_status ==constant.order.cancelOrder){
+                html +='        <button class="layui-btn layui-btn-primary layui-btn-xs orderCancel  layui-btn-radius" onclick="deleOrder(\''+order_id+'\')">取消订单</button>';
             }
             html +='        <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius">联系卖家</button>';
             html +='    </div>';
