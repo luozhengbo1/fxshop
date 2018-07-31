@@ -330,7 +330,7 @@ class Customer extends Mustlogin
             }
             $this->assign('user', $this->userInfo);
             $this->assign('titleName', '签到');
-            return $this->view->fetch('mySign');
+            return $this->view->fetch('mysign');
         }
     }
 
@@ -500,7 +500,7 @@ class Customer extends Mustlogin
     public function userinfo()
     {
         $this->assign('titleName', "完善用户信息");
-        $userData = Db::table('fy_customer')->where('openid', $this->user['openid'])->find();
+        $userData = Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->find();
         $userAddress = Db::table('fy_customer_address')->where(
             ['uid' => $userData['id'], 'status' => 1]
         )->find();
