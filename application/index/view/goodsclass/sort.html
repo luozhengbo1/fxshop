@@ -109,7 +109,7 @@
                     for(var i = 0; i < data.length; i++){
                         if(i<4){
                             html +=' <li class="tc">'
-                            html +='	<a href="{:url(\'goods/detail\',array(\'id\'=>21))}" >';
+                            html +='	<a href="{:url(\'goods/detail\',array(\'id\'=>data[i].id))}" >';
                             html +='    <img class="good-img" alt="图片" src="'+data[i].main_image+'">';
                             html +='   </a>';
                             html +='  </li>';
