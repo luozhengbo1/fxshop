@@ -515,10 +515,15 @@ var msnry;//瀑布流对象
 function masonryShow() {
     var container = document.querySelector('.grid');
     //图片加载有延长
-    setTimeout(function () {
+  /*  setTimeout(function () {
         msnry = new Masonry( container);
         msnry_destory = true;//表示创建masonry完成
-    },800)//800
+    },800)//800*/
+
+    setTimeout(function () {
+        $('.grid-item-image').height($('.grid-item-image').outerWidth())
+    },800)
+
 }
 function destoryMasonry() {
     if(msnry_destory){
