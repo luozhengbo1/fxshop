@@ -35,15 +35,14 @@ function formEmptyValid(id) {
     var flag= true
     item.each(function(i,ele){
         type = $(this).attr("type");
-        if(type){
-            var value = $(ele).val();
-            if(value==""){
-                $(ele).focus();
-                layer_msg($(ele).data("text"))
-                flag = false;
-                return flag;
-            }
+        var value = $(ele).val();
+        if(value=="" && $(ele).attr('data-text')!='undefined' &&  $(ele).attr('data-text')!=undefined){
+            $(ele).focus();
+            pc_layer_msg($(ele).data("text"))
+            flag = false;
+            return flag;
         }
+
     });
     return flag;
 }

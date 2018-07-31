@@ -60,15 +60,15 @@
             </tr>
             <tr>
                 <td><label  class="grey">申请售后原因</label></td>
-                <td> <textarea class="form-control mt5 h50" name="after_sale_reson"  nullmsg="填写售后原因" datatype="*"  placeholder="填写售后原因" ></textarea> </td>
+                <td> <textarea class="form-control mt5 h50" name="after_sale_reson"  data-text="填写售后原因"  placeholder="填写售后原因" ></textarea> </td>
             </tr>
             <tr>
                 <td><label  class="grey">售后要求</label></td>
-                <td> <textarea class="form-control mt5 h50"  name="after_sale_ask"   nullmsg="填写售后要求" datatype="*"  placeholder="填写售后要求" class="textarea"></textarea></td>
+                <td> <textarea class="form-control mt5 h50"  name="after_sale_ask"   data-text="填写售后要求"  datatype="*"  placeholder="填写售后要求" class="textarea"></textarea></td>
             </tr>
             <tr>
                 <td><label  class="grey">备注说明</label></td>
-                <td> <textarea class="form-control mt5 h50"   name="after_sale_remark" nullmsg="填写备注说明" datatype="*"   placeholder="填写备注说明" class="textarea"></textarea></td>
+                <td> <textarea class="form-control mt5 h50"   name="after_sale_remark" data-text="填写备注说明" datatype="*"   placeholder="填写备注说明" class="textarea"></textarea></td>
             </tr>
             <tr>
                 <td><label  class="grey">上传凭证</label></td>
@@ -96,17 +96,22 @@
         save:"{:url('order/orderService')}",
         returnUrl:"{:url('order/index',['param'=>'evaluate'])}",
     }
-   // submitForm('form',"{:url('order/orderService')}","{:url('order/orderDetail')}");
-    $('.chose-span').each(function (index,ele) {
-        $(ele).click(function () {
-            $('.chose-span label').removeClass('btn-success');
-            if($(ele).find("input").is(':checked')){
-                $(ele).find('label').addClass('btn-success');
-            }
-        })
-        $('.chose-span').first().find('label').click()
-    })
+      $(function () {
+          $('.chose-span').each(function (index,ele) {
+              $(ele).click(function () {
+                  $('.chose-span label').removeClass('btn-success');
+                  if($(ele).find("input").is(':checked')){
+                      $(ele).find('label').addClass('btn-success');
+                  }
+              })
+              $('.chose-span').first().find('label').click()
+          })
+      })
+
     function saveService(){
+        if(!formEmptyValid('form')){
+            return;
+        }
         var data= formData('form');
         var pic='';
         $('.pic').each(function (index,ele) {
