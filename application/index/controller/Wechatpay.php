@@ -19,15 +19,15 @@ class Wechatpay extends Controller
     public function notify()
     {
         # 支付成功后更新支付状态，支付时间
-        $xml = isset($GLOBALS['HTTP_RAW_POST_DATA']) ? $GLOBALS['HTTP_RAW_POST_DATA'] : '';
-        include_once 'WxPaySDK/Notify.php'; # 微信回调通知
-        $notify = new \PayNotifyCallBack();
-        $notify->Handle(true);
-        $orderInfo = \WxPayResults::Init($xml);
+//        $xml = isset($GLOBALS['HTTP_RAW_POST_DATA']) ? $GLOBALS['HTTP_RAW_POST_DATA'] : '';
+//        include_once 'WxPaySDK/Notify.php'; # 微信回调通知
+//        $notify = new \PayNotifyCallBack();
+//        $notify->Handle(true);
+//        $orderInfo = \WxPayResults::Init($xml);
 //        $orderInfo['out_trade_no']="144121740220180720165543";
 //        $orderInfo['openid']="omQYXwNAT5uC15TQqMGxajJzqo4s";
         if (empty($orderInfo)) {
-            file_put_contents("wx_pay_error.log",$xml."\r", 8);
+//            file_put_contents("wx_pay_error.log",$xml."\r", 8);
         } else {
             #查出两个子订单，将其状态改成已支付
             $where['order_id']=$orderInfo['out_trade_no'];
@@ -193,8 +193,6 @@ class Wechatpay extends Controller
                 $result = $wx->buySuccess($goodsname,$orderInfo['openid'],$order['total_price']);
                 Db::name('order')->where(['order_id'=>$orderInfo['out_trade_no']])->update(['is_tui'=>1]);
             }
-
-
             #交易记录
             $wx_pay_refund_log_insert=[];
             $wx_pay_refund_log_insert['openid']= $user['openid'];
