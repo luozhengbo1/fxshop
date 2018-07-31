@@ -617,9 +617,8 @@
                 ->join('fy_goods_attribute','fy_order_goods.sku_id=fy_goods_attribute.id','left')
                 ->where(['fy_order.order_id'=>$id])
                 ->select();
-            $address = Db::name('customer_address')
-                ->where(['id'=>$orderDetail[0]['address_id']])
-                ->find();
+//            dump($orderDetail);die;
+            $address = json_decode($orderDetail[0]['address_detail'],true);
             foreach (  $orderDetail as$k=> $v){
                 $orderDetail[$k]['goods_detail'] = json_decode($orderDetail[$k]['goods_detail'],true);
             }
