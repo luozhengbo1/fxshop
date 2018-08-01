@@ -625,7 +625,7 @@
                 ->select();
 //            dump($orderDetail);die;
             $address = json_decode($orderDetail[0]['address_detail'],true);
-            foreach (  $orderDetail as$k=> $v){
+            foreach (  $orderDetail as $k=> $v){
                 $orderDetail[$k]['goods_detail'] = json_decode($orderDetail[$k]['goods_detail'],true);
             }
             $this->view->assign('address',$address);
