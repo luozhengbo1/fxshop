@@ -179,14 +179,6 @@
                 html +='        </div>';
                 html +='        <div class="item-pay">';
                 html +='            <div class="item-pay-data">';
-               /* switch(show_area){
-                    case 2:
-                        html +='                <p class="price f14"> '+data[i].point_score+'积分 </p>';
-                        break;
-                    default:
-                        html +='                <p class="price f14"> ￥'+data[i].price+' </p>';
-                        break;
-                }*/
                 html +='                <p class="price f14"> '+priceScoreShow(data[i].settlement_type,data[i].price,data[i].point_score)+'</p>';
                 html +='                <p class="nums">x'+data[i].goods_num+'</p>';
                 html +='                <p ><span class="fr lh30 orange mt10">'+is_send_param[is_send]+'</span></p>';
@@ -214,10 +206,8 @@
                         break;
                 }
                 // html +='            <span class="f14">合计:<b>￥'+data[i].total_price+'</b></span>';
-                if(detail.postage){
+                if(detail.free_type ==constant.freeType.noFree && detail.postage>0){
                     html +='            <span class="f14">(含运费<b>￥'+detail.postage+'x'+data[i].goods_num+'</b>)</span>';
-                }else{
-                    html +='            <span class="f14">(含运费<b>￥0</b>)</span>';
                 }
                 html +='        </div>';
                 html +='    </div>';

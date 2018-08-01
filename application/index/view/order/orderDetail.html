@@ -67,7 +67,7 @@
             </div>
             </a>
             <div class="module  clear pr10 pt5 mb5" >
-                <div class="cont tr">
+                <div class="cont tr total-info">
                     <span class="f14">共<b>{$vo['goods_num']}</b>件商品</span>
                     <span class="f14">合计:
                         <b class="goodPriceTitle"
@@ -80,8 +80,7 @@
                            data-price="{$vo['price']}">
                          </b>
                     </span>
-
-                    <span class="f14">(含运费<b>￥{$vo['goods_detail']['postage']??'0'}</b>)</span>
+                    <span class="f14 postage" style="display: none">(含运费<b>￥{$vo['goods_detail']['postage']??'0'}</b>)</span>
                 </div>
                 {php}
                 $orderId = $orderDetail[0]['order_id'];
@@ -165,24 +164,31 @@
             pointScore=parseFloat($ele.data('score')),
             totalPrice=0,
             totalPoint=0,
-            stype = $ele.data('stype')
+            html=0,
+            stype = $ele.data('stype');
+        if(freetype==constant.freeType.noFree && postage>0){
+            totalPrice += postage;//加上邮费
+        }
         switch(stype){
             case 1:
                 totalPrice += parseInt(num)*parseFloat(price);
+                html ='￥'+totalPrice;
                 break;
             case 2:
                 totalPoint +=(parseInt(num)*parseFloat(pointScore));
+                html =totalPoint+'积分';
                 break;
             case 3:
-                totalPoint=parseInt(num)*parseFloat(price);
+                totalPoint=parseInt(num)*parseFloat(pointScore);
                 totalPrice += parseInt(num)*parseFloat(price);
+                html =totalPoint+'积分+￥'+totalPrice;
                 break;
         }
-        if(freetype==0 && !isNaN(postage)){
-            totalPrice += postage;//加上邮费
+
+        $(ele).html(html);
+        if(freetype ==constant.freeType.noFree && postage>0){
+            $(ele).parents('.total-info').find('.postage').show();
         }
-        html ='￥'+totalPrice+'+'+totalPoint+'积分';
-        $(ele).html(html)
     });
     var aftersale_type =parseInt($('#afterSaleService').data('aftersale'));
     if(aftersale_type==afterSale.yes){

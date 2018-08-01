@@ -633,6 +633,10 @@ var constant={
         noStart:0//未开始
         ,inActive:1 //活动中
         ,end: 2 //已结束
+    },
+    freeType:{
+       free:1// 包邮1不包邮0
+        ,noFree:0
     }
 }
 var settlement={

@@ -20,74 +20,74 @@
     }
 </style>
 {include file="Public/header-order"}
-    <!--<ul class="service-list" onclick="serviceSave('{$orderDetail.order_id}')">
+<!--<ul class="service-list" onclick="serviceSave('{$orderDetail.order_id}')">
 
-        <li class="clear" onclick="serviceSave('{$orderDetail.order_id}',0)">
-            <div class="fl w10p tc pt10"><img width="20" src="//gw.alicdn.com/tps/TB1qGHoKFXXXXcnaXXXXXXXXXXX-104-104.png"></div>
-            <div class="fl w80p pl10">
-                <p class="f14">退货退款</p>
-                <p class="grey f12">已收到货,需要退换已收到的货物及退款</p>
-            </div>
-            <div class="fr w10p pt20 tr pr10">
-                <i class="icon-right-arrow iconfont f12 grey"></i>
-            </div>
-        </li>
-        <li class="clear" onclick="serviceSave('{$orderDetail.order_id}',1)">
-            <div class="fl w10p tc pt10"><img width="20" src="//gw.alicdn.com/tps/TB1.5TwKFXXXXcEXVXXXXXXXXXX-104-104.png"></div>
-            <div class="fl w80p pl10">
-                <p class="f14">换货</p>
-                <p class="grey f12">商品存在质量问题,联系卖家协商换货</p>
-            </div>
-            <div class="fr w10p pt20 tr pr10">
-                <i class="icon-right-arrow iconfont f12 grey"></i>
-            </div>
-        </li>
-    </ul>-->
+    <li class="clear" onclick="serviceSave('{$orderDetail.order_id}',0)">
+        <div class="fl w10p tc pt10"><img width="20" src="//gw.alicdn.com/tps/TB1qGHoKFXXXXcnaXXXXXXXXXXX-104-104.png"></div>
+        <div class="fl w80p pl10">
+            <p class="f14">退货退款</p>
+            <p class="grey f12">已收到货,需要退换已收到的货物及退款</p>
+        </div>
+        <div class="fr w10p pt20 tr pr10">
+            <i class="icon-right-arrow iconfont f12 grey"></i>
+        </div>
+    </li>
+    <li class="clear" onclick="serviceSave('{$orderDetail.order_id}',1)">
+        <div class="fl w10p tc pt10"><img width="20" src="//gw.alicdn.com/tps/TB1.5TwKFXXXXcEXVXXXXXXXXXX-104-104.png"></div>
+        <div class="fl w80p pl10">
+            <p class="f14">换货</p>
+            <p class="grey f12">商品存在质量问题,联系卖家协商换货</p>
+        </div>
+        <div class="fr w10p pt20 tr pr10">
+            <i class="icon-right-arrow iconfont f12 grey"></i>
+        </div>
+    </li>
+</ul>-->
 
-    <form role="form" id="form" class="pr5 pl5 mt10 bg_white pt10 pb10">
-        <input type="hidden" name="order_id" value="{$orderDetail.order_id??''}">
-        <input type="hidden" name="goods_id" value="{$orderDetail.goods_id??''}">
-        <input type="hidden" name="sku_id" value="{$orderDetail.sku_id??''}">
-        <table>
-            <tr>
-                <td width="26%"><label class="grey">货品情况</label></td>
-                <td width="74%">
-                    <!--售后类型1未收到货，2已收到货3，退款/退货-->
-                    <span class="chose-span"><input type="radio"  id="status1" name="after_sale_type" value="1" ><label class="bootstrap-btn btn" for="status1">未收到货</label></span>
-                    <span class="chose-span"><input type="radio"  id="status2" name="after_sale_type" value="2" ><label class="bootstrap-btn btn" for="status2">已收到货</label></span>
-                    <span class="chose-span"><input type="radio"  id="status3" name="after_sale_type" value="3" ><label class="bootstrap-btn btn" for="status3">退款/退货</label></span>
-                </td>
-            </tr>
-            <tr>
-                <td><label  class="grey">申请售后原因</label></td>
-                <td> <textarea class="form-control mt5 h50" name="after_sale_reson"  nullmsg="填写售后原因" datatype="*"  placeholder="填写售后原因" ></textarea> </td>
-            </tr>
-            <tr>
-                <td><label  class="grey">售后要求</label></td>
-                <td> <textarea class="form-control mt5 h50"  name="after_sale_ask"   nullmsg="填写售后要求" datatype="*"  placeholder="填写售后要求" class="textarea"></textarea></td>
-            </tr>
-            <tr>
-                <td><label  class="grey">备注说明</label></td>
-                <td> <textarea class="form-control mt5 h50"   name="after_sale_remark" nullmsg="填写备注说明" datatype="*"   placeholder="填写备注说明" class="textarea"></textarea></td>
-            </tr>
-            <tr>
-                <td><label  class="grey">上传凭证</label></td>
-                <td>
-                    <div class="layui-upload clear mt5">
-                        <div id="imageShow" class="upload-image-show fl">
-                            <div class="upload-icon-wrap mr5" id="uploadBtn">
-                                <img width="30" src="__STATIC__/index/images/photo.png">
-                            </div>
+<form role="form" id="form" class="pr5 pl5 mt10 bg_white pt10 pb10">
+    <input type="hidden" name="order_id" value="{$orderDetail.order_id??''}">
+    <input type="hidden" name="goods_id" value="{$orderDetail.goods_id??''}">
+    <input type="hidden" name="sku_id" value="{$orderDetail.sku_id??''}">
+    <table>
+        <tr>
+            <td width="26%"><label class="grey">货品情况</label></td>
+            <td width="74%">
+                <!--售后类型1未收到货，2已收到货3，退款/退货-->
+                <span class="chose-span"><input type="radio"  id="status1" name="after_sale_type" value="1" ><label class="bootstrap-btn btn" for="status1">未收到货</label></span>
+                <span class="chose-span"><input type="radio"  id="status2" name="after_sale_type" value="2" ><label class="bootstrap-btn btn" for="status2">已收到货</label></span>
+                <span class="chose-span"><input type="radio"  id="status3" name="after_sale_type" value="3" ><label class="bootstrap-btn btn" for="status3">退款/退货</label></span>
+            </td>
+        </tr>
+        <tr>
+            <td><label  class="grey">申请售后原因</label></td>
+            <td> <textarea class="form-control mt5 h50" name="after_sale_reson"  data-text="填写售后原因"  placeholder="填写售后原因" ></textarea> </td>
+        </tr>
+        <tr>
+            <td><label  class="grey">售后要求</label></td>
+            <td> <textarea class="form-control mt5 h50"  name="after_sale_ask"   data-text="填写售后要求"  datatype="*"  placeholder="填写售后要求" class="textarea"></textarea></td>
+        </tr>
+        <tr>
+            <td><label  class="grey">备注说明</label></td>
+            <td> <textarea class="form-control mt5 h50"   name="after_sale_remark" data-text="填写备注说明" datatype="*"   placeholder="填写备注说明" class="textarea"></textarea></td>
+        </tr>
+        <tr>
+            <td><label  class="grey">上传凭证</label></td>
+            <td>
+                <div class="layui-upload clear mt5">
+                    <div id="imageShow" class="upload-image-show fl">
+                        <div class="upload-icon-wrap mr5" id="uploadBtn">
+                            <img width="30" src="__STATIC__/index/images/photo.png">
                         </div>
                     </div>
-                </td>
-            </tr>
-        </table>
-        <div class="footer-fixed pt5 pb5">
-            <a onclick="" class="bootstrap-btn w50p btn-info fl">客服中心</a>
-            <a onclick="saveService();" class="w50p bootstrap-btn btn-warning fr">立即提交</a>
-        </div>
-    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div class="footer-fixed pt5 pb5">
+        <a onclick="" class="bootstrap-btn w50p btn-info fl">客服中心</a>
+        <a onclick="saveService();" class="w50p bootstrap-btn btn-warning fr">立即提交</a>
+    </div>
+</form>
 
 <script>
     var url={
@@ -96,17 +96,22 @@
         save:"{:url('order/orderService')}",
         returnUrl:"{:url('order/index',['param'=>'evaluate'])}",
     }
-   // submitForm('form',"{:url('order/orderService')}","{:url('order/orderDetail')}");
-    $('.chose-span').each(function (index,ele) {
-        $(ele).click(function () {
-            $('.chose-span label').removeClass('btn-success');
-            if($(ele).find("input").is(':checked')){
-                $(ele).find('label').addClass('btn-success');
-            }
+    $(function () {
+        $('.chose-span').each(function (index,ele) {
+            $(ele).click(function () {
+                $('.chose-span label').removeClass('btn-success');
+                if($(ele).find("input").is(':checked')){
+                    $(ele).find('label').addClass('btn-success');
+                }
+            })
+            $('.chose-span').first().find('label').click()
         })
-        $('.chose-span').first().find('label').click()
     })
+
     function saveService(){
+        if(!formEmptyValid('form')){
+            return;
+        }
         var data= formData('form');
         var pic='';
         $('.pic').each(function (index,ele) {
@@ -114,7 +119,7 @@
         })
         pic = pic.substr(0,pic.length-1);
         data.after_sale_pic = pic;
-      //  debugger
+        //  debugger
         $.ajax({
             url:url.save,
             type:'post',
