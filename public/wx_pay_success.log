@@ -321,4 +321,21 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>4</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000158201807272552454843]]></transaction_id>
+</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+<attach><![CDATA[附加参数]]></attach>
+<bank_type><![CDATA[CFT]]></bank_type>
+<cash_fee><![CDATA[1]]></cash_fee>
+<fee_type><![CDATA[CNY]]></fee_type>
+<is_subscribe><![CDATA[Y]]></is_subscribe>
+<mch_id><![CDATA[1441217402]]></mch_id>
+<nonce_str><![CDATA[q35ilfzi4ln494ig01vpn4pu4pwlal2u]]></nonce_str>
+<openid><![CDATA[omQYXwDVsykgBFcCiyYkL4AYJRzw]]></openid>
+<out_trade_no><![CDATA[144121740220180801142756]]></out_trade_no>
+<result_code><![CDATA[SUCCESS]]></result_code>
+<return_code><![CDATA[SUCCESS]]></return_code>
+<sign><![CDATA[819C5E16311DDDD5BC260DFEEE214010]]></sign>
+<time_end><![CDATA[20180801142805]]></time_end>
+<total_fee>1</total_fee>
+<trade_type><![CDATA[JSAPI]]></trade_type>
+<transaction_id><![CDATA[4200000153201808010464958148]]></transaction_id>
 </xml>
