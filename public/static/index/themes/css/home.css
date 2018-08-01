@@ -3114,6 +3114,7 @@ a {
 .message-lists li{
 	background: white;
 	padding: .06rem 0;
+    border-bottom: 1px dotted grey;
 }
 .message-lists .img{
 	padding: 0 .02rem;
@@ -3129,7 +3130,6 @@ a {
 .message-lists .content{
 	float: left;
 	width: 83%;
-	border-bottom: 1px solid #eae9e9;
     padding-bottom: 8px;
 }
 .message-lists .content .name{
