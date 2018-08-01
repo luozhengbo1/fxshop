@@ -100,7 +100,7 @@ function orderBtnHtml(json){
 
             break;
     }
-    if(json.order_status!=7 && json.is_send!=constant.send.nosend ){
+    if( json.is_send!=constant.send.returnMoney ){
         html +='    <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="showWul(\''+json.logistics_name+'\',\''+json.logistics_number+'\')">物流单号</button>'
     }
     return html;

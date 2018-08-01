@@ -611,11 +611,11 @@ var constant={
         nosend:0//:'未发货',
         ,issend:1//:'已发货',
         ,waitComment:2//:'待评价',
-        ,returningGoods:3//:'退货中',
+        ,returningGoods:7//:'退货中',
         ,returnedGoods:4//:'退货完成',
         ,waitRes:5//:'待回复',
         ,dealComplete:6//:'交易完成',
-        ,returnMoney:7//:'退款中'
+        ,returnMoney:3//:未发货'退款中'
     },
     order:{
        noPay: 0//:'未支付',
