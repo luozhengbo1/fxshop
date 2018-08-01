@@ -521,7 +521,10 @@ function masonryShow() {
     },800)//800*/
 
    //setTimeout(function () {
-        $('.grid-item-image').height($('.grid-item-image').outerWidth())
+        $('.grid-item-image').height($('.grid-item-image').outerWidth());
+        if($('#searchIcon').size()>0){
+            $('#searchIcon').attr('onclick','searchGoods()')
+        }
     //},500)
 
 }

@@ -40,13 +40,10 @@
     <script>
 
         $(function () {
-            var searchJson = {
-                goodsName
-            }
-            getGoods(searchJson);
+            getGoods();
         })
         function getGoods(json) {
-            var data= {show_area:1}
+            var data= {show_area:showArea.time}
             if(json) $.extend(data,json);
             initData('goodsList');
             destoryMasonry();

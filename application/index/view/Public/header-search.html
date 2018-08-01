@@ -3,7 +3,7 @@
 	<div class="search-box">
 		<section  class="input" style="color: rgb(255, 255, 255);">
 			<a class="search_bg" href="javascript:;">
-				<i  class="iconfont icon-search" onclick="searchGoods()"></i>
+				<i  class="iconfont icon-search" id="searchIcon" onclick="searchGoods()"></i>
 				<div id="form" class="w100p">
 					<input type="text" name="goodsName" onkeyup="searchChange(this)"  id="goodsNameSearch" data-text="商品不为空" placeholder="商品搜索">
 				</div>
@@ -20,11 +20,8 @@
 <script>
     enterKey(searchGoods);
     function searchGoods(){
-        if(!formEmptyValid('form')){
-            return;
-        }else{
-            getGoods(formData('form'))
-        }
+        $('#searchIcon').removeAttr('onclick')
+		getGoods(formData('form'))
     }
 	function clearSearch(_this) {
 		$('#goodsNameSearch').val('');
