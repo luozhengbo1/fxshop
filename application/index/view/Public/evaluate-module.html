@@ -66,10 +66,8 @@
         var html='';
         for(var i = 0; i < data.length; i++){
             var avg_score= parseInt(data[i].avg_score)*20;
-            var imgArr;
-            if(data[i].pic){
-                imgArr = (data[i].pic).split(',');
-            }
+
+
             html +='<li>';
             html +='    <div class="good-evaluate-user-info clear">';
             html +='        <span class="fl user">'+data[i].username+'</span>';
@@ -78,18 +76,27 @@
             html +='    </div>';
             html +='    <p class="good-evaluate-title lh20">'+data[i].content+'</p>';
             html +='    <ul class="good-evaluate-img clear">';
-            if(imgArr){
-                for(var n=0; n<imgArr.length; n++){
-                    html +='        <li onclick="showImage(this,'+n+')"><img src="'+imgArr[n]+'"></li>';
+            if(data[i].pic){
+                //有多张图片
+                if((data[i].pic).indexOf(',')>-1){
+                    var imgArr = (data[i].pic).split(',');
+                    for(var n=0; n<imgArr.length; n++){
+                        html +='        <li onclick="showImage(this,'+n+')"><img src="'+imgArr[n]+'"></li>';
+                    }
+                }else{
+                    //只有一张
+                    html +='        <li onclick="showImage(this,0)"><img src="'+data[i].pic+'"></li>';
                 }
+
             }
 
             html +='    </ul>';
-            html +='<div class="good-evaluate-user-info mt10 clear">';
-            html +='    <span class="fl user">卖家回复:</span>';
-           // html +='    <p class="fr date">2018/2/23</p>';
-            html +='</div>';
-            html +='<p class="good-evaluate-title">'+data[i].return_content+'</p>';
+            if(data[i].return_content){
+                html +='<div class="good-evaluate-user-info mt10 clear">';
+                html +='    <span class="fl user">卖家回复:</span>';
+                html +='</div>';
+                html +='<p class="good-evaluate-title">'+data[i].return_content+'</p>';
+            }
             html +='</li>';
         }
         return html;

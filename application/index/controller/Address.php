@@ -86,7 +86,12 @@ class Address extends Mustlogin
                     $data['status']=1;
                 }
                 Db::table('fy_customer_address')->insert($data);
-                return ajax_return('', '新增成功', 200);
+
+                $msg = $this->getScore();
+                if($msg ==""){
+                    $msg="新增成功";
+                }
+                return ajax_return('', $msg, 200);
             }
         } else {
             //若只是跳转页面，则获取前端的地址id
@@ -147,33 +152,41 @@ class Address extends Mustlogin
                 Db::table('fy_customer_address')->where('id', 'not in', $id)->where('uid', $uid)->setField('status', 0);
 
 
-                //如果用户信息都已经完善了，奖励100积分  $oldUser中信息没有完善   $userData中数据完善了，说明数据第一次完善 奖励100积分
-                $user = session('wx_user');
-                $userData = Db::table('fy_customer')->where('openid', $user['openid'])->find();
-                $userDataStatus =  !empty($userData['nickname']) && !empty($userData['mobile']) && !empty($userData['email']);//true 已完善
-                $msg ='设置默认地址成功';
-                $time = time();
-                if( $userDataStatus){
-                    $scoreLog = Db::table('fy_score_log')->where([
-                        'openid'=>$user['openid'],
-                        'source' => 11,
-                    ])->find();
-                    if(empty($scoreLog)) {
-                        $userData['score'] += 100;
-                        $msg = '信息已完善,恭喜获得100积分';
-                        Db::table('fy_score_log')->insert([
-                            'uid' => $userData['id'],
-                            'openid' => $userData['openid'],
-                            'source' => 11,
-                            'score' => 100,
-                            'time' => $time
-                        ]);
-                    }
+                $msg = $this->getScore();
+                if($msg ==""){
+                    $msg ='设置默认地址成功';
                 }
-                Db::table('fy_customer')->where('openid', $user['openid'])->update($userData);
-
                 return ajax_return('', $msg, 200);
             }
         }
+    }
+    public function getScore(){
+        //如果用户信息都已经完善了，奖励100积分  $oldUser中信息没有完善   $userData中数据完善了，说明数据第一次完善 奖励100积分
+        $user = session('wx_user');
+        $userData = Db::table('fy_customer')->where('openid', $user['openid'])->find();
+        $userDataStatus =  !empty($userData['nickname']) && !empty($userData['mobile']) && !empty($userData['email']);//true 已完善
+        $time = time();
+        $msg="";
+        if( $userDataStatus){
+            $scoreLog = Db::table('fy_score_log')->where([
+                'openid'=>$user['openid'],
+                'source' => 11,
+            ])->find();
+            // dump($scoreLog);
+            // die;
+            if(empty($scoreLog)) {
+                $userData['score'] += 100;
+                $msg = '信息已完善,恭喜获得100积分';
+                Db::table('fy_score_log')->insert([
+                    'uid' => $userData['id'],
+                    'openid' => $userData['openid'],
+                    'source' => 11,
+                    'score' => 100,
+                    'time' => $time
+                ]);
+            }
+        }
+        Db::table('fy_customer')->where('openid', $user['openid'])->update($userData);
+        return $msg;
     }
 }

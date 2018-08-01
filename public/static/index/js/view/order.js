@@ -77,8 +77,34 @@ function showWul(name,num) {
         ,btn: '确定'
     });
 }
+//商品按钮
+function orderBtnHtml(json){
+    var html='';
+    switch(json.order_status)
+    {
+        case 1://已支付
+            if(json.is_send==0 && json.show_area !=showArea.score)
+                html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="refund(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">退款</a>';
+            if(json.is_send ==1)
+                html +='        <button class="layui-btn  layui-btn-danger layui-btn-radius layui-btn-xs " onclick="sureDeliver(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">确认收货</button>';
+            //待评价
+            if(json.is_send ==2){
+                html +='        <button class="layui-btn layui-btn-xs  layui-btn-danger layui-btn-radius" onclick="evaluateEdit(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">评&nbsp;&nbsp;价</button>';
+                if(json.show_area !=showArea.score){
+                    if(json.after_sale_is==afterSale.yes)
+                        html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="cancelAfterSale(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">取消申请</a>';
+                    else
+                        html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="goOrderService(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">申请售后</a>';
+                }
+            }
 
-
+            break;
+    }
+    if(json.order_status!=7 && json.is_send!=constant.send.nosend ){
+        html +='    <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="showWul(\''+json.logistics_name+'\',\''+json.logistics_number+'\')">物流单号</button>'
+    }
+    return html;
+}
 
 
 
