@@ -103,8 +103,8 @@
             var show_area = data[i].show_area;
             //商品既没有价格也没有积分，说明该规格商品 sku规格不存在，该规格商品失效
             var isDiscard = data[i].point_score == null && data[i].price1 == null;
-
-            if (isDiscard){
+            var noActivity = show_area ==showArea.time && activeStatus(parseInt(data[i].start_date),parseInt(data[i].end_date),parseInt("{$currentTime}")) !=constant.activity.inActive;// true 限时抢购不在时间范围
+            if (isDiscard || noActivity){
                 html += '<li class="singer-good clear">';
                 html += '    <i class="no-selected-icon chose-btn selected-no-use" ></i>';
                 html += '    <a  href="javascript:;">';
@@ -133,23 +133,14 @@
             html += '        </p>';
             if (isDiscard) {
                 html += '        <div class="mt10 clear grey">失效</div>';
+            }else if(noActivity){
+                html += '        <div class="mt10 clear grey">不在抢购时间范围</div>';
             } else {
-
                 html += '        <div class="mt10 clear">';
-               /* switch (show_area) {
-                    case 2:
-                        html += '            <p class="red fl"> <em class="f14">' + data[i].point_score + '积分</em></p>';
-                        break;
-                    default:
-                        html += '            <p class="red fl">¥ <em class="f14">' + data[i].price1 + '</em></p>';
-                        break;
-                }*/
                 html += '            <p class="red fl">'+priceScoreShow(data[i].settlement_type,data[i].price1,data[i].point_score)+'</p>';
                 html += '            <div class="layui-btn-group fr count-wrap">';
                 html += '                <button class="layui-btn layui-btn-primary layui-btn-xs fr24 minus">-</button>';
                 html += '                <div class="layui-btn layui-btn-primary layui-btn-xs">';
-                // onkeyup="value=(parseInt((value=value.replace(/\D/g,''))==''?'0':value,10))"
-
                 if (data[i].price1 != 0) {
                     html += '  <input class="sumInput tc"  data-score="' + data[i].point_score + '" data-showarea="' + data[i].show_area + '" data-image="' + data[i].main_image + '" data-name="' + data[i].name + '" data-store="' + data[i].store + '" data-goodsid="' + data[i].goods_id + '" data-carid="' + data[i].carId + '"  data-price="' + data[i].price1 + '" data-skuid="' + data[i].sku_id + '" data-skuval="' + data[i].val + '"   type="text" value="' + data[i].goods_num + '">';
                 } else {

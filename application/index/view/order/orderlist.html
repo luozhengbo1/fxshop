@@ -108,6 +108,7 @@
         orderService:"{:url('index/order/orderService')}",//
         cancelOrder:"{:url('index/order/cancelOrder')}",
         cancleAfterSale:"{:url('index/order/cancleAfterSale')}",
+        deleOrder:"{:url('index/order/deleteOrder')}",
     }
 
     tabSwitch($('.nav-list-tab li'),loadOrderData);
@@ -270,7 +271,7 @@
                 html +='        <button class="layui-btn  layui-btn-danger layui-btn-radius layui-btn-xs orderPay" onclick="pay(\''+order_id+'\')">付&nbsp;&nbsp;款</button>';
             }
             if(order_status ==constant.order.cancelOrder){
-                html +='        <button class="layui-btn layui-btn-primary layui-btn-xs orderCancel  layui-btn-radius" onclick="deleOrder(\''+order_id+'\')">取消订单</button>';
+                html +='        <button class="layui-btn layui-btn-primary layui-btn-xs orderCancel  layui-btn-radius" onclick="deleOrder(\''+order_id+'\')">删除</button>';
             }
             html +='        <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius">联系卖家</button>';
             html +='    </div>';

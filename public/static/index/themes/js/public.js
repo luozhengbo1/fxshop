@@ -628,6 +628,11 @@ var constant={
         youhui:2,//优惠券
         daijin:3,//代金券
         mianyou:4,
+    },
+    activity:{
+        noStart:0//未开始
+        ,inActive:1 //活动中
+        ,end: 2 //已结束
     }
 }
 var settlement={
@@ -710,9 +715,9 @@ function returnTime(intDiff) {
  */
 function activeStatus(start,end,current) {
     var currentTime = current;
-    if(currentTime<start) return 0;
-    else if(currentTime>start && currentTime<end) return 1;
-    else if(currentTime>end) return 2;
+    if(currentTime<start) return constant.activity.noStart;
+    else if(currentTime>start && currentTime<end) return constant.activity.inActive;
+    else if(currentTime>end) return constant.activity.end;
 }
 
 function recodeHistoryUrl() {

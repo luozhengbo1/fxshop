@@ -22,17 +22,18 @@ $js_api_parameters = base64_decode($_GET['js_api_parameters']);
 <div >
     <div class="payHead mt40">
         <p class="tc">订单金额</p>
-        <p class=" tc mt20 f32" >¥<i class="ml5 f32">22</i></p>
+        <p class=" tc mt20 f32" >¥<i class="ml5 f32">{$total}</i></p>
     </div>
     <div class="p5 pl10">
         <p class="grey f12 lh30">请选择支付方式</p>
-        <div class="lh40">
-            <img width="32" src="__STATIC__/index/images/weixin.png">
+        <div class="lh40 clear">
+            <img style="width: 30px" src="__STATIC__/index/images/weixin.png">
             <span>微信支付</span>
+            <img class="fr" style="margin-top: 14px; width: 16px"   src="__STATIC__/index/images/gou.png">
         </div>
     </div>
-    <div style="margin-top: 65%">
-        <button  onClick="callpay()" id="payDom" class="btn-default" >确认支付</button>
+    <div class="footer-fixed">
+        <button  onClick="callpay()" id="payDom" class="w100p bootstrap-btn btn-default">确认支付</button>
     </div>
 </div>
     <script type="text/javascript">
@@ -58,6 +59,7 @@ $js_api_parameters = base64_decode($_GET['js_api_parameters']);
 
         function callpay()
         {
+            layerLoad();
             if (typeof WeixinJSBridge == "undefined"){
                 if( document.addEventListener ){
                     document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
