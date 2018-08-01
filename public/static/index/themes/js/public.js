@@ -167,11 +167,11 @@ function navTab(){
 //swiper   banner滚动
 function bannerSwiper(_class) {
     new Swiper('.'+_class, {
-       /* autoplay: {
-            delay: 6000,
+        autoplay: {
+            delay: 1000,
             stopOnLastSlide: false,
             disableOnInteraction: false,
-        },*/
+        },
         pagination: {
             el: '.swiper-pagination',
             bulletElement : 'li',
