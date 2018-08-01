@@ -66,7 +66,10 @@
         var html='';
         for(var i = 0; i < data.length; i++){
             var avg_score= parseInt(data[i].avg_score)*20;
-            var imgArr = (data[i].pic).split(',');
+            var imgArr;
+            if(data[i].pic){
+                imgArr = (data[i].pic).split(',');
+            }
             html +='<li>';
             html +='    <div class="good-evaluate-user-info clear">';
             html +='        <span class="fl user">'+data[i].username+'</span>';
@@ -75,9 +78,12 @@
             html +='    </div>';
             html +='    <p class="good-evaluate-title lh20">'+data[i].content+'</p>';
             html +='    <ul class="good-evaluate-img clear">';
-            for(var n=0; n<imgArr.length; n++){
-                html +='        <li onclick="showImage(this,'+n+')"><img src="'+imgArr[n]+'"></li>';
+            if(imgArr){
+                for(var n=0; n<imgArr.length; n++){
+                    html +='        <li onclick="showImage(this,'+n+')"><img src="'+imgArr[n]+'"></li>';
+                }
             }
+
             html +='    </ul>';
             html +='<div class="good-evaluate-user-info mt10 clear">';
             html +='    <span class="fl user">卖家回复:</span>';

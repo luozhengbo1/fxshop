@@ -124,6 +124,12 @@
                     if($goodsData['settlement_type']==2 || $goodsData['settlement_type']==3){
                         $score+=$goodsData['score'];
                     }
+                    #限时商品判断
+                    if($goodsData['show_area']==1){#限时抢购，查看是否在抢购时间
+                          if($goodsData['start_date'] > time() ||  time() >$goodsData['end_date'] ){
+                              return ajax_return('','你来晚了,抢购已经结束');
+                          }
+                    }
                     #库存判断
                     $goods_attribute = Db::name('goods_attribute')->where(['id'=>$v['skuId']])->find();
                     if($goods_attribute['store']<$v['num']){
@@ -303,7 +309,7 @@
                     }
                     if($type==0 ||  $type==2){ #钱 和积分加钱
                         $jsApiParameters = base64_encode($jsApiParameters);
-                        $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$addId1}");
+                        $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&order_id={$orderId}");
                         die(json_encode($backData));
                     } else {
                         #将用户积分扣取，并将扣取记录记下来
@@ -428,7 +434,7 @@
                 if($orderData['type']==0||$orderData['type']==2){
 
                 }
-                $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$orderData['id']}");
+                $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&order_id={$orderData['order_id']}");
                 return json($backData);
             }
 
