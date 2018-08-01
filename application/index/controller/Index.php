@@ -12,7 +12,7 @@ class Index extends Mustlogin
 {
     public function index()
     {
-        $this->userInfo['uid'] = $this->userInfo['id'];
+        $this->userInfo['uid'] = isset($this->userInfo['id'])?$this->userInfo['id']:'';
         Hook::exec('app\\index\\behavior\\LoginLog', 'run',  $this->userInfo);
         #获取轮播图数据
         $sildeShow = new  Sildeshow($num = 6);

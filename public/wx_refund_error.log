@@ -409,4 +409,52 @@ Array
     [return_msg] => OK
     [sign] => 46714AD37EE1C6415323BBAF3BE411AF
 )
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ORDERNOTEXIST
+    [err_code_des] => 订单不存在
+    [mch_id] => 1441217402
+    [nonce_str] => cIhpjWcmAf5keDaw
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 74E8A57845466436375063A3EA65304F
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ORDERNOTEXIST
+    [err_code_des] => 订单不存在
+    [mch_id] => 1441217402
+    [nonce_str] => rHrtLHsxXMvbu4g6
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 3393101BA17727320A4902DA2FAFEC9E
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ORDERNOTEXIST
+    [err_code_des] => 订单不存在
+    [mch_id] => 1441217402
+    [nonce_str] => Xc2zULrwFnitUOuP
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => C8E3DFB5C3F1B4136FB2DAA4C760D249
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ORDERNOTEXIST
+    [err_code_des] => 订单不存在
+    [mch_id] => 1441217402
+    [nonce_str] => rTrjsGTb5XfayY1e
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => D61A32279C24D8C6C8563D7D788C7033
+)
 

@@ -619,16 +619,16 @@
             }
             $orderDetail = Db::name('order')
 //                ->join('fy_customer_address','fy_customer_address.id=fy_order.address_id','left')
-                ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
+                ->join('fy_order_goods ','fy_order_goods.order_id=fy_order.order_id','left')
                 ->join('fy_goods_attribute','fy_order_goods.sku_id=fy_goods_attribute.id','left')
                 ->where(['fy_order.order_id'=>$id])
                 ->select();
-//            dump($orderDetail);die;
             $address = json_decode($orderDetail[0]['address_detail'],true);
             foreach (  $orderDetail as $k=> $v){
                 $orderDetail[$k]['goods_detail'] = json_decode($orderDetail[$k]['goods_detail'],true);
             }
-            $this->view->assign('address',$address);
+            $this->view->assign('address',$address) ;
+
             $this->view->assign('orderDetail',$orderDetail);
             return $this->view->fetch('orderDetail');
         }
@@ -641,7 +641,7 @@
                 if(!$data['order_id'] || !$data['goods_id'] || !$data['sku_id'] ){
                     return $this->error('缺少参数id');
                 }
-                if( !$data['after_sale_type'] ||$data['after_sale_reson'] ){
+                if( !$data['after_sale_type'] || !$data['after_sale_reson'] ){
                     return ajax_return('','请选择售后类型和原因','500');
                 }
                 $goods = Db::name('goods')->where(['id'=>$data['goods_id']])->find();

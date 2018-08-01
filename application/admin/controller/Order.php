@@ -382,10 +382,10 @@ class Order extends Controller
                         return ajax_return('',$res['err_code_des']);
                     }
                 }else{#拒绝退款
-                    Db::name('order_goods')->where(['order_id'=>$order_id])->update(['is_return'=>3,'is_send'=>1]);
+                    $orderGoods = Db::name('order_goods')->where(['order_id'=>$order_id])->find();
+                    Db::name('order_goods')->where(['order_id'=>$order_id])->update(['is_return'=>3,'is_send'=>$orderGoods['is_send']]);
                     #将订单中退款的总价减少。return_all
                     $order = Db::name('order')->where(['order_id'=>$order_id])->find();
-                    $orderGoods = Db::name('order_goods')->where(['order_id'=>$order_id])->find();
                     $decsPrice = $order['return_price_all'] - $orderGoods['return_price'];
                     $decsPrice = ($decsPrice<0)?$decsPrice:'0';
                     $res = Db::name('order')->where(['order_id'=>$order_id])->update(['return_price_all'=>$decsPrice]);

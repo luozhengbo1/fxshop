@@ -4057,8 +4057,9 @@ a {
 }
 .product-order-list .order-serviceinfo .service {
 	display: inline-block;
-	background: #ff5000;
-	color: #fff;
+	/*background: #ff5000;*/
+	color:  #ff5000;
+	border: 1px solid  #ff5000;
 	border-radius: 4px;
 	padding: .04rem .13333rem;
 	margin-top: 4px;
