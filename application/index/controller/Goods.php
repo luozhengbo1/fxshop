@@ -256,6 +256,7 @@
                     ->where(['status'=>1,'goods_id'=>$data['id'],'avg_score'=>['between',[$data['start'],$data['end'] ]]])
                     ->page($page,$size)
                     ->count();
+//                dump($comment);
                 return ajax_return($comment,'ok','200');
             }else{
                 $arr = $this->getGoodsgoodOrBad( $this->request->param('goods_id'));
