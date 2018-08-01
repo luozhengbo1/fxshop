@@ -602,4 +602,15 @@ class Customer extends Mustlogin
             return $this->view->fetch();
         }
     }
+    public function msg_detail($id)
+    {
+        $this->assign('titleName', "消息详情");
+        $message = Db::table('fy_message')
+            ->where([
+                'id'=>$id,
+            ])
+            ->find();
+        $this->assign('message', $message);
+        return $this->view->fetch("msgDetail");
+    }
 }

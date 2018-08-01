@@ -21,25 +21,25 @@
 </div>
 
 <script>
+    var url={
+        msg_detail:"{:url('index/customer/msg_detail')}"
+    }
     function dealData(data) {
         var html = '';
         for (var i = 0; i < data.length; i++) {
             html += '<li class="clear" >';
+            html += '<a href="'+urlConnect(url.msg_detail,{id:data[i].message_id})+'">'
             html += '     <div class="img">';
             html += '         <img src="' + data[i].pic + '">';
             html += '     </div>';
             html += '     <div class="content">';
             html += '         <p class="clear mt5">';
             html += '             <span class="name fl">' + data[i].title + '</span>';
-            Date.prototype.toLocaleString = function () {
-                return this.getFullYear() + '-' + (this.getMonth() + 1) + '-' + this.getDay() + ' '
-                    + this.getHours() + ':' + this.getMinutes() + ':' + this.getSeconds();
-            }
-            var time = new Date(parseInt(data[i].create_time) * 1000).toLocaleString();
-            html += '             <span class="time grey fr">' + time + '</span>';
+            html += '             <span class="time grey fr">' + new Date(parseInt(data[i].create_time)*1000).Format("yyyy-MM-dd hh:mm:ss") + '</span>';
             html += '         </p>';
-            html += '         <p class="desc grey mt5">' + data[i].detail + '</p>';
+            html += '         <p class="desc grey mt5  ellipsis-oneline">' + data[i].detail + '</p>';
             html += '     </div>';
+            html +='</a>'
             html += ' </li>';
         }
         return html;

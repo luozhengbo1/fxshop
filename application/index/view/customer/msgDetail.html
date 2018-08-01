@@ -1,0 +1,18 @@
+{include file="Public/header-resource"}
+
+<body class="title-top">
+{include file="Public/header-title"}
+
+    <div class="bg_white"><img width="100%" src="{$message.pic}"></div>
+    <section class="p5 bg_white pb30">
+        <div class="tc f16 bold pt20 pb10">{$message.title}</div>
+        <div class="pb10 pt10">{$message.detail}</div>
+        <div class="clear">
+            <span class="grey fr timeWrap mr10" ></span>
+        </div>
+    </section>
+</body>
+<script>
+    $('.timeWrap').html(new Date(parseInt("{$message.create_time}")*1000).Format("yyyy-MM-dd hh:mm:ss"));
+</script>
+</html>
