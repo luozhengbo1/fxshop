@@ -2,6 +2,7 @@ layui.use('upload', function(){
     var $ = layui.jquery
         ,upload = layui.upload;
     //多图片上传
+    var pr
     upload.render({
         elem: '#uploadBtn'
         ,url:url.upload
@@ -13,16 +14,16 @@ layui.use('upload', function(){
         //,auto: false //选完文件后不自动上传
         ,before: function(obj){
             //预读本地文件示例，不支持ie8
-            obj.preview(function(index, file, result){
-                var html ='<div class="singer-image" style="" >';
-                html +='<img  src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img showImg">';
-                html +='<i class="close-btn" onclick="dele(this)"></i></div>';
-                $('#imageShow').prepend(html);
-            });
         }
         ,done: function(data){
-            console.log(data.data.name)
-            $('#imageShow').append('<input type="hidden" class="pic" name="pic" value="'+data.data.name+'">')
+            console.log(data)
+
+            var html ='<div class="singer-image" style="" >';
+            html +='<img  src="'+data.data.name+'" class="layui-upload-img showImg">';
+            html +='<i class="close-btn" onclick="dele(this)"></i></div>';
+            html +='<input type="hidden" class="pic" name="pic" value="'+data.data.name+'">'
+            $('#imageShow').prepend(html);
+            //console.log(data.data.name)
             //上传完毕
             //上传文件个数大于了5个
             isShowUploadBtn();
