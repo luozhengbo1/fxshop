@@ -108,6 +108,7 @@
         orderService:"{:url('index/order/orderService')}",//
         cancelOrder:"{:url('index/order/cancelOrder')}",
         cancleAfterSale:"{:url('index/order/cancleAfterSale')}",
+        deleOrder:"{:url('index/order/deleteOrder')}",
     }
 
     tabSwitch($('.nav-list-tab li'),loadOrderData);
@@ -178,14 +179,6 @@
                 html +='        </div>';
                 html +='        <div class="item-pay">';
                 html +='            <div class="item-pay-data">';
-               /* switch(show_area){
-                    case 2:
-                        html +='                <p class="price f14"> '+data[i].point_score+'积分 </p>';
-                        break;
-                    default:
-                        html +='                <p class="price f14"> ￥'+data[i].price+' </p>';
-                        break;
-                }*/
                 html +='                <p class="price f14"> '+priceScoreShow(data[i].settlement_type,data[i].price,data[i].point_score)+'</p>';
                 html +='                <p class="nums">x'+data[i].goods_num+'</p>';
                 html +='                <p ><span class="fr lh30 orange mt10">'+is_send_param[is_send]+'</span></p>';
@@ -213,30 +206,14 @@
                         break;
                 }
                 // html +='            <span class="f14">合计:<b>￥'+data[i].total_price+'</b></span>';
-                if(detail.postage){
+                if(detail.free_type ==constant.freeType.noFree && detail.postage>0){
                     html +='            <span class="f14">(含运费<b>￥'+detail.postage+'x'+data[i].goods_num+'</b>)</span>';
-                }else{
-                    html +='            <span class="f14">(含运费<b>￥0</b>)</span>';
                 }
                 html +='        </div>';
                 html +='    </div>';
                 html +='    <div class="module clear tr mt5 mb5 pr10" >';
                 html +='</a>';
 
-               // var is_send_param =
-                   // 0:'未发货',
-                   // 1:'已发货',
-                   // 2:'待评价',
-                   // 3:'退货中',
-                   // 4:'退货完成',
-                   // 5:'待回复',
-                   // 6:'交易完成',
-
-                //var order_status_param={
-                   // 0:'未支付',
-                   // 1:'已支付',
-                   // 7:'已取消订单',
-                   // 8:'订单完成',
                 switch(order_status)
                 {
                     case 1://已支付
@@ -270,7 +247,7 @@
                 html +='        <button class="layui-btn  layui-btn-danger layui-btn-radius layui-btn-xs orderPay" onclick="pay(\''+order_id+'\')">付&nbsp;&nbsp;款</button>';
             }
             if(order_status ==constant.order.cancelOrder){
-                html +='        <button class="layui-btn layui-btn-primary layui-btn-xs orderCancel  layui-btn-radius" onclick="deleOrder(\''+order_id+'\')">取消订单</button>';
+                html +='        <button class="layui-btn layui-btn-primary layui-btn-xs orderCancel  layui-btn-radius" onclick="deleOrder(\''+order_id+'\')">删除</button>';
             }
             html +='        <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius">联系卖家</button>';
             html +='    </div>';
