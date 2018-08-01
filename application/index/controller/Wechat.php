@@ -54,6 +54,7 @@ class WeChat extends Controller
         $accessInfo = json_decode(file_get_contents($url), true);
         $url = "https://api.weixin.qq.com/sns/userinfo?access_token={$accessInfo['access_token']}&openid={$accessInfo['openid']}&lang=zh_CN";
         $userInfo = json_decode(file_get_contents($url), true);
+        $userInfo['login_ip']=$this->get_client_ip();
         # 如果不存在用户就写入
         $customer = Db::name("customer");
         if (!$user = $customer->where(['openid' => $userInfo['openid']])->find()) {
@@ -62,14 +63,6 @@ class WeChat extends Controller
             $customer->insert($userInfo);
             //注册送10积分
             $customer->where('openid', $userInfo['openid'])->setField('score', 10);
-            //插入grade_id
-//            $experience = Db::table('fy_customer')->field('experience')->where('openid', $userInfo['openid'])->find();
-//            $grade = Db::table('fy_customer_grade')->select();
-//            foreach ($grade as $item) {
-//                if ($experience['experience'] >= $item['experience_start'] && $experience['experience'] <= $item['experience_end']) {
-////                    Db::table('fy_customer')->where('openid', $userInfo['openid'])->setField('grade_id', $item['id']);
-//                }
-//            }
             //新增score日志记录
             $user = $customer->where('openid', $userInfo['openid'])->find();
             $time = time();
@@ -87,16 +80,6 @@ class WeChat extends Controller
             $up['login_ip'] = get_client_ip();
             $customer->where(array('openid' => $userInfo['openid']))->update($up);
         }
-//        //新增前端登录日志记录
-//        $userData = Db::table('fy_customer')->field('id')->where('openid', $userInfo['openid'])->find();
-//        $time = date('Y-m-d H:i:s', time());
-//        $loginData = [
-//            'uid' => $userData['id'],
-//            'openid' => $userInfo['openid'],
-//            'login_time' => $time
-//        ];
-//        Db::table('fy_customer_login_log')->insert($loginData);
-        $userInfo['login_ip']=$this->get_client_ip();
         Session::set('wx_user', $userInfo);
         # 从哪里来回哪里去
         $this->redirect(urldecode($this->request->param('state')) ? urldecode($this->request->param('state')) : 'index/index/index');

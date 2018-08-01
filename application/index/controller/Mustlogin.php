@@ -14,7 +14,6 @@ Class MustLogin extends Controller
     {
         parent::__construct();
         $sessionUserInfo = \think\Session::get('wx_user');
-//        dump($sessionUserInfo);
         if (empty($sessionUserInfo['openid'])) {
             $this->redirect(substr(url('Wechat/wxLogin', ['state' => myUrl()]), 0, -5));
         }
