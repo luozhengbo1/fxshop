@@ -3,7 +3,9 @@
 $js_api_parameters = base64_decode($_GET['js_api_parameters']);
 {/php}
 <style>
-
+    .btn-default-wrap{
+        margin-top: 60%;
+    }
     .btn-default{
         width: 80%;
         margin: 0 auto;
@@ -24,7 +26,7 @@ $js_api_parameters = base64_decode($_GET['js_api_parameters']);
         <p class="tc">订单金额</p>
         <p class=" tc mt20 f32" >¥<i class="ml5 f32">{$total}</i></p>
     </div>
-    <div class="p5 pl10">
+    <div class="pt10 pl10 pr10">
         <p class="grey f12 lh30">请选择支付方式</p>
         <div class="lh40 clear">
             <img style="width: 30px" src="__STATIC__/index/images/weixin.png">
@@ -32,8 +34,8 @@ $js_api_parameters = base64_decode($_GET['js_api_parameters']);
             <img class="fr" style="margin-top: 14px; width: 16px"   src="__STATIC__/index/images/gou.png">
         </div>
     </div>
-    <div class="footer-fixed">
-        <button  onClick="callpay()" id="payDom" class="w100p bootstrap-btn btn-default">确认支付</button>
+    <div class="btn-default-wrap">
+        <button  onClick="callpay()" id="payDom" class="btn-default">确认支付</button>
     </div>
 </div>
     <script type="text/javascript">
@@ -46,13 +48,16 @@ $js_api_parameters = base64_decode($_GET['js_api_parameters']);
                 function(res){
                     WeixinJSBridge.log(res.err_msg);
                     // alert(res.err_code+res.err_desc+res.err_msg);
-                    if(res.err_msg=='get_brand_wcpay_request:ok'){
+                   /* if(res.err_msg=='get_brand_wcpay_request:ok'){
                         setTimeout(function(){
                             window.location.href = "{:url('order/index',array('param'=>'all'))}";
                         },4000);
                     }else{
                         history.back(-1);
-                    }
+                    }*/
+                    setTimeout(function(){
+                        window.location.href = "{:url('order/index',array('param'=>'all'))}";
+                    },4000);
                 }
             );
         }
