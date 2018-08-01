@@ -303,7 +303,7 @@
                     }
                     if($type==0 ||  $type==2){ #钱 和积分加钱
                         $jsApiParameters = base64_encode($jsApiParameters);
-                        $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$addId1}");
+                        $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&order_id={$orderId}");
                         die(json_encode($backData));
                     } else {
                         #将用户积分扣取，并将扣取记录记下来
@@ -428,7 +428,7 @@
                 if($orderData['type']==0||$orderData['type']==2){
 
                 }
-                $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&id={$orderData['id']}");
+                $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&order_id={$orderData['order_id']}");
                 return json($backData);
             }
 
