@@ -141,7 +141,7 @@
                 $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
 //                dump($totalScore);
                 if($totalScore>$user['score']){
-                    return ajax_return('','你积分数量不足','500');
+                    return ajax_return('','你的积分不足','500');
                 }
 //                dump($res);die;
                 Session::set('storeData '.$this->userInfo['openid'],$storeData);
