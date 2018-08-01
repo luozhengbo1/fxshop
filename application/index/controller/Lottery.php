@@ -26,7 +26,8 @@ Class Lottery extends Mustlogin
                     'fy_goods.status'=>1,
                     'fy_goods.isdelete'=>'0',
                     'fy_lottery.grant_start_date' => ['<', $time],
-                    'fy_lottery.grant_end_date' => ['>', $time]
+                    'fy_lottery.grant_end_date' => ['>', $time],
+                    'fy_lottery.status' =>1,
                 ];
 
             }else{
@@ -41,7 +42,8 @@ Class Lottery extends Mustlogin
                     'fy_goods.status'=>1,
                     'fy_goods.isdelete'=>'0',
                     'fy_lottery.grant_start_date' => ['<', $time],
-                    'fy_lottery.grant_end_date' => ['>', $time]
+                    'fy_lottery.grant_end_date' => ['>', $time],
+                    'fy_lottery.status' =>1,
                 ];
             }
             $goodsWithLottery = Db::name('goods')
@@ -108,6 +110,7 @@ Class Lottery extends Mustlogin
                 return ajax_return_error('缺少参数id');
             }
             $lottery = Db::name('lottery')->where(['id' => $data['id'], 'status' => '1'])->find();
+          //  dump($lottery);
             if ($lottery['number'] < 1) {
                 return ajax_return_error('奖券已经被领取完');
             }
@@ -121,7 +124,9 @@ Class Lottery extends Mustlogin
             }
             #将数量减少，记录领取用户
             $insert = [];
+           // dump($this->userInfo);
             $insert['username'] = $this->userInfo['nickname'];
+            $insert['uid'] = $this->userInfo['id'];
             $insert['addtime'] = time();
             $insert['lottery_id'] = $data['id'];
             $insert['status'] = 1;

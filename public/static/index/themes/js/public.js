@@ -548,6 +548,7 @@ function tagParse(tag){
     detailTag = detailTag.replace(/&lt;/g,"<");
     detailTag = detailTag.replace(/&gt;/g,">");
     detailTag = detailTag.replace(/&quot;/g,"'");
+    detailTag = detailTag.replace("&nbsp;", " ");
     return detailTag
 }
 
@@ -621,6 +622,12 @@ var constant={
        ,isPay:1//:'已支付',
        ,cancelOrder: 7//:'已取消订单',
        ,orderComplete: 8//:'订单完成',
+    },
+    coupon:{
+        dikou:1,//抵扣券
+        youhui:2,//优惠券
+        daijin:3,//代金券
+        mianyou:4,
     }
 }
 var settlement={
