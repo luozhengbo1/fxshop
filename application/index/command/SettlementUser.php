@@ -44,8 +44,14 @@
     if ( $orderResult->num_rows > 0) {
         while ($row1 = $orderResult->fetch_assoc()){
             #结算金额
-            $settMoney = $row1['total_price']-$row1['return_price_all'];
-            $setUserSql = "update fy_admin_user set balance=balance+'{$settMoney}' where id={$row1['user_id']}";
-            mysqli_query($conn,$setUserSql);
+            if($row1['is_settlement']!=1){
+                $settMoney = $row1['total_price']-$row1['return_price_all'];
+                $setUserSql = "update fy_admin_user set balance=balance+'{$settMoney}' where id={$row1['user_id']}";
+                mysqli_query($conn,$setUserSql);
+                #将结算订单修改城已经结算
+                $setsql = "update fy_order set is_settlement=1 where id={$row1['order_id']}";
+                mysqli_query($conn,$setsql);
+            }
+
         }
     }

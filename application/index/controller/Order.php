@@ -641,6 +641,13 @@
                 if(!$data['order_id'] || !$data['goods_id'] || !$data['sku_id'] ){
                     return $this->error('缺少参数id');
                 }
+                if( !$data['after_sale_type'] ||$data['after_sale_reson'] ){
+                    return ajax_return('','请选择售后类型和原因','500');
+                }
+                $goods = Db::name('goods')->where(['id'=>$data['goods_id']])->find();
+//                if($goods['settlement_type']==2||$goods['settlement_type']==3){
+//                    return ajax_return('','积分商品不支持售后','500');
+//                }
                 $orderGoods = Db::name('order_goods')->where(['order_id'=>$data['order_id'],'goods_id'=>$data['goods_id'],'sku_id'=>$data['sku_id']])->find();
                 $time = time() ;
                 $day7 = 24*60*60;

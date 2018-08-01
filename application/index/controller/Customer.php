@@ -31,8 +31,9 @@ class Customer extends Mustlogin
         }
         //会员收藏数量
         $count_collect = Db::table('fy_customer_collect')
-            ->where('uid', $user_data['id'])
-            ->where('status', 1)->count();
+            ->join('fy_goods','fy_goods.id=fy_customer_collect.goods_id')
+            ->where('fy_customer_collect.uid', $user_data['id'])
+            ->where('fy_customer_collect.status', 1)->count();
         $this->assign('count_collect', $count_collect);
 
         //会员卡券数量
