@@ -14,6 +14,7 @@
         margin-right: .08rem;
         border-radius: 4px;
         color: black;
+        margin-bottom: 4px;
     }
 </style>
 <div class="search-history mb5">
@@ -67,6 +68,8 @@
         return html;
     }
     function getGoods(json) {
+        var data= {show_area:showArea.hot+','+showArea.normal}
+        if(json) $.extend(data,json);
         initData('goodsList');
         destoryMasonry();
         pageload({
@@ -76,7 +79,7 @@
             size:10,
             ajaxData:{
                 url:"{:url('index/goods/goodsSearch')}",
-                data:json,
+                data:data,
             },
             dealFun:dealData,
             complete:masonryShow,
