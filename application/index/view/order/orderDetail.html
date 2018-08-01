@@ -89,53 +89,24 @@
                 $skuid   = $vo['sku_id'];
                 $status   = $vo['order_status'];
                 {/php}
-                <div class="tr">
+                <div class="tr goodsBtnShow"
+                     data-order_status="{$status}",
+                     data-show_area="{$vo['goods_detail']['show_area']}",
+                     data-is_send="{$vo['is_send']}",
+                     data-order_id="{$orderDetail[0]['order_id']}",
+                     data-goods_id="{$vo['goods_id']}",
+                     data-sku_id="{$vo['sku_id']}",
+                     data-logistics_name="{$vo['logistics_name']}",
+                     data-logistics_number="{$vo['logistics_number']}",
+                     data-after_sale_is="{$vo['after_sale_is']}"
+                >
 
-                   <!--   // var is_send_param =
-                   // 0:'未发货',
-                   // 1:'已发货',
-                   // 2:'待评价',
-                   // 3:'退货中',
-                   // 4:'退货完成',
-                   // 5:'待回复',
-                   // 6:'交易完成',
-
-                //var order_status_param={
-                   // 0:'未支付',
-                   // 1:'已支付',
-                   // 7:'已取消订单',
-                   // 8:'订单完成',
-                    -->
-
-                    {if condition="$status eq 1"/}
-                        {if condition="$is_send eq 0"/}
-                        <button class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="refund('{$orderId}','{$goodsId}','{$skuid}')">退&nbsp;&nbsp;款</button>
-                        {/if}
-                        {if condition="$is_send eq 1" /} <!--确认收货-->
-                         <button class="layui-btn  layui-btn-xs  layui-btn-danger layui-btn-radius" onclick="sureDeliver('{$orderId}','{$goodsId}','{$skuid}')">确认收货</button>
-                        {/if}
-                        {if condition="$is_send eq 2" /} <!--待评价-->
-                        <button class="layui-btn layui-btn-xs  layui-btn-danger layui-btn-radius" onclick="evaluateEdit('{$orderId}','{$goodsId}','{$skuid}')">评&nbsp;&nbsp;价</button>
-                            {if condition="$vo['after_sale_is'] eq 1 " /}
-                              <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="cancelAfterSale('{$orderId}','{$goodsId}','{$skuid}')">取消申请</button>
-                            {/if}
-                            {if condition="$vo['after_sale_is'] eq 0 " /}
-                              <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="goOrderService('{$orderId}','{$goodsId}','{$skuid}')">申请售后</button>
-                            {/if}
-
-                        {/if}
-                        {if condition="$is_send neq 0 && $status neq 7" /} <!--待评价-->
-                        <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="showWul('{$vo[\'logistics_name\']}','{$vo[\'logistics_number\']}')">物流单号</button>
-                        {/if}
-                   <!-- <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="logistic('{$orderId}','{$goodsId}','{$skuid}')"  >物流信息</button>-->
-
-                    {/if}
                 </div>
             </div>
             {/volist}
             <div class="module clear tr pt10 pr10" style="border-top: 1px dotted lightgrey" >
                 {if condition="$status eq 0"}<!--待付款-->
-                <button class="layui-btn  layui-btn-xs orderCancel layui-btn-radius" onclick="cancelOrder('{$orderDetail[0][\'order_id\']}')">取消订单</button>
+                <button class="layui-btn layui-btn-primary  layui-btn-xs orderCancel layui-btn-radius" onclick="cancelOrder('{$orderDetail[0][\'order_id\']}')">取消订单</button>
                 <button class="layui-btn  layui-btn-xs  layui-btn-danger layui-btn-radius orderPay" onclick="pay('{$orderDetail[0][\'order_id\']}')">付款</button>
                 {/if}
                 <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius">联系卖家</button>
@@ -154,6 +125,7 @@
 
     </div>
 </section>
+<script type="text/javascript" src="__STATIC__/index/js/view/order.js" ></script>
 <script>
     $('.goodPriceTitle').each(function (index,ele) {
         var $ele=$(ele);
@@ -190,6 +162,11 @@
             $(ele).parents('.total-info').find('.postage').show();
         }
     });
+    $('.goodsBtnShow').each(function (index,ele) {
+        var json = $(ele).data();
+        var html =orderBtnHtml(json);
+        $(ele).html(html);
+    })
     var aftersale_type =parseInt($('#afterSaleService').data('aftersale'));
     if(aftersale_type==afterSale.yes){
         $('#afterSaleService').html('取消申请')
@@ -229,6 +206,6 @@
         })
     }
 </script>
-<script type="text/javascript" src="__STATIC__/index/js/view/order.js" ></script>
+
 </body>
 </html>
