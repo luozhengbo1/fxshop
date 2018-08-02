@@ -152,6 +152,9 @@ Date.prototype.Format = function (fmt) { //author: meizz
         if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 };
+function formatDate(time) {
+   return new Date(parseInt(time)*1000).Format("yyyy-MM-dd hh:mm:ss");
+}
 //tab导航
 function navTab(){
     var $tabNavItem= $('.tab-nav .tab-nav-swiper');
@@ -448,11 +451,13 @@ function pub_edit(json){
                             //有回调函数  执行回调函数
                             json.complete(data.data);
                             request_flag.edit = true;
-                        }else{
+                        }else if (json.return_url){
                             setTimeout(function(){
                                 location.href=json.return_url;
                                 request_flag.edit = true;
                             },1500);
+                        }else{
+                            request_flag.edit = true;
                         }
                     }else{
                         request_flag.edit = true;
@@ -525,6 +530,7 @@ function masonryShow() {
         if($('#searchIcon').size()>0){
             $('#searchIcon').attr('onclick','searchGoods()')
         }
+    imageLazy();
     //},500)
 
 }
@@ -550,6 +556,7 @@ function tagParse(tag){
     var detailTag = tag;
     detailTag = detailTag.replace(/&lt;/g,"<");
     detailTag = detailTag.replace(/&gt;/g,">");
+    detailTag = detailTag.replace("&amp;", "&");
     detailTag = detailTag.replace(/&quot;/g,"'");
     detailTag = detailTag.replace("&nbsp;", " ");
     return detailTag
@@ -592,7 +599,7 @@ var is_send_param = {
     2:'待评价',
     3:'退款中',
     4:'退货完成',
-    5:'已评价',
+    5:'待回复',
     6:'交易完成',
     7:'退货中'
     //0未发货1已发货，2待评价。3退货中，4退货完成,,5待回复，6完成
@@ -752,9 +759,18 @@ function priceScoreShow(settlementType,price,score) {
     return result;
 }
 
+//图片延时加载
+//imageLazy();
+function imageLazy(){
+    var target = $("img.lazy");
+    if(target.size()>0){
+        target.lazyload({
+            effect: "fadeIn"
+        });
+        target.removeClass('lazy');
+    }
 
-
-
+}
 
 
 

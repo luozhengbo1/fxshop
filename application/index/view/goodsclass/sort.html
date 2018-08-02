@@ -79,6 +79,7 @@
                 data:data,
             },
             dealFun:dealData,
+            complete:imageLazy,
         });
     }
     function dealData(data) {
@@ -86,7 +87,7 @@
         for(var i = 0; i < data.length; i++){
             html +='<li class="tc radius4">';
             html +='    <a class="clear" href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'">';
-            html +='        <img class="good-img "  src="'+data[i].main_image+'">';
+            html +='        <img class="good-img  lazy"  src="__STATIC__/index/images/no-image.png" data-original="'+data[i].main_image+'">';
             html +='        <span class="ellipsis-oneline">'+data[i].name+'</span>';
             html +='    </a>';
             html +='</li>';
@@ -110,7 +111,7 @@
                         if(i<4){
                             html +=' <li class="tc">'
                             html +='	<a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
-                            html +='    <img class="good-img" alt="图片" src="'+data[i].main_image+'">';
+                            html +='    <img class="good-img lazy"  src="__STATIC__/index/images/no-image.png" data-original="'+data[i].main_image+'">';
                             html +='   </a>';
                             html +='  </li>';
                         }
