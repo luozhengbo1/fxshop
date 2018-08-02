@@ -384,7 +384,9 @@ class Order extends Controller
                     }
                 }else{#拒绝退款
                     $orderGoods = Db::name('order_goods')->where(['order_id'=>$order_id])->find();
-                    Db::name('order_goods')->where(['order_id'=>$order_id])->update(['is_return'=>3,'is_send'=>$orderGoods['is_send']]);
+                    $is_send = ($orderGoods['logistics_name'] &&  $orderGoods['logistics_number'] )?1 :0;
+                    $update = ['is_return'=>3,'is_send'=>$is_send];
+                    Db::name('order_goods')->where(['order_id'=>$order_id])->update($update);
                     #将订单中退款的总价减少。return_all
                     $order = Db::name('order')->where(['order_id'=>$order_id])->find();
                     $decsPrice = $order['return_price_all'] - $orderGoods['return_price'];
