@@ -14,6 +14,7 @@ namespace app\index\behavior;
 
 use think\Cache;
 use think\Db;
+use think\Log;
 use think\Session;
 
 class LoginLog
@@ -21,7 +22,7 @@ class LoginLog
 
     public function run(&$params)
     {
-        if ($params && !Cache::get('lock')) {
+        if ($params && !Cache::get($params['openid'])) {
             $time = date('Y-m-d H:i:s', time());
             Db::table('fy_customer_login_log')->insert([
                 'uid' => $params['uid'],
@@ -30,7 +31,10 @@ class LoginLog
                 'login_time' => $time,
             ]);
             //30分钟内多次访问/刷新首页，只计算为一次访问
-            Cache::set('lock', '1', 30*60);
+           $cache= Cache::set($params['openid'], '1', 10*60);
+           if(!$cache){
+               Log::write("缓存写入失败", 'warring');
+           }
         }
     }
 }

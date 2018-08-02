@@ -16,7 +16,7 @@ class Customer extends Mustlogin
     public function customer()
     {
         //会员信息
-        $user_data =$this->userInfo;
+        $user_data = $this->userInfo;
         //会员签到信息
         $beforeSign = Db::table('fy_customer_sign')->where('uid', $this->userInfo['id'])->order('addtime', 'desc')->find();//获取最新一条签到记录
         $noSignDay1 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 00:00:00')) / 86400;//2天
@@ -31,7 +31,7 @@ class Customer extends Mustlogin
         }
         //会员收藏数量
         $count_collect = Db::table('fy_customer_collect')
-            ->join('fy_goods','fy_goods.id=fy_customer_collect.goods_id')
+            ->join('fy_goods', 'fy_goods.id=fy_customer_collect.goods_id')
             ->where('fy_customer_collect.uid', $user_data['id'])
             ->where('fy_customer_collect.status', 1)->count();
         $this->assign('count_collect', $count_collect);
@@ -58,12 +58,12 @@ class Customer extends Mustlogin
         #退货退款
         $count_refund = Db::table('fy_order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid' =>  $this->userInfo['openid'], 'fy_order_goods.is_return' => 1, 'fy_order.pay_status' => 1])
+            ->where(['fy_order.openid' => $this->userInfo['openid'], 'fy_order_goods.is_return' => 1, 'fy_order.pay_status' => 1])
             ->count();
         #待评价
         $count_evaluate = Db::table('fy_order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
-            ->where(['fy_order.openid' =>  $this->userInfo['openid'], 'fy_order.order_status' => 1, 'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 2])
+            ->where(['fy_order.openid' => $this->userInfo['openid'], 'fy_order.order_status' => 1, 'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 2])
             ->count();
         $this->assign('count_pay', $count_pay);
         $this->assign('count_deliver', $count_deliver);
@@ -80,7 +80,6 @@ class Customer extends Mustlogin
      */
     public function collect_list($page = '1', $size = '10')
     {
-        $this->assign('titleName', '收藏夹');
         if ($this->request->isAjax()) {
             //查询用户id
             $uid = $this->userInfo['id'];
@@ -89,18 +88,13 @@ class Customer extends Mustlogin
                 ->alias('collect')
                 ->join('fy_customer customer', "collect.uid = customer.id  and customer.id=$uid")
                 ->join('fy_goods goods', "collect.goods_id = goods.id")
-                ->field('collect.uid,goods.id,goods.name,goods.main_image,goods.status,goods.basic_price')
                 ->page($page, $size)
                 ->where('collect.status', '1')
                 ->select();
             //判断用户收藏列表是否为空
-            if ($list_collect) {
-                $this->view->assign('list_collect', $list_collect);
-                return ajax_return($list_collect, 'OK', 200);
-            } else {
-                return ajax_return('', '您还没有收藏商品哦', 200);
-            }
+            return ajax_return($list_collect, 'OK', 200);
         } else {
+            $this->assign('titleName', '收藏夹');
             return $this->view->fetch('goodsCollect');
         }
     }
@@ -201,22 +195,22 @@ class Customer extends Mustlogin
             } else {
                 $save = [
                     'addtime' => $time,
-                    'uid' =>  $this->userInfo['id'],
+                    'uid' => $this->userInfo['id'],
                     'score' => 2,
                     'reward_score' => 0
                 ];
                 //判断用户是否第一次签到?continue_day=1，score+1插入customer表,addtime，uid，score=1,reward_score=0 插入sign表
-                $res = Db::table('fy_customer_sign')->where('uid',  $this->userInfo['id'])->select();
+                $res = Db::table('fy_customer_sign')->where('uid', $this->userInfo['id'])->select();
                 if (empty($res)) {
                     //第一次签到
-                    Db::table('fy_customer')->where('openid',  $this->userInfo['openid'])->setField('continuity_day', 1);
-                    Db::table('fy_customer')->where('openid',  $this->userInfo['openid'])->setInc('score', 2);
+                    Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->setField('continuity_day', 1);
+                    Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->setInc('score', 2);
                     Db::table('fy_customer_sign')->insert($save);
 //                    //新增日志记录
-                    $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid',  $this->userInfo['id'])->where('addtime', $time)->find();
+                    $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid', $this->userInfo['id'])->where('addtime', $time)->find();
                     Db::table('fy_score_log')->insert([
-                        'uid' =>  $this->userInfo['id'],
-                        'openid' =>  $this->userInfo['openid'],
+                        'uid' => $this->userInfo['id'],
+                        'openid' => $this->userInfo['openid'],
                         'source_id' => $sign_id['id'],
                         'source' => 2,
                         'score' => 2,
@@ -226,19 +220,19 @@ class Customer extends Mustlogin
                     exit;
                 } else {
                     //判断前一天是否签到
-                    $beforeSign = Db::table('fy_customer_sign')->where('uid',  $this->userInfo['id'])->order('addtime', 'desc')->find();//获取最新一条签到记录
+                    $beforeSign = Db::table('fy_customer_sign')->where('uid', $this->userInfo['id'])->order('addtime', 'desc')->find();//获取最新一条签到记录
                     $noSignDay1 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 00:00:00')) / 86400;//2天
                     $noSignDay2 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 23:59:59')) / 86400;//1天
                     //前一天未签到，continue_day重置为1，score+1更新到customer表
                     if (floor($noSignDay1) > 1 && $noSignDay2 > 1 && floor($noSignDay1) == $noSignDay2) {
-                        Db::table('fy_customer')->where('openid',  $this->userInfo['openid'])->setField('continuity_day', 1);
+                        Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->setField('continuity_day', 1);
                         Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->setInc('score', 2);
                         Db::table('fy_customer_sign')->insert($save);
                         //新增日志记录
-                        $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid',  $this->userInfo['id'])->where('addtime', $time)->find();
+                        $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid', $this->userInfo['id'])->where('addtime', $time)->find();
                         Db::table('fy_score_log')->insert([
-                            'uid' =>  $this->userInfo['id'],
-                            'openid' =>  $this->userInfo['openid'],
+                            'uid' => $this->userInfo['id'],
+                            'openid' => $this->userInfo['openid'],
                             'source_id' => $sign_id['id'],
                             'source' => 2,
                             'score' => 2,
@@ -254,7 +248,7 @@ class Customer extends Mustlogin
                          * */
                         $score = 0;
                         //判断今天签到后是否满足奖励条件
-                        switch ( $this->userInfo['continuity_day']) {
+                        switch ($this->userInfo['continuity_day']) {
                             case '2':
                                 $score = 5;
                                 break;
@@ -267,20 +261,20 @@ class Customer extends Mustlogin
                         }
                         //满足奖励条件：continue_day+1，score+1+reward_score更新到customer表，score=1,reward_score=相应的奖励积分插入到customer_sign表
                         if ($score) {
-                            Db::table('fy_customer')->where('openid',  $this->userInfo['openid'])->setInc('score', $score + 2);
-                            Db::table('fy_customer')->where('openid',  $this->userInfo['openid'])->setInc('continuity_day', 1);
+                            Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->setInc('score', $score + 2);
+                            Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->setInc('continuity_day', 1);
                             $newSave = [
                                 'addtime' => $time,
-                                'uid' =>  $this->userInfo['id'],
+                                'uid' => $this->userInfo['id'],
                                 'score' => 2,
                                 'reward_score' => $score
                             ];
                             Db::table('fy_customer_sign')->insert($newSave);
                             //新增日志记录
-                            $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid',  $this->userInfo['id'])->where('addtime', $time)->find();
+                            $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid', $this->userInfo['id'])->where('addtime', $time)->find();
                             Db::table('fy_score_log')->insert([
-                                'uid' =>  $this->userInfo['id'],
-                                'openid' =>  $this->userInfo['openid'],
+                                'uid' => $this->userInfo['id'],
+                                'openid' => $this->userInfo['openid'],
                                 'source_id' => $sign_id['id'],
                                 'source' => 2,
                                 'score' => 2 + $score,
@@ -288,18 +282,18 @@ class Customer extends Mustlogin
                             ]);
                         } else {
                             //是否已达到最大连续签到天数？continue_day重置为1
-                            if ( $this->userInfo['continuity_day'] == 15) {
-                                Db::table('fy_customer')->where('openid',  $this->userInfo['openid'])->setField('continuity_day', 1);
+                            if ($this->userInfo['continuity_day'] == 15) {
+                                Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->setField('continuity_day', 1);
                             } else {
-                                Db::table('fy_customer')->where('openid',  $this->userInfo['openid'])->setInc('continuity_day', 1);
+                                Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->setInc('continuity_day', 1);
                             }
-                            Db::table('fy_customer')->where('openid',  $this->userInfo['openid'])->setInc('score', 2);
+                            Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->setInc('score', 2);
                             Db::table('fy_customer_sign')->insert($save);
                             //新增日志记录
-                            $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid',  $this->userInfo['id'])->where('addtime', $time)->find();
+                            $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid', $this->userInfo['id'])->where('addtime', $time)->find();
                             Db::table('fy_score_log')->insert([
-                                'uid' =>  $this->userInfo['id'],
-                                'openid' =>  $this->userInfo['openid'],
+                                'uid' => $this->userInfo['id'],
+                                'openid' => $this->userInfo['openid'],
                                 'source_id' => $sign_id['id'],
                                 'source' => 2,
                                 'score' => 2,
@@ -316,13 +310,13 @@ class Customer extends Mustlogin
             $today_start = strtotime(date('Y-m-d', $time) . ' 00:00:00');
             $today_end = strtotime(date('Y-m-d', $time) . ' 23:59:59');
             $res = Db::table('fy_customer_sign')
-                ->where('uid',  $this->userInfo['id'])
+                ->where('uid', $this->userInfo['id'])
                 ->where('addtime', 'between', [$today_start, $today_end])
                 ->find();
             $this->assign('flag', $res ? 1 : 0);
 
             //判断前一天是否签到
-            $beforeSign = Db::table('fy_customer_sign')->where('uid',  $this->userInfo['id'])->order('addtime', 'desc')->find();//获取最新一条签到记录
+            $beforeSign = Db::table('fy_customer_sign')->where('uid', $this->userInfo['id'])->order('addtime', 'desc')->find();//获取最新一条签到记录
             $noSignDay1 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 00:00:00')) / 86400;//2天
             $noSignDay2 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 23:59:59')) / 86400;//1天
             //前一天未签到，continue_day重置为1，score+1更新到customer表
@@ -575,9 +569,9 @@ class Customer extends Mustlogin
         $this->assign('user_data', $user_data);
         if ($this->request->isAjax()) {
             $time = time();
-            $task_list = Db::table('fy_customer_task')->where(['status' => 1, 'isdelete' => 0,'start_date'=>['<=',$time],'end_date'=>['>=',$time]])->page($page, $size)->select();
-            return ajax_return($task_list,'OK',200);
-        }else{
+            $task_list = Db::table('fy_customer_task')->where(['status' => 1, 'isdelete' => 0, 'start_date' => ['<=', $time], 'end_date' => ['>=', $time]])->page($page, $size)->select();
+            return ajax_return($task_list, 'OK', 200);
+        } else {
             $this->assign('titleName', "赚积分");
             return $this->view->fetch("getScore");
         }
@@ -602,12 +596,13 @@ class Customer extends Mustlogin
             return $this->view->fetch();
         }
     }
+
     public function msg_detail($id)
     {
         $this->assign('titleName', "消息详情");
         $message = Db::table('fy_message')
             ->where([
-                'id'=>$id,
+                'id' => $id,
             ])
             ->find();
         $this->assign('message', $message);

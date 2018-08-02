@@ -90,6 +90,9 @@ function orderBtnHtml(json){
             //待评价
             if(json.is_send ==2){
                 html +='        <button class="layui-btn layui-btn-xs  layui-btn-danger layui-btn-radius" onclick="evaluateEdit(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">评&nbsp;&nbsp;价</button>';
+            }
+
+            if(json.is_send ==2 || json.is_send ==5 || json.is_send ==6){
                 if(json.show_area !=showArea.score){
                     if(json.after_sale_is==afterSale.yes)
                         html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="cancelAfterSale(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">取消申请</a>';
@@ -100,7 +103,7 @@ function orderBtnHtml(json){
 
             break;
     }
-    if( json.is_send==constant.send.returnMoney && json.is_send==constant.send.nosend ){
+    if( json.is_send!=constant.send.returnMoney && json.is_send!=constant.send.nosend ){
         html +='    <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="showWul(\''+json.logistics_name+'\',\''+json.logistics_number+'\')">物流单号</button>'
     }
     return html;

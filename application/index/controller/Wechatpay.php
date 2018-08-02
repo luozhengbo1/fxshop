@@ -39,16 +39,18 @@ class Wechatpay extends Controller
             if(is_array($arr)){
                 $orderAllData = Db::name('order_all')->where(['order_id'=>$orderInfo['out_trade_no']])->find();
                 #付款成功通知
+                $orderWhere = ["order_id" => $orderInfo['out_trade_no'] ];
+                $update = ['status' => 1];
+                $res = Db::name("order_all")->where($orderWhere)->update($update);
                 if($orderAllData['is_tui']==0){
                     foreach ($arr as $value){
-                        #修改子订单状态
                         Db::name('order')
                             ->where(['order_id'=>$orderInfo['out_trade_no'].$value])
                             ->update(['order_status'=>1,'pay_status'=>1, 'pay_time' => time()]);
                         #将子订单中对应的商品数量减少。
                         $goodsOrder = Db::name('order_goods')->where(['order_id'=>$orderInfo['out_trade_no'].$value])->select();
                         foreach ($goodsOrder as $v){
-                            $goodsStore = Db::name('goods_attribute')->where(['id'=>$v['sku_id']])->find();
+                            $goodsStore = Db::name('goods_attribute')->field('store,id,goods_id')->where(['id'=>$v['sku_id']])->find();
                             $store ='';
                             if($goodsStore['store']-$v['goods_num']<=0){
                                 $store =0;
@@ -87,9 +89,7 @@ class Wechatpay extends Controller
                     $result = $wx->buySuccess($goodsname,$orderInfo['openid'],$sonId['total_price']);
                     Db::name('order_all')->where(['order_id'=>$orderInfo['out_trade_no']])->update(['is_tui'=>1]);
                     file_put_contents("wx_pay_success.log",$xml."\r", 8);
-                    $orderWhere = ["order_id" => $orderInfo['out_trade_no'] ];
-                    $update = ['status' => 1];
-                    $res = Db::name("order_all")->where($orderWhere)->update($update);
+
                     $wx_par_log_is = Db::name('wx_pay_refund_log')->where(['order_id'=>$orderInfo['out_trade_no'],'type'=>1])->find();
                     if( !$wx_par_log_is ){#已经有了不在写入
                         $wx_pay_refund_log_insert=[];
