@@ -109,8 +109,9 @@ class Order extends Controller
         $this->view->assign('userList', $userList);
         $this->view->assign('list', $orderList);
 //        $this->view->assign('page', $page);
-        $this->view->assign('count', count($orderList));
-        return $this->view->fetch();
+        $this->view->assign('count',count($orderList));
+//        dump($orderList);die;
+        return $this->  view->fetch();
     }
 
     /**

@@ -81,11 +81,11 @@
                 if((data[i].pic).indexOf(',')>-1){
                     var imgArr = (data[i].pic).split(',');
                     for(var n=0; n<imgArr.length; n++){
-                        html +='        <li onclick="showImage(this,'+n+')"><img src="'+imgArr[n]+'"></li>';
+                        html +='        <li onclick="showImage(this,'+n+')"><img class="lazy"   src="__STATIC__/index/images/no-image.png" data-original="'+imgArr[n]+'"></li>';
                     }
                 }else{
                     //只有一张
-                    html +='        <li onclick="showImage(this,0)"><img src="'+data[i].pic+'"></li>';
+                    html +='        <li onclick="showImage(this,0)"><img class="lazy"   src="__STATIC__/index/images/no-image.png" data-original="'+data[i].pic+'"></li>';
                 }
 
             }

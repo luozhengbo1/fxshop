@@ -93,6 +93,7 @@
             $this->view->assign('bad', $arr['bad']  );
             $this->view->assign('mid', $arr['mid'] );
             $this->view->assign('good', $arr['good'] );
+            //$this->view->assign('lotterys',$this->getLottery($id) );
             return $this->view->fetch();
         }
 
@@ -277,5 +278,24 @@
             $this->assign('titleName', "限时抢购");
             return $this->view->fetch('rushPurchase');
         }
-
+        #获取商品所具有的券
+        public function  goodsLottery($goods_id){
+            #取出商品中发行中，未删除的所具有的券
+            $lotterys = Db::name('lottery')->where([
+                "goods_id"=>$goods_id,
+                'status'=>1,
+                'isdelete'=>'0',
+                ])->select();
+            #查询领取过这个奖券
+            $lotteryLogs = Db::name('lottery_log')->where(['openid' => $this->userInfo['openid']])->select();
+            foreach ($lotterys as $k=>$lottery){
+                foreach ($lotteryLogs as $k=>$log){
+                    //有领券记录
+                    if($log['lottery_id'] ==$lottery['id']){
+                        $lotterys[$k]['lotteryLog'] =$log;
+                    }
+                }
+            }
+            return ajax_return($lotterys,'',200);
+        }
 	}
