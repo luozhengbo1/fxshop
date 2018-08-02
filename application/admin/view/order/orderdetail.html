@@ -36,7 +36,7 @@
         <td>购买数量</td>
           <td>运费</td>
         <td>状态</td>
-        {if condition="$vo['after_sale_is'] eq 1"}
+        {if condition="$vo['after_sale_is'] neq 0"}
         <td>售后理由</td>
         <td>售后类型</td>
         <td>售后要求</td>
@@ -66,7 +66,7 @@
           </td>
 
 
-        {if condition="$vo['after_sale_is'] eq 1 "}
+        {if condition="$vo['after_sale_is'] neq 0 "}
         <td class="f-14">{$vo['after_sale_reson']}</td>
         <td class="f-14">{php}
                   if($vo['after_sale_type']==1){
@@ -160,7 +160,7 @@
                    data:{'order_id':order_id,'totalPrice':totalPrice},
                    success:function (res) {
                        alert(res.msg)
-                       document.location.relaod();
+                       $('.btn-refresh').click();
                    }
                })
            }
@@ -173,7 +173,8 @@
                    data:{'order_id':order_id,'id':id,'flag':flag},
                    success:function (res) {
                        alert(res.msg)
-                       document.location.relaod();
+                       $('.btn-refresh').click();
+                       // document.location.relaod();
                    }
                })
            }
@@ -186,7 +187,7 @@
                    data:{'order_id':order_id,'id':id,'after_sale_type':after_sale_type},
                    success:function (res) {
                        alert(res.msg)
-                       // document.location.relaod();
+                       $('.btn-refresh').click();
                    }
                })
            }

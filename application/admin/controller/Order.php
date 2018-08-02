@@ -141,6 +141,7 @@ class Order extends Controller
     public function orderDetail()
     {
         $id = $this->request->param('id');
+//        dump($id);
         if(!$id){
             return $this->error('缺少参数订单id');
         }
@@ -150,7 +151,7 @@ class Order extends Controller
             fy_order_goods.*, fy_goods_attribute.store,fy_goods_attribute.price')
             ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
             ->join('fy_goods_attribute','fy_order_goods.sku_id=fy_goods_attribute.id','left')
-            ->where(['fy_order.order_id'=>$id])
+            ->where(['fy_order.id'=>$id])
             ->select();
 //        dump($id);
 //        dump($orderDetail);die;
@@ -175,7 +176,7 @@ class Order extends Controller
                 return ajax_return_error('缺少参数id');
             }
             $orderGoods = Db::name('order_goods')->where(['id'=>$data['id']])->find();
-            if($orderGoods['is_return']!=0){
+            if($orderGoods['is_return']!=0 ||$orderGoods['is_return']!=3 ){
                 return ajax_return_error('退款单不能发货');
             }
             #付款成功通知

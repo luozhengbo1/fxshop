@@ -31,7 +31,7 @@ class LoginLog
                 'login_time' => $time,
             ]);
             //30分钟内多次访问/刷新首页，只计算为一次访问
-           $cache= Cache::set($params['openid'], '1', 5);
+           $cache= Cache::set($params['openid'], '1', 10*60);
            if(!$cache){
                Log::write("缓存写入失败", 'warring');
            }
