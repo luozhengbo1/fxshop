@@ -1,6 +1,6 @@
 <td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
 <td>{$vo.openid}</td>
-<td>{$vo.headimgurl}</td>
+<td><img src="{$vo.headimgurl}" width="100" height="100"></a></td>
 <td>{$vo.username|high_light=$Request.param.username}</td>
 <td>{$vo.nickname}</td>
 <td>{if condition="$vo.sex==1"}男{elseif condition="$vo.sex==2"/}女{else /}未知{/if}</td>

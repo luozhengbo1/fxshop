@@ -80,9 +80,9 @@ class Customer extends Controller
         if (!$vo) {
             throw new HttpException(404, '该记录不存在');
         }
-
+        $address = Db::name('customer_address')->where(['uid'=>$id,'status'=>1])->find();
         $this->view->assign("vo", $vo);
-
+        $this->view->assign("address", $address);
         return $this->view->fetch();
 
     }

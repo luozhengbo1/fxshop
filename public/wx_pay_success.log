@@ -1,4 +1,9 @@
-UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`  SET `score`=2  WHERE  `openid` = null<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = null
+UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = null
+UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = null
+UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = null
+UPDATE `fy_customer`  SET `score`=2  WHERE  `openid` = null
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -15,7 +20,10 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000148201807202018812229]]></transaction_id>
-</xml>UPDATE `fy_order_all`  SET `status`=1  WHERE  `order_id` = '144121740220180720171005'UPDATE `fy_customer`  SET `score`=2  WHERE  `openid` = null<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+UPDATE `fy_order_all`  SET `status`=1  WHERE  `order_id` = '144121740220180720171005'
+UPDATE `fy_customer`  SET `score`=2  WHERE  `openid` = null
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -32,7 +40,10 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000140201807209358995055]]></transaction_id>
-</xml>UPDATE `fy_order_all`  SET `status`=1  WHERE  `order_id` = '144121740220180720164218'UPDATE `fy_customer`  SET `score`=2  WHERE  `openid` = 'omQYXwNAT5uC15TQqMGxajJzqo4s'<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+UPDATE `fy_order_all`  SET `status`=1  WHERE  `order_id` = '144121740220180720164218'
+UPDATE `fy_customer`  SET `score`=2  WHERE  `openid` = 'omQYXwNAT5uC15TQqMGxajJzqo4s'
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -49,7 +60,9 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000147201807200005994899]]></transaction_id>
-</xml>UPDATE `fy_order_all`  SET `status`=1  WHERE  `order_id` = '144121740220180720172107'<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+UPDATE `fy_order_all`  SET `status`=1  WHERE  `order_id` = '144121740220180720172107'
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -66,7 +79,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000156201807204913430675]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -83,7 +97,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000150201807200462434159]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -100,7 +115,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000141201807246221980761]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -117,7 +133,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000140201807249130093329]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -134,7 +151,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000147201807245655230683]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -151,7 +169,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000147201807252475409796]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -168,7 +187,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000154201807272862608222]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -185,7 +205,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000151201807270792415174]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -202,7 +223,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000151201807270792415174]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -219,7 +241,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000146201807277872838372]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -236,7 +259,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000140201807273821502360]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -253,7 +277,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000153201807277350544020]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -270,7 +295,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000152201807278968157261]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -287,7 +313,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000146201807272382212080]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -304,7 +331,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000158201807273616568013]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[4]]></cash_fee>
@@ -321,7 +349,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>4</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000158201807272552454843]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -338,7 +367,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000153201808010464958148]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -355,7 +385,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000156201808020181326766]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -372,7 +403,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000139201808020752343865]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[CFT]]></bank_type>
 <cash_fee><![CDATA[1]]></cash_fee>
@@ -389,7 +421,8 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000154201808029317299336]]></transaction_id>
-</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
 <attach><![CDATA[附加参数]]></attach>
 <bank_type><![CDATA[BOC_DEBIT]]></bank_type>
 <cash_fee><![CDATA[2]]></cash_fee>
@@ -406,4 +439,58 @@ UPDATE `fy_customer`  SET `score`=0  WHERE  `openid` = nullUPDATE `fy_customer`
 <total_fee>2</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000152201808028947839257]]></transaction_id>
-</xml>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+<attach><![CDATA[附加参数]]></attach>
+<bank_type><![CDATA[CFT]]></bank_type>
+<cash_fee><![CDATA[1]]></cash_fee>
+<fee_type><![CDATA[CNY]]></fee_type>
+<is_subscribe><![CDATA[Y]]></is_subscribe>
+<mch_id><![CDATA[1441217402]]></mch_id>
+<nonce_str><![CDATA[meyk7mx5s1f1wxgliqv8l0m0mwcd0jl2]]></nonce_str>
+<openid><![CDATA[omQYXwM8TEkiBZR7Ldm891OOWbNQ]]></openid>
+<out_trade_no><![CDATA[144121740220180802134047]]></out_trade_no>
+<result_code><![CDATA[SUCCESS]]></result_code>
+<return_code><![CDATA[SUCCESS]]></return_code>
+<sign><![CDATA[ACCC965BA68A56F6D51C7DEA2A6E7B62]]></sign>
+<time_end><![CDATA[20180802134101]]></time_end>
+<total_fee>1</total_fee>
+<trade_type><![CDATA[JSAPI]]></trade_type>
+<transaction_id><![CDATA[4200000152201808029470202027]]></transaction_id>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+<attach><![CDATA[附加参数]]></attach>
+<bank_type><![CDATA[CFT]]></bank_type>
+<cash_fee><![CDATA[1]]></cash_fee>
+<fee_type><![CDATA[CNY]]></fee_type>
+<is_subscribe><![CDATA[Y]]></is_subscribe>
+<mch_id><![CDATA[1441217402]]></mch_id>
+<nonce_str><![CDATA[ernacmr9w5cqvietw0qaypa5vhpiai96]]></nonce_str>
+<openid><![CDATA[omQYXwM8TEkiBZR7Ldm891OOWbNQ]]></openid>
+<out_trade_no><![CDATA[144121740220180802134311]]></out_trade_no>
+<result_code><![CDATA[SUCCESS]]></result_code>
+<return_code><![CDATA[SUCCESS]]></return_code>
+<sign><![CDATA[9D1D5139A5F1DB16E002CE715932A405]]></sign>
+<time_end><![CDATA[20180802134322]]></time_end>
+<total_fee>1</total_fee>
+<trade_type><![CDATA[JSAPI]]></trade_type>
+<transaction_id><![CDATA[4200000155201808023095877512]]></transaction_id>
+</xml>
+<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+<attach><![CDATA[附加参数]]></attach>
+<bank_type><![CDATA[CFT]]></bank_type>
+<cash_fee><![CDATA[1]]></cash_fee>
+<fee_type><![CDATA[CNY]]></fee_type>
+<is_subscribe><![CDATA[Y]]></is_subscribe>
+<mch_id><![CDATA[1441217402]]></mch_id>
+<nonce_str><![CDATA[7mm0eovu4zi4pe01fxoul6p4om2kaf30]]></nonce_str>
+<openid><![CDATA[omQYXwM8TEkiBZR7Ldm891OOWbNQ]]></openid>
+<out_trade_no><![CDATA[144121740220180802134841]]></out_trade_no>
+<result_code><![CDATA[SUCCESS]]></result_code>
+<return_code><![CDATA[SUCCESS]]></return_code>
+<sign><![CDATA[2E0031CD0021CE1756D0A9662BE083F1]]></sign>
+<time_end><![CDATA[20180802134848]]></time_end>
+<total_fee>1</total_fee>
+<trade_type><![CDATA[JSAPI]]></trade_type>
+<transaction_id><![CDATA[4200000143201808022747528150]]></transaction_id>
+</xml>

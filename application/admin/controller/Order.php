@@ -141,6 +141,7 @@ class Order extends Controller
     public function orderDetail()
     {
         $id = $this->request->param('id');
+//        dump($id);
         if(!$id){
             return $this->error('缺少参数订单id');
         }
@@ -150,7 +151,7 @@ class Order extends Controller
             fy_order_goods.*, fy_goods_attribute.store,fy_goods_attribute.price')
             ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
             ->join('fy_goods_attribute','fy_order_goods.sku_id=fy_goods_attribute.id','left')
-            ->where(['fy_order.order_id'=>$id])
+            ->where(['fy_order.id'=>$id])
             ->select();
 //        dump($id);
 //        dump($orderDetail);die;
@@ -175,7 +176,7 @@ class Order extends Controller
                 return ajax_return_error('缺少参数id');
             }
             $orderGoods = Db::name('order_goods')->where(['id'=>$data['id']])->find();
-            if($orderGoods['is_return']!=0){
+            if($orderGoods['is_return']!=0 ||$orderGoods['is_return']!=3 ){
                 return ajax_return_error('退款单不能发货');
             }
             #付款成功通知
@@ -383,7 +384,9 @@ class Order extends Controller
                     }
                 }else{#拒绝退款
                     $orderGoods = Db::name('order_goods')->where(['order_id'=>$order_id])->find();
-                    Db::name('order_goods')->where(['order_id'=>$order_id])->update(['is_return'=>3,'is_send'=>$orderGoods['is_send']]);
+                    $is_send = ($orderGoods['logistics_name'] &&  $orderGoods['logistics_number'] )?1 :0;
+                    $update = ['is_return'=>3,'is_send'=>$is_send];
+                    Db::name('order_goods')->where(['order_id'=>$order_id])->update($update);
                     #将订单中退款的总价减少。return_all
                     $order = Db::name('order')->where(['order_id'=>$order_id])->find();
                     $decsPrice = $order['return_price_all'] - $orderGoods['return_price'];
