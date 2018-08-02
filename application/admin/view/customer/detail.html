@@ -4,6 +4,14 @@
     <form class="form form-horizontal" id="form" method="post" action="{:\\think\\Request::instance()->baseUrl()}">
         <input type="hidden" name="id" value="{$vo.id ?? ''}">
         <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3">头像：</label>
+            <div class="formControls col-xsa'd'd-6 col-sm-6">
+                <input type="hidden" class="input-text"  name="headimgurl" value="{$vo.headimgurl ?? ''}">
+                <img src="{$vo.headimgurl ?? ''}" width="100" height="100">
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3">用户名：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <input type="text" class="input-text" name="username" value="{$vo.username ?? ''}" disabled="disabled">
@@ -81,12 +89,11 @@
             <div class="col-xs-3 col-sm-3"></div>
         </div>
         <div class="row cl">
-            <label class="form-label col-xs-3 col-sm-3">头像：</label>
-            <div class="formControls col-xsa'd'd-6 col-sm-6">
-                <input type="text" class="input-text" id="upload" name="headimgurl" value="{$vo.headimgurl ?? ''}"
-                       style="width: 90%" disabled="disabled">
-                <a onclick="$(this).attr('href', $('#upload').val())" type="button" class="btn btn-success radius"
-                   data-lightbox="preview">预览</a>
+            <label class="form-label col-xs-3 col-sm-3">默认地址：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                {$address['name']}{$address['mobile']}
+                <br/>
+                {$address['address']}<br/>{$address['street']}
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
