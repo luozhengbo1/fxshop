@@ -92,7 +92,7 @@
                 html +='<li class="grid-item">';
             //    html +='	<a href="{:url(\'goods/detail\',array(\'id\'=>$vo[\'id\']))}" >';
                 html +='	<a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
-                html +='     <p class="tc"><img class="grid-item-image" src="'+data[i].main_image+'"></p>';
+                html +='     <p class="tc"><img class="grid-item-image lazy"  src="__STATIC__/index/images/no-image.png" data-original="'+data[i].main_image+'"></p>';
                 html +='     <p class="good-desc ellipsis h40">'+notEmpty(data[i].name)+' </p>';
                 html +='    </a>';
                 html +='    <div class="p5 clear h40">';

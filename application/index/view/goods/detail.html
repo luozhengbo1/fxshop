@@ -1,5 +1,41 @@
 {include file="Public/header-resource"}
+<style>
+    .count-down{
+        height: 50px;
+        width: 100%;
+        background: #de181b;
+        line-height: 50px;
+        padding: 0 10px;
+        color: white;
+    }
+    .fm-cusive{
+        font-family: cursive;
+    }
+    #addcartmover {
+        position: fixed;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        -webkit-animation: addcart .7s linear;
+        z-index: 9999;
+        -webkit-transform: translateY(-50%);
+        opacity: 1;
+        background-color: #ff0604;
+        color: #fff;
+        text-align: center;
+        line-height: 30px;
+    }
+    @-webkit-keyframes addcart {
+        0%  { right: 130px;top: 94%; opacity: 1; }
+        25% { right: 200px;top: 80%; opacity: 1; }
+        50% { right: 240px;top: 60%; opacity: 0.7; }
+        65% { right: 190px;top: 46%; opacity: 0.7; }
+        75% { right: 140px;top: 30%; opacity: 0.6; }
+        85% { right: 60px;top: 50%; opacity: 0.5; }
+        100% {right: 30px;top: 60%;; opacity: 0.3; }
+    }
 
+</style>
 <link rel="stylesheet" type="text/css" href="__STATIC__/index/plugins/swiper3/css/swiper.css">
 <script src="__STATIC__/index/plugins/swiper.js"></script>
 <body class="title-top footer-boottom">
@@ -345,8 +381,15 @@
         var swiper1 = bannerSwiper('header-banner');//顶部banner
         var swiper2 = bannerSwiper('love-goods-banner');//猜你喜欢 滚动
         getEvaluate("{$goods['id']}");
-        //loading带文字
-
+        console.log($("#goodDetail").html())
+        $("#goodDetail img").each(function (index,ele) {
+            $(ele).attr({
+                "data-original":$(ele).attr('src'),
+                "src": "__STATIC__/index/images/no-image.png",
+                "class":"lazy"
+            })
+        })
+        imageLazy();
 
     })
     //获取商品评论
@@ -359,7 +402,9 @@
             success: function(data){
                 if(data.code==200){
                     $("#evaluateList").empty().append(dealData(data.data)) ;
+                    imageLazy();
                 }
+
             }
         })
     }

@@ -525,6 +525,7 @@ function masonryShow() {
         if($('#searchIcon').size()>0){
             $('#searchIcon').attr('onclick','searchGoods()')
         }
+    imageLazy();
     //},500)
 
 }
@@ -752,9 +753,18 @@ function priceScoreShow(settlementType,price,score) {
     return result;
 }
 
+//图片延时加载
+//imageLazy();
+function imageLazy(){
+    var target = $("img.lazy");
+    if(target.size()>0){
+        target.lazyload({
+            effect: "fadeIn"
+        });
+        target.removeClass('lazy');
+    }
 
-
-
+}
 
 
 

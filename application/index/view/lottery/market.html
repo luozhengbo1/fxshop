@@ -72,7 +72,8 @@
                 url:url.goodsWithLottery,
                 data:{goodsClassId:classId},
             },
-            dealFun:dealData
+            dealFun:dealData,
+            complete:imageLazy,
         });
     }
 
@@ -93,7 +94,7 @@
             html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
             html +='            <ul class="item-img clear fl">';
             for(var n=0; n<imgArr.length; n++){
-                html +='        <li><img src="'+imgArr[n]+'"></li>';
+                html +='        <li><img  class="lazy"  src="__STATIC__/index/images/no-image.png" data-original="'+imgArr[n]+'"></li>';
             }
             html +='            </ul>';
             html +='    </a>';
