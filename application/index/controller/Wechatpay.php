@@ -36,6 +36,7 @@ class Wechatpay extends Controller
             $arr = explode(',',$sonId['son_id']);
             $user = Db::name('customer')->where(['openid'=>$orderInfo['openid']])->find();
             $goodsname="";
+            $goodsname1="";
             if(is_array($arr)){
                 $orderAllData = Db::name('order_all')->where(['order_id'=>$orderInfo['out_trade_no']])->find();
                 #付款成功通知
@@ -59,6 +60,8 @@ class Wechatpay extends Controller
 
                             $goodsDa  = Db::name('goods')->where(['id'=>$goodsStore['goods_id']])->find();
                             $goodsname .= $goodsDa['name']."  ".$v['sku_val']."*".$v['goods_num']."   ";
+                            $goodsname1 .= $goodsDa['name']."  ".$v['sku_val']."*".$v['goods_num']."<br/>";
+
                             #减库存
                             Db::name('goods_attribute')->where(['id'=>$v['sku_id']])->update(['store'=>$store]);
                             #加上销量
@@ -89,7 +92,8 @@ class Wechatpay extends Controller
                     $result = $wx->buySuccess($goodsname,$orderInfo['openid'],$sonId['total_price']);
                     Db::name('order_all')->where(['order_id'=>$orderInfo['out_trade_no']])->update(['is_tui'=>1]);
                     file_put_contents("wx_pay_success.log",$xml."\r", 8);
-
+                    #微信消息发送
+                    sendMessage($goodsname1,$orderInfo['openid'],$sonId['total_price']);
                     $wx_par_log_is = Db::name('wx_pay_refund_log')->where(['order_id'=>$orderInfo['out_trade_no'],'type'=>1])->find();
                     if( !$wx_par_log_is ){#已经有了不在写入
                         $wx_pay_refund_log_insert=[];
