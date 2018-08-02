@@ -55,10 +55,15 @@
             html +='        </div>';
             html +='        <div class="item-info">';
             html +='            <p class="ellipsis" >'+data[i].name+'</p>';
-            if(data[i].status ==0)
-            html +='            <span class="status" >失效</span>';//1上架0仓库中
+            if(data[i].status ==0){
+                html +='            <span class="status" >失效</span>';//1上架0仓库中
+            }
             html +='            <div class="clear price-info">';
-            html +='                <div class="fl price" >'+data[i].basic_price+'</div>';
+            if(data[i].price_real!=0){
+                html +='  		      <div class="fl price" >'+priceScoreShow(data[i].settlement_type,data[i].price_real,data[i].score)+'</div>';
+            }else{
+                html +='  		      <div class="fl price" >'+priceScoreShow(data[i].settlement_type,data[i].basic_price,data[i].score)+'</div>';
+            }
             html +='                <div class="fr cancel"  onclick="deleCollect('+data[i].id+')" ><i class="layui-icon f24"></i></div>';
             html +='            </div>';
             html +='        </div>';
