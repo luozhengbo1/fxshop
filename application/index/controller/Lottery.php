@@ -20,18 +20,14 @@ Class Lottery extends Mustlogin
             $size = $this->request->param('size');
             $goodsClassId = $this->request->param('goodsClassId');
             $time = time();
-            if($goodsClassId =='all'){
-                //dump($goodsClassId);
-                $where =[
-                    'fy_goods.status'=>1,
-                    'fy_goods.isdelete'=>'0',
-                    'fy_lottery.grant_start_date' => ['<', $time],
-                    'fy_lottery.grant_end_date' => ['>', $time],
-                    'fy_lottery.status' =>1,
-                ];
-
-            }else{
-                //dump($goodsClassId);
+            $where =[
+                'fy_goods.status'=>1,
+                'fy_goods.isdelete'=>'0',
+                'fy_lottery.grant_start_date' => ['<', $time],
+                'fy_lottery.grant_end_date' => ['>', $time],
+                'fy_lottery.status' =>1,
+            ];
+            if($goodsClassId !='all'){
                 if(!$goodsClassId){
                     return ajax_return_error('缺少参数分类id');
                 }
@@ -39,11 +35,6 @@ Class Lottery extends Mustlogin
                 $goodsClassAllChild = getAllChildcateIds($goodsClassId);
                 $where = [
                     'fy_goods.goods_class_id'=>['in',$goodsClassAllChild],
-                    'fy_goods.status'=>1,
-                    'fy_goods.isdelete'=>'0',
-                    'fy_lottery.grant_start_date' => ['<', $time],
-                    'fy_lottery.grant_end_date' => ['>', $time],
-                    'fy_lottery.status' =>1,
                 ];
             }
             $goodsWithLottery = Db::name('goods')
@@ -58,9 +49,10 @@ Class Lottery extends Mustlogin
                 ->where($where)
                 ->page($page,$size)
                 ->select();
+//            dump($goodsWithLottery);
+            echo Db::name('goods')->getLastSql();die;
             return ajax_return($goodsWithLottery, '', '200');
             //带有券的商品
-           // dump($goodsWithLottery);
         }
         return $this->view->fetch('market');
 

@@ -51,7 +51,7 @@
                 {php}}{/php}
                 <a class="btn" href="javascript:;" data-href="" data-id="{$vo['order_id']}"  onclick="layer_open('订单详情','{:\\think\\Url::build(\'orderDetail\', [\'oder_id\'=>$vo[\'order_id\'],\'id\'=>$vo[\'id\']])}')" >订单详情</a>
                 {php}if(  $is_return==1){ {/php}
-                <a class="btn" href="javascript:;" data-href="" data-id="{$vo['order_id']}"  onclick="layer_open('确认退款','{:\\think\\Url::build(\'orderDetail\', [\'id\'=>$vo[\'order_id\']])}')" >确认退款</a>
+                <a class="btn" href="javascript:;" data-href="" data-id="{$vo['order_id']}"  onclick="layer_open('确认退款','{:\\think\\Url::build(\'orderDetail\', [\'order_id\'=>$vo[\'order_id\'] ,\'id\'=>$vo[\'id\']])}')" >确认退款</a>
                 {php}}{/php}
             </td>
         </tr>
