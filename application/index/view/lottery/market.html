@@ -60,6 +60,7 @@
         getLottery:"{:url('index/lottery/get')}",//
     }
     getGoodsClass();
+
     function goodsWithLottery(){
         initData('dataList');
         var classId = $('#voucherClass').find('.active').attr('data-classid');
@@ -86,14 +87,17 @@
                 imgArr = eval(data[i].pic);
             }
             html +='<li>';
+            html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
             html +='        <div class="clear">';
             html +='            <p class="fl" ><span class="catalog border-tag" style="vertical-align: top">'+data[i].class_name+'</span><i>'+data[i].name+'</i></p>';
             html +='            <p class="price fr f16 bold">￥'+data[i].coupon_money+'</p>';
             html +='        </div>';
+            html +='    </a>';
             html +='        <div class="clear mt5">';
             html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
             html +='            <ul class="item-img clear fl">';
             for(var n=0; n<imgArr.length; n++){
+                if(n<3)
                 html +='        <li><img  class="lazy"  src="__STATIC__/index/images/no-image.png" data-original="'+imgArr[n]+'"></li>';
             }
             html +='            </ul>';
@@ -102,6 +106,7 @@
             html +=coupleTypeHtml(data[i]);
             html +='            </div>';
             html +='        </div>';
+            html +='    </a>';
             html +='</li>';
         }
         return html;
@@ -156,13 +161,9 @@
         })
     }
     function getLottery(id) {
-        $.ajax({
-            type:'post',
+        pub_edit({
             url:url.getLottery,
             data:{id:id},
-            success:function (data) {
-               layer_msg(data.msg);
-            }
         })
     }
 </script>

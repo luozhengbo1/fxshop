@@ -229,82 +229,7 @@
             <i class="close" onclick="closePop('goodsVoucher')"></i>
             <p class="f16 bold blackRed">优惠券领取</p>
         </div>
-        <div class="body mb70">
-            <div class="tax-box">
-            <div class="clear">
-                <div class="fl w70p" style="">
-                    <p class="tc f16 mt5">天猫购物券</p>
-                    <p class="tc mt5">100%刮中奖 最高50元</p>
-                    <p class="tc mt5">有效期：7天</p>
-                </div>
-                <div class="tax-split fl" >
-                    <div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>
-                </div>
-                <div class="fl" style="width: 28%" >
-                    <div class="f14 tc mt30">立即领取</div>
-                </div>
-            </div>
-            </div>
-            <div class="tax-box">
-                <div class="clear">
-                    <div class="fl w70p" style="">
-                        <p class="tc f16 mt5">天猫购物券</p>
-                        <p class="tc mt5">100%刮中奖 最高50元</p>
-                        <p class="tc mt5">有效期：7天</p>
-                    </div>
-                    <div class="tax-split fl" >
-                        <div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>
-                    </div>
-                    <div class="fl" style="width: 28%" >
-                        <div class="f14 tc mt30">立即领取</div>
-                    </div>
-                </div>
-            </div>
-            <div class="tax-box">
-                <div class="clear">
-                    <div class="fl w70p" style="">
-                        <p class="tc f16 mt5">天猫购物券</p>
-                        <p class="tc mt5">100%刮中奖 最高50元</p>
-                        <p class="tc mt5">有效期：7天</p>
-                    </div>
-                    <div class="tax-split fl" >
-                        <div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>
-                    </div>
-                    <div class="fl" style="width: 28%" >
-                        <div class="f14 tc mt30">立即领取</div>
-                    </div>
-                </div>
-            </div>
-            <div class="tax-box">
-                <div class="clear">
-                    <div class="fl w70p" style="">
-                        <p class="tc f16 mt5">天猫购物券</p>
-                        <p class="tc mt5">100%刮中奖 最高50元</p>
-                        <p class="tc mt5">有效期：7天</p>
-                    </div>
-                    <div class="tax-split fl" >
-                        <div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>
-                    </div>
-                    <div class="fl" style="width: 28%" >
-                        <div class="f14 tc mt30">立即领取</div>
-                    </div>
-                </div>
-            </div>
-            <div class="tax-box">
-                <div class="clear">
-                    <div class="fl w70p" style="">
-                        <p class="tc f16 mt5">天猫购物券</p>
-                        <p class="tc mt5">100%刮中奖 最高50元</p>
-                        <p class="tc mt5">有效期：7天</p>
-                    </div>
-                    <div class="tax-split fl" >
-                        <div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>
-                    </div>
-                    <div class="fl" style="width: 28%" >
-                        <div class="f14 tc mt30">立即领取</div>
-                    </div>
-                </div>
-            </div>
+        <div class="body mb70" id="lotterysContainer">
         </div>
         <div class="btns show">
             <div class="btn blue" onclick="closePop('goodsVoucher')">
@@ -315,7 +240,7 @@
 </div>
 {include file="Public/footer-shop"}
 {include file="Public/footer-quick-nav"}
-<script>
+<script type="text/javascript">
 
 
     //alert($("#countDown").data('current')+"当前时间"+new Date().getTime()/1000)
@@ -362,6 +287,8 @@
         collect_update:"{:url('index/customer/collect_update')}",//修改收藏状态
         collect_detail:"{:url('index/customer/collect_detail')}",//收藏详情
         evaluate_list:"{:url('index/goods/goodsComment')}",
+        goodsLottery:"{:url('index/goods/goodsLottery')}",//获取商品券
+        getLottery:"{:url('index/lottery/get')}",//
     }
     var skuZhuhe={};
     // skuId goodId num  valId
@@ -390,6 +317,7 @@
             })
         })
         imageLazy();
+        goodsLottery();
 
     })
     //获取商品评论
@@ -403,6 +331,56 @@
                 if(data.code==200){
                     $("#evaluateList").empty().append(dealData(data.data)) ;
                     imageLazy();
+                }
+
+            }
+        })
+    }
+    //获取商品券
+    function goodsLottery(){
+        $.ajax({
+            url:url.goodsLottery,
+            type:'post',
+            data:{goods_id:"{$goods['id']}"},
+            dataType:'json',
+            success: function(res){
+                if(res.code==200){
+                    var html =''
+                    var data = res.data;
+                    for(var i=0; i<data.length; i++){
+                        var coupon_type = data[i].coupon_type;
+                        html +='<div class="tax-box">'
+                        html += '<div class="clear">'
+                        html += '    <div class="fl w70p" style="">'
+                        html += '        <p class="tc f16 mt5">'+data[i].name+'</p>'
+                        switch(coupon_type){
+                            case constant.coupon.dikou:
+                                //  html +='                <p class="price"> '+data[i].point_score+'积分 </p>';
+                                break;
+                            case  constant.coupon.youhui:
+                                html += '        <p class="tc mt5"> 满'+data[i].coupon_real_money+'优惠'+data[i].coupon_money+'元 </p>'
+                                break;
+                            case constant.coupon.mianyou:
+                                html += '        <p class="tc mt5"> 包邮券</p>'
+                                break;
+                        }
+                        html += '        <p class="tc mt5">有效期：' + formatDate(data[i].expire_start_date) + '－' +formatDate(data[i].expire_end_date) + '</p>'
+                        html += '    </div>'
+                        html += '    <div class="tax-split fl" >'
+                        html += '        <div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>'
+                        html += '    </div>'
+                        html += '    <div class="fl" style="width: 28%" >'
+                        if(data[i].lotteryLog){
+                            html += '        <div class="f14 tc lh70" >已领取</div>'
+                        }else{
+                            html += '        <div class="f14 tc lh70" onclick="getLottery('+data[i].id+')">立即领取</div>'
+                        }
+
+                        html += '    </div>'
+                        html += '</div>'
+                        html += '</div>'
+                    }
+                    $("#lotterysContainer").empty().append(html) ;
                 }
 
             }
@@ -559,6 +537,13 @@
         setTimeout(function() {
             $dom.hide();
         }, 50);
+    }
+    function getLottery(id) {
+        pub_edit({
+            url:url.getLottery,
+            data:{id:id},
+            complete:goodsLottery,
+        })
     }
 </script>
 </body>
