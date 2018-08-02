@@ -85,7 +85,6 @@ class Wechatpay extends Controller
                         $scoreLog['score']=-$decScore;
                         $scoreLog['time']=time();
                         Db::name('score_log')->insert($scoreLog);
-
                     }
                     include_once "sendMsg/SDK/WeiXin.php";
                     $wx = new \WeiXin();
