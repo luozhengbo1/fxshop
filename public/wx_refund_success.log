@@ -1205,4 +1205,76 @@ Array
     [total_fee] => 1
     [transaction_id] => 4200000140201808038963624901
 )
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [cash_fee] => 1
+    [cash_refund_fee] => 1
+    [coupon_refund_count] => 0
+    [coupon_refund_fee] => 0
+    [mch_id] => 1441217402
+    [nonce_str] => akUjTA64PyqPHdr3
+    [out_refund_no] => 5b63fa73b17c21533278835
+    [out_trade_no] => 144121740220180803114946
+    [refund_channel] => Array
+        (
+        )
+
+    [refund_fee] => 1
+    [refund_id] => 50000707512018080305828845721
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => F411CB27F95096DD6968F85AC415A6B3
+    [total_fee] => 1
+    [transaction_id] => 4200000147201808037992110239
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [cash_fee] => 1
+    [cash_refund_fee] => 1
+    [coupon_refund_count] => 0
+    [coupon_refund_fee] => 0
+    [mch_id] => 1441217402
+    [nonce_str] => eVjKVhVXBZ3osRl7
+    [out_refund_no] => 5b63fa923c1df1533278866
+    [out_trade_no] => 144121740220180803112139
+    [refund_channel] => Array
+        (
+        )
+
+    [refund_fee] => 1
+    [refund_id] => 50000207512018080305850027832
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => FF4DE8B7682E5A7CCE0F9EFD28A746A5
+    [total_fee] => 1
+    [transaction_id] => 4200000147201808037809382874
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [cash_fee] => 1
+    [cash_refund_fee] => 1
+    [coupon_refund_count] => 0
+    [coupon_refund_fee] => 0
+    [mch_id] => 1441217402
+    [nonce_str] => tRViW3zjpVEKkoSY
+    [out_refund_no] => 5b63fb339cd7c1533279027
+    [out_trade_no] => 144121740220180803144926
+    [refund_channel] => Array
+        (
+        )
+
+    [refund_fee] => 1
+    [refund_id] => 50000707472018080305828854839
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => A23A1F28C844354D2B060287F3A0ED9C
+    [total_fee] => 1
+    [transaction_id] => 4200000158201808032465567159
+)
 

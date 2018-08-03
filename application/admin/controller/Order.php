@@ -390,7 +390,7 @@ class Order extends Controller
 //                        dump($buy_list);die;
                         $goods_data = '';
                         foreach ($buy_list as $buy_item) {
-                            $goods_data = $goods_data . '' . $buy_item->goods_name . ' ' . $buy_item->sku_val . '×' . $buy_item->num . '<br/>';
+                            $goods_data .=  $buy_item['goods_name'] . ' ' . $buy_item['sku_val'] . '×' . $buy_item['num'] . '<br/>';
                         }
                         $goods_info = ['goods_data' => $goods_data];
                         $order_info = ['refund_price' => $orderGoods['return_price'], 'refund_num' => $orderGoods['order_id']];
