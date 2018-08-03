@@ -289,9 +289,9 @@
             #查询领取过这个奖券
             $lotteryLogs = Db::name('lottery_log')->where(['openid' => $this->userInfo['openid']])->select();
             foreach ($lotterys as $k=>$lottery){
-                foreach ($lotteryLogs as $k=>$log){
+                foreach ($lotteryLogs as $key=>$log){
                     //有领券记录
-                    if($log['lottery_id'] ==$lottery['id']){
+                    if($lottery['id'] == $log['lottery_id'] ){
                         $lotterys[$k]['lotteryLog'] =$log;
                     }
                 }

@@ -142,15 +142,15 @@
             totalPrice += postage;//加上邮费
         }
         switch(stype){
-            case 1:
+            case settlement.money:
                 totalPrice += parseInt(num)*parseFloat(price);
                 html ='￥'+totalPrice;
                 break;
-            case 2:
+            case settlement.score:
                 totalPoint +=(parseInt(num)*parseFloat(pointScore));
                 html =totalPoint+'积分';
                 break;
-            case 3:
+            case settlement.money_score:
                 totalPoint=parseInt(num)*parseFloat(pointScore);
                 totalPrice += parseInt(num)*parseFloat(price);
                 html =totalPoint+'积分+￥'+totalPrice;

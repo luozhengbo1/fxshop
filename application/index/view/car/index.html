@@ -5,7 +5,7 @@
 <div id="dataListWrap">
     <ul class="cart-list" id="dataList">
         <li class="singer-good clear">
-            <i class="no-selected-icon selected-icon chose-btn"></i>
+           <!-- <i class="no-selected-icon selected-icon chose-btn"></i>
             <div class="image-info">
                 <img src="//img14.360buyimg.com/n7/jfs/t18583/328/1437914946/111140/3b067386/5aca247aNba85643c.jpg.dpg">
                 <p class="image_tag" attr-stock="stock_4390094" lowestbuy="0">无货</p>
@@ -20,20 +20,20 @@
                </span>
                 </p>
                 <div class="mt10 clear">
-                   <!-- <p class="red fl">¥ <em class="f16">999</em>.00</p>
+                   &lt;!&ndash; <p class="red fl">¥ <em class="f16">999</em>.00</p>
                     <div class="layui-btn-group fr count-wrap">
                         <button class="layui-btn layui-btn-primary layui-btn-xs fr24 minus">-</button>
                         <div class="layui-btn layui-btn-primary layui-btn-xs">
                             <input class="sumInput" type="text" value="1">
                         </div>
                         <button class="layui-btn layui-btn-primary layui-btn-xs fr24 add">+</button>
-                    </div>-->
+                    </div>&ndash;&gt;
                     <p class="grey">失效</p>
                 </div>
                 <div class="tr mt10">
                     <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="delGood()">删除</button>
                 </div>
-            </div>
+            </div>-->
         </li>
     </ul>
     <div class="empty-wrap" style="display: none">
@@ -142,9 +142,9 @@
                 html += '                <button class="layui-btn layui-btn-primary layui-btn-xs fr24 minus">-</button>';
                 html += '                <div class="layui-btn layui-btn-primary layui-btn-xs">';
                 if (data[i].price1 != 0) {
-                    html += '  <input class="sumInput tc"  data-score="' + data[i].point_score + '" data-showarea="' + data[i].show_area + '" data-image="' + data[i].main_image + '" data-name="' + data[i].name + '" data-store="' + data[i].store + '" data-goodsid="' + data[i].goods_id + '" data-carid="' + data[i].carId + '"  data-price="' + data[i].price1 + '" data-skuid="' + data[i].sku_id + '" data-skuval="' + data[i].val + '"   type="text" value="' + data[i].goods_num + '">';
+                    html += '  <input class="sumInput tc" data-settlement_type="'+data[i].settlement_type+'" data-score="' + data[i].point_score + '" data-showarea="' + data[i].show_area + '" data-image="' + data[i].main_image + '" data-name="' + data[i].name + '" data-store="' + data[i].store + '" data-goodsid="' + data[i].goods_id + '" data-carid="' + data[i].carId + '"  data-price="' + data[i].price1 + '" data-skuid="' + data[i].sku_id + '" data-skuval="' + data[i].val + '"   type="text" value="' + data[i].goods_num + '">';
                 } else {
-                    html += '   <input  class="sumInput tc"  data-score="' + data[i].point_score + '" data-showarea="' + data[i].show_area + '" data-image="' + data[i].main_image + '" data-name="' + data[i].name + '" data-store="' + data[i].store + '" data-goodsid="' + data[i].goods_id + '" data-carid="' + data[i].carId + '"  data-price="' + data[i].price_real + '" data-skuid="' + data[i].sku_id + '" data-skuval="' + data[i].val + '"   type="text" value="' + data[i].goods_num + '">';
+                    html += '   <input  class="sumInput tc" data-settlement_type="'+data[i].settlement_type+'" data-score="' + data[i].point_score + '" data-showarea="' + data[i].show_area + '" data-image="' + data[i].main_image + '" data-name="' + data[i].name + '" data-store="' + data[i].store + '" data-goodsid="' + data[i].goods_id + '" data-carid="' + data[i].carId + '"  data-price="' + data[i].price_real + '" data-skuid="' + data[i].sku_id + '" data-skuval="' + data[i].val + '"   type="text" value="' + data[i].goods_num + '">';
 
                 }
                 html += '                </div>';
@@ -184,6 +184,7 @@
                     name:$buyNum.data('name'),
                     showArea:showArea,
                     pointScore:$buyNum.data('score'),
+                    settlement_type:$buyNum.data('settlement_type'),
                 }
                 console.log(thisData)
                 saveData.push(thisData);
@@ -214,15 +215,27 @@
         var totalPoint=0;
         for (var i= 0; i<dataArr.length; i++){
             var sinData = dataArr[i];
-            var show_area = sinData.showArea;
-           switch(show_area){
-               case 2:
-                   totalPoint +=(parseInt(sinData.num)*parseFloat(sinData.pointScore));
-                   break;
-               default:
-                   totalPrice +=(parseInt(sinData.num)*parseFloat(sinData.price));
-                   break;
-           }
+            var num=parseInt(sinData.num);
+            var pointScore=parseFloat(sinData.pointScore);
+            var price =parseFloat(sinData.price);
+            var stype =sinData.settlement_type
+            switch(stype){
+                case settlement.money:
+                    totalPrice += parseInt(num)*parseFloat(price);
+                    html ='￥'+totalPrice;
+                    break;
+                case settlement.score:
+                    totalPoint +=(parseInt(num)*parseFloat(pointScore));
+                    html =totalPoint+'积分';
+                    break;
+                case settlement.money_score:
+                    totalPoint=parseInt(num)*parseFloat(pointScore);
+                    totalPrice += parseInt(num)*parseFloat(price);
+                    html =totalPoint+'积分+￥'+totalPrice;
+                    break;
+            }
+
+
             plusNum += parseInt(sinData.num);//合计购买数量;
 
 
