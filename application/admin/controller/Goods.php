@@ -529,7 +529,7 @@ class Goods extends Controller
         if($this->request->isAjax()){
             $data = $this->request->post();
             if($data['flag']=="up"){
-                Db::name('goods')->where(['id'=>$data['id']])->update(['status'=>1,'up_tip'=>0]);
+                Db::name('goods')->where(['id'=>$data['id']])->update(['status'=>1,'up_tip'=>0,'up_error_reason'=>'']);
             }else{
                 Db::name('goods')->where(['id'=>$data['id']])->update(['status'=>0,'up_tip'=>0]);
             }
@@ -564,6 +564,23 @@ class Goods extends Controller
                 ->update($update);
             return ajax_return('','操作成功','200');
         }
+    }
+
+    #上架失败
+    public function  upError()
+    {
+        if($this->request->isAjax()){
+            $data =$this->request->post();
+            $res = Db::name('goods')->where(['id'=>$data['id']])->update(['status'=>0,'up_error_reason'=>$data['up_error_reason']]);
+            return ajax_return('', '操作成功','200');
+        }else{
+            $id = $this->request->param('id');
+            $this->view->assign('id', $id);
+            $up_error_reason = Db::name('goods')->field('up_error_reason')->where(['id'=>$id])->find();
+            $this->view->assign('up_error_reason', $up_error_reason['up_error_reason']);
+            return $this->view->fetch();
+        }
+
     }
 
 }

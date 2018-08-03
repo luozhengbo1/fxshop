@@ -34,10 +34,12 @@
 <td>
 <?php
 if($vo['status']==1){?>
-    <a href="javascript:;">审核通过</a>
-<?php }else{?>
-<a href="javascript:;">仓库中</a>
-<?php }  ?>
+   审核通过
+<?php }else if($vo['status']==0 && $vo['up_error_reason']==''){?>
+仓库中
+<?php }else if($vo['up_error_reason']!=''){  ?>
+  审核失败<br /> 失败原因：{$vo['up_error_reason']??''}
+    <?php } ?>
 </td>
 <td>{php}if(($vo['up_tip']==1)){echo '上架提醒中';}else if($vo['up_tip']==2){ echo '下架提醒中'; }else{ echo '无';}{/php}</td>
 <td>
@@ -46,7 +48,8 @@ if($vo['status']==1){?>
 <a class="btn blue" href="javascript:;" onclick="editStatus({$vo.id},'down')" >下架</a>
 <?php }else{?>
     <a class="btn" href="javascript:;" onclick="editStatus({$vo.id},'up')" >上架</a>
-    <a class="btn" href="javascript:;" onclick="editStatus({$vo.id},'error')" >上架失败</a>
+    <!--<a class="btn" href="javascript:;" onclick="editStatus({$vo.id},'error')" >上架失败</a>-->
+    {tp:menu menu='superror' url='uperror:id=$vo.id' title='上架失败'/}
 <?php }}else{
     if($vo['up_tip']!=1  && $vo['status']!=1){?>
         <a class="btn" href="javascript:;" onclick="upTip({$vo.id},'up')" >上架提醒</a>

@@ -46,4 +46,40 @@ Array
     [return_msg] => OK
     [sign] => 8DD8086D9CC1B2A405BDAF01A49FD302
 )
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ERROR
+    [err_code_des] => 累计退款金额大于支付金额
+    [mch_id] => 1441217402
+    [nonce_str] => LoN2FlWevJUi3ImC
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => BBB3F8C94F3ADFA4B15852568C9C3104
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ERROR
+    [err_code_des] => 订单已全额退款
+    [mch_id] => 1441217402
+    [nonce_str] => WnuJV6pqnMpjrMS6
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 8620D1E4F2E05A70D6CD40CD9D109A5D
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ERROR
+    [err_code_des] => 订单已全额退款
+    [mch_id] => 1441217402
+    [nonce_str] => 6Sq8TnRz1oQzf6y9
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 2BEF95C0F17D2E4837E86FEB0367B76C
+)
 
