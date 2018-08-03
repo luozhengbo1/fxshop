@@ -584,14 +584,34 @@ class Customer extends Mustlogin
     {
         $this->assign('titleName', "个人消息 ");
         if ($this->request->isAjax()) {
+            //查出所有的msg
+            $message_user_list = Db::table('fy_message_user')->where('openid',$this->userInfo['openid'])->page($page, $size)->select();
+            //处理text非空、message_id非空的数据
+            $text_list=array();
+            $msg_ids='';
+            foreach ($message_user_list as $k => $v) {
+                //将订单消息赋给text_list
+                if($v['text']!=null){
+                    $text_list[$k]=$v;
+                    $text = json_decode($v['text']);
+                    $text_list[$k]['title'] = $text->title;
+                    $text_list[$k]['detail'] = $text->detail;
+                }
+                //将消息的message_id赋给msg_ids
+               if($v['message_id']!=null){
+                    $msg_ids=$v['message_id'].','.$msg_ids;
+               }
+            }
+            //联表查询message_id在msg_ids中的消息
             $message_list = Db::table('fy_message_user')
                 ->alias('u')
                 ->join('fy_message m', 'u.message_id=m.id')
                 ->order('u.create_time', 'desc')
-                ->where(['u.openid' => $this->userInfo['openid'], 'm.status' => 1, 'm.isdelete' => 0, 'm.is_send' => 1])
-                ->page($page, $size)
+                ->where(['message_id'=>['in',$msg_ids],'u.openid' => $this->userInfo['openid'], 'm.status' => 1, 'm.isdelete' => 0, 'm.is_send' => 1])
                 ->select();
-            return ajax_return($message_list, 'OK', 200);
+            //将订单消息和普通消息组合，返回给前端
+            $all_message_list = array_merge($message_list, $text_list);
+            return ajax_return($all_message_list, 'OK', 200);
         } else {
             return $this->view->fetch();
         }
