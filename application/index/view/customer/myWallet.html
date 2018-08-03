@@ -27,12 +27,14 @@
         </div>
         <div id="dataListWrap">
             <ul id="orderList" class="deal-list-wrap">
-                <!-- <li>
-                     <p class="clear title">
-                         <span class="fl">2018年4月</span>
-                         <span class="fr">总计:293.00</span>
-                     </p>
+                 <!--<li>
                      <ul class="deal-list">
+                         <li>
+                             <p class="clear title">
+                                 <span class="fl">2018年4月</span>
+                                 <span class="fr">总计:293.00</span>
+                             </p>
+                         </li>
                          <li class="clear bg_white">
                              <div class="deal-time">
                                  <p class="tc f14">27</p>
@@ -72,7 +74,8 @@
                 url: "{:url('index/customer/mywallet')}",
                 data: {},
             },
-            dealFun: dealData
+            dealFun: dealData,
+            complete:getTotalMoney,
         });
     }
 
@@ -84,59 +87,78 @@
         }
         return Length;
     }
-
+    var recordDate='';
     function dealData(data) {
         var html = '';
-        for (var i = 0, data_lenth = data.length; i < data_lenth; i++) {
-            console.log($(".deal-title:last-child").html())
+        for(var i=0; i<data.length; i++) {
             html += '<li>';
-            html += '    <p class="clear title deal-title">';
-            html += '        <span class="fl">' + data[i].record_month + '</span>';
-            html += '        <span class="fr">总计:' + data[i].record_money + '元</span>';
-            html += '    </p>';
-            var length = getJsonObjLength(data[i]);
-            for (var j = 0, data_i_length = length - 2; j < data_i_length; j++) {
-                console.log(data[i][j]);
-                var type = data[i][j].type
-                    ,image ="__STATIC__/index/images/image/other.jpg"
-                    ,dealName="其他"
-                    ,dealStatus='支付成功'
-                ;
-                html += '    <ul class="deal-list">';
-                html += '        <li class="clear bg_white" style="border-bottom: 1px dotted grey;">';
-                html += '            <div class="deal-time">';
-                html += '                <p class="tc f14">' + data[i][j].day + '</p>';
-                html += '                <p class="tc f18 bold mt5">' + data[i][j].month + '</p>';
-                html += '            </div>';
-                switch(type)
-                {
-                    case 1:
-                        image = "__STATIC__/index/images/image/goods.jpg";
-                        dealName="商品[消费]"
-                        dealStatus='支付成功'
-                        break;
-                    case 2:
-                        image = "__STATIC__/index/images/image/refund.jpg";
-                        dealName="商品[退款]"
-                        dealStatus="退款成功"
-                        break;
-                }
+            console.log(data[i]);
+            var type = data[i].type
+                ,year=new Date(parseInt( data[i].create_time)*1000).Format("yyyy")
+                ,month = new Date(parseInt(  data[i].create_time)*1000).Format("MM")
+                ,day=new Date(parseInt( data[i].create_time)*1000).Format("dd")
 
-                html += '            <div class="product-img">';
-                html += '                <img  src="'+image+'">';
-                html += '            </div>';
-                html += '            <div class="product-name">';
-                html += '                <p class="ellipsis-oneline lh20">'+dealName+'</p>';
-                html += '                <p class="f16 mb5 bold">' + data[i][j].money + '</p>';
-                html +='                 <p class="grey f10">'+data[i][j].order_id+'</p>'
-                html += '            </div>';
-                html += '            <div class="deal-status pt20 green">'+dealStatus+'</div>';
-                html += '        </li>';
-                html += '    </ul>';
+                ,image ="__STATIC__/index/images/image/other.jpg"
+                ,dealName="其他"
+                ,dealStatus='支付成功'
+            ;
+            html += '    <ul class="deal-list">';
+            if(recordDate!=year+month){
+                html +='</li>'
+                html += '    <p class="clear title deal-title">';
+                html += '        <span class="fl record_month">' +year +'年'+month + '月</span>';
+                html += '        <span class="fr recodeMoney" data-year="'+year+'" data-month="'+month+'"></span>';
+                html += '    </p>';
+                html +='</li>'
             }
+            recordDate=year+month;
+            html += '        <li class="clear bg_white" style="border-bottom: 1px dotted grey;">';
+            html += '            <div class="deal-time">';
+            html += '                <p class="tc f14">' +day+ '</p>';
+            html += '                <p class="tc f18 bold mt5">' +month + '月</p>';
+            html += '            </div>';
+            switch(type)
+            {
+                case 1:
+                    image = "__STATIC__/index/images/image/goods.jpg";
+                    dealName="商品[消费]"
+                    dealStatus='支付成功'
+                    break;
+                case 2:
+                    image = "__STATIC__/index/images/image/refund.jpg";
+                    dealName="商品[退款]"
+                    dealStatus="退款成功"
+                    break;
+            }
+
+            html += '            <div class="product-img">';
+            html += '                <img  src="'+image+'">';
+            html += '            </div>';
+            html += '            <div class="product-name">';
+            html += '                <p class="ellipsis-oneline lh20">'+dealName+'</p>';
+            html += '                <p class="f16 mb5 bold">' + data[i].money + '</p>';
+            html +='                 <p class="grey f10">'+data[i].order_id+'</p>'
+            html += '            </div>';
+            html += '            <div class="deal-status pt20 green">'+dealStatus+'</div>';
+            html += '        </li>';
+            html += '    </ul>';
+
             html += '</li>';
         }
         return html;
+    }
+    function getTotalMoney() {
+        $('.recodeMoney').each(function (index,ele) {
+            $.ajax({
+                url: "{:url('index/customer/getTotalMoney')}",
+                type:'post',
+                data:{year:$(ele).attr('data-year'),month:$(ele).attr('data-month')},
+                dataType:'json',
+                success: function(data){
+                    $(ele).html('总计: '+data.data[0].totalMoney+'元');
+                }
+            })
+        })
     }
 </script>
 </body>
