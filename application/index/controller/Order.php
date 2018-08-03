@@ -84,6 +84,7 @@
                     $this->redirect('index/order/index');
                     exit;
                 }
+                $time = time();
                 foreach ($storeData as $k=>$v){
                     $tempGoods = Db::name('goods')
                         ->field('fy_goods.*,fy_goods_attribute.point_score,fy_goods_attribute.price as price1')
@@ -92,8 +93,26 @@
                             'fy_goods.id'=>$v['goodsId'],
                             'fy_goods_attribute.id'=>$v['skuId'],
                         ])->find();
+                    //查询用户有效的券
+                    $lottery = Db::name('lottery')
+                        ->alias('lottery')
+                        ->field('lottery.*')
+                        ->join('fy_lottery_log','fy_lottery_log.lottery_id=lottery.id')
+                        ->where([
+                            "fy_lottery.goods_id"=>$v['goodsId'],
+                            'fy_lottery.status'=>1,
+                            'fy_lottery.isdelete'=>'0',
+                            'fy_lottery.expire_start_date' =>['<', $time],
+                            'fy_lottery.expire_end_date' =>['>', $time],
+//
+                            'fy_lottery_log.openid'=>$this->userInfo['openid'],
+                        ])
+                        ->select();
+                    //dump($lottery);
 //                    dump($tempGoods);die;
+                    $storeData[$k]['lottery']=$lottery;
                     $storeData[$k] = array_merge($storeData[$k], $tempGoods);
+                  //  dump($storeData);
                    // $storeData[$k] = array_merge($storeData[$k], Db::name('goods')->where(['id'=>$v['goodsId']])->find());
                 }
                 #如果有地址就取出地址
@@ -102,6 +121,7 @@
                     ->join('fy_customer','fy_customer.id=ca.uid')
                     ->where(['fy_customer.openid'=>$this->userInfo['openid'],'ca.status'=>1 ])
                     ->find();
+
 //                dump($address);die;
                 $this->view->assign('address',$address?$address:'');
                 $this->view->assign('storeData',$storeData);

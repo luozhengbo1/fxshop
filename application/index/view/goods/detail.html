@@ -380,7 +380,9 @@
                         html += '</div>'
                         html += '</div>'
                     }
+                    if(data.length>0)
                     $("#lotterysContainer").empty().append(html) ;
+                    else  $("#lotterysContainer").empty().append('<p class="tc">该商品暂无相关券</p>') ;
                 }
 
             }

@@ -71,11 +71,20 @@
                     {/if}
                 </span>
             </li>
+            {volist name="$vo['lottery']" id="lot" empty=""}
+              {if condition="$lot['type'] eq 2" /}{/if}
+                <li class="clear">
+                    <span class="fl">店铺优惠</span>
+                    <div class="fr">
+                        <select>
+                            <option>不使用优惠券</option>
+                            <option>省50元：50元限时优惠券</option>
+                        </select>
+                    </div>
+                </li>
+            {/volist}
+
             <!--<li class="clear">
-                <span class="fl">配送方式</span>
-                <span class="fr">快递包邮</span>
-            </li>
-            <li class="clear">
                 <span class="fl">运费险</span>
                 <span class="fr">卖家送，确认收货前退货可赔</span>
             </li>-->
