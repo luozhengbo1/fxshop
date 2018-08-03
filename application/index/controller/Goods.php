@@ -3,7 +3,7 @@
 	use think\Db;
 	use think\Cache;
 	use think\Session;
-	
+
 	Class Goods extends Mustlogin
 	{
         #获取商品的
@@ -287,6 +287,8 @@
                 'grant_start_date' =>['<', $time],
                 'grant_end_date' =>['>', $time],
                 ])->select();
+//            echo Db::name('lottery')->getLastSql();
+//            dump($lotterys);die;
             #查询领取过这个奖券
             $lotteryLogs = Db::name('lottery_log')->where(['openid' => $this->userInfo['openid']])->select();
             foreach ($lotterys as $k=>$lottery){

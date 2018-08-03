@@ -103,39 +103,38 @@
                         ->where([
                             "fy_lottery.goods_id"=>$v['goodsId'],
                             'fy_lottery.status'=>1,
-                            'fy_lottery.isdelete'=>'0',
+                            'fy_lottery.isdelete'=>0,
                             'fy_lottery.expire_start_date' =>['<', $time],
                             'fy_lottery.expire_end_date' =>['>', $time],
-//
                             'fy_lottery_log.openid'=>$this->userInfo['openid'],
                         ])
                         ->select();
-                   // dump($lottery);
-                   //dump($storeData);die;
                     $storeData[$k] = array_merge($storeData[$k], $tempGoods);
-                    $dikou = array();$youhui= array();$daijin= array();$mianyou= array();
-                    foreach ($lottery as $key=>$log){
-                        $coupon_type=$log['type'];
+                    $dikou = [];
+                    $youhui= [];
+                    $daijin=[];
+                    $mianyou= [];
+                    foreach ($lottery as $key=>$lot){
+                        $coupon_type=$lot['type'];
                         switch($coupon_type){
                             /*  case 1://抵扣券
-                                  array_push($dikou,$log);
+                                  array_push($dikou,$lot);
                                   break;*/
                             case  2://优惠券
                                 $totalPrice = ($storeData[$k]['num']*$storeData[$k]['price1']);
-                                if($totalPrice>$log['coupon_real_money']){
-                                    array_push($youhui,$log);
+                                if($totalPrice>$lot['coupon_real_money']){
+                                    array_push($youhui,$lot);
                                 }
                                 break;
                             case  3://代金券
-                                array_push($daijin,$log);
+                                array_push($daijin,$lot);
                                 break;
                             case 4://免邮
                                 //不包邮的时候
                                 if($storeData[$k]['free_type']==0){
-                                    array_push($mianyou,$log);
+                                    array_push($mianyou,$lot);
                                 }
                                 break;
-
                         }
                     }
                     $storeData[$k]['dikou']=$dikou;
@@ -151,7 +150,6 @@
                     ->join('fy_customer','fy_customer.id=ca.uid')
                     ->where(['fy_customer.openid'=>$this->userInfo['openid'],'ca.status'=>1 ])
                     ->find();
-
 //                dump($address);die;
                 $this->view->assign('address',$address?$address:'');
                 $this->view->assign('storeData',$storeData);
