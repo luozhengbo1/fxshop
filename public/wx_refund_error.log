@@ -1,0 +1,25 @@
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ERROR
+    [err_code_des] => 订单已全额退款
+    [mch_id] => 1441217402
+    [nonce_str] => wkU7bsAiUoaGYuP9
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => F991E0EB07FD04017CBF65B5DC465291
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ERROR
+    [err_code_des] => 订单已全额退款
+    [mch_id] => 1441217402
+    [nonce_str] => FOdwIpR5jkZS0isk
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => B526D96BAEE7614F84342ABC33DF0F67
+)
+

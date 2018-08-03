@@ -27,7 +27,7 @@ class Wechatpay extends Controller
         $notify = new \PayNotifyCallBack();
         $notify->Handle(true);
         $orderInfo = \WxPayResults::Init($xml);
-//        $orderInfo['out_trade_no']="1441217402201807311101364321";
+//        $orderInfo['out_trade_no']="1441217402201808030902191513";
 //        $orderInfo['openid']="omQYXwAnbPpTEgNYpxhqkRrfcoqE";
         if (empty($orderInfo)) {
             file_put_contents("wx_pay_error.log", $xml . "\r", 8);
@@ -78,7 +78,7 @@ class Wechatpay extends Controller
                         $decScore = $user['score'] - $totalScore;
                         if ($decScore < 0) $decScore = 0;
                         Db::name('customer')->where(['openid' => $orderInfo['openid']])->update(['score' => $decScore]);
-//                    file_put_contents("wx_pay_success.log",Db::name('customer')->getLastSql()."\r", 8);
+                        file_put_contents("wx_pay_success.log",Db::name('customer')->getLastSql()."\r", 8);
                         #记录
                         $scoreLog = [];
                         $scoreLog['openid'] = $orderInfo['openid'];
@@ -93,14 +93,14 @@ class Wechatpay extends Controller
                     $wx = new \WeiXin();
                     $result = $wx->buySuccess($goodsname, $orderInfo['openid'], $sonId['total_price']);
                     Db::name('order_all')->where(['order_id' => $orderInfo['out_trade_no']])->update(['is_tui' => 1]);
-                    file_put_contents("wx_pay_success.log", $xml . "\r", 8);
+//                    file_put_contents("wx_pay_success.log", $xml . "\r", 8);
 
                     //发货消息发送
                     $order_message = new OrderMessage();
                     $user_info = ['uid' => $user['id'], 'openid' => $user['openid']];
                     $goods_info = ['total_price' => $orderAllData['total_price'], 'goods_data' => $goods_data];
                     $order_message->payMessage('pay_success', $user_info, $goods_info, '');
-
+                    
                     $wx_par_log_is = Db::name('wx_pay_refund_log')->where(['order_id' => $orderInfo['out_trade_no'], 'type' => 1])->find();
                     if (!$wx_par_log_is) {#已经有了不在写入
                         $wx_pay_refund_log_insert = [];
