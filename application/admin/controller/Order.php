@@ -310,7 +310,7 @@ class Order extends Controller
             $result = ['code' => 400, 'msg' => ''];
 
             if ($order_id) {
-                # 拒绝退款
+                # 确认退款
                 if ($data['flag'] == "yes") {
                     $where = array('order_id' => $order_id);
                     $order = Db::name('order')
@@ -323,7 +323,6 @@ class Order extends Controller
                     #如果订单在父订单中支付，需要找到父订单用父订单id发起退款
                     $orderId = substr($order_id, '0', strlen($order_id) - 4);
                     $orderAll = Db::name('order_all')->where(['order_id' => $orderId, 'status' => 1])->find();
-//                dump($orderAll);
                     if (empty($orderAll)) {
                         $orderId = $order_id;
                     } else {
@@ -344,7 +343,6 @@ class Order extends Controller
                         file_put_contents("wx_refund_error.log", print_r($result, true) . "\r", 8);
                         return ajax_return_error('没有退款订单');
                     }
-//                dump($order['total_price']);
                     $input = new \WxPayRefund();
                     $input->SetOut_trade_no($orderId);   //自己的订单号
                     //$input->SetTransaction_id($order['transaction_id']);  //微信官方生成的订单流水号，在支付成功中有返回
@@ -353,13 +351,11 @@ class Order extends Controller
                     $input->SetRefund_fee($orderGoods['return_price'] * 100);  //退款总金额，订单总金额，单位为分，只能为整数
                     $input->SetOp_user_id($merchid);
                     $res = \WxPayApi::refund($input);
-//                dump($input);
-//                dump($res);die;
                     //退款操作
                     if ($res['return_code'] == 'SUCCESS' && $res['result_code'] == "SUCCESS") {
                         file_put_contents("wx_refund_success.log", print_r($res, true) . "\r", 8);
                         //修改订单状态 将订单总金额减少退款金额
-                        $orderData = Db::name('order')->field('total_price')->where(['order_id' => $order_id])->find();
+                        $orderData = Db::name('order')->where(['order_id' => $order_id])->find();
                         $decPrice = $orderData['total_price'] - $orderGoods['return_price'];#减去订单总价
                         if ($decPrice < 0) $decPrice = 0;
 //                    if(($order['return_price_all'])== $order['total_price']){#全额退款
@@ -392,7 +388,7 @@ class Order extends Controller
                         //退款通知发送到商城
                         $order_message = new OrderMessage();
                         $user_info = ['uid' => $user['id'], 'openid' => $user['openid']];
-                        $buy_list = \Qiniu\json_decode($orderData['buy_list']);
+                        $buy_list = json_decode($orderData['buy_list']);
                         $goods_data = '';
                         foreach ($buy_list as $buy_item) {
                             $goods_data = $goods_data . '' . $buy_item->goods_name . ' ' . $buy_item->sku_val . '×' . $buy_item->num . '<br/>';

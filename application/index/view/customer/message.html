@@ -28,18 +28,33 @@
         var html = '';
         for (var i = 0; i < data.length; i++) {
             html += '<li class="clear" >';
-            html += '<a href="'+urlConnect(url.msg_detail,{id:data[i].message_id})+'">'
-            html += '     <div class="img">';
-            html += '         <img src="' + data[i].pic + '">';
-            html += '     </div>';
-            html += '     <div class="content">';
-            html += '         <p class="clear mt5">';
-            html += '             <span class="name fl">' + data[i].title + '</span>';
-            html += '             <span class="time grey fr">' + new Date(parseInt(data[i].create_time)*1000).Format("yyyy-MM-dd hh:mm:ss") + '</span>';
-            html += '         </p>';
-            html += '         <p class="desc grey mt5  ellipsis-oneline">' + data[i].detail + '</p>';
-            html += '     </div>';
-            html +='</a>'
+            //显示普通消息
+            if(data[i].message_id!=null){
+                html += '<a href="'+urlConnect(url.msg_detail,{id:data[i].message_id})+'">'
+                html += '     <div class="img">';
+                html += '         <img src="' + data[i].pic + '">';
+                html += '     </div>';
+                html += '     <div class="content">';
+                html += '         <p class="clear mt5">';
+                html += '             <span class="name fl">' + data[i].title + '</span>';
+                html += '             <span class="time grey fr">' + new Date(parseInt(data[i].create_time)*1000).Format("yyyy-MM-dd hh:mm:ss") + '</span>';
+                html += '         </p>';
+                html += '         <p class="desc grey mt5  ellipsis-oneline">' + data[i].detail + '</p>';
+                html += '     </div>';
+                html +='</a>'
+            }else{
+                //显示订单消息
+                html += '     <div class="img">';
+                html += '         <img src="__ROOT__/static/index/images/order.jpg">';
+                html += '     </div>';
+                html += '     <div class="content">';
+                html += '         <p class="clear mt5">';
+                html += '             <span class="name fl">' + data[i].title + '</span>';
+                html += '             <span class="time grey fr">' + new Date(parseInt(data[i].create_time)*1000).Format("yyyy-MM-dd hh:mm:ss") + '</span>';
+                html += '         </p>';
+                html += '         <p class="desc grey mt5  ">' + data[i].detail + '</p>';
+                html += '     </div>';
+            }
             html += ' </li>';
         }
         return html;
