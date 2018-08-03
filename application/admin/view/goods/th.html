@@ -1,6 +1,5 @@
 <th width="25"><input type="checkbox"></th>
 <th width="">商品名称</th>
-<th width="">商品副标题</th>
 <th width="">商品主图</th>
 <th width="">商品原价</th>
 <th width="">现价</th>
@@ -15,6 +14,10 @@
 <th width="">是否是实物</th>
 <th width="">返现积分</th>
 <th width="">审核状态</th>
+<th width="">提醒状态</th>
+<?php if($_SESSION['think']['auth_id']!=1 ){?>
+<th width="">提醒操作</th>
+<?php } ?>
 <?php if($_SESSION['think']['auth_id']==1 ){
 ?>
 <th width="">上市审核</th>

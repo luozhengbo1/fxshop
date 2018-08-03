@@ -54,6 +54,17 @@
            },
        })
     }
+    function upTip(id,flag) {
+        $.ajax({
+            url:"{:url('goods/upDownTip')}",
+            data:{'id':id,'flag':flag},
+            type:'post',
+            success:function (res) {
+                alert(res.msg)
+                document.location.reload();
+            },
+        })
+    }
 </script>
 {/block}
 

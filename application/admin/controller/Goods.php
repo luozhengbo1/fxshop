@@ -63,6 +63,7 @@ class Goods extends Controller
 //    		if( $data['settlement_type']==1 ){#现价
 //				$goods['price'] = $data['price'];
 //    		}else if( $data['settlement_type']==2 ){#积分价
+//    		}else if( $data['settlement_type']==2 ){#积分价
 //				$goods['socre'] = $data['socre'];
 //    		}else{#积分+现价
 //    			$goods['score_price'] = $data['score_price'];
@@ -126,7 +127,7 @@ class Goods extends Controller
             #商品生产地
             $goods['yieldly'] = $data['yieldly'];
             #所属商户
-            $goods['user_id'] = $data['user_id'];
+            $goods['user_id'] = isset($data['user_id'])?$data['user_id']:$this->uid;
             $goods['is_return_goods'] = $data['is_return_goods'];
 
             if(  !empty($data['pic']) ){
@@ -332,7 +333,7 @@ class Goods extends Controller
             $goods['yieldly'] = $data['yieldly'];
             $goods['is_comment'] = $data['is_comment'];
             #所属商户
-            $goods['user_id'] = $data['user_id'];
+            $goods['user_id'] = isset($data['user_id'])?$data['user_id']:$this->uid;
             $goods['is_return_goods'] = $data['is_return_goods'];
 
             if(  !empty($data['pic']) ){
@@ -547,6 +548,22 @@ class Goods extends Controller
             return json($skuData);
         }
 
+    }
+    #
+    public  function  upDownTip()
+    {
+        if($this->request->isAjax()){
+            $data = $this->request->post();
+            if($data['flag']=='up'){
+                $update=['up_tip'=>1] ;
+            }else if($data['flag']=='down'){
+                $update=['up_tip'=>2] ;
+            }
+            $res =  Db::name('goods')
+                ->where(['id'=>$data['id']])
+                ->update($update);
+            return ajax_return('','操作成功','200');
+        }
     }
 
 }

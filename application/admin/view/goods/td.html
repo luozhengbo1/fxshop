@@ -1,6 +1,5 @@
 <td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
 <td>{$vo.name|high_light=$Request.param.name}</td>
-<td>{$vo.subtitle}</td>
 <td><img src="{$vo.main_image}" width="100" alt="主图"></td>
 <td>{$vo.original_price}</td>
 <td>{$vo.price_real}</td>
@@ -32,16 +31,26 @@
 <td>{$vo.orderby}</td>
 <td>{if condition="$vo.is_real eq 1"}是{else /}否{/if}</td>
 <td>{$vo.return_score}</td>
-<?php if($_SESSION['think']['auth_id']==1){
+<?php
 if($vo['status']==1){?>
 <td><a href="javascript:;">审核通过</a></td>
 <?php }else{?>
 <td><a href="javascript:;">仓库中</a></td>
-<?php } } ?>
+<?php }  ?>
+<td>{php}if(($vo['up_tip']==1)){echo '上架提醒中';}else if($vo['up_tip']==2){ echo '下架提醒中'; }else{ echo '无';}{/php}</td>
+<td>
 <?php if($_SESSION['think']['auth_id']==1 ){
 if($vo['status']==1){?>
-<td><a class="btn blue" href="javascript:;" onclick="editStatus({$vo.id},'down')" >下架</a></td>
+<a class="btn blue" href="javascript:;" onclick="editStatus({$vo.id},'down')" >下架</a>
 <?php }else{?>
-<td><a class="btn" href="javascript:;" onclick="editStatus({$vo.id},'up')" >上架</a></td>
-<?php }} ?>
+<a class="btn" href="javascript:;" onclick="editStatus({$vo.id},'up')" >上架</a>
+<?php }}else{
+    if($vo['up_tip']!=1){?>
+        <a class="btn" href="javascript:;" onclick="upTip({$vo.id},'up')" >上架提醒</a>
+<?php }else if($vo['up_tip']==1){?>
+    <a class="btn" href="javascript:;" onclick="upTip({$vo.id},'down')" >下架提醒</a>
+<?php
+    }
+}?>
+</td>
 <!--<td>{$vo.score_price}</td>-->

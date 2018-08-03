@@ -22,4 +22,28 @@ Array
     [return_msg] => OK
     [sign] => B526D96BAEE7614F84342ABC33DF0F67
 )
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ERROR
+    [err_code_des] => 订单已全额退款
+    [mch_id] => 1441217402
+    [nonce_str] => Z4RINz6XfIFjyL25
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 4CB7C3A67ED9ED0DB84EA6A1BC85A32A
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ERROR
+    [err_code_des] => 订单已全额退款
+    [mch_id] => 1441217402
+    [nonce_str] => mrDr3Vd6oLXN7bXV
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 8DD8086D9CC1B2A405BDAF01A49FD302
+)
 
