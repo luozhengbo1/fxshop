@@ -352,17 +352,13 @@ class Order extends Controller
                     $input->SetOp_user_id($merchid);
                     $res = \WxPayApi::refund($input);
                     //退款操作
+
                     if ($res['return_code'] == 'SUCCESS' && $res['result_code'] == "SUCCESS") {
                         file_put_contents("wx_refund_success.log", print_r($res, true) . "\r", 8);
                         //修改订单状态 将订单总金额减少退款金额
                         $orderData = Db::name('order')->where(['order_id' => $order_id])->find();
                         $decPrice = $orderData['total_price'] - $orderGoods['return_price'];#减去订单总价
                         if ($decPrice < 0) $decPrice = 0;
-//                    if(($order['return_price_all'])== $order['total_price']){#全额退款
-//                        $order_status = 6;
-//                    }else {
-//                        $order_status =5;
-//                    }
                         $updateRes = Db::name('order')->where(['order_id' => $order_id])->update(['total_price' => $decPrice]);
                         Db::name('order_goods')->where(['id' => $data['id']])->update(['is_return' => 2, 'is_send' => 4]);#已退款，退货完成
                         $result['code'] = 200;
@@ -388,7 +384,7 @@ class Order extends Controller
                         //退款通知发送到商城
                         $order_message = new OrderMessage();
                         $user_info = ['uid' => $user['id'], 'openid' => $user['openid']];
-                        $buy_list = json_decode($orderData['buy_list']);
+                        $buy_list = json_decode($orderData['buy_list'],true);
                         $goods_data = '';
                         foreach ($buy_list as $buy_item) {
                             $goods_data = $goods_data . '' . $buy_item->goods_name . ' ' . $buy_item->sku_val . '×' . $buy_item->num . '<br/>';

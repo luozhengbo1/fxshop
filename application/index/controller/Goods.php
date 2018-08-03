@@ -75,14 +75,11 @@
             }
 
             #查询该商品是否有优惠券在这里显示的一定是商品优惠券
-            $lottery = Db::name('lottery')
-                ->where(['goods_id'=>$id,'isdelete'=>0,'status'=>1])
-                ->find();
+
             $this->view->assign('goods',$goods);
             $this->view->assign('skuData',$skuData);
             $this->view->assign('proprety_name',$proprety_name);
             $this->view->assign('proprety_name_val',$proprety_name_val);
-            $this->view->assign('lottery',$lottery);
             $this->view->assign('arr',$arr);
             #获取猜你喜欢的商品
           // dump($arr);

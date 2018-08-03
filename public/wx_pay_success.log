@@ -494,3 +494,4 @@ UPDATE `fy_order_all`  SET `status`=1  WHERE  `order_id` = '14412174022018072017
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000143201808022747528150]]></transaction_id>
 </xml>
+UPDATE `fy_customer`  SET `score`=12  WHERE  `openid` = 'omQYXwNAT5uC15TQqMGxajJzqo4s'UPDATE `fy_customer`  SET `score`=12  WHERE  `openid` = 'omQYXwNAT5uC15TQqMGxajJzqo4s'UPDATE `fy_customer`  SET `score`=12  WHERE  `openid` = 'omQYXwNAT5uC15TQqMGxajJzqo4s'
