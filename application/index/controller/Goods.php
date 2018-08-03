@@ -278,10 +278,13 @@
         #获取商品所具有的券
         public function  goodsLottery($goods_id){
             #取出商品中发行中，未删除的所具有的券
+            $time = time();
             $lotterys = Db::name('lottery')->where([
                 "goods_id"=>$goods_id,
                 'status'=>1,
                 'isdelete'=>'0',
+                'grant_start_date' =>['<', $time],
+                'grant_end_date' =>['>', $time],
                 ])->select();
             #查询领取过这个奖券
             $lotteryLogs = Db::name('lottery_log')->where(['openid' => $this->userInfo['openid']])->select();

@@ -71,23 +71,32 @@
                     {/if}
                 </span>
             </li>
-            {volist name="$vo['lottery']" id="lot" empty=""}
-              {if condition="$lot['type'] eq 2" /}{/if}
-                <li class="clear">
-                    <span class="fl">店铺优惠</span>
-                    <div class="fr">
-                        <select>
-                            <option>不使用优惠券</option>
-                            <option>省50元：50元限时优惠券</option>
-                        </select>
-                    </div>
-                </li>
-            {/volist}
-
-            <!--<li class="clear">
-                <span class="fl">运费险</span>
-                <span class="fr">卖家送，确认收货前退货可赔</span>
-            </li>-->
+            {if condition="$vo['youhui']"}
+            <li class="clear">
+                <span class="fl">优惠</span>
+                <div class="fr">
+                    <select  class="w180 youhui"  onchange="showData()">
+                        <option value="">不使用优惠券</option>
+                        {volist name="$vo['youhui']" id="vo1" empty=""}
+                        <option value="{$vo1['id']}" data-value="{$vo1['coupon_money']}">省{$vo1['coupon_money']}元：{$vo1['coupon_money']}元限时优惠券</option>
+                        {/volist}
+                    </select>
+                </div>
+            </li>
+            {/if}
+            {if condition="$vo['mianyou']"}
+            <li class="clear">
+                <span class="fl">免邮</span>
+                <div class="fr">
+                    <select  class="w180 mianyou" onchange="showData()">
+                        <option value="">不使用免邮券</option>
+                        {volist name="$vo['mianyou']" id="vo1" empty=""}
+                        <option value="{$vo1['id']}" data-value="">免邮券</option>
+                        {/volist}
+                    </select>
+                </div>
+            </li>
+            {/if}
             <li class="clear">
                 <span class="fl">卖家留言：</span>
                 <input type="text" class="fr words" placeholder="选填：填写内容已和卖家协商确定">
@@ -113,9 +122,9 @@
         pay:"{:url('index/order/pay')}",
     }
    var saveData = new Array();
-   $('#singlePay').click(function () {
-       console.log();
-   });
+   $(function () {
+       showData();
+   })
    function showServiceInfo(){
       layer.open({
            title:'价格说明'
@@ -130,6 +139,9 @@
        saveData = new Array()//初始化数组
        $('.goodsData').each(function (index,ele) {
            var $ele = $(ele);
+           var $parents = $(ele).parents('.orderWrap');
+           var $mianyou = $parents.find('.mianyou')//免邮券
+               ,$youhui=$parents.find('.youhui')//优惠券
            var thisData = {
                goodsId:$ele.data('goodsid'),
                num:$ele.data('num'),
@@ -141,6 +153,8 @@
                addressId:"{$address['id']??''}",
                show_area:$ele.data('showarea'),
                pointScore:$ele.data('score'),
+               youhuiId:$youhui.val(),
+               baoyouId:$mianyou.val(),
            };
            saveData.push(thisData);
        })
@@ -150,14 +164,14 @@
            data:{arr:JSON.stringify(saveData)},
        })
    }
-    showData()
+
     function showData() {
        var totalPrice = 0,
            totalPoint=0
        ;
-
         $('.goodsData').each(function (index,ele) {
             var $ele =$(ele);
+            var $parents = $(ele).parents('.orderWrap');
             var num =$ele.data('num') ,
                 price =$ele.data('price'),
                 postage =parseFloat($ele.data('postage')),
@@ -166,18 +180,9 @@
                 pointScore=$ele.data('score'),
                 stype = $ele.data('stype')
             ;
+            var $mianyou = $parents.find('.mianyou')//免邮券
+                ,$youhui=$parents.find('.youhui')//优惠券
 
-           // console.log('test'+isNaN(23))
-            //freetype 包邮1不包邮0
-            /*switch(show_area){
-                case 2:
-                    totalPoint +=(parseInt(num)*parseFloat(pointScore));
-                    break;
-                default:
-                    totalPrice += parseInt(num)*parseFloat(price);
-                    break;
-            }*/
-            //settlementType 结算类型1-货币2-积分3-积分+货币
             switch(stype){
                 case 1:
                     totalPrice += parseInt(num)*parseFloat(price);
@@ -190,7 +195,10 @@
                     totalPrice += parseInt(num)*parseFloat(price);
                     break;
             }
-            if(freetype==0 && !isNaN(postage)){
+            if($youhui.val() ){
+                totalPrice -=parseInt($youhui.find('option:selected').attr('data-value'));
+            }
+            if(($mianyou.val()) || (freetype==0 && !isNaN(postage))){
                 totalPrice += postage;//加上邮费
             }
         })
