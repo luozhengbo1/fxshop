@@ -44,14 +44,21 @@
                     }
                 {/php}
                 {if condition="$is_send eq 1"}
+<<<<<<< HEAD
+                <a href="javascript:;" class="btn" onclick="layer_open('去发货','{:\\think\\Url::build(\'orderDetail\', [\'id\'=>$vo[\'order_id\']])}')">去发货</a>
+                {/if}
+                {php}if( $after_sale_is==1){ {/php}
+                <a href="javascript:;" class="btn" onclick="layer_open('售后处理','{:\\think\\Url::build(\'orderDetail\', [\'id\'=>$vo[\'order_id\']])}')">售后处理</a>
+=======
                 <a href="javascript:;" class="btn" onclick="layer_open('去发货','{:\\think\\Url::build(\'orderDetail\', [\'order_id\'=>$vo[\'order_id\'],\'id\'=>$vo[\'id\']])}')">去发货</a>
                 {/if}
                 {php}if( $after_sale_is==1){ {/php}
                 <a href="javascript:;" class="btn" onclick="layer_open('售后处理','{:\\think\\Url::build(\'orderDetail\', [\'order_id\'=>$vo[\'order_id\'],\'id\'=>$vo[\'id\']])}')">售后处理</a>
+>>>>>>> c0409e9885b2fcd959ffa7610414449cd072658a
                 {php}}{/php}
                 <a class="btn" href="javascript:;" data-href="" data-id="{$vo['order_id']}"  onclick="layer_open('订单详情','{:\\think\\Url::build(\'orderDetail\', [\'oder_id\'=>$vo[\'order_id\'],\'id\'=>$vo[\'id\']])}')" >订单详情</a>
                 {php}if(  $is_return==1){ {/php}
-                <a class="btn" href="javascript:;" data-href="" data-id="{$vo['order_id']}"  onclick="layer_open('确认退款','{:\\think\\Url::build(\'orderDetail\', [\'id\'=>$vo[\'order_id\']])}')" >确认退款</a>
+                <a class="btn" href="javascript:;" data-href="" data-id="{$vo['order_id']}"  onclick="layer_open('确认退款','{:\\think\\Url::build(\'orderDetail\', [\'order_id\'=>$vo[\'order_id\'] ,\'id\'=>$vo[\'id\']])}')" >确认退款</a>
                 {php}}{/php}
             </td>
         </tr>

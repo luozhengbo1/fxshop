@@ -8,17 +8,18 @@
     ];
     if(!empty($orderGoods)){
         foreach($orderGoods  as $key=> $goodsval ){
-            $vo['buy_list'][$key]['is_send'] = $isSendCN[$goodsval['is_send']];
-            #echo $isSendCN[$goodsval['is_send']];
+            echo $goodsval['is_send'];
+            $vo['buy_list'][$key]['is_send'] = $isSendCN[$goodsval['is_send']]?$isSendCN[$goodsval['is_send']]:'';
+            echo $isSendCN[$goodsval['is_send']];
         }
     }
-
     if(is_array($vo['buy_list']) ){
-        foreach( $vo['buy_list']  as $val ){
+        foreach( $vo['buy_list']  as $key=> $val ){
             echo $val['goods_name']."&nbsp;&nbsp;&nbsp;&nbsp;";
             echo ($val['sku_val'])?$val['sku_val']:'';
             echo "&nbsp;&nbsp;&nbsp;&nbsp;x".$val['num']."<br/>";
-    echo "<a href='javascript:;' class='btn' style='color: orangered' >".$val['is_send']."</a><br/>";
+            $isSend = isset($val['is_send']) ? $val['is_send']: '';
+            echo "<a href='javascript:;' class='btn' style='color: orangered' >".$isSend."</a><br/>";
         }
     }
     {/php}</td>

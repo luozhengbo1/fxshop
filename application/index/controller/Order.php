@@ -1,5 +1,6 @@
 <?php
     namespace  app\index\controller;
+    use app\common\behavior\OrderMessage;
     use think\Db;
     use think\Session;
     use think\View;
@@ -260,14 +261,18 @@
                         $orderRow[$k]["user_id"] =Db::name('goods')->field('user_id')->where(['id'=> $val['goodsId']])->find()['user_id'];
                         #获取简单的商品明细
                         $getNameSkuNum[]=[
-                            'goods_name'=>Db::name('goods')->field('name')->where(['id'=> $val['goodsId']])->find()['name'],
+                            'goods_name'=>Db::name('goods')->field('name')->where(['id'=> $val['goodsId'],'user_id'=> $orderRow[$k]["user_id"]])->find()['name'],
                             'sku_val'=>$val['val'],
                             'num'=>$val['num'],
+                            'goods_id'=>$val['goodsId'],
+                            'user_id'=>$orderRow[$k]["user_id"],
                         ];
+
                     }
-                    $orderRow[$k]["buy_list"] =json_encode($getNameSkuNum);
+                    #商品详情根据用户分组之后更新
+                    $buyListAll = $this->array_group_by($getNameSkuNum,'user_id');
+                    $orderRow[$k]["buy_list"] =  json_encode($buyListAll[$orderRow[$k]["user_id"]]);
                 }
-//                dump($userPrice);die;
                 $orderAll['son_id']= join($sonId,',');
                 $orderGoods=[];
                 foreach ($data as $k=> $v){
@@ -307,8 +312,8 @@
                 $jsApiParameters= $tools->GetJsApiParameters($unifiedOrder);
 //                $orderAll['prepay_id'] = $unifiedOrder['prepay_id'];
 //                $orderAll['js_api_parameters'] = $jsApiParameters;
-                # 插入订单数据
 
+                # 插入订单数据
                 $addId1 =Db::name("order_all")->insert($orderAll);
                 $addId2 =Db::name("order")->insertAll($orderRow);
                 $addId3 =Db::name("order_goods")->insertAll($orderGoods);
