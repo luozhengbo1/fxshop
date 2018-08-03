@@ -1,5 +1,6 @@
 <?php
     namespace  app\index\controller;
+    use app\common\behavior\OrderMessage;
     use think\Db;
     use think\Session;
     use think\View;
@@ -291,8 +292,8 @@
                 $jsApiParameters= $tools->GetJsApiParameters($unifiedOrder);
 //                $orderAll['prepay_id'] = $unifiedOrder['prepay_id'];
 //                $orderAll['js_api_parameters'] = $jsApiParameters;
-                # 插入订单数据
 
+                # 插入订单数据
                 $addId1 =Db::name("order_all")->insert($orderAll);
                 $addId2 =Db::name("order")->insertAll($orderRow);
                 $addId3 =Db::name("order_goods")->insertAll($orderGoods);
