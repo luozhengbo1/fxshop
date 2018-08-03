@@ -388,7 +388,7 @@ class Order extends Controller
                         //退款通知发送到商城
                         $order_message = new OrderMessage();
                         $user_info = ['uid' => $user['id'], 'openid' => $user['openid']];
-                        $buy_list = \Qiniu\json_decode($orderData['buy_list']);
+                        $buy_list = json_decode($orderData['buy_list'],true);
                         $goods_data = '';
                         foreach ($buy_list as $buy_item) {
                             $goods_data = $goods_data . '' . $buy_item->goods_name . ' ' . $buy_item->sku_val . '×' . $buy_item->num . '<br/>';

@@ -1037,3 +1037,28 @@ Array
     [transaction_id] => 4200000141201808023497978216
 )
 
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [cash_fee] => 3
+    [cash_refund_fee] => 1
+    [coupon_refund_count] => 0
+    [coupon_refund_fee] => 0
+    [mch_id] => 1441217402
+    [nonce_str] => V9K2nSqsMylPvQLx
+    [out_refund_no] => 5b63c260d32891533264480
+    [out_trade_no] => 144121740220180803092845
+    [refund_channel] => Array
+        (
+        )
+
+    [refund_fee] => 1
+    [refund_id] => 50000007502018080305827897039
+    [result_code] => SUCCESS
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 922FE7B532185425E3DD240A0B47A701
+    [total_fee] => 3
+    [transaction_id] => 4200000150201808036948491664
+)
+
