@@ -110,11 +110,39 @@
                             'fy_lottery_log.openid'=>$this->userInfo['openid'],
                         ])
                         ->select();
-                    //dump($lottery);
-//                    dump($tempGoods);die;
-                    $storeData[$k]['lottery']=$lottery;
+                   // dump($lottery);
+                   //dump($storeData);die;
                     $storeData[$k] = array_merge($storeData[$k], $tempGoods);
-                  //  dump($storeData);
+                    $dikou = array();$youhui= array();$daijin= array();$mianyou= array();
+                    foreach ($lottery as $key=>$log){
+                        $coupon_type=$log['type'];
+                        switch($coupon_type){
+                            /*  case 1://抵扣券
+                                  array_push($dikou,$log);
+                                  break;*/
+                            case  2://优惠券
+                                $totalPrice = ($storeData[$k]['num']*$storeData[$k]['price1']);
+                                if($totalPrice>$log['coupon_real_money']){
+                                    array_push($youhui,$log);
+                                }
+                                break;
+                            case  3://代金券
+                                array_push($daijin,$log);
+                                break;
+                            case 4://免邮
+                                //不包邮的时候
+                                if($storeData[$k]['free_type']==0){
+                                    array_push($mianyou,$log);
+                                }
+                                break;
+
+                        }
+                    }
+                    $storeData[$k]['dikou']=$dikou;
+                    $storeData[$k]['youhui']=$youhui;
+                    $storeData[$k]['daijin']=$daijin;
+                    $storeData[$k]['mianyou']=$mianyou;
+                    //dump($storeData);
                    // $storeData[$k] = array_merge($storeData[$k], Db::name('goods')->where(['id'=>$v['goodsId']])->find());
                 }
                 #如果有地址就取出地址
@@ -129,6 +157,26 @@
                 $this->view->assign('storeData',$storeData);
                 return $this->view->fetch();
             }
+        }
+        #查询用户有效的券
+        public function getUserLottery($ids){
+            $idArr = explode(",", $ids);
+            $time = time();
+            $lottery = Db::name('lottery')
+                ->alias('lottery')
+                ->field('lottery.*')
+                ->join('fy_lottery_log','fy_lottery_log.lottery_id=lottery.id')
+                ->where([
+                    "fy_lottery.goods_id"=>['in',$idArr],
+                    'fy_lottery.status'=>1,
+                    'fy_lottery.isdelete'=>'0',
+                    'fy_lottery.expire_start_date' =>['<', $time],
+                    'fy_lottery.expire_end_date' =>['>', $time],
+                    'fy_lottery_log.openid'=>$this->userInfo['openid'],
+                ])
+                ->select();
+            return ajax_return($lottery,'','200');
+
         }
 
 

@@ -88,8 +88,9 @@
     function dealData(data) {
         var html = '';
         for (var i = 0, data_lenth = data.length; i < data_lenth; i++) {
+            console.log($(".deal-title:last-child").html())
             html += '<li>';
-            html += '    <p class="clear title">';
+            html += '    <p class="clear title deal-title">';
             html += '        <span class="fl">' + data[i].record_month + '</span>';
             html += '        <span class="fr">总计:' + data[i].record_money + '元</span>';
             html += '    </p>';
