@@ -9,15 +9,16 @@
         #获取商品的
         public function  getGoodsHotOrOther($page,$size,$show_area='3')
         {
-            if($show_area=="all"){
-                $goodsList =Db::name('goods')
-                    ->select();
-            }else{
-                $goodsList = Db::name('goods')
-                    ->where(['show_area'=>$show_area,'status'=>1,'isdelete'=>'0'])
-                    ->page($page,$size)
-                    ->select();
+            $where = [];
+            $where=['status'=>1,'isdelete'=>'0'];
+            if($show_area!="all"){
+                $where['show_area'] =$show_area;
             }
+            $goodsList = Db::name('goods')
+                ->where($where)
+                ->order('orderby desc ,create_time DESC')
+                ->page($page,$size)
+                ->select();
             foreach ($goodsList as $k=>$v){
                 $goods_attribute = Db::name('goods_attribute')
                     ->where(['goods_id'=>$v['id']])
