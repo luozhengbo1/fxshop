@@ -74,6 +74,7 @@
             }
         }
 
+
         #订单确认页面
         public function affirmOrder()
         {

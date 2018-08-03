@@ -58,11 +58,12 @@
         <td class="f-14">{$vo['goods_num']}</td>
           <td class="f-14">{$vo['goods_detail']['postage']??'0'}</td>
           <td class="f-14">
-             {php} if($vo['is_send']==2){
-                echo "已收货";
-             }else{
-                echo "待收货";
-              }{/php}
+            {php}$isSendCN =[
+            '未发货','已发货','待评价','退款中','退款完成','待回复','完成','退货退款'
+            ];
+            echo $isSendCN[$vo['is_send']];
+            {/php}
+
           </td>
 
 
