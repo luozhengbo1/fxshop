@@ -3,7 +3,17 @@
 {include file="Public/header-title"}
 <!--用户信息-->
 <style>
-
+    .address-show{
+        color: #333;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        width: 100px;
+        float: left;
+    }
+    .sgreen{color: #15b25b}
 </style>
 <section class="mt5">
     <div class="aui-product-set">
@@ -47,8 +57,8 @@
         </a>-->
         <a href="{:\\think\\Url::build(\'Address/index\')}" class="aui-address-cell" >
             <div class="aui-address-cell-bd">我的收货地址</div>
-            <div class="right-side-arrow ellipsis-oneline {if condition='$userAddress.id neq null' /}active{/if}">
-                {$userAddress.address ??'设置默认地址'}
+            <div class="right-side-arrow  {if condition='$userAddress.id neq null' /}active{/if}">
+                <i class="address-show {if condition='$userAddress.id neq null' /}sgreen{/if}">{$userAddress.address ??'设置默认地址'}</i>
                 <i class="iconfont icon-right-arrow"></i>
             </div>
         </a>
