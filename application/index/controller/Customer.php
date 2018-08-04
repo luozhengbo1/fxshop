@@ -325,7 +325,7 @@ class Customer extends Mustlogin
             }
             $this->assign('user', $this->userInfo);
             $this->assign('titleName', '签到');
-            return $this->view->fetch('mysign');
+            return $this->view->fetch('my_sign');
         }
     }
 
@@ -383,7 +383,7 @@ class Customer extends Mustlogin
                 ->order('create_time', 'desc')
                 ->page($page, $size)
                 ->select();
-            foreach ($pay_record as $k => $v) {
+           /* foreach ($pay_record as $k => $v) {
                 $pay_record[$k]['day'] = date('d', $v['create_time']);
                 $pay_record[$k]['month'] = date('m月', $v['create_time']);
                 $pay_record[$k]['end_time'] = date("Y年m月", $v['create_time']);
@@ -415,8 +415,8 @@ class Customer extends Mustlogin
                 if ($i < count($res)) {
                     $i++;
                 }
-            }
-            return ajax_return($all_pay_record, 'OK', 200);
+            }*/
+            return ajax_return($pay_record, 'OK', 200);
         } else {
             $user_data = Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->find();
             $this->assign('user_data', $user_data);
@@ -425,6 +425,23 @@ class Customer extends Mustlogin
         }
     }
 
+    public function getTotalMoney($month,$year){
+        $start_date=$year.'-'.$month;
+        $start_date =strtotime($start_date);
+        $end_date=$year.'-'.($month+1);
+        $end_date =strtotime($end_date);
+        $total_money = Db::table('fy_wx_pay_refund_log')
+            ->field('sum(money) totalMoney')
+            ->where(['isdelete' => 0, 'openid' => $this->userInfo['openid'],'create_time'=>['between',[$start_date,$end_date]]])
+            ->select();
+       // dump($total_money);
+//        dump(date('Y-m-d H:i:s',$start_date));
+//        dump($end_date);
+//        dump(date('Y-m-d H:i:s',$end_date));
+//        dump(date('Y-m-d H:i:s',$end_date));
+
+        return ajax_return($total_money,'',200);
+    }
     /**
      * 会员权益中心
      */
