@@ -85,6 +85,8 @@ class Goods extends Controller
     		}
     		#服务信息
             $goods['service'] = json_encode($data['service']);
+            #服务电话
+            $goods['service_mobile'] = $data['service_mobile'];
     		#是否包邮
     		$goods['free_type'] = $data['free_type'];
     		#显示区域
@@ -292,6 +294,8 @@ class Goods extends Controller
             }
             #服务信息
             $goods['service'] = json_encode($data['service']);
+            #服务电话
+            $goods['service_mobile'] = $data['service_mobile'];
             #是否包邮
             $goods['free_type'] = $data['free_type'];
             #显示区域
