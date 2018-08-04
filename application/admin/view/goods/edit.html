@@ -262,8 +262,6 @@
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>服务信息：</label>
             <div class="formControls col-xs-6 col-sm-7 skin-minimal">
-
-                <input type="text" class="input-text" placeholder="七天无理由退换" name="service[]" value="" >
                 <a href="javascript:;" class="btn" onclick="addServic(this)">新增服务信息</a>
                 {php}
                     if($vo['service'] && is_array($vo['service'])){
@@ -272,6 +270,9 @@
                             <a href="javascript:;" class="btn" onclick="delServic(this)">移除</a>
                         {php}
                         }
+                    }else{  {/php}
+                <input type="text" class="input-text" placeholder="七天无理由退换" name="service[]" value="" >
+                {php}
                     }
                 {/php}
             </div>
