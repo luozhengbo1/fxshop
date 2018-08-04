@@ -41,7 +41,7 @@ class GoodsComment extends Controller
     {
         if($this->request->isAjax()){
             $data = $this->request->post();
-            $res = $this->getModel()->where(['id'=>$data['id']])->update(['return_content'=>$data['return_content'],'status'=>1]);
+            $res = $this->getModel()->where(['id'=>$data['id']])->update(['return_content'=>$data['return_content'],'status'=>1,'return_is'=>1]);
             return ajax_return_adv('回复成功','parent','回复成功','');
         }else{
             $vo = $this->getModel()->where(['id'=>$this->request->param("id")])->find();

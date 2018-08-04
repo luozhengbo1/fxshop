@@ -83,6 +83,8 @@ class Goods extends Controller
                 }
     			$goods['postage'] = $data['postage'];
     		}
+    		#服务信息
+            $goods['service'] = json_encode($data['service']);
     		#是否包邮
     		$goods['free_type'] = $data['free_type'];
     		#显示区域
@@ -288,6 +290,8 @@ class Goods extends Controller
             }else{
                 $goods['postage'] = '';
             }
+            #服务信息
+            $goods['service'] = json_encode($data['service']);
             #是否包邮
             $goods['free_type'] = $data['free_type'];
             #显示区域
@@ -511,6 +515,7 @@ class Goods extends Controller
                     }
                 }
             }
+            $goodsData['service'] = ($goodsData['service']!='')?json_decode($goodsData['service'],true):'';
             $this->view->assign('vo',$goodsData);
             #常规属性
             $this->view->assign('proprety_name_val',$proprety_name_val);
@@ -555,9 +560,9 @@ class Goods extends Controller
         if($this->request->isAjax()){
             $data = $this->request->post();
             if($data['flag']=='up'){
-                $update=['up_tip'=>1] ;
+                $update=['up_tip'=>1] ;#上架提醒
             }else if($data['flag']=='down'){
-                $update=['up_tip'=>2] ;
+                $update=['up_tip'=>2] ;#下架提醒
             }
             $res =  Db::name('goods')
                 ->where(['id'=>$data['id']])
@@ -571,7 +576,7 @@ class Goods extends Controller
     {
         if($this->request->isAjax()){
             $data =$this->request->post();
-            $res = Db::name('goods')->where(['id'=>$data['id']])->update(['status'=>0,'up_error_reason'=>$data['up_error_reason']]);
+            $res = Db::name('goods')->where(['id'=>$data['id']])->update(['status'=>0,'up_tip'=>0,'up_error_reason'=>$data['up_error_reason']]);
             return ajax_return('', '操作成功','200');
         }else{
             $id = $this->request->param('id');
