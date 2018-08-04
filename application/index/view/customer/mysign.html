@@ -1,46 +1,67 @@
 {include file="Public/header-resource"}
 <style>
-    .layui-m-layercont{padding: 0!important;}
+    .layui-m-layercont {
+        padding: 0 !important;
+    }
 </style>
 
 <body class="footer-boottom">
 <section>
     <div class="sign-header">
-        <span  onclick="openDialog()" class="sign-rule-btn layui-btn layui-btn-primary layui-btn-xs layui-btn-radius">活动规则</span>
-        <div class="sign-btn"  onclick="sign()">
-            {$flag?'今日<br>已签到':'签到<br>赚积分'}
+        <span onclick="openDialog()" class="sign-rule-btn layui-btn layui-btn-primary layui-btn-xs layui-btn-radius">活动规则</span>
+        <div class="sign-btn" onclick="sign()">
+            <?php
+             $day_of_week=date('w');
+             if($day_flags[$day_of_week-1]){
+                echo '今日<br>已签到';
+            }else{
+            echo '签到<br>赚积分';
+            }?>
         </div>
     </div>
 
     <ul class="sign-date">
-        <li class="active">周一</li>
-        <li>周二</li>
-        <li>周三</li>
-        <li>周四</li>
-        <li>周五</li>
-        <li>周六</li>
-        <li>周日</li>
+        <li
+        <?php if($day_flags[0]){ echo 'class="active"'; } ?> >周一</li>
+        <li
+        <?php if($day_flags[1]){ echo 'class="active"'; } ?> >周二</li>
+        <li
+        <?php if($day_flags[2]){ echo 'class="active"'; } ?> >周三</li>
+        <li
+        <?php if($day_flags[3]){ echo 'class="active"'; } ?> >周四</li>
+        <li
+        <?php if($day_flags[4]){ echo 'class="active"'; } ?> >周五</li>
+        <li
+        <?php if($day_flags[5]){ echo 'class="active"'; } ?> >周六</li>
+        <li
+        <?php if($day_flags[6]){ echo 'class="active"'; } ?> >周日</li>
     </ul>
     <div class="lh40 pl10 clear pr10">
         <span class="fl f14">福利任务</span>
         <span class="fr green f14"> 已经连续签到{$user['continuity_day']?$user['continuity_day']:0}天</span>
+        <!--<span class="fr red f7">  <?php if(!empty($hint)){ echo $hint; } ?></span>-->
     </div>
     <ul class="sign-task clear">
-        <li class="clear">
-            <div class="fl">
-                <p>每日签到</p>
-                <p>奖励2积分</p>
-            </div>
-            <div class="fr">
-
-            </div>
-        </li>
+        <!--<li class="clear">-->
+        <!--<div class="fl">-->
+        <!--<p>每日签到</p>-->
+        <!--<p>奖励2积分</p>-->
+        <!--</div>-->
+        <!--<div class="fr">-->
+        <!--</div>-->
+        <!--</li>-->
         <li class="clear">
             <div class="fl">
                 <p>连续签到3天</p>
                 <p>奖励5积分</p>
             </div>
-            <div class="fr"></div>
+            <div class="fr">
+                <?php
+                if(isset($score_flags[0])){
+                    if($score_flags[0]==1){  ?>
+                <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius">已领取</button>
+                <?php } }?>
+            </div>
         </li>
         <li class="clear">
             <div class="fl">
@@ -48,9 +69,11 @@
                 <p>奖励15积分</p>
             </div>
             <div class="fr">
-                <button class="layui-btn layui-btn-danger layui-btn-xs layui-btn-radius">
-                    立即领取
-                </button>
+                <?php
+                if(isset($score_flags[1])){
+                    if($score_flags[1]==1){  ?>
+                <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius">已领取</button>
+                <?php } }?>
             </div>
         </li>
         <li class="clear">
@@ -59,9 +82,11 @@
                 <p>奖励30积分</p>
             </div>
             <div class="fr">
-                <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius">
-                    已领取
-                </button>
+                <?php
+                if(isset($score_flags[2])){
+                    if($score_flags[2]==1){  ?>
+                <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius">已领取</button>
+                <?php } }?>
             </div>
         </li>
         <li class="clear">
@@ -70,7 +95,7 @@
                 <p>更多积分等你来领</p>
             </div>
             <div class="fr">
-                <a href="{:url('customer/getscore')}"  class="layui-btn layui-btn-xs layui-btn-radius">
+                <a href="{:url('customer/getscore')}" class="layui-btn layui-btn-xs layui-btn-radius">
                     做任务
                 </a>
             </div>
@@ -91,11 +116,12 @@
             , btn: '确定'
         });
     }
+
     function sign() {
         pub_edit({
             url: "{:url('customer/my_sign')}",
             data: {flag: 1},
-            return_url:window.location.href,
+            return_url: window.location.href,
         })
     }
 </script>

@@ -44,7 +44,6 @@ class OrderMessage
                     '发货时间：' . $order_info['send_time'] . '<br/>' .
                     '物流公司：' . $order_info['logistics_name'] . '<br/>' .
                     '快递单号：' . $order_info['logistics_number'] . '<br/>' .
-//                    '收件信息：' . $order_info['address_detail'] . '<br/>'.
                     '请保持手机畅通！'
             ];
             $msg = json_encode($text);
