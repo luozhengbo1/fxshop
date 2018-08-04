@@ -3,6 +3,7 @@
 	use think\Db;
 	use think\Cache;
 	use think\Session;
+	use think\Controller;
 
 	Class Goods extends  Controller
 	{
