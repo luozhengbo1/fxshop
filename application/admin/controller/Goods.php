@@ -526,7 +526,6 @@ class Goods extends Controller
             $this->view->assign('skuData',$skuData);
             $this->view->assign('proprety_name',$proprety_name);
             $this->view->assign('proprety_name1',$arr);
-            $this->view->assign('pageType',$this->request->param('type'));
             return $this->view->fetch('edit');
         }
 
