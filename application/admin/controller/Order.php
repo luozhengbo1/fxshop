@@ -268,7 +268,6 @@ class Order extends Controller
                 #扣去奖券金额   #未使用优惠券直接退款商品价格 如果不包邮直接商品价格，
                 if ($orderGoods['goods_detail']['settlement_type'] == 1) {
                     $goodsAttribute = Db::name('goods_attribute')->field('price')->where(['id' => $orderGoods['sku_id']])->find();
-
                     $returnMoney = $orderGoods['goods_num'] * $goodsAttribute['price'];
                     #如果商品包邮，退款时减去邮费
                     if ($orderGoods['goods_detail']['free_type'] == 0) {
@@ -298,6 +297,12 @@ class Order extends Controller
             }
             return ajax_return('', '处理成功', '200');
         }
+
+    }
+
+    #拒绝售后
+    public function refuseAfterSale()
+    {
 
     }
 

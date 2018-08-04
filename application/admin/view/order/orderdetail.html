@@ -127,10 +127,16 @@
           <span>{$afterData['apply_time']|date="Y-m-d H:i:s",###}</span>
           <p>
             <a href="javascript:;" onclick="afterSaleHandle(this,{$vo['id']},{$afterData['id']},{$afterData['after_sale_type']},'yes')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 同意售后处理</a>
-            <a href="javascript:;" onclick="afterSaleHandle(this,{$vo['id']},{$afterData['id']},{$afterData['after_sale_type']},'no')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 不同意售后处理</a>
+            <a href="javascript:;" onclick="refuseAfterSale(this,{$vo['id']},{$afterData['id']},{$afterData['after_sale_type']},'no')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 不同意售后处理</a>
           </p>
-          <label class="ml20">商家邮寄地址:</label>
-          <input type="text" placeholder="商家邮寄地址"   name="total_price"  value="{$afterData['shop_wuliu_address']??''}" class="form_control w120 lh30 h30" >
+          <div>
+            <label class="ml20">商家邮寄地址:</label>
+            <input type="text" placeholder="商家邮寄地址"   name="shop_wuliu_address"  value="{$afterData['shop_wuliu_address']??''}" class="form_control w240 lh30 h30" >
+          </div>
+          <div>
+            <label class="ml20">拒绝售后理由:</label>
+            <input type="text" placeholder="拒绝售后理由"   name="refused_reason"  value="{$afterData['refused_reason']??''}" class="form_control w240 lh30 h30" >
+          </div>
         </div>
       </form>
       {/if}
@@ -197,15 +203,39 @@
                })
            }
        }
-       function  afterSaleHandle(order_id,id,after_sale_type) {
+       function  afterSaleHandle(obj,ogid,id,after_sale_type,flag) {
             if(after_sale_type!=3){
-
+                var  shop_wuliu_address = $('input[name="shop_wuliu_address"]').val()
+                if(shop_wuliu_address==''){
+                    alert('请填写用户邮寄地址');
+                    $('input[name="shop_wuliu_address"]').css('display','block')
+                }
             }
-           if(order_id && id ){
+           if( id ){
                $.ajax({
                    url:"{:url('order/afterSaleHandle')}",
                    type:'post',
-                   data:{'order_id':order_id,'id':id,'after_sale_type':after_sale_type},
+                   data:{'id':id,ogid:ogid,'after_sale_type':after_sale_type,shop_wuliu_address:shop_wuliu_address,flag:flag},
+                   success:function (res) {
+                       alert(res.msg)
+                       $('.btn-refresh').click();
+                   }
+               })
+           }
+       }
+       function refuseAfterSale(obj,ogid,id,after_sale_type,flag) {
+           if(flag=='no'){
+               var  refused_reason = $('input[name="refused_reason"]').val()
+               if(refused_reason==''){
+                   alert('请填拒绝售后理由地址');
+                   $('input[name="refused_reason"]').css('display','block')
+               }
+           }
+           if( id ){
+               $.ajax({
+                   url:"{:url('order/refuseAfterSale')}",
+                   type:'post',
+                   data:{'id':id,ogid:ogid,'after_sale_type':after_sale_type,shop_wuliu_address:shop_wuliu_address,flag:flag},
                    success:function (res) {
                        alert(res.msg)
                        $('.btn-refresh').click();
