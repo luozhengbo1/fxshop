@@ -24,6 +24,7 @@
             <td class="f-14">
                 {tp:menu menu='sedit' /}
                 {tp:menu menu='sdelete' /}
+                <a class="btn"  onclick="layer_open('预览','/index.php/admin/goods/edit/type/show/id/{$vo.id}.html')">预览</a>
             </td>
         </tr>
         {/volist}
@@ -64,6 +65,9 @@
                 document.location.reload();
             },
         })
+    }
+    function showDetail(id) {
+
     }
 </script>
 {/block}

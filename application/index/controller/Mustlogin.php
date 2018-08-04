@@ -15,7 +15,7 @@ Class MustLogin extends Controller
         parent::__construct();
         $sessionUserInfo = \think\Session::get('wx_user');
         if (empty($sessionUserInfo['openid'])) {
-            $this->redirect(substr(url('Wechat/wxLogin', ['state' => myUrl()]), 0, -5));
+         //   $this->redirect(substr(url('Wechat/wxLogin', ['state' => myUrl()]), 0, -5));
         }
         $user = Db::name('customer')->where(['openid'=>$sessionUserInfo['openid']])->find();
         $this->userInfo =$user ?$user:$sessionUserInfo;
