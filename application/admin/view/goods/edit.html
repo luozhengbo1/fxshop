@@ -299,7 +299,7 @@
             <div class="formControls col-xs-6 col-sm-7 skin-minimal">
                 <a href="javascript:;" class="btn" onclick="addServic(this)">新增服务信息</a>
                 {php}
-                    if($vo['service'] && is_array($vo['service'])){
+                    if(isset($vo['service']) && is_array($vo['service'])){
                         foreach($vo['service'] as $serviceV ){ {/php}
                             <input type="text" class="input-text" placeholder="七天无理由退换" name="service[]" value="{$serviceV}" >
                             <a href="javascript:;" class="btn" onclick="delServic(this)">移除</a>
