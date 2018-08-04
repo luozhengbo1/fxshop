@@ -4560,6 +4560,7 @@ a {
 }
 .sign-date li.active{
 	color: green;
+	font-weight: 600;
 }
 .sign-task li{
 	padding: 10px 8px 4px;
