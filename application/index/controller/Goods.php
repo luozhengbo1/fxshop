@@ -3,21 +3,23 @@
 	use think\Db;
 	use think\Cache;
 	use think\Session;
-	
+
 	Class Goods extends Mustlogin
 	{
         #获取商品的
         public function  getGoodsHotOrOther($page,$size,$show_area='3')
         {
-            if($show_area=="all"){
-                $goodsList =Db::name('goods')
-                    ->select();
-            }else{
-                $goodsList = Db::name('goods')
-                    ->where(['show_area'=>$show_area,'status'=>1,'isdelete'=>'0'])
-                    ->page($page,$size)
-                    ->select();
+            $where = [];
+            $where=['status'=>1,'isdelete'=>'0'];
+            if($show_area!="all"){
+
+                $where['show_area'] =$show_area;
             }
+            $goodsList = Db::name('goods')
+                ->where($where)
+                ->order('orderby desc ,create_time DESC')
+                ->page($page,$size)
+                ->select();
             foreach ($goodsList as $k=>$v){
                 $goods_attribute = Db::name('goods_attribute')
                     ->where(['goods_id'=>$v['id']])
@@ -73,7 +75,10 @@
             if( !empty($goods['routine']) ){
                 $goods['routine'] =json_decode($goods['routine'],true);
             }
-
+            #服务信息
+            if( !empty($goods['service']) ){
+                $goods['service'] = json_decode($goods['service'],true);
+            }
             #查询该商品是否有优惠券在这里显示的一定是商品优惠券
 
             $this->view->assign('goods',$goods);
@@ -286,6 +291,8 @@
                 'grant_start_date' =>['<', $time],
                 'grant_end_date' =>['>', $time],
                 ])->select();
+//            echo Db::name('lottery')->getLastSql();
+//            dump($lotterys);die;
             #查询领取过这个奖券
             $lotteryLogs = Db::name('lottery_log')->where(['openid' => $this->userInfo['openid']])->select();
             foreach ($lotterys as $k=>$lottery){

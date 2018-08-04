@@ -1,7 +1,10 @@
 <td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
 <td>{$vo.username}</td>
 {php}if($_SESSION['think']['auth_id']==1){{/php}
-<td>{$vo.username}</td>
+<td>{php}
+        $user = \think\Db::name('admin_user')->where('id',$vo['user_id'])->find();
+        echo $user['account']."&nbsp;&nbsp;&nbsp;&nbsp;".$user['realname'];
+    {/php}</td>
 {php}}{/php}
 <td>{$vo.goods_name}</td>
 <td>{php} $pic = explode(',',$vo['pic']);
@@ -17,3 +20,5 @@
 <td>{$vo.logistics_score}</td>
 <td>{$vo.service_score}</td>
 <td>{$vo.avg_score}</td>
+<td>{$vo.return_content??'无'}</td>
+<td>{php}echo ($vo['return_is']==1)?'已回复':'未回复';{/php}</td>
