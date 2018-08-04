@@ -855,6 +855,8 @@
                 $insert['openid']=$this->userInfo['openid'];
                 $insert['username']=$this->userInfo['nickname'];
                 $insert['goods_id']= $data['goods_id'] ;
+                #所属商户
+                $insert['user_id']=  $orderGoods['goods_detail']['user_id'] ;
                 $insert['goods_name']=$orderGoods['goods_detail']['name'];
                 $insert['content']=$data['desc'];
                 $insert['create_time']=time();

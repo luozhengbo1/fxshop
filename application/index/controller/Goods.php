@@ -12,6 +12,7 @@
             $where = [];
             $where=['status'=>1,'isdelete'=>'0'];
             if($show_area!="all"){
+
                 $where['show_area'] =$show_area;
             }
             $goodsList = Db::name('goods')
@@ -74,7 +75,10 @@
             if( !empty($goods['routine']) ){
                 $goods['routine'] =json_decode($goods['routine'],true);
             }
-
+            #服务信息
+            if( !empty($goods['service']) ){
+                $goods['service'] = json_decode($goods['service'],true);
+            }
             #查询该商品是否有优惠券在这里显示的一定是商品优惠券
 
             $this->view->assign('goods',$goods);

@@ -22,7 +22,7 @@
         <tr class="text-c">
             {include file="td" /}
             <td class="f-14">
-                {tp:menu menu='sreturnComment' url='returnComment:id=$vo.id' title='回复'/}
+                {if condition="$vo.return_is neq 1"}{tp:menu menu='sreturnComment' url='returnComment:id=$vo.id' title='回复'/}{/if}
                 {$vo.status|show_status=$vo.id}
                 {tp:menu menu='sdelete' /}
             </td>

@@ -55,10 +55,13 @@ class Customer extends Controller
     {
         if ($this->request->isPost()) {
             $header = ['用户名', '昵称', '性别', '生日', '手机号', '邮箱', '积分', '连续签到天数',
-                '经验值', '等级', '头像', '微信ID', '登录IP', '国家', '省份', '城市', '创建时间'];
+                '经验值',  '头像', '微信ID', '登录IP', '国家', '省份', '城市', '创建时间'];
             $data = \think\Db::name("customer")->field("username,nickname,sex,birthday,mobile,email,
-            score,continuity_day,experience,grade,headimgurl,openid,login_ip,countty,province,city,create_time")
+            score,continuity_day,experience,headimgurl,openid,login_ip,country,province,city,create_time")
                 ->order("id desc")->select();
+            foreach ($data as &$v){
+                $v['create_time'] = date('Y-m-d H:i:s', $v['create_time']);
+            }
             if ($error = \Excel::export($header, $data, "会员信息表", '2007')) {
                 throw new Exception($error);
             }
