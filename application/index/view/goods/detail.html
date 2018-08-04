@@ -78,33 +78,41 @@
     <p class="good-price" id="goodPriceTitle" data-type="{$goods['settlement_type']}" data-score="{$goods['score']}" data-price="{$goods['basic_price']}" ></p>
     <p class="good-title">{$goods['name']??''}</p>
 
-    <ul class="clear good-service">
+    <ul class="clear good-service mb10">
         <li class="fl">快递¥<?php if($goods['free_type']==1) echo 0;
                                 else echo $goods['postage']; ?></li>
         <li class="fl tc">销量{$goods['buy_num']??''}</li>
         <li class="fr tr">{$goods['yieldly']??'贵阳'}</li>
     </ul>
+    <div class="mb10">
+        <p class="detail-block" id="goodsLottery" onclick="showPop('goodsVoucher')">
+            <span class="title">优惠</span>
+            <span class="content"><span class="icon-couple"></span>{$lottery?$lottery['id']:'无'}</span>
+            <i class="detail_footer-icon"></i>
+        </p>
 
-    <p class="mt10 detail-block" onclick="showPop('goodsVoucher')">
-        <span class="title">优惠</span>
-        <span class="content"><span class="icon-couple"></span>{$lottery?$lottery['id']:'无'}</span>
-        <i class="detail_footer-icon"></i>
-    </p>
-    <p class="detail-block">
-        <span class="title">促销</span>
-        <span class="content"><span class="icon-point"></span>购买可得{$goods['return_score']??''}积分</span>
-        <i class="detail_footer-icon"></i>
-    </p>
-    <p class="detail-block">
-        <span class="title">服务</span>
-        <span class="content">{$goods['after_sale']??''}</span>
-        <i class="detail_footer-icon"></i>
-    </p>
-    <!--<p class="detail-block">
-        <span class="title">规格</span>
-        <span class="content">选择颜色，尺码</span>
-        <i class="detail_footer-icon"></i>
-    </p>-->
+        {if condition="$goods['return_score'] neq 0" /}
+        <p class="detail-block">
+            <span class="title">促销</span>
+            <span class="content"><span class="icon-point"></span>购买可得{$goods['return_score']??''}积分</span>
+            <!-- <i class="detail_footer-icon"></i>-->
+        </p>
+        {/if}
+        {if condition="$goods['service']" /}
+        <p class="detail-block " onclick="showPop('goodsService')">
+            <span class="title">服务</span>
+            <span class="content orange-border">{$goods['service'][0]??''}</span>
+            <i class="detail_footer-icon"></i>
+        </p>
+        {/if}
+        <!--<p class="detail-block">
+            <span class="title">规格</span>
+            <span class="content">选择颜色，尺码</span>
+            <i class="detail_footer-icon"></i>
+        </p>-->
+    </div>
+
+
 </div>
 <!--商品评价-->
 <a name="good-evaluate"></a>
@@ -235,6 +243,24 @@
             <div class="btn blue" onclick="closePop('goodsVoucher')">
                 关闭
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="detail_popup show" id="goodsService" style="display:none ">
+    <div class="cover-bg"  onclick="closePop('goodsService')"></div>
+    <div class=" main-voucher" >
+        <div class="header h60 lh60">
+            <i class="close" onclick="closePop('goodsService')"></i>
+            <p class="f16 bold blackRed">服务信息</p>
+        </div>
+        <div class="body mb70 order-serviceinfo pr10 pl10">
+            {if condition="$goods['service']" /}
+            {volist name="$goods['service']" id="service"}
+            <p class="service">{$service}</p>
+            {/volist}
+            {/if}
+
         </div>
     </div>
 </div>
@@ -380,9 +406,13 @@
                         html += '</div>'
                         html += '</div>'
                     }
-                    if(data.length>0)
-                    $("#lotterysContainer").empty().append(html) ;
-                    else  $("#lotterysContainer").empty().append('<p class="tc">该商品暂无相关券</p>') ;
+                    if(data.length>0){
+                        $("#lotterysContainer").empty().append(html) ;
+                    }
+                    else {
+                        $('#goodsLottery').hide();
+                        $("#lotterysContainer").empty().append('<p class="tc">该商品暂无相关券</p>') ;
+                    }
                 }
 
             }

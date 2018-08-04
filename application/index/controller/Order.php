@@ -67,6 +67,7 @@
                     ->select();
 //                echo Db::name('order')->getLastSql();
                 foreach ($orderList as $k=>$v ){
+
                     $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'],true);
                 }
                 $orderList = array_values($this->array_group_by($orderList,'order_id'));
@@ -95,6 +96,10 @@
                             'fy_goods.id'=>$v['goodsId'],
                             'fy_goods_attribute.id'=>$v['skuId'],
                         ])->find();
+                    #服务信息
+                    if( !empty($tempGoods['service']) ){
+                        $tempGoods['service'] = json_decode($tempGoods['service'],true);
+                    }
                     //查询用户有效的券
                     $lottery = Db::name('lottery')
                         ->alias('lottery')
@@ -150,7 +155,7 @@
                     ->join('fy_customer','fy_customer.id=ca.uid')
                     ->where(['fy_customer.openid'=>$this->userInfo['openid'],'ca.status'=>1 ])
                     ->find();
-//                dump($address);die;
+                //dump($storeData);die;
                 $this->view->assign('address',$address?$address:'');
                 $this->view->assign('storeData',$storeData);
                 return $this->view->fetch();
@@ -698,10 +703,16 @@
             $address = json_decode($orderDetail[0]['address_detail'],true);
             foreach (  $orderDetail as $k=> $v){
                 $orderDetail[$k]['goods_detail'] = json_decode($orderDetail[$k]['goods_detail'],true);
+                #服务信息
+                if( !empty( $orderDetail[$k]['goods_detail']['service']) ){
+                    $orderDetail[$k]['goods_detail']['service'] = json_decode($orderDetail[$k]['goods_detail']['service'],true);
+                }else{
+                    $orderDetail[$k]['goods_detail']['service']=[];
+                }
             }
             $this->view->assign('address',$address) ;
-
             $this->view->assign('orderDetail',$orderDetail);
+
             return $this->view->fetch('orderDetail');
         }
 

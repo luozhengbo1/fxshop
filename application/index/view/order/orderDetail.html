@@ -45,7 +45,14 @@
                 <div class="item-info">
                     <h3 class="title ellipsis">{$vo['goods_detail']['name']}</h3>
                     <p class="sku f12 grey">{$vo['sku_val']}</p>
-                    <ul class="order-serviceinfo">   <li class="service">{$vo['goods_detail']['after_sale']}</li>   </ul>
+                    {if condition="$vo['goods_detail']['service']" /}
+                    <div class="order-serviceinfo">
+                    {volist name="$vo['goods_detail']['service']" id="service"}
+                            <span class="service">{$service}</span>
+                    {/volist}
+                    </div>
+                    {/if}
+
                 </div>
                 <div class="item-pay">
                     <div class="item-pay-data">

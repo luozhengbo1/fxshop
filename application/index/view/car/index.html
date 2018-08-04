@@ -102,7 +102,7 @@
         for(var i = 0; i < data.length; i++) {
             var show_area = data[i].show_area;
             //商品既没有价格也没有积分，说明该规格商品 sku规格不存在，该规格商品失效
-            var isDiscard = data[i].point_score == null && data[i].price1 == null;
+            var isDiscard = (data[i].point_score == null && data[i].price1 == null )|| data[i].status==constant.goodsStatus.down;
             var noActivity = show_area ==showArea.time && activeStatus(parseInt(data[i].start_date),parseInt(data[i].end_date),parseInt("{$currentTime}")) !=constant.activity.inActive;// true 限时抢购不在时间范围
             if (isDiscard || noActivity){
                 html += '<li class="singer-good clear">';
@@ -132,7 +132,7 @@
             html += '        <span class="sku">' + data[i].val + '</span>';
             html += '        </p>';
             if (isDiscard) {
-                html += '        <div class="mt10 clear grey">失效</div>';
+                html += '        <div class="mt10 clear grey">该商品失效</div>';
             }else if(noActivity){
                 html += '        <div class="mt10 clear grey">不在抢购时间范围</div>';
             } else {

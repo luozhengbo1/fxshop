@@ -81,6 +81,7 @@
             }
             #查询该商品是否有优惠券在这里显示的一定是商品优惠券
 
+          //  dump($goods);
             $this->view->assign('goods',$goods);
             $this->view->assign('skuData',$skuData);
             $this->view->assign('proprety_name',$proprety_name);
