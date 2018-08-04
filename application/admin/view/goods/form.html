@@ -22,8 +22,17 @@
         </select>
     </div>
     <div class="select-box" style="width:250px">
+        <select name="user_id" class="select">
+            <option value="">--请选择所属商户--</option>
+            {if condition="is_array($userList) eq 1"}
+                {volist name="$userList" id="userVal"}
+                    <option value="{$userVal['id']}"   {if condition="$Request.param.user_id eq $userVal['id']"}selected{/if}>{$userVal['account']}&nbsp;&nbsp;&nbsp;&nbsp;{$userVal['account']}</option>
+                {/volist}
+            {/if}
+        </select>
+    </div>
+    <div class="select-box" style="width:250px">
         <select name="is_real" class="select">
-
             <option value="" >实物</option>
             <option value="1"  {if condition="$Request.param.is_real eq 1"}selected{/if}>是</option>
             <option value="0"  {if condition="$Request.param.is_real eq 0"}selected{/if}>否</option>
