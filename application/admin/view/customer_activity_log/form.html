@@ -1,0 +1,28 @@
+<form class="mb-20" method="get" action="{:\\think\\Url::build($Request.action)}">
+    <input type="text" class="input-text" style="width:250px" placeholder="活动名称" name="activity_name"
+           value="{$Request.param.activity_name}">
+    <input type="text" class="input-text" style="width:250px" placeholder="活动参与用户" name="username"
+           value="{$Request.param.username}">
+    <input type="text" class="input-text Wdate" style="width:250px" placeholder="参与开始时间" name="starttime"
+           value="{$Request.param.starttime}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" {/literal} >
+    <input type="text" class="input-text Wdate" style="width:250px" placeholder="参与结束时间" name="endtime"
+           value="{$Request.param.endtime}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" {/literal} >
+    <div class="select-box" style="width:250px">
+        <select name="join_status" class="select">
+            <option value="" >参与状态...</option>
+            <option value="1"
+            <?php
+                    if( isset($_GET['join_status'])){
+                        echo $_GET['join_status']==1?'selected':'';
+                    } ?>
+            >已参与</option>
+            <option value="2"
+            <?php
+                    if( isset($_GET['join_status'])){
+                        echo $_GET['join_status']==0?'selected':'';
+                    } ?>
+            >参与中</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-success"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+</form>
