@@ -162,6 +162,7 @@
                     show_area = detail.show_area,
                     stype =  detail.settlement_type,
                     is_send= data[i].is_send,
+                    service = eval(detail['service']),
                     order_id = data[i].order_id;
                 console.log(goods_id)
                 html +='<a href="'+urlConnect("{:url('index/order/orderDetail')}",{id:order_id})+'">';
@@ -173,7 +174,12 @@
                 html +='            <h3 class="title ellipsis">'+detail.name+'</h3>';
                 html +='            <p class="sku f12 grey">'+data[i].sku_val+'</p>';
                 html +='            <div class="order-serviceinfo clear">';
-                html +='<span class="service">'+detail.after_sale+'</span>';
+                if(service){
+                    for(var n=0; n<service.length; n++){
+                        html +='<span class="service">'+service[n]+'</span>';
+                    }
+                }
+
                 html +=' </div>';
 
                 html +='        </div>';

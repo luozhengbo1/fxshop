@@ -52,14 +52,19 @@
         <ul class="service-info">
             <li class="clear">
                 <span class="fl">服务信息</span>
-                <span class="fr">
-                    <!--<img width="20px"  src="__STATIC__/index/images/day7.png">支持7天无理由退货
-                    -->
-                    {$vo['after_sale']}
-                    <a href="javascript:;" onclick="showServiceInfo()">
+                <!--<span class="fr">
+
+                   &lt;!&ndash; <a href="javascript:;" onclick="showServiceInfo()">
                          <img style="width: 20px; height: 20px"  src="__STATIC__/index/images/info.png">价格说明
-                    </a>
-                 </span>
+                    </a>&ndash;&gt;
+                 </span>-->
+                {if condition="$vo['service']" /}
+                {volist name="$vo['service']" id="service"}
+                <span class="content orange-border ml10">
+                    {$service}
+                </span>
+                {/volist}
+                {/if}
             </li>
             <li class="clear">
                 <span class="fl">快递</span>

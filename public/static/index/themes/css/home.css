@@ -3391,7 +3391,7 @@ a {
 }
 /**评论*/
 .good-evaluate-bar{
-	margin-top: .08rem;
+/*	margin-top: .08rem;*/
 	height: .3rem;
 	line-height: .3rem;
 	padding: 0 .08rem;
@@ -3797,9 +3797,10 @@ a {
 }
 .affirm-order  .service-info li{
 	padding: 0 .06rem;
-	line-height: .42rem;
-	height: .42rem;
+	line-height: .4rem;
+	/*height: .42rem;*/
 	border-bottom: 1px solid #e7e7e7;
+	position: relative;
 }
 .affirm-order  .service-info li .words{
 	border: none;
@@ -4051,18 +4052,25 @@ a {
 	width:57%;
 	float: left;
 }
-.product-order-list .order-serviceinfo {
+.order-serviceinfo {
 	box-sizing: border-box;
     width: 100%;
 }
-.product-order-list .order-serviceinfo .service {
+.order-serviceinfo .service {
 	display: inline-block;
 	/*background: #ff5000;*/
 	color:  #ff5000;
 	border: 1px solid  #ff5000;
 	border-radius: 4px;
-	padding: .04rem .13333rem;
+	padding: .3px 2px;
+	margin-right: 1px;
 	margin-top: 4px;
+}
+.orange-border{
+	border: 1px solid  #ff5000;
+	border-radius: 4px;
+	padding: 2px;
+	color:  #ff5000;
 }
 .item-pay{
 	width: 20%;
@@ -4552,6 +4560,7 @@ a {
 }
 .sign-date li.active{
 	color: green;
+	font-weight: 600;
 }
 .sign-task li{
 	padding: 10px 8px 4px;

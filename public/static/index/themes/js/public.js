@@ -647,6 +647,10 @@ var constant={
     freeType:{
        free:1// 包邮1不包邮0
         ,noFree:0
+    },
+    goodsStatus:{
+        up:1//上架
+        ,down:0//仓库中
     }
 }
 var settlement={
