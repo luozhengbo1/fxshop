@@ -23,12 +23,19 @@ class Customer extends Mustlogin
         $noSignDay2 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 23:59:59')) / 86400;//1天
         //前一天未签到，continue_day重置为0,将最新数据渲染到页面
         if (floor($noSignDay1) > 1 && $noSignDay2 > 1 && floor($noSignDay1) == $noSignDay2) {
-            Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->update(['continuity_day' => 0]);
-            $user_sign_data = Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->find();
-            $this->assign('userdata', $user_sign_data);
+//            Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->update(['continuity_day' => 0]);
+//            $user_sign_data = Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->find();
+//            $this->assign('userdata', $user_sign_data);
+            $this->userInfo['continuity_day'] = 0;
+            $this->assign('userdata', $this->userInfo);
+        } elseif ($this->userInfo['continuity_day'] == 15) {
+            $this->userInfo['continuity_day'] = 0;
+            $this->assign('userdata', $this->userInfo);
         } else {
             $this->assign('userdata', $this->userInfo);
         }
+        //签到满15天，continue_day重置为0,将最新数据渲染到页面
+
         //会员收藏数量
         $count_collect = Db::table('fy_customer_collect')
             ->join('fy_goods', 'fy_goods.id=fy_customer_collect.goods_id')
@@ -179,7 +186,7 @@ class Customer extends Mustlogin
      */
     public function my_sign()
     {
-        //根据openid在customer表中查询id,nickname,score,continuity_day
+        //根据uid在fy_customer_sign表中查询本周每天的签到记录
         if ($this->request->isAjax()) {
             $time = time();
             $today_start = strtotime(date('Y-m-d', $time) . ' 00:00:00');
@@ -206,7 +213,7 @@ class Customer extends Mustlogin
                     Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->setField('continuity_day', 1);
                     Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->setInc('score', 2);
                     Db::table('fy_customer_sign')->insert($save);
-//                    //新增日志记录
+                    //新增日志记录
                     $sign_id = Db::table('fy_customer_sign')->field('id')->where('uid', $this->userInfo['id'])->where('addtime', $time)->find();
                     Db::table('fy_score_log')->insert([
                         'uid' => $this->userInfo['id'],
@@ -259,7 +266,7 @@ class Customer extends Mustlogin
                                 $score = 30;
                                 break;
                         }
-                        //满足奖励条件：continue_day+1，score+1+reward_score更新到customer表，score=1,reward_score=相应的奖励积分插入到customer_sign表
+                        //满足奖励条件：continue_day+1，score+2+更新到customer表，score=2插入到customer_sign表
                         if ($score) {
                             Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->setInc('score', $score + 2);
                             Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->setInc('continuity_day', 1);
@@ -305,29 +312,62 @@ class Customer extends Mustlogin
                 }
             }
         } else {
-            //判断今天是否签到
-            $time = time();
-            $today_start = strtotime(date('Y-m-d', $time) . ' 00:00:00');
-            $today_end = strtotime(date('Y-m-d', $time) . ' 23:59:59');
-            $res = Db::table('fy_customer_sign')
-                ->where('uid', $this->userInfo['id'])
-                ->where('addtime', 'between', [$today_start, $today_end])
-                ->find();
-            $this->assign('flag', $res ? 1 : 0);
+            //获取本周每一天的时间
+            $today_time = strtotime(date('Y-m-d', time()));
+            $day_of_week = date('w');
+            $start_day_of_week = $today_time - ($day_of_week - 1) * 24 * 60 * 60;
+            $week_days = array();
+            for ($i = 0; $i < 8; $i++) {
+                $week_days[$i] = $start_day_of_week + $i * 24 * 60 * 60;
+            }
+            //查询本周的签到数据，检验是否有每天的签到数据,若有，flag=1,否则flag=0;
+            $sign_list = Db::table('fy_customer_sign')->where(['uid' => $this->userInfo['id'], 'addtime' => ['between', [$week_days[0], $week_days[7]]]])->select();
+            $day_flags = array();
+            for ($i = 0; $i < 7; $i++) {
+                foreach ($sign_list as $item) {
+                    if ($item['addtime'] >= $week_days[$i] && $item['addtime'] < $week_days[$i + 1]) {
+                        $day_flags[$i] = 1;
+                    }
+                }
+                if (!isset($day_flags[$i])) {
+                    $day_flags[$i] = 0;
+                }
+            }
 
-            //判断前一天是否签到
+            //获取连续签到天数,判断前一天是否签到，若未签到，前端显示的continue_day为0，否则显示为相应的连续签到天数
             $beforeSign = Db::table('fy_customer_sign')->where('uid', $this->userInfo['id'])->order('addtime', 'desc')->find();//获取最新一条签到记录
             $noSignDay1 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 00:00:00')) / 86400;//2天
             $noSignDay2 = (strtotime(date('Y-m-d') . '23:59:59') - strtotime(date('Y-m-d', $beforeSign['addtime']) . ' 23:59:59')) / 86400;//1天
-            //前一天未签到，continue_day重置为1，score+1更新到customer表
             if (floor($noSignDay1) > 1 && $noSignDay2 > 1 && floor($noSignDay1) == $noSignDay2) {
                 $this->userInfo['continuity_day'] = 0;
             }
+            //判断是否已达到最大连续签到天数，若达到，前端显示的continue_day为0，否则显示为相应的连续签到天数
+            if ($this->userInfo['continuity_day'] == 15) {
+                $this->userInfo['continuity_day'] = 0;
+            }
             $this->assign('user', $this->userInfo);
+            $this->assign('day_flags', $day_flags);
+
+            //判断连续签到奖励领取情况
+            $score_flags = array();
+            if ($this->userInfo['continuity_day'] >= 3) {
+                $score_flags[0] = 1;
+            }
+            if ($this->userInfo['continuity_day'] >= 7) {
+                $score_flags[0] = 1;
+                $score_flags[1] = 1;
+            }
+            if ($this->userInfo['continuity_day'] == 15) {
+                $score_flags[0] = 1;
+                $score_flags[1] = 1;
+                $score_flags[2] = 1;
+            }
+            $this->assign('score_flags', $score_flags);
             $this->assign('titleName', '签到');
-            return $this->view->fetch('my_sign');
+            return $this->view->fetch('mysign');
         }
     }
+
 
     /**
      * 设置
@@ -383,39 +423,39 @@ class Customer extends Mustlogin
                 ->order('create_time', 'desc')
                 ->page($page, $size)
                 ->select();
-           /* foreach ($pay_record as $k => $v) {
-                $pay_record[$k]['day'] = date('d', $v['create_time']);
-                $pay_record[$k]['month'] = date('m月', $v['create_time']);
-                $pay_record[$k]['end_time'] = date("Y年m月", $v['create_time']);
-            }
-            //按时间对数据分组：时间为键值
-            $res = array();
-            foreach ($pay_record as $key => $val) {
-                $res[$val['end_time']][] = $val;
-            }
-            //将分组情况赋给一个空数组以便返回
-            $i = 0;
-            $all_pay_record = array();
-            foreach ($res as $item) {
-                $all_pay_record[$i] = $item;
-                //获取分组的时间
-                $j = 0;
-                $all_pay_record[$i]['record_month'] = $item[$j]['end_time'];
-                //将money转为float类型并存入数组
-                for ($t = 0; $t < count($item); $t++) {
-                    $money[$t] = number_format(floatval($item[$t]['money']), '2');
-                }
-                //计算总计金额
-                $total_money = 0;
-                for ($y = 0; $y < count($item); $y++) {
-                    $total_money = $total_money + $money[$y];
-                }
-                $all_pay_record[$i]['record_money'] = $total_money;
-                //下一次计算的判断值自增
-                if ($i < count($res)) {
-                    $i++;
-                }
-            }*/
+            /* foreach ($pay_record as $k => $v) {
+                 $pay_record[$k]['day'] = date('d', $v['create_time']);
+                 $pay_record[$k]['month'] = date('m月', $v['create_time']);
+                 $pay_record[$k]['end_time'] = date("Y年m月", $v['create_time']);
+             }
+             //按时间对数据分组：时间为键值
+             $res = array();
+             foreach ($pay_record as $key => $val) {
+                 $res[$val['end_time']][] = $val;
+             }
+             //将分组情况赋给一个空数组以便返回
+             $i = 0;
+             $all_pay_record = array();
+             foreach ($res as $item) {
+                 $all_pay_record[$i] = $item;
+                 //获取分组的时间
+                 $j = 0;
+                 $all_pay_record[$i]['record_month'] = $item[$j]['end_time'];
+                 //将money转为float类型并存入数组
+                 for ($t = 0; $t < count($item); $t++) {
+                     $money[$t] = number_format(floatval($item[$t]['money']), '2');
+                 }
+                 //计算总计金额
+                 $total_money = 0;
+                 for ($y = 0; $y < count($item); $y++) {
+                     $total_money = $total_money + $money[$y];
+                 }
+                 $all_pay_record[$i]['record_money'] = $total_money;
+                 //下一次计算的判断值自增
+                 if ($i < count($res)) {
+                     $i++;
+                 }
+             }*/
             return ajax_return($pay_record, 'OK', 200);
         } else {
             $user_data = Db::table('fy_customer')->where('openid', $this->userInfo['openid'])->find();
@@ -425,23 +465,25 @@ class Customer extends Mustlogin
         }
     }
 
-    public function getTotalMoney($month,$year){
-        $start_date=$year.'-'.$month;
-        $start_date =strtotime($start_date);
-        $end_date=$year.'-'.($month+1);
-        $end_date =strtotime($end_date);
+    public function getTotalMoney($month, $year)
+    {
+        $start_date = $year . '-' . $month;
+        $start_date = strtotime($start_date);
+        $end_date = $year . '-' . ($month + 1);
+        $end_date = strtotime($end_date);
         $total_money = Db::table('fy_wx_pay_refund_log')
             ->field('sum(money) totalMoney')
-            ->where(['isdelete' => 0, 'openid' => $this->userInfo['openid'],'create_time'=>['between',[$start_date,$end_date]]])
+            ->where(['isdelete' => 0, 'openid' => $this->userInfo['openid'], 'create_time' => ['between', [$start_date, $end_date]]])
             ->select();
-       // dump($total_money);
+        // dump($total_money);
 //        dump(date('Y-m-d H:i:s',$start_date));
 //        dump($end_date);
 //        dump(date('Y-m-d H:i:s',$end_date));
 //        dump(date('Y-m-d H:i:s',$end_date));
 
-        return ajax_return($total_money,'',200);
+        return ajax_return($total_money, '', 200);
     }
+
     /**
      * 会员权益中心
      */
@@ -602,29 +644,29 @@ class Customer extends Mustlogin
         $this->assign('titleName', "个人消息 ");
         if ($this->request->isAjax()) {
             //查出所有的msg
-            $message_user_list = Db::table('fy_message_user')->where('openid',$this->userInfo['openid'])->page($page, $size)->select();
+            $message_user_list = Db::table('fy_message_user')->where('openid', $this->userInfo['openid'])->page($page, $size)->select();
             //处理text非空、message_id非空的数据
-            $text_list=array();
-            $msg_ids='';
+            $text_list = array();
+            $msg_ids = '';
             foreach ($message_user_list as $k => $v) {
                 //将订单消息赋给text_list
-                if($v['text']!=null){
-                    $text_list[$k]=$v;
+                if ($v['text'] != null) {
+                    $text_list[$k] = $v;
                     $text = json_decode($v['text']);
                     $text_list[$k]['title'] = $text->title;
                     $text_list[$k]['detail'] = $text->detail;
                 }
                 //将消息的message_id赋给msg_ids
-               if($v['message_id']!=null){
-                    $msg_ids=$v['message_id'].','.$msg_ids;
-               }
+                if ($v['message_id'] != null) {
+                    $msg_ids = $v['message_id'] . ',' . $msg_ids;
+                }
             }
             //联表查询message_id在msg_ids中的消息
             $message_list = Db::table('fy_message_user')
                 ->alias('u')
                 ->join('fy_message m', 'u.message_id=m.id')
                 ->order('u.create_time', 'desc')
-                ->where(['message_id'=>['in',$msg_ids],'u.openid' => $this->userInfo['openid'], 'm.status' => 1, 'm.isdelete' => 0, 'm.is_send' => 1])
+                ->where(['message_id' => ['in', $msg_ids], 'u.openid' => $this->userInfo['openid'], 'm.status' => 1, 'm.isdelete' => 0, 'm.is_send' => 1])
                 ->select();
             //将订单消息和普通消息组合，返回给前端
             $all_message_list = array_merge($message_list, $text_list);
