@@ -79,7 +79,7 @@
             html += '    <div class="grey mt5 mb5">' + tagParse(data[i].desc) + '</div>';
             html += '    <div class="clear">';
             //转换时间戳
-            html += '        <p class="fl grey">使用有效期：' + formatDate(data[i].expire_start_date) + '－' +formatDate(data[i].expire_end_date) + '</p>';
+            html += '        <p class="fl grey">有效期：' + formatDate(data[i].expire_start_date,'yyyy-MM-dd') + '－' +formatDate(data[i].expire_end_date,'yyyy-MM-dd') + '</p>';
             //console.log(parseInt("{$currentTime}"),data[i].expire_end_date)
             if (data[i].is_use == 0) {
                 if (data[i].status == 1) {

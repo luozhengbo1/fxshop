@@ -85,12 +85,17 @@
         <li class="fr tr">{$goods['yieldly']??'贵阳'}</li>
     </ul>
     <div class="mb10">
+        {if condition="$lotterys" /}
         <p class="detail-block" id="goodsLottery" onclick="showPop('goodsVoucher')">
             <span class="title">优惠</span>
-            <span class="content"><span class="icon-couple"></span>{$lottery?$lottery['id']:'无'}</span>
+            <span class="content">
+                <span class="icon-couple"></span>
+                  {if condition="$lotterys[0]['type'] eq 2" /}满{$lotterys[0]['coupon_real_money']}优惠{$lotterys[0]['coupon_money']}元' {/if}
+                 {if condition="$lotterys[0]['type'] eq 4" /}包邮券 {/if}
+            </span>
             <i class="detail_footer-icon"></i>
         </p>
-
+        {/if}
         {if condition="$goods['return_score'] neq 0" /}
         <p class="detail-block">
             <span class="title">促销</span>
@@ -369,15 +374,12 @@
                     var html =''
                     var data = res.data;
                     for(var i=0; i<data.length; i++){
-                        var coupon_type = data[i].coupon_type;
+                        var coupon_type = data[i].type;
                         html +='<div class="tax-box">'
                         html += '<div class="clear">'
                         html += '    <div class="fl w70p" style="">'
                         html += '        <p class="tc f16 mt5">'+data[i].name+'</p>'
                         switch(coupon_type){
-                            case constant.coupon.dikou:
-                                //  html +='                <p class="price"> '+data[i].point_score+'积分 </p>';
-                                break;
                             case  constant.coupon.youhui:
                                 html += '        <p class="tc mt5"> 满'+data[i].coupon_real_money+'优惠'+data[i].coupon_money+'元 </p>'
                                 break;
@@ -385,7 +387,8 @@
                                 html += '        <p class="tc mt5"> 包邮券</p>'
                                 break;
                         }
-                        html += '        <p class="tc mt5">有效期：' + formatDate(data[i].expire_start_date) + '－' +formatDate(data[i].expire_end_date) + '</p>'
+                       // html += '        <p class="tc mt5">剩余有效期：' +returnTime(parseInt(data[i].expire_end_date)-parseInt(data[i].expire_start_date))  + '</p>'
+                        html += '        <p class="tc mt5">剩余有效期：' +returnTime(parseInt(data[i].expire_end_date)-parseInt("{$currentTime}") )+ '</p>'
                         html += '    </div>'
                         html += '    <div class="tax-split fl" >'
                         html += '        <div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>'
@@ -453,7 +456,7 @@
         zhuheVal = zhuheVal.substr(0,zhuheVal.length-1);
         console.log(zhuheId);
        // debugger;
-        if (skuZhuhe != null) {
+        if (skuZhuhe != null && skuZhuhe !="") {
             skuZhuhe.forEach(function (item) {
                 var id='';
                 if(!(item.attribute_name)){
