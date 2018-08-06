@@ -34,7 +34,6 @@ class CustomerActivityLog extends Controller
         }
         //按参与状态搜索
         if ($this->request->param("join_status")) {
-            dump($this->request->param("join_status"));die;
             $map['actlog.status'] = $this->request->param("join_status");
         }
     }
@@ -60,7 +59,7 @@ class CustomerActivityLog extends Controller
             ->join('fy_activity act', 'actlog.activity_id = act.id')
             ->join('fy_customer cus', 'actlog.uid = cus.id')
             ->where($map)
-            ->paginate(20);
+            ->paginate(10);
         $page = $list->render();
         // 模板变量赋值
         $this->view->assign('page', $page);

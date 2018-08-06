@@ -9,7 +9,11 @@
            value="{$Request.param.endtime}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" {/literal} >
     <div class="select-box" style="width:250px">
         <select name="join_status" class="select">
-            <option value="" >参与状态...</option>
+            <option value=""
+            <?php
+                    if( isset($_GET['join_status'])){
+                        echo $_GET['join_status']==''?'selected':'';
+                    } ?>>参与状态...</option>
             <option value="1"
             <?php
                     if( isset($_GET['join_status'])){
@@ -19,7 +23,7 @@
             <option value="2"
             <?php
                     if( isset($_GET['join_status'])){
-                        echo $_GET['join_status']==0?'selected':'';
+                        echo $_GET['join_status']==2?'selected':'';
                     } ?>
             >参与中</option>
         </select>

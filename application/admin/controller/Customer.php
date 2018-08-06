@@ -30,7 +30,7 @@ class Customer extends Controller
         if ($this->request->param("grade")) {
             $id = $this->request->param("grade");
             $grade = Db::table('fy_customer_grade')->where('id', $id)->find();
-            $map['experience']=['between',[$grade['experience_start'],$grade['experience_end']]];
+            $map['experience'] = ['between', [$grade['experience_start'], $grade['experience_end']]];
         }
 
         //按创建时间段搜索
@@ -55,11 +55,24 @@ class Customer extends Controller
     {
         if ($this->request->isPost()) {
             $header = ['用户名', '昵称', '性别', '生日', '手机号', '邮箱', '积分', '连续签到天数',
-                '经验值',  '头像', '微信ID', '登录IP', '国家', '省份', '城市', '创建时间'];
+                '经验值', '头像', '微信ID', '登录IP', '国家', '省份', '城市', '创建时间', '等级'];
             $data = \think\Db::name("customer")->field("username,nickname,sex,birthday,mobile,email,
             score,continuity_day,experience,headimgurl,openid,login_ip,country,province,city,create_time")
                 ->order("id desc")->select();
-            foreach ($data as &$v){
+
+            //处理等级数据、性别、时间数据
+            $grade_list = Db::table('fy_customer_grade')->field('name,experience_start,experience_end')->where(['isdelete' => 0])->select();
+            foreach ($data as &$v) {
+                foreach ($grade_list as $grade_val) {
+                    if ($v['experience'] >= $grade_val['experience_start'] && $v['experience'] <= $grade_val['experience_end']) {
+                        $v['grade'] = $grade_val['name'];
+                    }
+                }
+                if ($v['sex'] == 1) {
+                    $v['sex'] = '男';
+                } elseif ($v['sex'] == 2) {
+                    $v['sex'] = '女';
+                }
                 $v['create_time'] = date('Y-m-d H:i:s', $v['create_time']);
             }
             if ($error = \Excel::export($header, $data, "会员信息表", '2007')) {
@@ -83,7 +96,7 @@ class Customer extends Controller
         if (!$vo) {
             throw new HttpException(404, '该记录不存在');
         }
-        $address = Db::name('customer_address')->where(['uid'=>$id,'status'=>1])->find();
+        $address = Db::name('customer_address')->where(['uid' => $id, 'status' => 1])->find();
         $this->view->assign("vo", $vo);
         $this->view->assign("address", $address);
         return $this->view->fetch();
