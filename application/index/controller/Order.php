@@ -781,7 +781,7 @@
                 if(!$data['id']  ){
                     return $this->error('缺少参数id');
                 }
-                Db::name('order')->where(['id'=>$data['id']])->update(['user_wuliu_order'=>$data['user_wuliu_order']]);
+                Db::name('order')->where(['id'=>$data['id']])->update(['user_wuliu_type_order'=>$data['user_wuliu_type_order'],]);
                 return ajax_return('','更新成功','200');
             }
         }
@@ -804,17 +804,16 @@
         {
             if($this->request->isAjax()){
                 $data =$this->request->post();
-                if(!$data['order_id'] || !$data['goods_id'] || !$data['order_id'] ){
+                if(!$data['id'] ){
                     return $this->error('缺少参数id');
                 }
-                $update=[];
-                $update['after_sale_reson'] ='';
-                $update['after_sale_type'] ='';
-                $update['after_sale_ask'] ='';
-                $update['after_sale_remark'] ='';
-                $update['after_sale_pic'] ='';
-                $update['after_sale_is'] =0;
-                Db::name('order_goods')->where(['order_id'=>$data['order_id'],'goods_id'=>$data['goods_id'],'sku_id'=>$data['sku_id']])->update($update);
+                if(!$data['ogid'] ){
+                    return $this->error('缺少参数ogid');
+                }
+                Db::name('after_sale_following')
+                    ->where(['id'=>$data['id']])->delete();
+                Db::name('order_goods')
+                    ->where(['id'=>$data['ogid']])->update(['after_sale_is'=>0,'after_handle_is'=>0]);
                 return ajax_return('','取消成功','200');
             }
 

@@ -137,6 +137,16 @@
             <label class="ml20">拒绝售后理由:</label>
             <input type="text" placeholder="拒绝售后理由"   name="refused_reason"  value="{$afterData['refused_reason']??''}" class="form_control w240 lh30 h30" >
           </div>
+          <div>
+            <label class="ml20">用户邮寄地址:</label>
+            <p>{$afterData['moren_address']}</p>
+          </div>
+          <div>
+            <label class="ml20">商家邮寄物流单号:</label>
+            <p>{$afterData['user_wuliu_type_order']??''}</p>
+            <a href="javascript:;" onclick="shopSure(this,{$vo['id']},{$afterData['id']},{$afterData['after_sale_type']})" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 商家确认收货</a>
+          </div>
+          </div>
         </div>
       </form>
       {/if}
@@ -245,6 +255,23 @@
                    }
                })
            }
+       }
+       //商户确认售后收货
+       function shopSure(obj,ogid,id,after_sale_type) {
+           if( id ){
+               $.ajax({
+                   url:"{:url('order/shopSure')}",
+                   type:'post',
+                   data:{'id':id,ogid:ogid,'after_sale_type':after_sale_type},
+                   success:function (res) {
+                       alert(res.msg)
+                       $('.btn-refresh').click();
+                   }
+               })
+           }
+       }
+       function shopSendGoods(obj,ogid,id,after_sale_type) {
+
        }
 </script>
 {/block}
