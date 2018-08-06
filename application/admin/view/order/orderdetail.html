@@ -1,277 +1,315 @@
- {extend name="template/base" /}
+{extend name="template/base" /}
 {block name="content"}
 <div class="page-container">
-  <div>
-    <p>收货人地址信息：</p>
-    <table class="table table-border table-bordered table-hover table-bg mt-20">
-      <thead>
-      <tr class="text-c">
-        <td width="25%">收货人</td>
-        <td width="25%">电话</td>
-        <td width="25%">地址</td>
-        <td width="25%">详细地址</td>
-      </tr>
-      </thead>
-      <tbody>
-      <tr class="text-c">
-        <td class="f-14">{$address['name']}</td>
-        <td class="f-14">{$address['mobile']}</td>
-        <td class="f-14">{$address['address']} </td>
-        <td class="f-14"> {$address['street']}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <div>
-    <p>订单信息：</p>
-    {volist name="orderDetail" id="vo" empty=""}
-    <table class="table table-border table-bordered table-hover table-bg mt-20">
-      <thead>
-      <tr class="text-c">
-        <td>商品图片</td>
-        <td>商品名</td>
-          <td>价格</td>
-          <td>下单时间</td>
-        <td>商品规格</td>
-        <td>购买数量</td>
-          <td>运费</td>
-        <td>状态</td>
-        {if condition="$vo['after_sale_is'] neq 0"}
-        <td>售后理由</td>
-        {/if}
-        <td>退货退款操作</td>
-      </tr>
-      </thead>
-      <tbody>
-      <tr class="text-c">
-        <td class="f-14"><img width="30" height="30" src="{$vo['goods_detail']['main_image']}" /></td>
-        <td class="f-14">{$vo['goods_detail']['name']}</td>
-          <td class="f-14">{$vo['price']}</td>
-          <td class="f-14">{$vo['create_time']|date="Y-m-d H:i:s",###}</td>
-
-        <td class="f-14">{$vo['sku_val']}</td>
-        <td class="f-14">{$vo['goods_num']}</td>
-          <td class="f-14">{$vo['goods_detail']['postage']??'0'}</td>
-          <td class="f-14">
-            {php}$isSendCN =[
-            '未发货','已发货','待评价','退款中','退款完成','待回复','完成','退货退款'
-            ];
-            echo $isSendCN[$vo['is_send']];
-            {/php}
-
-          </td>
-
-        <td class="f-14">
-          {if condition="$vo.is_return eq 1"}
-          <a href="javascript:;" onclick="refundHandle('{$vo[\'order_id\']}',{$vo['id']},'yes')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 确定退款</a>
-          <a href="javascript:;" onclick="refundHandle('{$vo[\'order_id\']}',{$vo['id']},'no')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 拒绝退款</a>
-          {elseif  condition="$vo.is_return eq 2" /}
-          已退款
-          {/if}
-        </td>
-      </tr>
-      </tbody>
-    </table>
     <div>
-    <form>
-      <div class="mt20 mb20">
-        <label class="ml20">快递名称:</label>
-        <input type="text" placeholder="快递名称" name="logistics_name" value="{$vo['logistics_name']??''}" class="form_control w120 lh30 h30" >
-        <label>快递单号:</label>
-        <input type="text" placeholder="快递单号"  name="logistics_number"  value="{$vo['logistics_number']??''}" class="form_control w120 lh30 h30" >
-        <a href="javascript:;" onclick="addPost(this,{$vo['id']})" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 保存</a>
-      </div>
-    </form>
-  </div>
+        <p>收货人地址信息：</p>
+        <table class="table table-border table-bordered table-hover table-bg mt-20">
+            <thead>
+            <tr class="text-c">
+                <td width="25%">收货人</td>
+                <td width="25%">电话</td>
+                <td width="25%">地址</td>
+                <td width="25%">详细地址</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-c">
+                <td class="f-14">{$address['name']}</td>
+                <td class="f-14">{$address['mobile']}</td>
+                <td class="f-14">{$address['address']}</td>
+                <td class="f-14"> {$address['street']}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <div>
-      <p>售后处理信息</p>
-      {php}
-        if($vo['after_sale_is']==1){
-          $afterData = \think\Db::name('after_sale_following')->where(['ogid'=>$vo['id'],'order_id'=>$vo['order_id']])->order('apply_time')->find();
-        }
-      {/php}
-       {if condition="$afterData neq false"}
-      <form>
-        <div class="mt20 mb20">
-          <label class="ml20">申请人:</label>
-          <span>{php}
-            $user = \think\Db::name('customer')->where(['openid'=> $afterData['openid']])->find();
-            echo  $user['nickname'];
-            {/php}</span>
-          <label class="ml20">申请类型:</label>
-          <span>{php}
-                if($afterData['after_sale_type']==1){
-                    echo "换货";
-                }else if($afterData['after_sale_type']==2){
-                    echo "维修";
-                }else if($afterData['after_sale_type']==3){
-                    echo "退款/退货";
-                }
-          {/php}</span>
-          <label class="ml20">申请理由:</label>
-          <span>{$afterData['after_sale_reson']??'无'}</span><br/>
-          <label class="ml20">售后要求:</label>
-          <span>{$afterData['after_sale_ask']??'无'}</span>
-          <label class="ml20">备注说明:</label>
-          <span>{$afterData['after_sale_remark']??'无'}</span>
-          <label class="ml20">图片:</label>
-          <span>{php}
-            if($afterData['after_sale_pic']){
-              $afterData['after_sale_pic'] = explode(',',$afterData['after_sale_pic']);
-              foreach(   $afterData['after_sale_pic'] as $vpic){
-                echo "<img src='$vpic' width='100' height='100'>";
-              }
-            }
-          {/php}</span><br/>
-          <label class="ml20">申请时间:</label>
-          <span>{$afterData['apply_time']|date="Y-m-d H:i:s",###}</span>
-          <p>
-            <a href="javascript:;" onclick="afterSaleHandle(this,{$vo['id']},{$afterData['id']},{$afterData['after_sale_type']},'yes')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 同意售后处理</a>
-            <a href="javascript:;" onclick="refuseAfterSale(this,{$vo['id']},{$afterData['id']},{$afterData['after_sale_type']},'no')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 不同意售后处理</a>
-          </p>
-          <div>
-            <label class="ml20">商家邮寄地址:</label>
-            <input type="text" placeholder="商家邮寄地址 收货人 联系电话 缺一不可"   name="shop_wuliu_address"  value="{$afterData['shop_wuliu_address']??''}" class="form_control w240 lh30 h30" >
-          </div>
-          <div>
-            <label class="ml20">拒绝售后理由:</label>
-            <input type="text" placeholder="拒绝售后理由"   name="refused_reason"  value="{$afterData['refused_reason']??''}" class="form_control w240 lh30 h30" >
-          </div>
-          <div>
-            <label class="ml20">用户邮寄地址:</label>
-            <p>{$afterData['moren_address']}</p>
-          </div>
-          <div>
-            <label class="ml20">商家邮寄物流单号:</label>
-            <p>{$afterData['user_wuliu_type_order']??''}</p>
-            <a href="javascript:;" onclick="shopSure(this,{$vo['id']},{$afterData['id']},{$afterData['after_sale_type']})" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 商家确认收货</a>
-          </div>
-          </div>
+        <p>订单信息：</p>
+        {volist name="orderDetail" id="vo" empty=""}
+        <table class="table table-border table-bordered table-hover table-bg mt-20">
+            <thead>
+            <tr class="text-c">
+                <td>商品图片</td>
+                <td>商品名</td>
+                <td>价格</td>
+                <td>下单时间</td>
+                <td>商品规格</td>
+                <td>购买数量</td>
+                <td>运费</td>
+                <td>状态</td>
+                {if condition="$vo['after_sale_is'] neq 0"}
+                <td>售后理由</td>
+                {/if}
+                <td>退货退款操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-c">
+                <td class="f-14"><img width="30" height="30" src="{$vo['goods_detail']['main_image']}"/></td>
+                <td class="f-14">{$vo['goods_detail']['name']}</td>
+                <td class="f-14">{$vo['price']}</td>
+                <td class="f-14">{$vo['create_time']|date="Y-m-d H:i:s",###}</td>
+
+                <td class="f-14">{$vo['sku_val']}</td>
+                <td class="f-14">{$vo['goods_num']}</td>
+                <td class="f-14">{$vo['goods_detail']['postage']??'0'}</td>
+                <td class="f-14">
+                    {php}$isSendCN =[
+                    '未发货','已发货','待评价','退款中','退款完成','待回复','完成','退货退款'
+                    ];
+                    echo $isSendCN[$vo['is_send']];
+                    {/php}
+
+                </td>
+
+                <td class="f-14">
+                    {if condition="$vo.is_return eq 1"}
+                    <a href="javascript:;" onclick="refundHandle('{$vo[\'order_id\']}',{$vo['id']},'yes')"
+                       class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont"> </i> 确定退款</a>
+                    <a href="javascript:;" onclick="refundHandle('{$vo[\'order_id\']}',{$vo['id']},'no')"
+                       class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont"> </i> 拒绝退款</a>
+                    {elseif condition="$vo.is_return eq 2" /}
+                    已退款
+                    {/if}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div>
+            <form>
+                <div class="mt20 mb20">
+                    <label class="ml20">快递名称:</label>
+                    <input type="text" placeholder="快递名称" name="logistics_name" value="{$vo['logistics_name']??''}"
+                           class="form_control w120 lh30 h30">
+                    <label>快递单号:</label>
+                    <input type="text" placeholder="快递单号" name="logistics_number" value="{$vo['logistics_number']??''}"
+                           class="form_control w120 lh30 h30">
+                    <a href="javascript:;" onclick="addPost(this,{$vo['id']})" class="btn btn-success radius mr-5 ml20"><i
+                            class="Hui-iconfont"> </i> 保存</a>
+                </div>
+            </form>
         </div>
-      </form>
-      {/if}
-
+        {php}
+        if($vo['after_sale_is']==1){
+        $afterData =
+        \think\Db::name('after_sale_following')->where(['ogid'=>$vo['id'],'order_id'=>$vo['order_id']])->order('apply_time')->find();
+        }
+        if(isset($afterData)){
+        {/php}
+        <div>
+            <p>售后处理信息</p>
+            <form>
+                <div class="mt20 mb20">
+                    <label class="ml20">申请人:</label>
+                    <span>
+                        {php}
+                            $user = \think\Db::name('customer')->where(['openid'=> $afterData['openid']])->find();
+                            echo  $user['nickname'];
+                        {/php}
+                    </span><br/>
+                    <label class="ml20">申请类型:</label>
+                    <span>
+                        {php}
+                            if($afterData['after_sale_type']==1){
+                                echo "换货";
+                            }else if($afterData['after_sale_type']==2){
+                                echo "维修";
+                            }else if($afterData['after_sale_type']==3){
+                                echo "退款/退货";
+                            }
+                        {/php}
+                    </span><br/>
+                    <label class="ml20">申请理由:</label>
+                    <span>{$afterData['after_sale_reson']??'无'}</span><br/>
+                    <label class="ml20">售后要求:</label>
+                    <span>{$afterData['after_sale_ask']??'无'}</span><br/>
+                    <label class="ml20">备注说明:</label>
+                    <span>{$afterData['after_sale_remark']??'无'}</span><br/>
+                    <label class="ml20">图片:</label>
+                    <span>
+                        {php}
+                            if($afterData['after_sale_pic']){
+                                $afterData['after_sale_pic'] = explode(',',$afterData['after_sale_pic']);
+                                foreach(   $afterData['after_sale_pic'] as $vpic){
+                                    echo "<img src='$vpic' width='100' height='100'>";
+                                }
+                            }
+                        {/php}
+                    </span><br/>
+                    <label class="ml20">申请时间:</label>
+                    <span>{$afterData['apply_time']|date="Y-m-d H:i:s",###}</span>
+                    <p>
+                        <a href="javascript:;"
+                           onclick="afterSaleHandle(this,{$vo['id']},{$afterData['id']},{$afterData['after_sale_type']},'yes')"
+                           class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont"> </i> 同意售后处理</a>
+                        <a href="javascript:;"
+                           onclick="refuseAfterSale(this,{$vo['id']},{$afterData['id']},{$afterData['after_sale_type']},'no')"
+                           class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont"> </i> 不同意售后处理</a>
+                    </p>
+                    <div>
+                        <label class="ml20">商家邮寄地址:</label>
+                        <input type="text" placeholder="商家邮寄地址 收货人 联系电话 缺一不可" name="shop_wuliu_address"
+                               value="{$afterData['shop_wuliu_address']??''}" class="form_control w240 lh30 h30">
+                    </div>
+                    <div>
+                        <label class="ml20">拒绝售后理由:</label>
+                        <input type="text" placeholder="拒绝售后理由" name="refused_reason"
+                               value="{$afterData['refused_reason']??''}" class="form_control w240 lh30 h30">
+                    </div>
+                    <div>
+                        <label class="ml20">用户邮寄地址:</label>
+                        <p>{$afterData['moren_address']}</p>
+                    </div>
+                    <div>
+                        <label class="ml20">商家邮寄物流单号:</label>
+                        <p>{$afterData['user_wuliu_type_order']??''}</p>
+                        <a href="javascript:;"
+                           onclick="shopSure(this,{$vo['id']},{$afterData['id']},{$afterData['after_sale_type']})"
+                           class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont"> </i> 商家确认收货</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {php} } {/php}
     </div>
     {/volist}
     <tr>
-      <td>订单总价</td>
-      <td>
-        <input type="text" placeholder="订单总金额"  step="0.01" name="total_price"  value="{$vo['total_price']??''}" class="form_control w120 lh30 h30" >
-        {if condition="$vo['pay_status'] eq 0"}
-        <a href="javascript:;" onclick="editTotalPrice('{$vo[\'order_id\']}')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 修改总金额</a>
-        {/if}
-      </td>
+        <td>订单总价</td>
+        <td>
+            <input type="text" placeholder="订单总金额" step="0.01" name="total_price" value="{$vo['total_price']??''}"
+                   class="form_control w120 lh30 h30">
+            {if condition="$vo['pay_status'] eq 0"}
+            <a href="javascript:;" onclick="editTotalPrice('{$vo[\'order_id\']}')"
+               class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont"> </i> 修改总金额</a>
+            {/if}
+        </td>
     </tr>
-  </div>
 </div>
 {/block}
 {block name="script"}
 <script>
-        function  addPost(obj,id) {
+    function addPost(obj, id) {
 
-            var logistics_name = $(obj).prev().prev().prev().val()
-            var logistics_number = $(obj).prev('input').val()
+        var logistics_name = $(obj).prev().prev().prev().val()
+        var logistics_number = $(obj).prev('input').val()
+        $.ajax({
+            url: "{:url('order/addPost')}",
+            type: 'post',
+            data: {'id': id, 'logistics_name': logistics_name, 'logistics_number': logistics_number},
+            success: function (res) {
+                alert(res.msg)
+                document.location.reload()
+            }
+        })
+    }
+
+    function editTotalPrice(order_id) {
+        var totalPrice = $('input[name="total_price"]').val();
+        if (totalPrice <= 0) {
+            alert('订单金额不能小于0');
+            return false;
+        }
+        if (order_id) {
             $.ajax({
-                url:"{:url('order/addPost')}",
-                type:'post',
-                data:{'id':id,'logistics_name':logistics_name,'logistics_number':logistics_number},
-                success:function (res) {
+                url: "{:url('order/editTotalPrice')}",
+                type: 'post',
+                data: {'order_id': order_id, 'totalPrice': totalPrice},
+                success: function (res) {
                     alert(res.msg)
-                    document.location.reload()
+                    $('.btn-refresh').click();
                 }
             })
         }
-       function  editTotalPrice(order_id) {
-            var totalPrice = $('input[name="total_price"]').val();
-            if(totalPrice<=0){
-                alert('订单金额不能小于0');
+    }
+
+    function refundHandle(order_id, id, flag) {
+        if (order_id && id) {
+            $.ajax({
+                url: "{:url('order/refund')}",
+                type: 'post',
+                data: {'order_id': order_id, 'id': id, 'flag': flag},
+                success: function (res) {
+                    alert(res.msg)
+                    $('.btn-refresh').click();
+
+                    // document.location.relaod();
+                }
+            })
+        }
+    }
+
+    function afterSaleHandle(obj, ogid, id, after_sale_type, flag) {
+        if (after_sale_type != 3) {
+            var shop_wuliu_address = $('input[name="shop_wuliu_address"]').val()
+            if (shop_wuliu_address == '') {
+                alert('请填写用户邮寄地址');
+                $('input[name="shop_wuliu_address"]').css('display', 'block')
                 return false;
             }
-           if(order_id){
-               $.ajax({
-                   url:"{:url('order/editTotalPrice')}",
-                   type:'post',
-                   data:{'order_id':order_id,'totalPrice':totalPrice},
-                   success:function (res) {
-                       alert(res.msg)
-                       $('.btn-refresh').click();
-                   }
-               })
-           }
-       }
-       function refundHandle(order_id,id,flag) {
-           if(order_id && id ){
-               $.ajax({
-                   url:"{:url('order/refund')}",
-                   type:'post',
-                   data:{'order_id':order_id,'id':id,'flag':flag},
-                   success:function (res) {
-                       alert(res.msg)
-                       $('.btn-refresh').click();
-
-                       // document.location.relaod();
-                   }
-               })
-           }
-       }
-       function  afterSaleHandle(obj,ogid,id,after_sale_type,flag) {
-            if(after_sale_type!=3){
-                var  shop_wuliu_address = $('input[name="shop_wuliu_address"]').val()
-                if(shop_wuliu_address==''){
-                    alert('请填写用户邮寄地址');
-                    $('input[name="shop_wuliu_address"]').css('display','block')
-                    return false;
+        }
+        if (id) {
+            $.ajax({
+                url: "{:url('order/afterSaleHandle')}",
+                type: 'post',
+                data: {
+                    'id': id,
+                    ogid: ogid,
+                    'after_sale_type': after_sale_type,
+                    shop_wuliu_address: shop_wuliu_address,
+                    flag: flag
+                },
+                success: function (res) {
+                    alert(res.msg)
+                    $('.btn-refresh').click();
                 }
-            }
-           if( id ){
-               $.ajax({
-                   url:"{:url('order/afterSaleHandle')}",
-                   type:'post',
-                   data:{'id':id,ogid:ogid,'after_sale_type':after_sale_type,shop_wuliu_address:shop_wuliu_address,flag:flag},
-                   success:function (res) {
-                       alert(res.msg)
-                       $('.btn-refresh').click();
-                   }
-               })
-           }
-       }
-       function refuseAfterSale(obj,ogid,id,after_sale_type,flag) {
-           if(flag=='no'){
-               var  refused_reason = $('input[name="refused_reason"]').val()
-               if(refused_reason==''){
-                   alert('请填拒绝售后理由');
-                   $('input[name="refused_reason"]').css('display','block')
-                   return false;
-               }
-           }
-           if( id ){
-               $.ajax({
-                   url:"{:url('order/refuseAfterSale')}",
-                   type:'post',
-                   data:{'id':id,ogid:ogid,'after_sale_type':after_sale_type,refused_reason:refused_reason,flag:flag},
-                   success:function (res) {
-                       alert(res.msg)
-                       $('.btn-refresh').click();
-                   }
-               })
-           }
-       }
-       //商户确认售后收货
-       function shopSure(obj,ogid,id,after_sale_type) {
-           if( id ){
-               $.ajax({
-                   url:"{:url('order/shopSure')}",
-                   type:'post',
-                   data:{'id':id,ogid:ogid,'after_sale_type':after_sale_type},
-                   success:function (res) {
-                       alert(res.msg)
-                       $('.btn-refresh').click();
-                   }
-               })
-           }
-       }
-       function shopSendGoods(obj,ogid,id,after_sale_type) {
+            })
+        }
+    }
 
-       }
+    function refuseAfterSale(obj, ogid, id, after_sale_type, flag) {
+        if (flag == 'no') {
+            var refused_reason = $('input[name="refused_reason"]').val()
+            if (refused_reason == '') {
+                alert('请填拒绝售后理由');
+                $('input[name="refused_reason"]').css('display', 'block')
+                return false;
+            }
+        }
+        if (id) {
+            $.ajax({
+                url: "{:url('order/refuseAfterSale')}",
+                type: 'post',
+                data: {
+                    'id': id,
+                    ogid: ogid,
+                    'after_sale_type': after_sale_type,
+                    refused_reason: refused_reason,
+                    flag: flag
+                },
+                success: function (res) {
+                    alert(res.msg)
+                    $('.btn-refresh').click();
+                }
+            })
+        }
+    }
+
+    //商户确认售后收货
+    function shopSure(obj, ogid, id, after_sale_type) {
+        if (id) {
+            $.ajax({
+                url: "{:url('order/shopSure')}",
+                type: 'post',
+                data: {'id': id, ogid: ogid, 'after_sale_type': after_sale_type},
+                success: function (res) {
+                    alert(res.msg)
+                    $('.btn-refresh').click();
+                }
+            })
+        }
+    }
+
+    function shopSendGoods(obj, ogid, id, after_sale_type) {
+
+    }
 </script>
 {/block}
