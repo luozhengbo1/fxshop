@@ -296,15 +296,9 @@
                 break;
         }
     }
-
     $('#goodPriceTitle').html(priceScoreShow($('#goodPriceTitle').data('type'),$('#goodPriceTitle').data('price'),$('#goodPriceTitle').data('score')));
-
     //showarea  展示区域1-限时抢购2-积分商城3-日常售卖4-热销产品
     var show_area = $('#popupMain').attr('data-showarea');
-    var detailTag = "{$goods['detail']??''}";
-    detailTag = detailTag.replace(/&lt;/g,"<");
-    detailTag = detailTag.replace(/&gt;/g,">");
-    detailTag = detailTag.replace(/&quot;/g,"'");
     var url = {
         getSku:"{:url('index/goods/getSku')}",
         addCar:"{:url('index/car/addCar')}",
@@ -325,7 +319,7 @@
         skuId:'',
         val:'',
     }
-    $('#goodDetail').append(detailTag);
+
     $(function () {
         navTab();
         eventDeal( );//页面点击事件处理
@@ -344,6 +338,7 @@
         })
         imageLazy();
         goodsLottery();
+        $('#goodDetail').append(tagParse("{$goods['detail']??''}"));
 
     })
     //获取商品评论
