@@ -58,7 +58,7 @@ Class Lottery extends Mustlogin
 
     }
     #券详情
-    public function detail($id,$goods_id)
+    public function detail($id,$goods_id,$type)
     {
         $this->assign('titleName', "券详情");
         $lottery = Db::name('lottery')
@@ -69,7 +69,7 @@ Class Lottery extends Mustlogin
 
         $this->assign('lottery', $lottery);
         $this->assign('goods_id', $goods_id);
-
+        $this->assign('type', $type);
         return  $this->view->fetch();
 
     }

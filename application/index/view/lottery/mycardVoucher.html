@@ -87,8 +87,8 @@
                         html += '        <button class="fr layui-btn layui-btn-xs layui-btn-radius" disabled="disabled" style="background-color: #d0d0d0">&nbsp;&nbsp;已过期 &nbsp;&nbsp;</button>';
                     } else {
                         switch(coupon_type){
-                            case  constant.coupon.daijin:
-                                html += '        <a onclick="showCode()" class="fr layui-btn layui-btn-xs layui-btn-radius" >&nbsp;&nbsp;去使用&nbsp;&nbsp;</a>';
+                            case  constant.coupon.daijin://id:data.coupon_id,goods_id:data.id
+                                html += '        <a href="'+urlConnect("{:url('lottery/detail')}",{id:data[i].id,goods_id:data[i].goods_id,type:'use'})+'"  class="fr layui-btn layui-btn-xs layui-btn-radius" >&nbsp;&nbsp;去使用&nbsp;&nbsp;</a>';
                                 break;
                             default:
                                 html += '        <a  href="'+urlConnect("{:url('goods/detail')}",{id:data[i].goods_id})+'" class="fr layui-btn layui-btn-xs layui-btn-radius" >&nbsp;&nbsp;去使用&nbsp;&nbsp;</a>';
