@@ -3,9 +3,34 @@
 	use think\Db;
 	use think\Cache;
 	use think\Session;
+	use think\Controller;
 
-	Class Goods extends Mustlogin
+	Class Goods extends  Controller
 	{
+	    protected $userInfo;
+	    public function __construct()
+        {
+            parent::__construct();
+            $sessionUserInfo = \think\Session::get('wx_user');
+            $this->userInfo = Db::name('customer')->where(['openid'=>$sessionUserInfo['openid']])->find();
+            $this->view->assign('param', $this->request->param('param'));
+            //会员收藏数量
+            $car = Db::table('fy_car')
+                ->where([
+                    'openid'=>$this->userInfo['openid'],
+                    'status'=> 1
+                ])
+                ->select();
+            $carNum=0;
+            foreach ($car as $k=>$v){
+                $carNum +=$v['goods_num'];
+            }
+            if($carNum>999) $carNum=$carNum+'+';
+            $time = time();
+            $this->view->assign('currentTime',  $time);
+            $this->assign('carNum', $carNum);
+        }
+
         #获取商品的
         public function  getGoodsHotOrOther($page,$size,$show_area='3')
         {

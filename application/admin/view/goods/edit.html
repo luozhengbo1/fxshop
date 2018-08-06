@@ -516,6 +516,7 @@
         </form>
 
     </div>
+    {php} var_dump($pageType);{/php}
     {if condition="isset($pageType)  eq 'show'"}
     <div class="show-phone-detail-wrap">
         <div class="show-btn">
@@ -523,7 +524,6 @@
             </button>
         </div>
         <div  class="show-phone-detail">
-
             <iframe src="/index.php/index/goods/detail/id/{$vo.id}.html" scrolling="yes" frameborder="0"></iframe>
         </div>
     </div>

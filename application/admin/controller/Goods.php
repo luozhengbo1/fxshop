@@ -38,6 +38,9 @@ class Goods extends Controller
         if ($this->request->param("status") ) {
             $map['status'] =$this->request->param("status") ;
         }
+        if ($this->request->param("user_id") ) {
+            $map['user_id'] =$this->request->param("user_id") ;
+        }
 
         if($this->uid!=1){#非超级管理员只显示自己的商品
             $map['user_id'] =$this->uid;
@@ -140,6 +143,13 @@ class Goods extends Controller
 
     		#常规参数处理
     		if( !empty($data['routine_key']) || !empty($data['routine_val'])   ){
+                #参数为空删除
+                foreach ($data['routine_key'] as $key=>&$roval){
+                    if($roval=='' && $data['routine_val'][$key]=='' ){
+                        unset($data['routine_key'][$key]);
+                        unset($data['routine_val'][$key]);
+                    }
+                }
     			$goods['routine'] = json_encode(array_combine($data['routine_key'],$data['routine_val']));
     		}
     		 $res = Db::name('goods')->insert($goods);
@@ -252,6 +262,8 @@ class Goods extends Controller
 
         $this->datalist($model, $map,'','orderby');
 //        echo Db::name('goods')->getLastSql();die;
+        $userList = Db::name('admin_user')->field('id,realname,account')->where(['isdelete'=>0,'id'=>['>',1]])->select();
+        $this->view->assign('userList',$userList);
         $this->view->assign('goodsClassList',getGoodsClassTree());
         return $this->  view->fetch();
     }
@@ -350,6 +362,13 @@ class Goods extends Controller
 
             #常规参数处理
             if( !empty($data['routine_key']) || !empty($data['routine_val'])   ){
+                #参数为空删除
+                foreach ($data['routine_key'] as $key=>&$roval){
+                    if($roval=='' && $data['routine_val'][$key]=='' ){
+                        unset($data['routine_key'][$key]);
+                        unset($data['routine_val'][$key]);
+                    }
+                }
                 $goods['routine'] = json_encode(array_combine($data['routine_key'],$data['routine_val']));
             }
             $res = Db::name('goods')->where(['id'=>$data['id']])->update($goods);
@@ -519,14 +538,13 @@ class Goods extends Controller
                     }
                 }
             }
-            $goodsData['service'] = ($goodsData['service']!='')?json_decode($goodsData['service'],true):'';
+            $goodsData['service'] = ($goodsData['service'])?json_decode($goodsData['service'],true):'';
             $this->view->assign('vo',$goodsData);
             #常规属性
             $this->view->assign('proprety_name_val',$proprety_name_val);
             $this->view->assign('skuData',$skuData);
             $this->view->assign('proprety_name',$proprety_name);
             $this->view->assign('proprety_name1',$arr);
-            $this->view->assign('pageType',$this->request->param('type'));
             return $this->view->fetch('edit');
         }
 

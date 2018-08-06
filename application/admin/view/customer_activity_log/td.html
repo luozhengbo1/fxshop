@@ -1,0 +1,13 @@
+<td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
+<td><?php
+    $activity_name=\think\Db::table('fy_activity')->field('name')->where('id',$vo['activity_id'])->find();
+    echo $activity_name['name'];
+    ?></td>
+<td>{$vo.activity_detail}</td>
+<td><?php
+    $uid=\think\Db::table('fy_customer')->field('nickname')->where('id',$vo['uid'])->find();
+    echo $uid['nickname'];
+    ?></td>
+<td>{$vo.create_time}</td>
+<td>{$vo.update_time}</td>
+<td>{if ($vo['status']==1)}已参与{else if($vo['status']==0) /}参与中{/if}</td>

@@ -728,13 +728,16 @@
                     return ajax_return('','请选择售后类型和原因','500');
                 }
                 $goods = Db::name('goods')->where(['id'=>$data['goods_id']])->find();
-//                if($goods['settlement_type']==2||$goods['settlement_type']==3){
-//                    return ajax_return('','积分商品不支持售后','500');
-//                }
+                if($goods['settlement_type']==2||$goods['settlement_type']==3){
+                    if($data['after_sale_type']==3){#表示退货退款
+                        return ajax_return('','积分商品不支持退货退款','500');
+                    }
+                }
                 $orderGoods = Db::name('order_goods')->where(['order_id'=>$data['order_id'],'goods_id'=>$data['goods_id'],'sku_id'=>$data['sku_id']])->find();
                 $time = time() ;
-                $day7 = 24*60*60;
-                if($time - $orderGoods['get_goods_time'] > $day7 && ($data['after_sale_type']==1 ||$data['after_sale_type']==3)  ){#大于7天不可以退换货
+                $orderGoods['address_detail'] = json_decode( $orderGoods['address_detail'],true);
+                $day7 = 24*60*60*7;
+                if( ($time - $orderGoods['get_goods_time'] > $day7 )&& $data['after_sale_type']==1   ){#大于7天不可以退换货
                     return ajax_return('','超过七天不可以退换货，请联系卖家','500');
                 }
                 $update=[];
@@ -743,8 +746,15 @@
                 $update['after_sale_ask'] = $data['after_sale_ask'];
                 $update['after_sale_remark'] = $data['after_sale_remark'];
                 $update['after_sale_pic'] = $data['after_sale_pic'];
-                $update['after_sale_is'] = 1;
-                Db::name('order_goods')->where(['order_id'=>$data['order_id'],'goods_id'=>$data['goods_id'],'sku_id'=>$data['sku_id']])->update($update);
+                $update['order_id'] = $orderGoods['order_id'];
+                $update['goods_id'] = $orderGoods['goods_id'];
+                $update['openid'] = $orderGoods['openid'];
+                $update['after_status'] = 1;
+                $update['apply_time'] = $time;
+                $update['mobile'] = $orderGoods['address_detail']['mobile'];
+                $update['ogid'] = $orderGoods['id'];
+                Db::name('after_sale_following')->insert($update);
+                Db::name('order_goods')->where(['id'=>$orderGoods['id']])->update(['after_sale_is'=>1]);
                 return ajax_return('','申请成功','200');
             }
             $this->assign('titleName', "商品售后");
@@ -759,8 +769,6 @@
                 ->where(['fy_order.order_id'=>$order_id,'fy_order_goods.goods_id'=>$goods_id])
                 ->find();
             $orderDetail['goods_detail'] = json_decode($orderDetail['goods_detail'],true);
-//            echo Db::name('order')->getLastSql();
-//            dump($orderDetail);die;
             $this->view->assign('orderDetail',$orderDetail);
             return $this->view->fetch('orderService');
         }
@@ -815,8 +823,6 @@
                 ->where(['fy_order.order_id'=>$order_id,'fy_order_goods.goods_id'=>$goods_id])
                 ->find();
             $orderDetail['goods_detail'] = json_decode($orderDetail['goods_detail'],true);
-//            echo Db::name('order')->getLastSql();
-//            dump($orderDetail);die;
             $this->view->assign('orderDetail',$orderDetail);
             return $this->view->fetch('logistics');
         }
@@ -887,7 +893,6 @@
                     return  ajax_return('','确认失败','500');
                 }
             }else{
-
                 $this->assign('titleName', "商品评价");
                 $this->assign('sku_id', $this->request->param('sku_id'));
                 $this->assign('goods_id', $this->request->param('goods_id'));

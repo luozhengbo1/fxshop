@@ -203,14 +203,14 @@ class Order extends Controller
                 $user_data = Db::table('fy_customer')->where('openid', $orderGoods['openid'])->find();
                 $order_message = new OrderMessage();
                 $user_info = ['uid' => $user_data['id'], 'openid' => $user_data['openid']];
-                $goods_info = ['goods_data' => $orderGoods['goods_detail']['name']];
+                $goods_info = ['goods_data' => $orderGoods['goods_detail']];
                 $order_info = [
                     'order_id' => $orderGoods['order_id'],
                     'send_time' => $orderGoods['send_time'],
                     'logistics_name' => $orderGoods['logistics_name'],
                     'logistics_number' => $orderGoods['logistics_number']
                 ];
-                $order_message->payMessage('deliver_success', $user_info, $goods_info, $order_info);
+                $order_message->payMessage('diliver_success', $user_info, $goods_info, $order_info);
                 return ajax_return('', '操作成功', '200');
             } else {
                 return ajax_return('', '操作失败', '500');
@@ -268,7 +268,6 @@ class Order extends Controller
                 #扣去奖券金额   #未使用优惠券直接退款商品价格 如果不包邮直接商品价格，
                 if ($orderGoods['goods_detail']['settlement_type'] == 1) {
                     $goodsAttribute = Db::name('goods_attribute')->field('price')->where(['id' => $orderGoods['sku_id']])->find();
-
                     $returnMoney = $orderGoods['goods_num'] * $goodsAttribute['price'];
                     #如果商品包邮，退款时减去邮费
                     if ($orderGoods['goods_detail']['free_type'] == 0) {
@@ -298,6 +297,12 @@ class Order extends Controller
             }
             return ajax_return('', '处理成功', '200');
         }
+
+    }
+
+    #拒绝售后
+    public function refuseAfterSale()
+    {
 
     }
 
@@ -381,7 +386,6 @@ class Order extends Controller
                         $wx_pay_refund_log_insert['type'] = 2;#退款
                         $wx_pay_refund_log_insert['order_id'] = $orderGoods['order_id'];
                         Db::name('wx_pay_refund_log')->insert($wx_pay_refund_log_insert);
-
                         //退款通知发送到商城
                         $order_message = new OrderMessage();
 //                        dump($orderData);
