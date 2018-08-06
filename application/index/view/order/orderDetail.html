@@ -116,7 +116,7 @@
                 <button class="layui-btn layui-btn-primary  layui-btn-xs orderCancel layui-btn-radius" onclick="cancelOrder('{$orderDetail[0][\'order_id\']}')">取消订单</button>
                 <button class="layui-btn  layui-btn-xs  layui-btn-danger layui-btn-radius orderPay" onclick="pay('{$orderDetail[0][\'order_id\']}')">付款</button>
                 {/if}
-                <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius">联系卖家</button>
+                <a href="tel://{$vo['goods_detail']['service_mobile']}" class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius">联系卖家</a>
             </div>
         </li>
     </ul>

@@ -118,9 +118,12 @@
            //dump($skuData);die;
             $this->view->assign('guestGoods',$this->guestYouLike($id));
             $arr = $this->getGoodsgoodOrBad($id);
+            $lotterys =$this->return_lottery($id);
+            $this->view->assign('lotterys', $lotterys);
             $this->view->assign('bad', $arr['bad']  );
             $this->view->assign('mid', $arr['mid'] );
             $this->view->assign('good', $arr['good'] );
+            //dump($lotterys);
             //$this->view->assign('lotterys',$this->getLottery($id) );
             return $this->view->fetch();
         }
@@ -308,6 +311,10 @@
         }
         #获取商品所具有的券
         public function  goodsLottery($goods_id){
+            $lotterys =$this->return_lottery($goods_id);
+            return ajax_return($lotterys,'',200);
+        }
+        public function return_lottery($goods_id){
             #取出商品中发行中，未删除的所具有的券
             $time = time();
             $lotterys = Db::name('lottery')->where([
@@ -316,7 +323,7 @@
                 'isdelete'=>'0',
                 'grant_start_date' =>['<', $time],
                 'grant_end_date' =>['>', $time],
-                ])->select();
+            ])->select();
 //            echo Db::name('lottery')->getLastSql();
 //            dump($lotterys);die;
             #查询领取过这个奖券
@@ -329,6 +336,6 @@
                     }
                 }
             }
-            return ajax_return($lotterys,'',200);
+            return $lotterys;
         }
 	}

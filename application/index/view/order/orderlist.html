@@ -136,6 +136,7 @@
         for(var j = 0; j < result.length; j++){
             var data=result[j],//单个订单
                 order_status = data[0].order_status ,
+                serviceMobile='',
                 order_id=data[0].order_id+"";//订单id
             html +='<li class="orderWrap">';
             html +='<div class=" order_box_hd pt10">';
@@ -162,6 +163,7 @@
                     show_area = detail.show_area,
                     stype =  detail.settlement_type,
                     is_send= data[i].is_send,
+                    serviceMobile =detail.service_mobile,
                     service = eval(detail['service']),
                     order_id = data[i].order_id;
                 console.log(goods_id)
@@ -246,7 +248,7 @@
             if(order_status ==constant.order.cancelOrder){
                 html +='        <button class="layui-btn layui-btn-primary layui-btn-xs orderCancel  layui-btn-radius" onclick="deleOrder(\''+order_id+'\')">删除</button>';
             }
-            html +='        <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius">联系卖家</button>';
+            html +='        <a  href="tel://'+serviceMobile+'"  class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius">联系卖家</a>';
             html +='    </div>';
             html +='     <div class="bottomLine"></div>';
             html +='</li>';

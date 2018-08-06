@@ -152,8 +152,13 @@ Date.prototype.Format = function (fmt) { //author: meizz
         if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 };
-function formatDate(time) {
-   return new Date(parseInt(time)*1000).Format("yyyy-MM-dd hh:mm:ss");
+function formatDate(time,formate) {
+    if(formate){
+        return new Date(parseInt(time)*1000).Format(formate);
+    }else{
+        return new Date(parseInt(time)*1000).Format("yyyy-MM-dd hh:mm:ss");
+    }
+
 }
 //tab导航
 function navTab(){

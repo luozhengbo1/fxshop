@@ -1,4 +1,5 @@
 {include file="Public/header-resource"}
+<script src="__STATIC__/index/plugins/qrcode.js"></script>
 <body class="title-top footer-boottom">
 {include file="Public/header-title"}
 <!--券详情-->
@@ -36,13 +37,35 @@
             <p class="pl10 grey f12">门市价<i>￥ {$lottery['coupon_money']}</i></p>
         </li>
         <li>
+            {if condition="$type eq 'use' " /}
+            <a class="go-pay" onclick="goUse();" >立&nbsp;即&nbsp;使&nbsp;用</a>
+            {/if}
+            {if condition="$type eq 'buy' " /}
             <a class="go-pay" href="{:url('lottery/affairm',['lottery_id'=>$lottery['id'],'goods_id'=>$lottery['goods_id']])}" >立&nbsp;即&nbsp;抢&nbsp;购</a>
+            {/if}
+
         </li>
     </ul>
+
 </div>
 <script>
    $('.content').html(tagParse("{$lottery['desc']}"));
+   function goUse() {
+// 设置参数方式
+       layer.open({
+           content: ' <div id="qrcode" style="width: 200px; height: 200px"></div>'
+           ,btn: '关闭'
+       });
+       var qrcode = new QRCode('qrcode', {
+           text: 'your content',
+           width: 200,
+           height: 200,
+           colorDark : '#000000',
+           colorLight : '#ffffff',
+           correctLevel : QRCode.CorrectLevel.H
+       });
 
+   }
 </script>
 </body>
 </html>

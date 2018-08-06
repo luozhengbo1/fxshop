@@ -125,7 +125,7 @@
             case  constant.coupon.daijin:
                 html +='                <p class="tc base-color mb10">代'+data.coupon_money+'元券</p>';
 
-                html +='                <a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10" href="'+urlConnect("{:url('lottery/detail')}",{id:data.coupon_id,goods_id:data.id})+'" >立即购买</a>';
+                html +='                <a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10" href="'+urlConnect("{:url('lottery/detail')}",{id:data.coupon_id,goods_id:data.id,type:'buy'})+'" >立即购买</a>';
                 break;
             case constant.coupon.mianyou:
                 html +='                <p class="price f12"> 包邮券 </p>';
