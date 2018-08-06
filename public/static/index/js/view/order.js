@@ -94,13 +94,15 @@ function orderBtnHtml(json){
 
             if(json.is_send ==2 || json.is_send ==5 || json.is_send ==6){
                 if(json.show_area !=showArea.score){
-                    if(json.after_sale_is==afterSale.yes)
+                    if(json.after_sale_is==afterSale.yes){
                         html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="cancelAfterSale(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">取消申请</a>';
+
+                    }
                     else
                         html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="goOrderService(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">申请售后</a>';
                 }
             }
-
+            html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="logistic(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">售后跟踪</a>';
             break;
     }
     if( json.is_send!=constant.send.returnMoney && json.is_send!=constant.send.nosend ){
