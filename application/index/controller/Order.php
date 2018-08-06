@@ -773,6 +773,19 @@
             return $this->view->fetch('orderService');
         }
 
+        #用户填写物流单号
+        public function orderServerAddWuliu()
+        {
+            if($this->request->isAjax()){
+                $data =$this->request->post();
+                if(!$data['id']  ){
+                    return $this->error('缺少参数id');
+                }
+                Db::name('order')->where(['id'=>$data['id']])->update(['user_wuliu_order'=>$data['user_wuliu_order']]);
+                return ajax_return('','更新成功','200');
+            }
+        }
+
         #删除订单
         public function  deleteOrder()
         {

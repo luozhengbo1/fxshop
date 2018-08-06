@@ -256,55 +256,69 @@ class Order extends Controller
     {
         if ($this->request->isAjax()) {
             $data = $this->request->post();
-            if (!$data['order_id'] || !$data['id'] || !$data['after_sale_type']) {
+            if (!$data['ogid'] || !$data['id'] || !$data['after_sale_type']) {
                 return ajax_return('', '缺少参数');
             }
-            $orderGoods = Db::name('order_goods')->where(['id' => $data['id']])->find();
+            $orderGoods = Db::name('order_goods')->where(['id' => $data['ogid']])->find();
             $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'], true);
-            if ($data['after_sale_type'] == 1 || $data['after_sale_type'] == 2) {#1 换货 2，维修 ， 3 退款/退货
-                #处理换货 通过
-                Db::name('order_goods')->where(['id' => $data['id']])->update(['after_sale_is' => 2]);
-            } else if ($data['after_sale_type'] == 3) {#退款
-                #通过退款，将该商品订单改为退款 状态，
-                #计算退款金额  将退款金额计算在订单表中， 修改字段is_return 为1 ，
-                #扣去奖券金额   #未使用优惠券直接退款商品价格 如果不包邮直接商品价格，
-                if ($orderGoods['goods_detail']['settlement_type'] == 1) {
-                    $goodsAttribute = Db::name('goods_attribute')->field('price')->where(['id' => $orderGoods['sku_id']])->find();
-                    $returnMoney = $orderGoods['goods_num'] * $goodsAttribute['price'];
-                    #如果商品包邮，退款时减去邮费
-                    if ($orderGoods['goods_detail']['free_type'] == 0) {
-                        $returnMoney -= $orderGoods['goods_num'] * $orderGoods['goods_detail']['postage'];
+            if(!$orderGoods['after_handle_is']){ #未处理，进行处理
+                Db::name('order_goods')->where(['id' => $data['ogid']])->update(['after_handle_is' => 1]);
+                Db::name('after_sale_following')->where(['id' => $data['id']])
+                    ->update(['shop_wuliu_address' => $data['shop_wuliu_address'],'handle_time'=>time()]);
+                if ($data['after_sale_type'] == 3) {#退款
+                    #通过退款，将该商品订单改为退款 状态，
+                    #计算退款金额  将退款金额计算在订单表中， 修改字段is_return 为1 ，
+                    #扣去奖券金额   #未使用优惠券直接退款商品价格 如果不包邮直接商品价格，
+                    if ($orderGoods['goods_detail']['settlement_type'] == 1) {
+                        $goodsAttribute = Db::name('goods_attribute')->field('price')->where(['id' => $orderGoods['sku_id']])->find();
+                        $returnMoney = $orderGoods['goods_num'] * $goodsAttribute['price'];
+                        #如果商品包邮，退款时减去邮费
+                        if ($orderGoods['goods_detail']['free_type'] == 0) {
+                            $returnMoney -= $orderGoods['goods_num'] * $orderGoods['goods_detail']['postage'];
+                        }
+                        if ($returnMoney < 0) $returnMoney = 0.01;
+//                      $returnMoney = $goodsAttribute['price'];
+                        $res1 = Db::name('order_goods')->where([
+                            'order_id' => $data['order_id'],
+                            'id' => $data['id'],
+                        ])->update(['is_return' => 1, 'return_price' => $goodsAttribute['price'], 'is_send' => 7, 'after_sale_is' => 1]); # 待退款  3退款中 7退款中/退货退款
+                        $ordertmp = Db::name('order')->field('return_price_all')->where([
+                            'order_id' => $orderGoods['order_id']])->find();
+                        #退款价
+                        $order = Db::name('order')->where('order_id', $orderGoods['order_id'])->find();
+                        $update = [];
+                        $update = ['return_price_all' => $goodsAttribute['price'] + $ordertmp['return_price_all']];
+                        $res = Db::name('order')
+                            ->where('order_id', $data['order_id'])
+                            #总退款加上0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成
+                            ->update($update);
                     }
-                    if ($returnMoney < 0) $returnMoney = 0.01;
-//                $returnMoney = $goodsAttribute['price'];
-                    $res1 = Db::name('order_goods')->where([
-                        'order_id' => $data['order_id'],
-                        'id' => $data['id'],
-                    ])->update(['is_return' => 1, 'return_price' => $goodsAttribute['price'], 'is_send' => 7, 'after_sale_is' => 2]); # 待退款  3退款中 7退款中/退货退款
-                    $ordertmp = Db::name('order')->field('return_price_all')->where([
-                        'order_id' => $data['order_id']])->find();
-                    #退款价
-                    $order = Db::name('order')->where('order_id', $data['order_id'])->find();
-                    $update = [];
-                    $update = ['return_price_all' => $goodsAttribute['price'] + $ordertmp['return_price_all']];
-                    $res = Db::name('order')
-                        ->where('order_id', $data['order_id'])
-                        #总退款加上0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成
-                        ->update($update);
-                } else {
-                    #处理 通过
-                    Db::name('order_goods')->where(['id' => $data['id']])->update(['after_sale_is' => 2]);
                 }
-
+            }else{
+                return ajax_return('', '已经处理过了', '200');
             }
+
             return ajax_return('', '处理成功', '200');
         }
-
     }
 
     #拒绝售后
     public function refuseAfterSale()
     {
+        if ($this->request->isAjax()) {
+            $data = $this->request->post();
+            if (!$data['ogid'] || !$data['id'] || !$data['after_sale_type']) {
+                return ajax_return('', '缺少参数');
+            }
+            $orderGoods = Db::name('order_goods')->where(['id' => $data['ogid']])->find();
+            if(!$orderGoods['after_handle_is']){ #未处理，进行处理
+                Db::name('order_goods')->where(['id' => $data['ogid']])->update(['after_handle_is' => 1]);
+                Db::name('after_sale_following')->where(['id' => $data['id']])->update(['refused_reason' => $data['refused_reason'],'handle_time'=>time()]);
+            }else{
+                return ajax_return('', '已经处理过了', '200');
+            }
+            return ajax_return('', '处理成功', '200');
+        }
 
     }
 
