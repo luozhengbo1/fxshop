@@ -1,4 +1,4 @@
-{extend name="template/base" /}
+ {extend name="template/base" /}
 {block name="content"}
 <div class="page-container">
   <div>
@@ -131,7 +131,7 @@
           </p>
           <div>
             <label class="ml20">商家邮寄地址:</label>
-            <input type="text" placeholder="商家邮寄地址"   name="shop_wuliu_address"  value="{$afterData['shop_wuliu_address']??''}" class="form_control w240 lh30 h30" >
+            <input type="text" placeholder="商家邮寄地址 收货人 联系电话 缺一不可"   name="shop_wuliu_address"  value="{$afterData['shop_wuliu_address']??''}" class="form_control w240 lh30 h30" >
           </div>
           <div>
             <label class="ml20">拒绝售后理由:</label>
@@ -198,6 +198,7 @@
                    success:function (res) {
                        alert(res.msg)
                        $('.btn-refresh').click();
+
                        // document.location.relaod();
                    }
                })
@@ -209,6 +210,7 @@
                 if(shop_wuliu_address==''){
                     alert('请填写用户邮寄地址');
                     $('input[name="shop_wuliu_address"]').css('display','block')
+                    return false;
                 }
             }
            if( id ){
@@ -227,15 +229,16 @@
            if(flag=='no'){
                var  refused_reason = $('input[name="refused_reason"]').val()
                if(refused_reason==''){
-                   alert('请填拒绝售后理由地址');
+                   alert('请填拒绝售后理由');
                    $('input[name="refused_reason"]').css('display','block')
+                   return false;
                }
            }
            if( id ){
                $.ajax({
                    url:"{:url('order/refuseAfterSale')}",
                    type:'post',
-                   data:{'id':id,ogid:ogid,'after_sale_type':after_sale_type,shop_wuliu_address:shop_wuliu_address,flag:flag},
+                   data:{'id':id,ogid:ogid,'after_sale_type':after_sale_type,refused_reason:refused_reason,flag:flag},
                    success:function (res) {
                        alert(res.msg)
                        $('.btn-refresh').click();
