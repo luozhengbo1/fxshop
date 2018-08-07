@@ -83,6 +83,17 @@
             </td>
         </tr>
     </table>
+    <p>默认寄回地址</p>
+    <div class="aui-address-box-default">
+        {if condition="$address  neq 0 "}
+        <a class="show-address" href="{:\\think\\Url::build(\'address/index\')}">
+            <p class="bold f14">{$address['name']??''}  &nbsp;&nbsp; {$address['mobile']}</p>
+            <p>{$address['address']??''}&nbsp;&nbsp;&nbsp;&nbsp; {$address['street']??''}</p>
+        </a>
+        {else /}
+        <a class="add-address" href="{:\\think\\Url::build(\'address/index\')}"><span>还没有地址去添加吧</span></a>
+        {/if}
+    </div>
     <div class="footer-fixed pt5 pb5">
         <a onclick="" class="bootstrap-btn w50p btn-info fl">客服中心</a>
         <a onclick="saveService();" class="w50p bootstrap-btn btn-warning fr">立即提交</a>
@@ -90,6 +101,7 @@
 </form>
 
 <script>
+    recodeHistoryUrl();
     var url={
         upload:"{:url('index/upload/upload')}",
         dele:"",
@@ -114,6 +126,7 @@
         }
         var data= formData('form');
         var pic='';
+        data.address_id ="{$address['id']}"
         $('.pic').each(function (index,ele) {
             pic +=$(ele).val()+',';
         })

@@ -202,4 +202,52 @@ Array
     [return_msg] => OK
     [sign] => 5ACBCFFE24B8A835D1DFB79539EF7A02
 )
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ERROR
+    [err_code_des] => 订单已全额退款
+    [mch_id] => 1441217402
+    [nonce_str] => N5kHYgoXBNt9U5RW
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 949AE327B8B6C0C7F5F88A6BC05A941E
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ERROR
+    [err_code_des] => 订单已全额退款
+    [mch_id] => 1441217402
+    [nonce_str] => hyLIXudPmIq2R8Um
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 5B18590A8A025D530E612AEEDFFA7E0D
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ERROR
+    [err_code_des] => 订单已全额退款
+    [mch_id] => 1441217402
+    [nonce_str] => iU0S0W4LvOjBBzv1
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 161B7D24EC616973BAB56D2A7B9DE79E
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => ERROR
+    [err_code_des] => 订单已全额退款
+    [mch_id] => 1441217402
+    [nonce_str] => RAitiTEdCPmoEcmz
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => A53D52D0F02AAD7382CF129C15E5966F
+)
 

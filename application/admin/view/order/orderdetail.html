@@ -93,83 +93,81 @@
         $afterData =
         \think\Db::name('after_sale_following')->where(['ogid'=>$vo['id'],'order_id'=>$vo['order_id']])->order('apply_time')->find();
         }
-        if(isset($afterData)){
-        {/php}
-        <div>
-            <p>售后处理信息</p>
-            <form>
-                <div class="mt20 mb20">
-                    <label class="ml20">申请人:</label>
-                    <span>
-                        {php}
-                            $user = \think\Db::name('customer')->where(['openid'=> $afterData['openid']])->find();
-                            echo  $user['nickname'];
-                        {/php}
-                    </span><br/>
-                    <label class="ml20">申请类型:</label>
-                    <span>
-                        {php}
-                            if($afterData['after_sale_type']==1){
-                                echo "换货";
-                            }else if($afterData['after_sale_type']==2){
-                                echo "维修";
-                            }else if($afterData['after_sale_type']==3){
-                                echo "退款/退货";
-                            }
-                        {/php}
-                    </span><br/>
-                    <label class="ml20">申请理由:</label>
-                    <span>{$afterData['after_sale_reson']??'无'}</span><br/>
-                    <label class="ml20">售后要求:</label>
-                    <span>{$afterData['after_sale_ask']??'无'}</span><br/>
-                    <label class="ml20">备注说明:</label>
-                    <span>{$afterData['after_sale_remark']??'无'}</span><br/>
-                    <label class="ml20">图片:</label>
-                    <span>
-                        {php}
-                            if($afterData['after_sale_pic']){
-                                $afterData['after_sale_pic'] = explode(',',$afterData['after_sale_pic']);
-                                foreach(   $afterData['after_sale_pic'] as $vpic){
-                                    echo "<img src='$vpic' width='100' height='100'>";
-                                }
-                            }
-                        {/php}
-                    </span><br/>
-                    <label class="ml20">申请时间:</label>
-                    <span>{$afterData['apply_time']|date="Y-m-d H:i:s",###}</span>
-                    <p>
-                        <a href="javascript:;"
-                           onclick="afterSaleHandle(this,{$vo['id']},{$afterData['id']},{$afterData['after_sale_type']},'yes')"
-                           class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont"> </i> 同意售后处理</a>
-                        <a href="javascript:;"
-                           onclick="refuseAfterSale(this,{$vo['id']},{$afterData['id']},{$afterData['after_sale_type']},'no')"
-                           class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont"> </i> 不同意售后处理</a>
-                    </p>
-                    <div>
-                        <label class="ml20">商家邮寄地址:</label>
-                        <input type="text" placeholder="商家邮寄地址 收货人 联系电话 缺一不可" name="shop_wuliu_address"
-                               value="{$afterData['shop_wuliu_address']??''}" class="form_control w240 lh30 h30">
-                    </div>
-                    <div>
-                        <label class="ml20">拒绝售后理由:</label>
-                        <input type="text" placeholder="拒绝售后理由" name="refused_reason"
-                               value="{$afterData['refused_reason']??''}" class="form_control w240 lh30 h30">
-                    </div>
-                    <div>
-                        <label class="ml20">用户邮寄地址:</label>
-                        <p>{$afterData['moren_address']}</p>
-                    </div>
-                    <div>
-                        <label class="ml20">商家邮寄物流单号:</label>
-                        <p>{$afterData['user_wuliu_type_order']??''}</p>
-                        <a href="javascript:;"
-                           onclick="shopSure(this,{$vo['id']},{$afterData['id']},{$afterData['after_sale_type']})"
-                           class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont"> </i> 商家确认收货</a>
-                    </div>
-                </div>
-            </form>
-        </div>
-        {php} } {/php}
+      {/php}
+       {if condition="isset($afterData) neq false"}
+      <form>
+        <div class="mt20 mb20">
+          <label class="ml20">申请人:</label>
+          <span>{php}
+            $user = \think\Db::name('customer')->where(['openid'=> $afterData['openid']])->find();
+            echo  $user['nickname'];
+            {/php}</span>
+          <label class="ml20">申请类型:</label>
+          <span>{php}
+                if($afterData['after_sale_type']==1){
+                    echo "换货";
+                }else if($afterData['after_sale_type']==2){
+                    echo "维修";
+                }else if($afterData['after_sale_type']==3){
+                    echo "退款/退货";
+                }
+          {/php}</span>
+          <label class="ml20">申请理由:</label>
+          <span>{$afterData['after_sale_reson']??'无'}</span><br/>
+          <label class="ml20">售后要求:</label>
+          <span>{$afterData['after_sale_ask']??'无'}</span>
+          <label class="ml20">备注说明:</label>
+          <span>{$afterData['after_sale_remark']??'无'}</span>
+          <label class="ml20">图片:</label>
+          <span>{php}
+            if($afterData['after_sale_pic']){
+              $afterData['after_sale_pic'] = explode(',',$afterData['after_sale_pic']);
+              foreach(   $afterData['after_sale_pic'] as $vpic){
+                echo "<img src='$vpic' width='100' height='100'>";
+              }
+            }
+          {/php}</span><br/>
+          <label class="ml20">申请时间:</label>
+          <span>{$afterData['apply_time']|date="Y-m-d H:i:s",###}</span>
+          <p>
+            <a href="javascript:;" onclick="afterSaleHandle(this,{$vo['id']},{$afterData['id']},{$afterData['after_sale_type']},'yes')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 同意售后处理</a>
+            <a href="javascript:;" onclick="refuseAfterSale(this,{$vo['id']},{$afterData['id']},{$afterData['after_sale_type']},'no')" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 不同意售后处理</a>
+          </p>
+          <div>
+            <label class="ml20">商家邮寄地址:</label>
+            <input type="text" placeholder="商家邮寄地址 收货人 联系电话 缺一不可"   name="shop_wuliu_address"  value="{$afterData['shop_wuliu_address']??''}" class="form_control w240 lh30 h30" >
+          </div>
+          <div>
+            <label class="ml20">拒绝售后理由:</label>
+            <input type="text" placeholder="拒绝售后理由"   name="refused_reason"  value="{$afterData['refused_reason']??''}" class="form_control w240 lh30 h30" >
+          </div>
+          <div>
+            <label class="ml20">用户邮寄地址:</label>
+            <p>{php}
+                $afterData['moren_address'] = json_decode($afterData['moren_address'],true);
+              echo $afterData['moren_address']['name'];
+              echo $afterData['moren_address']['mobile'],'<br/>';
+              echo $afterData['moren_address']['address'];
+              echo $afterData['moren_address']['street'];
+              {/php}
+            </p>
+          </div>
+          <div>
+            <label class="ml20">商家邮寄物流单号:</label>
+            <p>{$afterData['user_wuliu_type_order']??'无'}</p>
+            <a href="javascript:;" onclick="shopSure(this,{$vo['id']},{$afterData['id']},{$afterData['after_sale_type']})" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 商家确认收货</a>
+          </div>
+          <div>
+            <label class="ml20">商家换货/维修物流填写:</label><br />
+            <label class="ml20">物流类型:</label>
+            <input type="text" placeholder="物流类型"   name="send_wuliu_type"  value="{$afterData['send_wuliu_type']??''}" class="form_control w240 lh30 h30" >
+            <label class="ml20">物流单号:</label>
+            <input type="text" placeholder="物流单号"   name="send_wuliu_order"  value="{$afterData['send_wuliu_order']??''}" class="form_control w240 lh30 h30" >
+            <a href="javascript:;" onclick="shopSendGoods(this,{$vo['id']},{$afterData['id']},{$afterData['after_sale_type']})" class="btn btn-success radius mr-5 ml20"><i class="Hui-iconfont">  </i> 商家确认发货</a>
+          </div>
+          </div>
+        </form>
+      {/if}
     </div>
     {/volist}
     <tr>
@@ -187,7 +185,7 @@
 {/block}
 {block name="script"}
 <script>
-    function addPost(obj, id) {
+      function addPost(obj, id) {
 
         var logistics_name = $(obj).prev().prev().prev().val()
         var logistics_number = $(obj).prev('input').val()
@@ -237,6 +235,7 @@
         }
     }
 
+    //同意售后处理
     function afterSaleHandle(obj, ogid, id, after_sale_type, flag) {
         if (after_sale_type != 3) {
             var shop_wuliu_address = $('input[name="shop_wuliu_address"]').val()
@@ -265,51 +264,60 @@
         }
     }
 
-    function refuseAfterSale(obj, ogid, id, after_sale_type, flag) {
-        if (flag == 'no') {
-            var refused_reason = $('input[name="refused_reason"]').val()
-            if (refused_reason == '') {
-                alert('请填拒绝售后理由');
-                $('input[name="refused_reason"]').css('display', 'block')
-                return false;
-            }
-        }
-        if (id) {
-            $.ajax({
-                url: "{:url('order/refuseAfterSale')}",
-                type: 'post',
-                data: {
-                    'id': id,
-                    ogid: ogid,
-                    'after_sale_type': after_sale_type,
-                    refused_reason: refused_reason,
-                    flag: flag
-                },
-                success: function (res) {
-                    alert(res.msg)
-                    $('.btn-refresh').click();
-                }
-            })
-        }
-    }
 
-    //商户确认售后收货
-    function shopSure(obj, ogid, id, after_sale_type) {
-        if (id) {
-            $.ajax({
-                url: "{:url('order/shopSure')}",
-                type: 'post',
-                data: {'id': id, ogid: ogid, 'after_sale_type': after_sale_type},
-                success: function (res) {
-                    alert(res.msg)
-                    $('.btn-refresh').click();
-                }
-            })
-        }
-    }
+    //商家拒绝退款
+       function refuseAfterSale(obj,ogid,id,after_sale_type,flag) {
+           if(flag=='no'){
+               var  refused_reason = $('input[name="refused_reason"]').val()
+               if(refused_reason==''){
+                   alert('请填拒绝售后理由');
+                   $('input[name="refused_reason"]').css('display','block')
+                   return false;
+               }
+           }
+           if( id ){
+               $.ajax({
+                   url:"{:url('order/refuseAfterSale')}",
+                   type:'post',
+                   data:{'id':id,ogid:ogid,'after_sale_type':after_sale_type,refused_reason:refused_reason,flag:flag},
+                   success:function (res) {
+                       alert(res.msg)
+                       $('.btn-refresh').click();
+                   }
+               })
+           }
+       }
+       //商户确认售后收货
+       function shopSure(obj,ogid,id,after_sale_type) {
+           if( id ){
+               $.ajax({
+                   url:"{:url('order/shopSure')}",
+                   type:'post',
+                   data:{'id':id,ogid:ogid,'after_sale_type':after_sale_type},
+                   success:function (res) {
+                       alert(res.msg)
+                       // $('.btn-refresh').click();
+                   }
+               })
+           }
+       }
+       //商家发货
+       function shopSendGoods(obj,ogid,id,after_sale_type) {
+           if( id ){
+               var type=$('input[name="send_wuliu_type"]').val();
+               var wuliu_order=$('input[name="send_wuliu_order"]').val();
+               $.ajax({
+                   url:"{:url('order/shopsSendGoods')}",//商家确认发货
+                   type:'post',
+                   data:{'id':id,ogid:ogid,'after_sale_type':after_sale_type,'send_wuliu_order':wuliu_order,'send_wuliu_type':type},
+                   success:function (res) {
+                       alert(res.msg)
+                       // $('.btn-refresh').click();
+                   }
+               })
+           }
+       }
 
-    function shopSendGoods(obj, ogid, id, after_sale_type) {
 
-    }
 </script>
 {/block}

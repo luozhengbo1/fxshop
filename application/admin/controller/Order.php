@@ -333,15 +333,19 @@ class Order extends Controller
                 return ajax_return('', '缺少参数');
             }
             $orderGoods = Db::name('order_goods')->where(['id' => $data['ogid']])->find();
+            $update = [];
             if($data['after_sale_type']==1){#换货 2 维修
-                Db::name('after_sale_following')
-                    ->where(['id' => $data['id']])
-                    ->update(['after_status' =>5 ,"huan_wei_handle_time"=>time()]);#换货
+                $update['after_status']=5;
             }else if($data['after_sale_type']==2){ #
-                Db::name('after_sale_following')
-                    ->where(['id' => $data['id']])
-                    ->update(['after_status' =>4 ,"huan_wei_handle_time"=>time()]);#维修中
+               #维修中
+                $update['after_status']=4;
             }
+            $update['huan_wei_handle_time']=time();
+            $update['shop_sure_get_goods']=1;
+            Db::name('after_sale_following')
+                ->where(['id' => $data['id']])
+                ->update($update);#换货
+            return ajax_return('','确认收货成功','200');
 
         }
 
@@ -355,11 +359,10 @@ class Order extends Controller
                 return ajax_return('', '缺少参数');
             }
             $orderGoods = Db::name('order_goods')->where(['id' => $data['ogid']])->find();
-
             Db::name('after_sale_following')
                 ->where(['id' => $data['id']])
-                ->update(['after_status' =>6 ,"send_time"=>time()]);#商家发货时间
-
+                ->update(['after_status' =>6 ,"send_time"=>time(),'send_wuliu_type'=>$data['send_wuliu_type'],'send_wuliu_order'=>$data['send_wuliu_order']]);#商家发货时间
+            return ajax_return('','发货成功','200');
         }
 
     }
