@@ -1,10 +1,6 @@
 {extend name="template/base" /}
 {block name="content"}
-<<<<<<< HEAD
-<form class="page-container">
-=======
 <div class="page-container">
->>>>>>> e1d6cd637bbc912da217cd8a3ee63161db52d25e
     <div>
         <p>收货人地址信息：</p>
         <table class="table table-border table-bordered table-hover table-bg mt-20">
@@ -171,7 +167,7 @@
           </div>
           </div>
         </form>
-        {php} } {/php}
+      {/if}
     </div>
     {/volist}
     <tr>
@@ -189,7 +185,7 @@
 {/block}
 {block name="script"}
 <script>
-    function addPost(obj, id) {
+      function addPost(obj, id) {
 
         var logistics_name = $(obj).prev().prev().prev().val()
         var logistics_number = $(obj).prev('input').val()
@@ -239,6 +235,7 @@
         }
     }
 
+    //同意售后处理
     function afterSaleHandle(obj, ogid, id, after_sale_type, flag) {
         if (after_sale_type != 3) {
             var shop_wuliu_address = $('input[name="shop_wuliu_address"]').val()
@@ -267,27 +264,8 @@
         }
     }
 
-    function refuseAfterSale(obj, ogid, id, after_sale_type, flag) {
-        if (flag == 'no') {
-            var refused_reason = $('input[name="refused_reason"]').val()
-            if (refused_reason == '') {
-                alert('请填拒绝售后理由');
-                $('input[name="refused_reason"]').css('display', 'block')
-                return false;
-            }
-           if( id ){
-               $.ajax({
-                   url:"{:url('order/afterSaleHandle')}",
-                   type:'post',
-                   data:{'id':id,ogid:ogid,'after_sale_type':after_sale_type,shop_wuliu_address:shop_wuliu_address,flag:flag},
-                   success:function (res) {
-                       alert(res.msg)
-                       $('.btn-refresh').click();
-                   }
-               })
-           }
-       }
-    }
+
+    //商家拒绝退款
        function refuseAfterSale(obj,ogid,id,after_sale_type,flag) {
            if(flag=='no'){
                var  refused_reason = $('input[name="refused_reason"]').val()
@@ -323,6 +301,7 @@
                })
            }
        }
+       //商家发货
        function shopSendGoods(obj,ogid,id,after_sale_type) {
            if( id ){
                var type=$('input[name="send_wuliu_type"]').val();
@@ -330,7 +309,7 @@
                $.ajax({
                    url:"{:url('order/shopsSendGoods')}",//商家确认发货
                    type:'post',
-                   data:{'id':id,ogid:ogid,'after_sale_type':after_sale_type,'wuliu_order':wuliu_order,'type':type},
+                   data:{'id':id,ogid:ogid,'after_sale_type':after_sale_type,'send_wuliu_order':wuliu_order,'send_wuliu_type':type},
                    success:function (res) {
                        alert(res.msg)
                        // $('.btn-refresh').click();
