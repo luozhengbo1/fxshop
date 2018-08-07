@@ -261,38 +261,43 @@ class Order extends Controller
             }
             $orderGoods = Db::name('order_goods')->where(['id' => $data['ogid']])->find();
             $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'], true);
+//            dump($data);die;
             if(!$orderGoods['after_handle_is']){ #未处理，进行处理
                 Db::name('order_goods')->where(['id' => $data['ogid']])->update(['after_handle_is' => 1]);
                 Db::name('after_sale_following')->where(['id' => $data['id']])
-                    ->update(['shop_wuliu_address' => $data['shop_wuliu_address'],'handle_time'=>time(),'after_status'=>8]);#同意
+                    ->update(['shop_wuliu_address' => $data['shop_wuliu_address']
+                        ,'handle_yes_no_time'=>time()
+                        ,'handle_time'=>time()
+                        ,'after_status'=>8
+                        ,'yes_or_no'=>1]);#同意
                 if ($data['after_sale_type'] == 3) {#退款
                     #通过退款，将该商品订单改为退款 状态，
                     #计算退款金额  将退款金额计算在订单表中， 修改字段is_return 为1 ，
                     #扣去奖券金额   #未使用优惠券直接退款商品价格 如果不包邮直接商品价格，
-                    if ($orderGoods['goods_detail']['settlement_type'] == 1) {
-                        $goodsAttribute = Db::name('goods_attribute')->field('price')->where(['id' => $orderGoods['sku_id']])->find();
-                        $returnMoney = $orderGoods['goods_num'] * $goodsAttribute['price'];
-                        #如果商品包邮，退款时减去邮费
-                        if ($orderGoods['goods_detail']['free_type'] == 0) {
-                            $returnMoney -= $orderGoods['goods_num'] * $orderGoods['goods_detail']['postage'];
-                        }
-                        if ($returnMoney < 0) $returnMoney = 0.01;
+//                    if ($orderGoods['goods_detail']['settlement_type'] == 1) {
+//                        $goodsAttribute = Db::name('goods_attribute')->field('price')->where(['id' => $orderGoods['sku_id']])->find();
+//                        $returnMoney = $orderGoods['goods_num'] * $goodsAttribute['price'];
+//                        #如果商品包邮，退款时减去邮费
+//                        if ($orderGoods['goods_detail']['free_type'] == 0) {
+//                            $returnMoney -= $orderGoods['goods_num'] * $orderGoods['goods_detail']['postage'];
+//                        }
+//                        if ($returnMoney < 0) $returnMoney = 0.01;
 //                      $returnMoney = $goodsAttribute['price'];
-                        $res1 = Db::name('order_goods')->where([
-                            'order_id' => $data['order_id'],
-                            'id' => $data['id'],
-                        ])->update(['is_return' => 1, 'return_price' => $goodsAttribute['price'], 'is_send' => 7, 'after_sale_is' => 1]); # 待退款  3退款中 7退款中/退货退款
-                        $ordertmp = Db::name('order')->field('return_price_all')->where([
-                            'order_id' => $orderGoods['order_id']])->find();
-                        #退款价
-                        $order = Db::name('order')->where('order_id', $orderGoods['order_id'])->find();
-                        $update = [];
-                        $update = ['return_price_all' => $goodsAttribute['price'] + $ordertmp['return_price_all']];
-                        $res = Db::name('order')
-                            ->where('order_id', $data['order_id'])
-                            #总退款加上0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成
-                            ->update($update);
-                    }
+//                        $res1 = Db::name('order_goods')->where([
+//                            'order_id' => $data['order_id'],
+//                            'id' => $data['id'],
+//                        ])->update(['is_return' => 1, 'return_price' => $goodsAttribute['price'], 'is_send' => 7, 'after_sale_is' => 1]); # 待退款  3退款中 7退款中/退货退款
+//                        $ordertmp = Db::name('order')->where([
+//                            'order_id' => $orderGoods['order_id']])->find();
+//                        #退款价
+//                        $order = Db::name('order')->where('order_id', $orderGoods['order_id'])->find();
+//                        $update = [];
+//                        $update = ['return_price_all' => $goodsAttribute['price'] + $ordertmp['return_price_all']];
+//                        $res = Db::name('order')
+//                            ->where('order_id', $data['order_id'])->update($update);
+//
+//                        #总退款加上0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成
+//                    }
                 }
             }else{
                 return ajax_return('', '已经处理过了', '200');
@@ -310,13 +315,43 @@ class Order extends Controller
             if (!$data['ogid'] || !$data['id'] || !$data['after_sale_type']) {
                 return ajax_return('', '缺少参数');
             }
+//            dump($data);die;
             $orderGoods = Db::name('order_goods')->where(['id' => $data['ogid']])->find();
+            $orderGoods['goods_detail']=json_decode($orderGoods['goods_detail'],true);
+            if($data['after_sale_type']==3){#拒绝退款
+                $goodsAttribute = Db::name('goods_attribute')->field('price')->where(['id' => $orderGoods['sku_id']])->find();
+                $returnMoney = $orderGoods['goods_num'] * $goodsAttribute['price'];
+                #如果商品包邮，退款时减去邮费
+                if ($orderGoods['goods_detail']['free_type'] == 0) {
+                    $returnMoney -= $orderGoods['goods_num'] * $orderGoods['goods_detail']['postage'];
+                }
+                if ($returnMoney < 0) $returnMoney = 0.01;
+                $returnMoney = $goodsAttribute['price'];
+                $res1 = Db::name('order_goods')->where([
+                    'order_id' => $orderGoods['order_id'],
+                    'id' => $data['id'],
+                ])->update(['is_return' => 0, 'return_price' =>0, 'is_send' => 6, 'after_sale_is' => 0]); # 0   6 完成 0 未提交
+                $ordertmp = Db::name('order')->where([
+                    'order_id' => $orderGoods['order_id']])->find();
+                #退款价
+                $order = Db::name('order')->where('order_id', $orderGoods['order_id'])->find();
+                $update = [];
+                $update = ['return_price_all' =>$ordertmp['return_price_all'] - $goodsAttribute['price']];#减去退款价
+                $res = Db::name('order')
+                    ->where('order_id', $orderGoods['order_id'])->update($update);
+                    #总退款加上0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成
+            }
             if(!$orderGoods['after_handle_is']){ #未处理，进行处理
                 Db::name('order_goods')->where(['id' => $data['ogid']])->update(['after_handle_is' => 1]);
                 Db::name('after_sale_following')
                     ->where(['id' => $data['id']])
-                    ->update(['refused_reason' => $data['refused_reason'],'handle_time'=>time(),'after_status'=>2]);#不同意
+                    ->update(['refused_reason' => $data['refused_reason'],
+                        'handle_yes_no_time'=>time()
+                        ,'handle_time'=>time()
+                        ,'yes_or_no'=>2
+                        ,'after_status'=>2]);#不同意
             }else{
+
                 return ajax_return('', '已经处理过了', '200');
             }
             return ajax_return('', '处理成功', '200');
@@ -340,7 +375,8 @@ class Order extends Controller
                #维修中
                 $update['after_status']=4;
             }
-            $update['huan_wei_handle_time']=time();
+            $update['handle_time']=time();
+            $update['shop_sure_get_time']=time();
             $update['shop_sure_get_goods']=1;
             Db::name('after_sale_following')
                 ->where(['id' => $data['id']])

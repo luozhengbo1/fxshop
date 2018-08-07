@@ -1,49 +1,159 @@
 {include file="Public/header-resource"}
 <body class="title-top footer-boottom">
 {include file="Public/header-title"}
-<script type="text/javascript" src="__STATIC__/index/js/view/order.js" ></script>
+<style>
+    .invator_img{
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+    }
+</style>
 <div class="clear" style="background: #FF9000; padding: .14rem 0; color: white;">
     <div class="fl ml20">
         <div class="f16 mt20">
-            <p id="showStatus" class="f16">退款完成</p>
-            <p class="sulfTime fl f14">2018年8月6日</p>
+            <p id="showStatus" class="f16" data-status="{$afterSale.after_status}"></p>
+            <p class=" fl f14">{$afterSale['handle_time']|date="Y-m-d H:i:s",###}</p>
         </div>
     </div>
     <div class="fr"><img  style="width: 100px" src="__STATIC__/index/images/sell_pay.png"></div>
 </div>
-<div class="bg_white h50 lh50 tc">
-    <button class="layui-btn  layui-btn-radius  layui-btn-normal" onclick="logisticForm()">
-        填写退货快递信息
+{if condition="$afterSale['user_wuliu_type_order'] eq ''" /}
+<div class="bg_white h50 lh50 tc" id="orderInfo">
+    <button class="layui-btn  layui-btn-radius  layui-btn-normal" onclick="logisticForm({$afterSale['id']})">
+        填写售后快递信息
     </button>
 </div>
+{/if}
+
 <div class="bg_white pl10 pb10 mt5">
-    <p class="lh30">退款信息</p>
+    <p class="lh30">售后信息</p>
     {include file="Public/header-order"}
     <ul class="grey ">
-        <li>退款原因：做工问题</li>
-        <li>退款金额：￥255.34</li>
-        <li>申请件数：1</li>
-        <li>申请时间：2018-8-6 13:46</li>
-        <li>退款编号：11372812344212915</li>
+        <li>售后原因：{$afterSale['after_sale_reson']}</li>
+        <li>售后金额：￥{$orderDetail['return_price']}</li>
+        <li>申请件数：{$orderDetail['goods_num']}</li>
+        <li>申请时间：{$afterSale.apply_time|date="Y-m-d H:i:s",###}</li>
+        <li class="tc pr10 mt5"><button class="layui-btn  layui-btn-radius  layui-btn-normal layui-btn-xs" onclick="kefu(18302563273)">客服中心</button></li>
     </ul>
 </div>
 <div class="bg_white pl10 pb10 mt5">
     <p class="lh30">协商历史</p>
     <ul>
+        {if condition="$afterSale['apply_time']" /}
+        <li class="mb5">
+            <div  class="clear">
+                <div class="fl">
+                    <img class="invator_img" src="{$userInfo['headimgurl']}">
+                </div>
+                <div class="fl">
+                    <p class="f14">买家</p>
+                    <span class="grey">{$afterSale['apply_time']|date="Y-m-d H:i:s",###} </span>
+                </div>
+            </div>
+            <pre class="msg clear lh20">发起了退货退款申请，货物状态：已收到货，原因：做工问题，金额：{$orderDetail['return_price']}元。</pre>
+        </li>
+        {/if}
+        {if condition="$afterSale['handle_yes_no_time']" /}
+        <li class="mb5">
+            <div  class="clear">
+                <div class="fl">
+                    <img class="invator_img" src="{$userInfo['headimgurl']}">
+                </div>
+                <div class="fl">
+                    <p class="f14">买家</p>
+                    <span class="grey">{$afterSale['apply_time']|date="Y-m-d H:i:s",###} </span>
+                </div>
+            </div>
+            <p class="tl lh20">
+                {if condition="$afterSale['yes_or_no'] eq 1" /}商家同意了本次售后服务申请。{/if}
+                {if condition="$afterSale['yes_or_no'] eq 2" /}商家拒绝了本次售后服务申请,理由：{$afterSale['refused_reason']}{/if}
+            </p>
+        </li>
+        {/if}
+        {if condition="$afterSale['handle_yes_no_time'] && $afterSale['yes_or_no'] eq 1" /}
         <li class="mb5">
             <div  class="clear">
                 <div class="fl">
                     <img src="__STATIC__/index/images/avator.png">
                 </div>
                 <div class="fl">
-                    <p class="f14">系统</p>
-                    <span class="grey">2018-08-06 16:57:10</span>
+                    <p class="f14">商家</p>
+                    <span class="grey">{$afterSale['handle_yes_no_time']|date="Y-m-d H:i:s",###} </span>
                 </div>
             </div>
-            <pre class="msg clear lh20">由于买家购物评级良好，买家申请的退款享有极速退款特权，淘宝已将255.34元垫付给买家。</pre>
+            <p class="tl lh20">
+                商家确认收货地址：{$afterSale['shop_wuliu_address']}
+            </p>
         </li>
+        {/if}
+        {if condition="$afterSale['user_wuliu_type_order']" /}
+        <li class="mb5">
+            <div  class="clear">
+                <div class="fl">
+                    <img class="invator_img" src="{$userInfo['headimgurl']}">
+                </div>
+                <div class="fl">
+                    <p class="f14">买家</p>
+                    <span class="grey">{$afterSale['apply_time']|date="Y-m-d H:i:s",###} </span>
+                </div>
+            </div>
+            <p class="tl lh20">
+                买家退货。物流公司及单号：{$afterSale['user_wuliu_type_order']}，快递方式：快递。
+            </p>
+        </li>
+        {/if}
+        {if condition="$afterSale['shop_sure_get_goods'] eq 1" /}
+        <li class="mb5">
+            <div  class="clear">
+                <div class="fl">
+                    <img  src="__STATIC__/index/images/avator.png">
+                </div>
+                <div class="fl">
+                    <p class="f14">商家</p>
+                    <span class="grey">{$afterSale['shop_sure_get_time']|date="Y-m-d H:i:s",###} </span>
+                </div>
+            </div>
+            <p class="tl lh20">
+                {if condition="$afterSale['after_sale_type'] neq 3" /}
+                商家确认收货
+                {/if}
+                {if condition="$afterSale['after_sale_type'] eq 3" /}
+                买家申请的退款操作成功，退款金额为：{$orderDetail['return_price']}元
+                {/if}
+            </p>
+        </li>
+        {/if}
+        {if condition="$afterSale['send_wuliu_type'] && $afterSale['send_wuliu_order'] " /}
+        <li class="mb5">
+            <div  class="clear">
+                <div class="fl">
+                    <img src="__STATIC__/index/images/avator.png">
+                </div>
+                <div class="fl">
+                    <p class="f14">商家</p>
+                    <span class="grey">{$afterSale['send_time']|date="Y-m-d H:i:s",###} </span>
+                </div>
+            </div>
+            <p class="tl lh20">
+                买家发货。物流公司及单号：{$afterSale['send_wuliu_type']} &nbsp;{$afterSale['send_wuliu_order']}，快递方式：快递。
+            </p>
+        </li>
+        {/if}
     </ul>
 </div>
-
+<script>
+    console.log("{}")
+    var url ={
+        orderServerAddWuliu:"{:url('index/order/orderServerAddWuliu')}",
+    }
+    $(function () {
+        var after_status=$('#showStatus').data('status')
+        $('#showStatus').html(constant.sale_after_text[after_status]);
+        if(after_status==constant.saleAfter.agree){
+            $('#orderInfo').show();
+        }
+    })
+</script>
+<script type="text/javascript" src="__STATIC__/index/js/view/order.js" ></script>
 </body>
 </html>

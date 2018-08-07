@@ -61,16 +61,16 @@ function evaluateEdit(order_id,goods_id,sku_id) {
     window.location.href=urlConnect(url.evaluateEdit,{order_id:order_id,goods_id:goods_id,sku_id:sku_id})
 }
 //申请售后
-function goOrderService(order_id,goods_id) {
-    window.location.href = urlConnect(url.orderService,{order_id:order_id,goods_id:goods_id})
+function goOrderService(order_id,goods_id,sku_id) {
+    window.location.href = urlConnect(url.orderService,{order_id:order_id,goods_id:goods_id,sku_id:sku_id})
 }
 //查看物流
 function logistic(order_id,goods_id) {
     window.location.href=urlConnect(url.logistics,{order_id:order_id,goods_id:goods_id})
 }
 //退款详情
-function orderTrack(order_id,goods_id) {
-    window.location.href=urlConnect(url.orderTrack,{order_id:order_id,goods_id:goods_id})
+function orderTrack(order_id,goods_id,sku_id) {
+    window.location.href=urlConnect(url.orderTrack,{order_id:order_id,goods_id:goods_id,sku_id:sku_id})
 }
 
 //物流单号
@@ -82,15 +82,25 @@ function showWul(name,num) {
         ,btn: '确定'
     });
 }
-function logisticForm() {
-    var html =  '<div class="mt5"><input class="form-control p0 tc" type="text" placeholder="填写快递公司"></div>';
-        html+=  '<div class="mt5"><input class="form-control p0 tc" type="text" placeholder="填写快递单号"></div>'
+function pageReload() {
+    setTimeout(function () {
+        window.location.reload();
+    },1500)
+}
+function logisticForm(id) {
+    var html =  '<div class="mt5"><input class="form-control p0 tc" id="postType" type="text" placeholder="填写快递公司"></div>';
+        html+=  '<div class="mt5"><input class="form-control p0 tc" id="postNum" type="text" placeholder="填写快递单号"></div>'
     layer.open({
         content: html
         ,btn: ['确定', '取消']
         ,yes: function(index){
-            location.reload();
-            layer.close(index);
+            //location.reload();
+            //layer.close(index);
+            pub_edit({
+                url:url.orderServerAddWuliu,
+                data:{id:id, 'type':$('#postType').val(),'wuliu_order':$('#postNum').val()},
+                complete: pageReload,
+            })
         }
     });
 }
@@ -109,17 +119,17 @@ function orderBtnHtml(json){
                 html +='        <button class="layui-btn layui-btn-xs  layui-btn-danger layui-btn-radius" onclick="evaluateEdit(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">评&nbsp;&nbsp;价</button>';
             }
 
-            if(json.is_send ==2 || json.is_send ==5 || json.is_send ==6){
+            if(json.is_send ==2 || json.is_send ==5 || json.is_send ==6 || json.is_send ==7){
                 if(json.show_area !=showArea.score){
                     if(json.after_sale_is==afterSale.yes){
                         html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="cancelAfterSale(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">取消申请</a>';
+                        html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="orderTrack(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">售后详情</a>';
 
                     }
                     else
                         html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="goOrderService(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">申请售后</a>';
                 }
             }
-            html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="orderTrack(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">退款详情</a>';
             break;
     }
     if( json.is_send!=constant.send.returnMoney && json.is_send!=constant.send.nosend ){

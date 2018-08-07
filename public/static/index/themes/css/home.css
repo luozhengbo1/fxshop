@@ -4047,6 +4047,7 @@ a {
 }
 .product-order-list .item-img img{
 	width: 100%;
+	max-height: 90px;
 }
 .product-order-list .item-info{
 	width:57%;
