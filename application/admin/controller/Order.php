@@ -203,14 +203,16 @@ class Order extends Controller
                 $user_data = Db::table('fy_customer')->where('openid', $orderGoods['openid'])->find();
                 $order_message = new OrderMessage();
                 $user_info = ['uid' => $user_data['id'], 'openid' => $user_data['openid']];
-                $goods_info = ['goods_data' => $orderGoods['goods_detail']];
+                $goods_data='';
+                $goods_data=$goods_data.''.$orderGoods['goods_detail']['name'].' '.$orderGoods['sku_val'].'×'.$orderGoods['goods_num'];
+                $goods_info = ['goods_data' => $goods_data];
                 $order_info = [
                     'order_id' => $orderGoods['order_id'],
                     'send_time' => $orderGoods['send_time'],
                     'logistics_name' => $orderGoods['logistics_name'],
                     'logistics_number' => $orderGoods['logistics_number']
                 ];
-                $order_message->payMessage('diliver_success', $user_info, $goods_info, $order_info);
+                $order_message->payMessage('deliver_success', $user_info, $goods_info, $order_info);
                 return ajax_return('', '操作成功', '200');
             } else {
                 return ajax_return('', '操作失败', '500');
@@ -262,7 +264,7 @@ class Order extends Controller
             if(!$orderGoods['after_handle_is']){ #未处理，进行处理
                 Db::name('order_goods')->where(['id' => $data['ogid']])->update(['after_handle_is' => 1]);
                 Db::name('after_sale_following')->where(['id' => $data['id']])
-                    ->update(['shop_wuliu_address' => $data['shop_wuliu_address'],'handle_time'=>time()]);
+                    ->update(['shop_wuliu_address' => $data['shop_wuliu_address'],'handle_time'=>time(),'after_status'=>8]);#同意
                 if ($data['after_sale_type'] == 3) {#退款
                     #通过退款，将该商品订单改为退款 状态，
                     #计算退款金额  将退款金额计算在订单表中， 修改字段is_return 为1 ，
@@ -311,11 +313,53 @@ class Order extends Controller
             $orderGoods = Db::name('order_goods')->where(['id' => $data['ogid']])->find();
             if(!$orderGoods['after_handle_is']){ #未处理，进行处理
                 Db::name('order_goods')->where(['id' => $data['ogid']])->update(['after_handle_is' => 1]);
-                Db::name('after_sale_following')->where(['id' => $data['id']])->update(['refused_reason' => $data['refused_reason'],'handle_time'=>time()]);
+                Db::name('after_sale_following')
+                    ->where(['id' => $data['id']])
+                    ->update(['refused_reason' => $data['refused_reason'],'handle_time'=>time(),'after_status'=>2]);#不同意
             }else{
                 return ajax_return('', '已经处理过了', '200');
             }
             return ajax_return('', '处理成功', '200');
+        }
+
+    }
+
+    #商户确认收货
+    public function shopSure()
+    {
+        if ($this->request->isAjax()) {
+            $data = $this->request->post();
+            if (!$data['ogid'] || !$data['id'] || !$data['after_sale_type']) {
+                return ajax_return('', '缺少参数');
+            }
+            $orderGoods = Db::name('order_goods')->where(['id' => $data['ogid']])->find();
+            if($data['after_sale_type']==1){#换货 2 维修
+                Db::name('after_sale_following')
+                    ->where(['id' => $data['id']])
+                    ->update(['after_status' =>5 ,"huan_wei_handle_time"=>time()]);#换货
+            }else if($data['after_sale_type']==2){ #
+                Db::name('after_sale_following')
+                    ->where(['id' => $data['id']])
+                    ->update(['after_status' =>4 ,"huan_wei_handle_time"=>time()]);#维修中
+            }
+
+        }
+
+    }
+    #商家发货中
+    public function shopsSendGoods()
+    {
+        if ($this->request->isAjax()) {
+            $data = $this->request->post();
+            if (!$data['ogid'] || !$data['id'] || !$data['after_sale_type']) {
+                return ajax_return('', '缺少参数');
+            }
+            $orderGoods = Db::name('order_goods')->where(['id' => $data['ogid']])->find();
+
+            Db::name('after_sale_following')
+                ->where(['id' => $data['id']])
+                ->update(['after_status' =>6 ,"send_time"=>time()]);#商家发货时间
+
         }
 
     }

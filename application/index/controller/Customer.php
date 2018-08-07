@@ -28,13 +28,12 @@ class Customer extends Mustlogin
 //            $this->assign('userdata', $user_sign_data);
             $this->userInfo['continuity_day'] = 0;
             $this->assign('userdata', $this->userInfo);
-        } elseif ($this->userInfo['continuity_day'] == 15) {
+        } elseif ($this->userInfo['continuity_day'] == 15) {            //签到满15天，continue_day重置为0,将最新数据渲染到页面
             $this->userInfo['continuity_day'] = 0;
             $this->assign('userdata', $this->userInfo);
         } else {
             $this->assign('userdata', $this->userInfo);
         }
-        //签到满15天，continue_day重置为0,将最新数据渲染到页面
 
         //会员收藏数量
         $count_collect = Db::table('fy_customer_collect')
@@ -465,6 +464,7 @@ class Customer extends Mustlogin
         }
     }
 
+    //获取每个月账单的总额
     public function getTotalMoney($month, $year)
     {
         $start_date = $year . '-' . $month;
@@ -475,12 +475,6 @@ class Customer extends Mustlogin
             ->field('sum(money) totalMoney')
             ->where(['isdelete' => 0, 'openid' => $this->userInfo['openid'], 'create_time' => ['between', [$start_date, $end_date]]])
             ->select();
-        // dump($total_money);
-//        dump(date('Y-m-d H:i:s',$start_date));
-//        dump($end_date);
-//        dump(date('Y-m-d H:i:s',$end_date));
-//        dump(date('Y-m-d H:i:s',$end_date));
-
         return ajax_return($total_money, '', 200);
     }
 
@@ -489,7 +483,6 @@ class Customer extends Mustlogin
      */
     public function memberrights($page = '1', $size = '20')
     {
-        //会员信息：等级、加入时间、现有经验值、下一等级名称、下一等级起始经验值、达到下一等级所需经验值
         $user_data = Db::table('fy_customer')
             ->alias('c')
             ->join('fy_customer_grade g', 'g.experience_start <= c.experience and g.experience_end >= c.experience')
@@ -528,6 +521,7 @@ class Customer extends Mustlogin
             ->join('fy_customer_grade g', 'g.experience_start <= c.experience and g.experience_end >= c.experience')
             ->where('openid', $this->userInfo['openid'])
             ->find();
+        //会员信息：加入时间、现有经验值、下一等级名称、下一等级起始经验值、达到下一等级所需经验值
         $user_data['create_time'] = date('Y年m月d日', $user_data['create_time']);
         $grade_data = Db::table('fy_customer_grade')->where(['experience_start' => ['>', $user_data['experience']]])->find();
         if ($user_data['experience'] < $grade_data['experience_start']) {
@@ -617,9 +611,6 @@ class Customer extends Mustlogin
      */
     public function getscore($page = '1', $size = '10')
     {
-
-
-        //会员信息：等级、加入时间、现有经验值、下一等级名称、下一等级起始经验值、达到下一等级所需经验值
         $user_data = Db::table('fy_customer')
             ->alias('c')
             ->join('fy_customer_grade g', 'g.experience_start <= c.experience and g.experience_end >= c.experience')
@@ -676,6 +667,7 @@ class Customer extends Mustlogin
         }
     }
 
+    //消息详情
     public function msg_detail($id)
     {
         $this->assign('titleName', "消息详情");
