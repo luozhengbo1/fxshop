@@ -753,6 +753,9 @@
                 $update['apply_time'] = $time;
                 $update['mobile'] = $orderGoods['address_detail']['mobile'];
                 $update['ogid'] = $orderGoods['id'];
+                #默认寄回地址
+                $address = Db::name('customer_address')->where(['id'=>$data['address_id']])->find();
+                $update['moren_address'] =json_encode($address);
                 Db::name('after_sale_following')->insert($update);
                 Db::name('order_goods')->where(['id'=>$orderGoods['id']])->update(['after_sale_is'=>1]);
                 return ajax_return('','申请成功','200');
@@ -769,7 +772,9 @@
                 ->where(['fy_order.order_id'=>$order_id,'fy_order_goods.goods_id'=>$goods_id])
                 ->find();
             $orderDetail['goods_detail'] = json_decode($orderDetail['goods_detail'],true);
+            $orderDetail['address_detail'] = json_decode($orderDetail['address_detail'],true);
             $this->view->assign('orderDetail',$orderDetail);
+            $this->view->assign('address',$orderDetail['address_detail']);
             return $this->view->fetch('orderService');
         }
 
@@ -781,7 +786,8 @@
                 if(!$data['id']  ){
                     return $this->error('缺少参数id');
                 }
-                Db::name('order')->where(['id'=>$data['id']])->update(['user_wuliu_type_order'=>$data['user_wuliu_type_order'],]);
+                $data['user_wuliu_type_order'] = $data['type'].$data['wuliu_order'];
+                Db::name('order')->where(['id'=>$data['id']])->update(['user_wuliu_type_order'=>$data['user_wuliu_type_order']]);
                 return ajax_return('','更新成功','200');
             }
         }
