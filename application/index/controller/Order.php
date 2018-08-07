@@ -736,10 +736,12 @@
                 $orderGoods = Db::name('order_goods')->where(['order_id'=>$data['order_id'],'goods_id'=>$data['goods_id'],'sku_id'=>$data['sku_id']])->find();
                 $time = time() ;
                 $orderGoods['address_detail'] = json_decode( $orderGoods['address_detail'],true);
+                $orderGoods['goods_detail'] = json_decode( $orderGoods['goods_detail'],true);
                 $day7 = 24*60*60*7;
                 if( ($time - $orderGoods['get_goods_time'] > $day7 )&& $data['after_sale_type']==1   ){#大于7天不可以退换货
                     return ajax_return('','超过七天不可以退换货，请联系卖家','500');
                 }
+
                 $update=[];
                 $update['after_sale_type'] = $data['after_sale_type'];
                 $update['after_sale_reson'] = $data['after_sale_reson'];
@@ -751,13 +753,39 @@
                 $update['openid'] = $orderGoods['openid'];
                 $update['after_status'] = 1;
                 $update['apply_time'] = $time;
+                $update['handle_time'] = $time;
                 $update['mobile'] = $orderGoods['address_detail']['mobile'];
                 $update['ogid'] = $orderGoods['id'];
                 #默认寄回地址
                 $address = Db::name('customer_address')->where(['id'=>$data['address_id']])->find();
                 $update['moren_address'] =json_encode($address);
                 Db::name('after_sale_following')->insert($update);
-                Db::name('order_goods')->where(['id'=>$orderGoods['id']])->update(['after_sale_is'=>1]);
+//                $returnMoeny =$orderGoods['goods_num'] ;
+                if($data['after_sale_type']==3){
+                    $goodsAttribute = Db::name('goods_attribute')->field('price')->where(['id' => $orderGoods['sku_id']])->find();
+                    $returnMoney = $orderGoods['goods_num'] * $goodsAttribute['price'];
+                    #如果商品包邮，退款时减去邮费
+                    if ($orderGoods['goods_detail']['free_type'] == 0) {
+                        $returnMoney -= $orderGoods['goods_num'] * $orderGoods['goods_detail']['postage'];
+                    }
+                    if ($returnMoney < 0) $returnMoney = 0.01;
+                    $res1 = Db::name('order_goods')->where([
+                        'order_id' => $data['order_id'],
+                        'id' => $orderGoods['id'],
+                    ])->update(['is_return' => 1, 'return_price' => $goodsAttribute['price'], 'is_send' => 7]); # 待退款  3退款中 7退款中/退货退款
+                    $ordertmp = Db::name('order')->where([
+                        'order_id' => $orderGoods['order_id']])->find();
+                    #退款价
+                    $newupdate = [];
+                    $update = ['return_price_all' => $goodsAttribute['price'] + $ordertmp['return_price_all']];
+                    $res = Db::name('order')
+                        ->where('order_id', $data['order_id'])->update($newupdate);
+                }
+
+                Db::name('order_goods')->where([
+                    'order_id' => $data['order_id'],
+                    'id' => $orderGoods['id'],
+                ])->update(['after_sale_is' => 1]); # 待退款  3退款中 7退款中/退货退款
                 return ajax_return('','申请成功','200');
             }
             $this->assign('titleName', "商品售后");
@@ -773,8 +801,16 @@
                 ->find();
             $orderDetail['goods_detail'] = json_decode($orderDetail['goods_detail'],true);
             $orderDetail['address_detail'] = json_decode($orderDetail['address_detail'],true);
+
+            $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
+            $userAddress = Db::table('fy_customer_address')->where(
+                ['uid' => $user['id'], 'status' => 1]
+            )->find();
+            //dump($userAddress);
+            $this->assign('userAddress', $userAddress);
+
             $this->view->assign('orderDetail',$orderDetail);
-            $this->view->assign('address',$orderDetail['address_detail']);
+            $this->view->assign('address',$userAddress);
             return $this->view->fetch('orderService');
         }
 
@@ -787,7 +823,7 @@
                     return $this->error('缺少参数id');
                 }
                 $data['user_wuliu_type_order'] = $data['type'].$data['wuliu_order'];
-                Db::name('order')->where(['id'=>$data['id']])->update(['user_wuliu_type_order'=>$data['user_wuliu_type_order']]);
+                Db::name('after_sale_following')->where(['id'=>$data['id']])->update(['user_wuliu_type_order'=>$data['user_wuliu_type_order']]);
                 return ajax_return('','更新成功','200');
             }
         }
@@ -810,16 +846,43 @@
         {
             if($this->request->isAjax()){
                 $data =$this->request->post();
-                if(!$data['id'] ){
-                    return $this->error('缺少参数id');
+//                if(!$data['id'] ){
+//                    return $this->error('缺少参数id');
+//                }
+//                if(!$data['ogid'] ){
+//                    return $this->error('缺少参数ogid');
+//                }
+                $afterSale = Db::name('after_sale_following')
+                    ->where(['order_id'=>$data['order_id'],'goods_id'=>$data['goods_id'],'openid'=>$this->userInfo['openid']])
+                    ->find();
+                $orderGoods = Db::name('order_goods')->where(['order_id'=>$data['order_id'],'goods_id'=>$data['goods_id'],'sku_id'=>$data['sku_id']])->find();
+                if($afterSale['after_sale_type']==3){#
+                    $goodsAttribute = Db::name('goods_attribute')->field('price')->where(['id' => $orderGoods['sku_id']])->find();
+                    $returnMoney = $orderGoods['goods_num'] * $goodsAttribute['price'];
+                    #如果商品包邮，退款时减去邮费
+                    if ($orderGoods['goods_detail']['free_type'] == 0) {
+                        $returnMoney -= $orderGoods['goods_num'] * $orderGoods['goods_detail']['postage'];
+                    }
+                    if ($returnMoney < 0) $returnMoney = 0.01;
+                    $returnMoney = $goodsAttribute['price'];
+                    $res1 = Db::name('order_goods')->where([
+                        'order_id' => $data['order_id'],
+                        'id' => $data['id'],
+                    ])->update(['is_return' => 0, 'return_price' =>0, 'is_send' => 6, 'after_sale_is' => 0]); # 0   6 完成 0 未提交
+                    $ordertmp = Db::name('order')->where([
+                        'order_id' => $orderGoods['order_id']])->find();
+                    #退款价
+                    $order = Db::name('order')->where('order_id', $orderGoods['order_id'])->find();
+                    $update = [];
+                    $update = ['return_price_all' =>$ordertmp['return_price_all'] - $goodsAttribute['price']];#减去退款价
+                    $res = Db::name('order')
+                        ->where('order_id', $data['order_id'])->update($update);
+                    #总退款加上0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成
+
                 }
-                if(!$data['ogid'] ){
-                    return $this->error('缺少参数ogid');
-                }
-                Db::name('after_sale_following')
-                    ->where(['id'=>$data['id']])->delete();
                 Db::name('order_goods')
-                    ->where(['id'=>$data['ogid']])->update(['after_sale_is'=>0,'after_handle_is'=>0]);
+                    ->where(['order_id'=>$data['order_id'],'goods_id'=>$data['goods_id'],'sku_id'=>$data['sku_id'],'openid'=>$this->userInfo['openid']])
+                    ->update(['after_sale_is'=>0,'after_handle_is'=>0]);
                 return ajax_return('','取消成功','200');
             }
 
@@ -835,16 +898,39 @@
             if(!$goods_id || !$order_id ){
                 return $this->error('缺少参数id');
             }
-            $orderDetail = Db::name('order')
-                ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
-                ->join('fy_goods_attribute','fy_order_goods.sku_id=fy_goods_attribute.id','left')
-                ->where(['fy_order.order_id'=>$order_id,'fy_order_goods.goods_id'=>$goods_id])
-                ->find();
-            $orderDetail['goods_detail'] = json_decode($orderDetail['goods_detail'],true);
-            $this->view->assign('orderDetail',$orderDetail);
+            $this->view->assign('orderDetail',$this->returnOrderDetail($order_id,$goods_id));
             return $this->view->fetch('logistics');
         }
-
+        #商品售后
+        public function  orderTrack()
+        {
+            $this->assign('titleName', "售后详情");
+            $order_id = $this->request->param('order_id');
+            $goods_id = $this->request->param('goods_id');
+            $sku_id= $this->request->param('sku_id');
+            if(!$goods_id || !$order_id ){
+                return $this->error('缺少参数id');
+            }
+             $afterSale = Db::name('after_sale_following')
+                ->where(['order_id'=>$order_id
+                    ,'goods_id'=>$goods_id,'openid'=>$this->userInfo['openid']])
+                 ->order('apply_time desc')
+                ->find();
+            $this->view->assign('afterSale',$afterSale);
+            $orderGoods = Db::name('order_goods')
+                ->where([
+                    'order_id'=>$order_id
+                    ,'goods_id'=>$goods_id
+                    ,'sku_id'=>$sku_id
+                ])
+                ->find();
+            $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'],true);
+            $this->view->assign('orderDetail',$orderGoods);
+            $this->view->assign('userInfo',$this->userInfo);
+            //dump($this->userInfo);
+            //dump($orderGoods);
+            return $this->view->fetch('orderTrack');
+        }
         #订单评论
         public function  orderComment()
         {
@@ -919,5 +1005,15 @@
             }
         }
 
+        #返回订单详情
+        public function returnOrderDetail($order_id,$goods_id){
+            $orderDetail = Db::name('order')
+                ->join('fy_order_goods','fy_order_goods.order_id=fy_order.order_id','left')
+                ->join('fy_goods_attribute','fy_order_goods.sku_id=fy_goods_attribute.id','left')
+                ->where(['fy_order.order_id'=>$order_id,'fy_order_goods.goods_id'=>$goods_id])
+                ->find();
+            $orderDetail['goods_detail'] = json_decode($orderDetail['goods_detail'],true);
+            return $orderDetail;
+        }
     }
 

@@ -237,8 +237,9 @@
 
     //同意售后处理
     function afterSaleHandle(obj, ogid, id, after_sale_type, flag) {
+        var shop_wuliu_address = $('input[name="shop_wuliu_address"]').val()
         if (after_sale_type != 3) {
-            var shop_wuliu_address = $('input[name="shop_wuliu_address"]').val()
+
             if (shop_wuliu_address == '') {
                 alert('请填写用户邮寄地址');
                 $('input[name="shop_wuliu_address"]').css('display', 'block')

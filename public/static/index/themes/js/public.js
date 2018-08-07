@@ -656,6 +656,27 @@ var constant={
     goodsStatus:{
         up:1//上架
         ,down:0//仓库中
+    },
+    saleAfter:{
+        noApply:0 //未申请
+        ,applying:1//申请中
+        ,noAggree:2// 2不同意,
+        ,repairing:4// ,4维修中
+        ,changeGoods:5// 5换货中
+        ,delivery:6// ,6商家发货中，
+        ,sureGoods:7// 7用户确认收货,
+        ,agree:8,// 8同意
+    },
+    sale_after_text:{
+        0 :'未申请'
+        ,1:'申请中'
+        ,2:'不同意'
+        ,4:'维修中'
+        ,5:'换货中'
+        ,6:'商家已发货'
+        ,7:'用户确认收货'
+        ,8:'同意'
+        ,9:'售后完成'
     }
 }
 var settlement={
@@ -781,7 +802,15 @@ function imageLazy(){
 
 }
 
+function kefu(mobile,qq) {
+    var html ='<p class="f14 mb10"><a href="tel://'+mobile+'" >联系卖家:'+mobile+'</p>';
+        html +='<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2550162927&site=qq&menu=yes&t='+new Date().getTime()+'">联系客服：<img border="0" src="http://wpa.qq.com/pa?p=2:2550162927:52" alt="点击这里给我发消息" title="点击这里给我发消息"/>2550162927</a>';
+    layer.open({
+        content: html
+        ,btn: '关闭'
+    });
 
+}
 
 
 
