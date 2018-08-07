@@ -773,8 +773,16 @@
                 ->find();
             $orderDetail['goods_detail'] = json_decode($orderDetail['goods_detail'],true);
             $orderDetail['address_detail'] = json_decode($orderDetail['address_detail'],true);
+
+            $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
+            $userAddress = Db::table('fy_customer_address')->where(
+                ['uid' => $user['id'], 'status' => 1]
+            )->find();
+            //dump($userAddress);
+            $this->assign('userAddress', $userAddress);
+
             $this->view->assign('orderDetail',$orderDetail);
-            $this->view->assign('address',$orderDetail['address_detail']);
+            $this->view->assign('address',$userAddress);
             return $this->view->fetch('orderService');
         }
 
