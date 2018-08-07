@@ -68,6 +68,11 @@ function goOrderService(order_id,goods_id) {
 function logistic(order_id,goods_id) {
     window.location.href=urlConnect(url.logistics,{order_id:order_id,goods_id:goods_id})
 }
+//退款详情
+function orderTrack(order_id,goods_id) {
+    window.location.href=urlConnect(url.orderTrack,{order_id:order_id,goods_id:goods_id})
+}
+
 //物流单号
 function showWul(name,num) {
     var msg = '<p class="mt10 f14 tl">物流名称：'+name+'</p>'
@@ -75,6 +80,18 @@ function showWul(name,num) {
     layer.open({
         content:msg
         ,btn: '确定'
+    });
+}
+function logisticForm() {
+    var html =  '<div class="mt5"><input class="form-control p0 tc" type="text" placeholder="填写快递公司"></div>';
+        html+=  '<div class="mt5"><input class="form-control p0 tc" type="text" placeholder="填写快递单号"></div>'
+    layer.open({
+        content: html
+        ,btn: ['确定', '取消']
+        ,yes: function(index){
+            location.reload();
+            layer.close(index);
+        }
     });
 }
 //商品按钮
@@ -102,7 +119,7 @@ function orderBtnHtml(json){
                         html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="goOrderService(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">申请售后</a>';
                 }
             }
-            html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="logistic(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">售后跟踪</a>';
+            html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="orderTrack(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">退款详情</a>';
             break;
     }
     if( json.is_send!=constant.send.returnMoney && json.is_send!=constant.send.nosend ){

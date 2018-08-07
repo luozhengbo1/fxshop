@@ -1,0 +1,49 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+{include file="Public/header-title"}
+<script type="text/javascript" src="__STATIC__/index/js/view/order.js" ></script>
+<div class="clear" style="background: #FF9000; padding: .14rem 0; color: white;">
+    <div class="fl ml20">
+        <div class="f16 mt20">
+            <p id="showStatus" class="f16">退款完成</p>
+            <p class="sulfTime fl f14">2018年8月6日</p>
+        </div>
+    </div>
+    <div class="fr"><img  style="width: 100px" src="__STATIC__/index/images/sell_pay.png"></div>
+</div>
+<div class="bg_white h50 lh50 tc">
+    <button class="layui-btn  layui-btn-radius  layui-btn-normal" onclick="logisticForm()">
+        填写退货快递信息
+    </button>
+</div>
+<div class="bg_white pl10 pb10 mt5">
+    <p class="lh30">退款信息</p>
+    {include file="Public/header-order"}
+    <ul class="grey ">
+        <li>退款原因：做工问题</li>
+        <li>退款金额：￥255.34</li>
+        <li>申请件数：1</li>
+        <li>申请时间：2018-8-6 13:46</li>
+        <li>退款编号：11372812344212915</li>
+    </ul>
+</div>
+<div class="bg_white pl10 pb10 mt5">
+    <p class="lh30">协商历史</p>
+    <ul>
+        <li class="mb5">
+            <div  class="clear">
+                <div class="fl">
+                    <img src="__STATIC__/index/images/avator.png">
+                </div>
+                <div class="fl">
+                    <p class="f14">系统</p>
+                    <span class="grey">2018-08-06 16:57:10</span>
+                </div>
+            </div>
+            <pre class="msg clear lh20">由于买家购物评级良好，买家申请的退款享有极速退款特权，淘宝已将255.34元垫付给买家。</pre>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>
