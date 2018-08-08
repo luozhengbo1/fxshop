@@ -27,7 +27,7 @@ class Wechatpay extends Controller
         include_once 'WxPaySDK/WxPay.Config.php'; # 微信回调通知
         $wxConfig = new \WxPayConfig();
         $notify = new \PayNotifyCallBack();
-        $notify->Handle($wxConfig, false);
+        $notify->Handle($wxConfig, true);
         $orderInfo = \WxPayResults::Init($wxConfig, $xml);
 //        $orderInfo['out_trade_no']="144121740220180808160606";
 //        $orderInfo['openid']="omQYXwNAT5uC15TQqMGxajJzqo4s";
@@ -64,17 +64,14 @@ class Wechatpay extends Controller
                                 $store = 0;
                             }
                             $store = $goodsStore['store'] - $v['goods_num'];
-
                             $goodsDa = Db::name('goods')->where(['id' => $goodsStore['goods_id']])->find();
                             $goodsname .= $goodsDa['name'] . "  " . $v['sku_val'] . "*" . $v['goods_num'] . "   ";
                             $goods_data .= $goods_data . '' . $goodsDa['name'] . "  " . $v['sku_val'] . "×" . $v['goods_num'] . "<br/>";
-
                             #减库存
                             Db::name('goods_attribute')->where(['id' => $v['sku_id']])->update(['store' => $store]);
                             #加上销量
                             Db::name('goods')->where(['id' => $goodsStore['goods_id']])->setInc('buy_num', $goodsStore['store']);
                             #扣取相应的积分
-//                    $goods = Db::name('goods')->where(['id'=>$v['goods_id']])->find();
                         }
                         $totalScore = $this->totalScore($goodsOrder);
 
@@ -101,10 +98,8 @@ class Wechatpay extends Controller
                     $user_info = ['uid' => $user['id'], 'openid' => $user['openid']];
                     $goods_info = ['total_price' => $orderAllData['total_price'], 'goods_data' => $goods_data];
                     $order_message->payMessage('pay_success', $user_info, $goods_info, '');
-
                     $wx_par_log_is = Db::name('wx_pay_refund_log')->where(['order_id' => $orderInfo['out_trade_no'], 'type' => 1])->find();
                     if (!$wx_par_log_is) {#已经有了不在写入
-//                        dump($sonId['total_price']);die;
                         $wx_pay_refund_log_insert = [];
                         $wx_pay_refund_log_insert['openid'] = $user['openid'];
                         $wx_pay_refund_log_insert['username'] = $user['nickname'];
@@ -115,7 +110,6 @@ class Wechatpay extends Controller
                         #购买商品
                         Db::name('wx_pay_refund_log')->insert($wx_pay_refund_log_insert);
                     }
-
                 }
             }
 
@@ -124,11 +118,9 @@ class Wechatpay extends Controller
     }
 
     #统计积分合计
-    #统计积分合计
     public function totalScore($data)
     {
         $pay = 0;
-//        dump($data);
         foreach ($data as $val) {
             $goods = Db::name('goods')->where(['id' => $val['goods_id']])->find();
             $res = Db::name('goods_attribute')->field('price,point_score')->where(['id' => $val['sku_id']])->find();
@@ -153,7 +145,7 @@ class Wechatpay extends Controller
         include_once 'WxPaySDK/WxPay.Config.php'; # 微信回调通知
         $notify = new \PayNotifyCallBack();
         $wxConfig = new \WxPayConfig();
-        $notify->Handle($wxConfig, false);
+        $notify->Handle($wxConfig, true);
         $orderInfo = \WxPayResults::Init($wxConfig, $xml);
 //        $orderInfo['out_trade_no']="144121740220180720145045";
         if (empty($orderInfo)) {
