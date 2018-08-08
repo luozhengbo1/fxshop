@@ -21,6 +21,17 @@
 	<!-- 如果需要分页器 -->
 	<div class="swiper-pagination"></div>
 </div>
+<!--活动分类-->
+<ul class="module-nav clear">
+    {volist name="modular" id="vo" empty=""}
+    <li>
+        <a href="{$vo.url}" >
+            <img src="{$vo.pic}" alt="{$vo.title}">
+            <p>{$vo.title}</p>
+        </a>
+    </li>
+    {/volist}
+</ul>
 <!--广告-->
 <div class="announcement clear" >
 	<div class="image fl">
@@ -31,18 +42,7 @@
 	</div>
 	<div class="more fl"><a href="{:\\think\\Url::build(\'notice/index\')}">更多<i class="iconfont icon-right-arrow f12 grey"></i></a></div>
 </div>
-<!--活动分类-->
-<ul class="module-nav clear">
-	{volist name="modular" id="vo" empty=""}
-		<li>
-			<a href="{$vo.url}" >
-				<img src="{$vo.pic}" alt="{$vo.title}">
-				<p>{$vo.title}</p>
-			</a>
-		</li>
-	{/volist}
 
-</ul>
 <div class="module-active clear mt5">
 	<p class="item-title clear">
 		<a href="{:url('activity/activity')}"  >

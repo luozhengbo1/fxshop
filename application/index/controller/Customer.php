@@ -381,7 +381,7 @@ class Customer extends Mustlogin
         //dump($userAddress);
         $this->assign('userData', $userData);
         $this->assign('userAddress', $userAddress);
-        return $this->view->fetch();
+        return $this->view->fetch('mySet');
     }
 
     /**
