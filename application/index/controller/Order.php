@@ -269,13 +269,18 @@
                 include_once "WxPaySDK/WxPay.Api.php";
                 include_once "WxPaySDK/WxPay.JsApiPay.php";
                 include_once 'WxPaySDK/log.php';
+                include_once 'WxPaySDK/WxPay.Config.php';
                 #订单总价的计算
                 $price = $this->calculateOrderValue($data);
 //                dump($price);die;
                 if ($price == 0) {
                     $price = 0.01; #至少支付一分钱
                 }
-                $orderId = \WxPayConfig::MCHID.date("YmdHis");
+//                $orderId = \WxPayConfig::MCHID.date("YmdHis");
+                #
+                $wxConfig = new \WxPayConfig();
+                $orderId =$wxConfig->GetMerchantId().date("YmdHis");
+
                 $time = time();
                 $orderAll = [
                     'order_id'=>$orderId,
@@ -292,6 +297,7 @@
                 foreach ( $dataUser as $k=>$v ){
                     $sonId[] = rand(1000,9999);
                     $userPrice[] = $this->calculateOrderValue($v);
+                    $userPoint[] = $this->totalScore($v);
 //                    dump($userPrice[$k]);
                     $orderRow[$k] = array(
                         "order_id" => $orderId.$sonId[$k],
@@ -305,7 +311,7 @@
                         "pay_status" => 0,#支付状态;0未付款;1已付款
                         "order_status" => 0,
                         "type"=>$type,
-                        "total_point"=>$totalScore,
+                        "total_point"=>$userPoint[$k],
                     );
 
                     #添加上商户id
@@ -350,6 +356,7 @@
                 //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名内，所以获取不到，使用github的实现。
                 //②、统一下单
                 $input = new \WxPayUnifiedOrder();
+
                 $input->SetBody("泛亚商城 的订单");
                 $input->SetAttach("附加参数");
                 $input->SetOut_trade_no($orderId);
@@ -357,10 +364,12 @@
                 $input->SetTime_start(date("YmdHis"));
                 $input->SetTime_expire(date("YmdHis", time() + 1800));
                 $input->SetGoods_tag("");
-                $input->SetNotify_url("http://".$_SERVER['HTTP_HOST']."/index.php/index/wechatpay/notify");
+                #微信支付回调变更
+                $notifyUrl = $wxConfig->GetNotifyUrl("http://".$_SERVER['HTTP_HOST']."/index.php/index/wechatpay/notify");
+                $input->SetNotify_url($notifyUrl);
                 $input->SetTrade_type("JSAPI");
                 $input->SetOpenid($this->userInfo['openid']);
-                $unifiedOrder = \WxPayApi::unifiedOrder($input);
+                $unifiedOrder = \WxPayApi::unifiedOrder($wxConfig,$input);
                 $jsApiParameters= $tools->GetJsApiParameters($unifiedOrder);
 //                $orderAll['prepay_id'] = $unifiedOrder['prepay_id'];
 //                $orderAll['js_api_parameters'] = $jsApiParameters;
@@ -479,6 +488,8 @@
                     include_once "WxPaySDK/WxPay.Api.php";
                     include_once "WxPaySDK/WxPay.JsApiPay.php";
                     include_once 'WxPaySDK/log.php';
+                    include_once 'WxPaySDK/WxPay.Config.php';
+                    $wxConfig = new \WxPayConfig();
                     $tools = new \JsApiPay();
                     //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名
                     //
@@ -492,10 +503,12 @@
                     $input->SetTime_start(date("YmdHis"));
                     $input->SetTime_expire(date("YmdHis", time() + 1800));
                     $input->SetGoods_tag("");
-                    $input->SetNotify_url("http://".$_SERVER['HTTP_HOST']."/index.php/index/wechatpay/notify1");
+                    #微信支付回调变更
+                    $notifyUrl = $wxConfig->GetNotifyUrl("http://".$_SERVER['HTTP_HOST']."/index.php/index/wechatpay/notify1");
+                    $input->SetNotify_url($notifyUrl);
                     $input->SetTrade_type("JSAPI");
                     $input->SetOpenid($this->userInfo['openid']);
-                    $unifiedOrder = \WxPayApi::unifiedOrder($input);
+                    $unifiedOrder = \WxPayApi::unifiedOrder($wxConfig,$input);
 //                    dump($unifiedOrder);die;
                     $jsApiParameters= $tools->GetJsApiParameters($unifiedOrder);
 
@@ -639,7 +652,8 @@
                 ])->find();
                 #积分商品不支持退货退款
                 $goods = Db::name('goods')->where(['id'=>$data['goods_id']])->find();
-                if($goods['settlement_type']==2 || $goods['settlement_type']==3){
+//                if($goods['settlement_type']==2 || $goods['settlement_type']==3){
+                if($goods['settlement_type']==2 ){
                     return ajax_return_error('积分商品不支持退换');
                 }
                 $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'],true);

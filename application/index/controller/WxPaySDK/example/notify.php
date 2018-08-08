@@ -6,15 +6,18 @@
 * 请勿直接直接使用样例对外提供服务
 * 
 **/
+#新增
+ini_set('date.timezone','Asia/Shanghai');
+error_reporting(E_ERROR);
+#新增
 
-//require_once "../lib/WxPay.Api.php";
-//require_once '../lib/WxPay.Notify.php';
-require_once "WxPay.Api.php";
-require_once 'WxPay.Notify.php';
+require_once "../lib/WxPay.Api.php";
+require_once '../lib/WxPay.Notify.php';
+require_once "WxPay.Config.php";
 require_once 'log.php';
 
 //初始化日志
-$logHandler= new CLogFileHandler( dirname(__FILE__)."/logs/".date('Y-m-d').'.log');
+$logHandler= new CLogFileHandler("../logs/".date('Y-m-d').'.log');
 $log = Log::Init($logHandler, 15);
 
 class PayNotifyCallBack extends WxPayNotify

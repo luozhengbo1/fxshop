@@ -439,13 +439,16 @@ class Order extends Controller
                     if ($orderGoods['return_price'] <= 0) {
                         return ajax_return_error('退款金额不能小于0');
                     }
-                    $merchid = \WxPayConfig::MCHID;
+                    include_once APP_PATH . '/index/controller/WxPaySDK/WxPay.Config.php';
+                    $wxConfig = new \WxPayConfig();
+                    $merchid = $wxConfig->GetMerchantId();
                     if (!$order) {
                         $result['code'] = 401;
                         $result['msg'] = '没有退款订单';
                         file_put_contents("wx_refund_error.log", print_r($result, true) . "\r", 8);
                         return ajax_return_error('没有退款订单');
                     }
+//                    dump($orderId);die;
                     $input = new \WxPayRefund();
                     $input->SetOut_trade_no($orderId);   //自己的订单号
                     //$input->SetTransaction_id($order['transaction_id']);  //微信官方生成的订单流水号，在支付成功中有返回
@@ -453,7 +456,7 @@ class Order extends Controller
                     $input->SetTotal_fee($order['total_price'] * 100);   //订单标价金额，单位为分
                     $input->SetRefund_fee($orderGoods['return_price'] * 100);  //退款总金额，订单总金额，单位为分，只能为整数
                     $input->SetOp_user_id($merchid);
-                    $res = \WxPayApi::refund($input);
+                    $res = \WxPayApi::refund($wxConfig,$input);
                     //退款操作
 
                     if ($res['return_code'] == 'SUCCESS' && $res['result_code'] == "SUCCESS") {

@@ -1,0 +1,52 @@
+2018-08-08 15:35:522018-08-08 15:36:352018-08-08 15:37:222018-08-08 15:38:052018-08-08 15:40:242018-08-08 15:48:502018-08-08 15:55:162018-08-08 15:56:562018-08-08 15:58:102018-08-08 16:03:471231231232342343246662018-08-08 16:04:181231231232342343246662018-08-08 16:04:501231231232342343246662018-08-08 16:04:582018-08-08 16:05:531231231232342343246662018-08-08 16:06:151231231232342343246662018-08-08 16:06:311231231232342343246662018-08-08 16:06:461231231232342343246662018-08-08 16:07:161231231232342343246662018-08-08 16:07:511231231232342343246662018-08-08 16:08:07123123123234234324666<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+<attach><![CDATA[附加参数]]></attach>
+<bank_type><![CDATA[CFT]]></bank_type>
+<cash_fee><![CDATA[1]]></cash_fee>
+<fee_type><![CDATA[CNY]]></fee_type>
+<is_subscribe><![CDATA[Y]]></is_subscribe>
+<mch_id><![CDATA[1441217402]]></mch_id>
+<nonce_str><![CDATA[cp7vmj5mgidneui2gy4r8kgcc86h38yz]]></nonce_str>
+<openid><![CDATA[omQYXwNAT5uC15TQqMGxajJzqo4s]]></openid>
+<out_trade_no><![CDATA[144121740220180808160606]]></out_trade_no>
+<result_code><![CDATA[SUCCESS]]></result_code>
+<return_code><![CDATA[SUCCESS]]></return_code>
+<sign><![CDATA[8EEE730D4B689511E18E5F0D222A1B95609A7FE32256C8193F2BC1A76B373C90]]></sign>
+<time_end><![CDATA[20180808160614]]></time_end>
+<total_fee>1</total_fee>
+<trade_type><![CDATA[JSAPI]]></trade_type>
+<transaction_id><![CDATA[4200000147201808088029416226]]></transaction_id>
+</xml>2018-08-08 16:10:2512312312323423432466614466<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+<attach><![CDATA[附加参数]]></attach>
+<bank_type><![CDATA[CFT]]></bank_type>
+<cash_fee><![CDATA[1]]></cash_fee>
+<fee_type><![CDATA[CNY]]></fee_type>
+<is_subscribe><![CDATA[Y]]></is_subscribe>
+<mch_id><![CDATA[1441217402]]></mch_id>
+<nonce_str><![CDATA[pvvva8en75v94u5s7yg79envkqwb6fhs]]></nonce_str>
+<openid><![CDATA[omQYXwNAT5uC15TQqMGxajJzqo4s]]></openid>
+<out_trade_no><![CDATA[144121740220180808153610]]></out_trade_no>
+<result_code><![CDATA[SUCCESS]]></result_code>
+<return_code><![CDATA[SUCCESS]]></return_code>
+<sign><![CDATA[F3D7D05FCB2D3085D354464E387C03A27F46084455584BC50C17219461E737AE]]></sign>
+<time_end><![CDATA[20180808153619]]></time_end>
+<total_fee>1</total_fee>
+<trade_type><![CDATA[JSAPI]]></trade_type>
+<transaction_id><![CDATA[4200000154201808081376190106]]></transaction_id>
+</xml>2018-08-08 16:12:3112312312323423432466614466<xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+<attach><![CDATA[附加参数]]></attach>
+<bank_type><![CDATA[CFT]]></bank_type>
+<cash_fee><![CDATA[1]]></cash_fee>
+<fee_type><![CDATA[CNY]]></fee_type>
+<is_subscribe><![CDATA[Y]]></is_subscribe>
+<mch_id><![CDATA[1441217402]]></mch_id>
+<nonce_str><![CDATA[o84d68eb3g15b32fl1w21bye3vgcl6s6]]></nonce_str>
+<openid><![CDATA[omQYXwNAT5uC15TQqMGxajJzqo4s]]></openid>
+<out_trade_no><![CDATA[144121740220180808161223]]></out_trade_no>
+<result_code><![CDATA[SUCCESS]]></result_code>
+<return_code><![CDATA[SUCCESS]]></return_code>
+<sign><![CDATA[1E6655E54C8274DB985B68C7F4B54303971CC864254FC5B9903D2DE5F33252D9]]></sign>
+<time_end><![CDATA[20180808161230]]></time_end>
+<total_fee>1</total_fee>
+<trade_type><![CDATA[JSAPI]]></trade_type>
+<transaction_id><![CDATA[4200000154201808088642456703]]></transaction_id>
+</xml>
