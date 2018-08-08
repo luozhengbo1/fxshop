@@ -182,6 +182,30 @@ Class Lottery extends Mustlogin
         }
     }
 
+    #商家扫码同意
+
+    /**
+     * @param $id 券id
+     * @param $goods_id 商品id
+     * @param $adminId  发行券商家id
+     * @return string
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function  adminUserScanCode($id,$goods_id,$adminId){
+        $this->assign('titleName', "商家扫码券");
+        $lottery = Db::name('lottery')
+            ->where( [
+                'id'=>['in',$id],
+            ])
+            ->find();
+        $this->assign('lottery', $lottery);
+        $this->assign('goods_id', $goods_id);
+        return $this->view->fetch('adminUserScanCode');
+    }
+
     #券的支付接口
     public function  payLottery()
     {
