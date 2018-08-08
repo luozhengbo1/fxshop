@@ -6,8 +6,7 @@
 * 请勿直接直接使用样例对外提供服务
 * 
 **/
-//require_once "../lib/WxPay.Config.Interface.php";
-require_once "WxPay.Config.Interface.php";
+require_once "../lib/WxPay.Config.Interface.php";
 
 /**
 *
@@ -32,7 +31,7 @@ class WxPayConfig extends WxPayConfigInterface
 	{
 		return 'wxd9da51e6bae6c3c0';
 	}
-    public  function GetMerchantId()
+	public function GetMerchantId()
 	{
 		return '1441217402';
 	}
@@ -42,9 +41,9 @@ class WxPayConfig extends WxPayConfigInterface
 	* TODO:支付回调url
 	* 签名和验证签名方式， 支持md5和sha256方式
 	**/
-	public function GetNotifyUrl($url='')
+	public function GetNotifyUrl()
 	{
-		return $url;
+		return "";
 	}
 	public function GetSignType()
 	{
@@ -111,7 +110,7 @@ class WxPayConfig extends WxPayConfigInterface
 	 */
 	public function GetSSLCertPath(&$sslCertPath, &$sslKeyPath)
 	{
-		$sslCertPath = dirname(__FILE__).'/cert/apiclient_cert.pem';
-		$sslKeyPath = dirname(__FILE__).'/cert/apiclient_key.pem';
+		$sslCertPath = '../cert/apiclient_cert.pem';
+		$sslKeyPath = '../cert/apiclient_key.pem';
 	}
 }

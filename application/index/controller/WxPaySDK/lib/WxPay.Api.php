@@ -45,13 +45,9 @@ class WxPayApi
 		}
 		
 		//异步通知url未设置，则使用配置文件中的url
-//		if(!$inputObj->IsNotify_urlSet() && $config->GetNotifyUrl() != ""){
-//			$inputObj->SetNotify_url($config->GetNotifyUrl());//异步通知url
-//		}
-//       修改
-        if(!$inputObj->IsNotify_urlSet() ){
-//            $inputObj->SetNotify_url($config->GetNotifyUrl());//异步通知url
-        }
+		if(!$inputObj->IsNotify_urlSet() && $config->GetNotifyUrl() != ""){
+			$inputObj->SetNotify_url($config->GetNotifyUrl());//异步通知url
+		}
 		
 		$inputObj->SetAppid($config->GetAppId());//公众账号ID
 		$inputObj->SetMch_id($config->GetMerchantId());//商户号
