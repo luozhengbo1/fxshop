@@ -3,7 +3,7 @@
 {include file="Public/header-title"}
 <!--券详情-->
 <style>
-    .footer-pay-info .go-pay{
+     .affairm-go-pay{
         background: orange;
         color: white;
         width: 100%;
@@ -67,9 +67,9 @@
             <div class="fr price">￥<i class="priceShow f16 ">{$lottery['coupon_real_money']}</i>元</div>
         </li>
     </ul>
-    <ul class="footer-fixed footer-pay-info clear">
-        <li>
-            <a class="go-pay" href="{:url('lottery/affairm',['lottery_id'=>$lottery['id'],'goods_id'=>$lottery['goods_id']])}" >提&nbsp;交&nbsp;订&nbsp;单</a>
+    <ul class="footer-fixed clear">
+        <li style="width: 100%">
+            <a class="affairm-go-pay" href="{:url('lottery/affairm',['lottery_id'=>$lottery['id'],'goods_id'=>$lottery['goods_id']])}" >提&nbsp;交&nbsp;订&nbsp;单</a>
         </li>
     </ul>
 </div>
