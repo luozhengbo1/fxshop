@@ -4266,6 +4266,31 @@ a {
 	height: 100%;
     border-radius: 2px;
 }
+
+
+.voucher-detail{}
+.voucher-detail .content{
+	padding: 2px 5px;
+	background: white;
+	min-height: 300px;
+}
+.footer-pay-info li{
+	width: 50%;
+	float: left;
+	height: .56rem;
+}
+.footer-pay-info .go-pay{
+	background: orange;
+	color: white;
+	width: 100%;
+	display: inline-block;
+	height: .56rem;
+	line-height: .56rem;
+	text-align: center;
+	font-weight: bold;
+	font-size: 20px;
+}
+
 /*会员权益*/
 .member-benefits header{
 	height: 1rem;

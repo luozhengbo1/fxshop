@@ -3,30 +3,7 @@
 <body class="title-top footer-boottom">
 {include file="Public/header-title"}
 <!--券详情-->
-<style>
-    .voucher-detail{}
-    .voucher-detail .content{
-        padding: 2px 5px;
-        background: white;
-        min-height: 300px;
-    }
-    .footer-pay-info li{
-        width: 50%;
-        float: left;
-        height: .56rem;
-    }
-    .footer-pay-info .go-pay{
-        background: orange;
-        color: white;
-        width: 100%;
-        display: inline-block;
-        height: .56rem;
-        line-height: .56rem;
-        text-align: center;
-        font-weight: bold;
-        font-size: 20px;
-    }
-</style>
+
 <div class="voucher-detail">
    <div class="content">
 
@@ -49,15 +26,21 @@
 
 </div>
 <script>
+    var host = "http://10.20.1.171:81"
+    var url={
+        adminUserScanCode:host+"{:url('index/Lottery/adminUserScanCode')}",
+    }
    $('.content').html(tagParse("{$lottery['desc']}"));
+   // console.log(urlConnect(url.adminUserScanCode,{id:"{$lottery['id']}",goods_id:"{$lottery['goods_id']}",adminId:'11'}))
    function goUse() {
 // 设置参数方式
        layer.open({
            content: ' <div id="qrcode" style="width: 200px; height: 200px"></div>'
            ,btn: '关闭'
        });
+       //http://10.20.1.171:81/index.php/index//id/33/goods_id/11/adminId/11/type/use.html
        var qrcode = new QRCode('qrcode', {
-           text: 'your content',
+           text:urlConnect(url.adminUserScanCode,{id:"{$lottery['id']}",goods_id:"{$lottery['goods_id']}",adminId:'11'}),
            width: 200,
            height: 200,
            colorDark : '#000000',
