@@ -49,6 +49,7 @@ class Wechatpay extends Controller
             if (is_array($arr)) {
                 $orderAllData = Db::name('order_all')->where(['order_id' => $orderInfo['out_trade_no']])->find();
                 if ($orderAllData['is_tui'] == 0) {
+                    Db::name('order_all')->where(['order_id' => $orderInfo['out_trade_no']])->update(['is_tui' => 1]);
                     foreach ($arr as $value) {
                         #查出两个子订单，将其状态改成已支付
                         Db::name('order')
@@ -95,7 +96,6 @@ class Wechatpay extends Controller
                     include_once "sendMsg/SDK/WeiXin.php";
                     $wx = new \WeiXin();
                     $result = $wx->buySuccess($goodsname, $orderInfo['openid'], $sonId['total_price']);
-                    Db::name('order_all')->where(['order_id' => $orderInfo['out_trade_no']])->update(['is_tui' => 1]);
                     //发货消息发送
                     $order_message = new OrderMessage();
                     $user_info = ['uid' => $user['id'], 'openid' => $user['openid']];
@@ -150,8 +150,8 @@ class Wechatpay extends Controller
         # 支付成功后更新支付状态，支付时间
         $xml = isset($GLOBALS['HTTP_RAW_POST_DATA']) ? $GLOBALS['HTTP_RAW_POST_DATA'] : '';
         include_once 'WxPaySDK/Notify.php'; # 微信回调通知
-        $notify = new \PayNotifyCallBack();
         include_once 'WxPaySDK/WxPay.Config.php'; # 微信回调通知
+        $notify = new \PayNotifyCallBack();
         $wxConfig = new \WxPayConfig();
         $notify->Handle($wxConfig, false);
         $orderInfo = \WxPayResults::Init($wxConfig, $xml);
@@ -163,6 +163,7 @@ class Wechatpay extends Controller
             #付款成功通知
             $orderData = Db::name('order')->where(['order_id' => $orderInfo['out_trade_no']])->find();
             if ($orderData['is_tui'] == 0) {
+                Db::name('order')->where(['order_id' => $orderInfo['out_trade_no']])->update(['is_tui' => 1]);
                 #减对应商品的库存
                 $goodsname = '';
                 $goods_data = '';
@@ -182,12 +183,10 @@ class Wechatpay extends Controller
                     $goodsDa = Db::name('goods')->where(['id' => $goodsStore['goods_id']])->find();
                     $goodsname .= $goodsDa['name'] . "  " . $v['sku_val'] . "*" . $v['goods_num'] . "   ";
                     $goods_data .= $goods_data . '' . $goodsDa['name'] . "  " . $v['sku_val'] . "×" . $v['goods_num'] . "<br/>";
-
                 }
                 include_once "sendMsg/SDK/WeiXin.php";
                 $wx = new \WeiXin();
                 $result = $wx->buySuccess($goodsname, $orderInfo['openid'], $orderData['total_price']);
-                Db::name('order')->where(['order_id' => $orderInfo['out_trade_no']])->update(['is_tui' => 1]);
                 $user = Db::name('customer')->where(['openid' => $orderInfo['openid']])->find();
                 $order = Db::name('order')->where(['order_id' => $orderInfo['out_trade_no']])->find();
                 $where['order_id'] = $orderInfo['out_trade_no'];
