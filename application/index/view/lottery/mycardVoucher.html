@@ -56,9 +56,6 @@
             html += '        <p class="fl bold f14 ml10">' + data[i].name + '</p>';
 
             switch(coupon_type){
-                case constant.coupon.dikou:
-                    //  html +='                <p class="price"> '+data[i].point_score+'积分 </p>';
-                    break;
                 case  constant.coupon.youhui:
                     //html +='                <p class="fl bold f14 ml10"> 满'+data[i].coupon_real_money+'优惠'+data[i].coupon_money+'元 </p>';
                     html += '        <p class="price f16">券额：￥'+data[i].coupon_money+'</p>';
@@ -69,9 +66,6 @@
                     break;
                 case constant.coupon.mianyou:
                     //html +='                <p class="fl bold f14 ml10"> 包邮券 </p>';
-                    break;
-                default:
-                    //  html +='                <p class="price"> ￥'+data.price+' </p>';
                     break;
             }
             html += '    </div>';
