@@ -44,16 +44,14 @@
 
 <!--轮播图-->
 <a  name="good-detail-content"></a>
-<div class="swiper-container header-banner">
+<div class="swiper-container header-banner bg_black">
     <ul class="swiper-wrapper" style="min-height: 2rem" >
         {volist name="goods['pic']" id="vo"}
         <li class="swiper-slide">
-            <img src="{$vo}" lazy="loaded" id="test">
+            <img style="min-height:200px" data-src="{$vo}" class="swiper-lazy">
+            <div class="swiper-lazy-preloader"></div>
         </li>
         {/volist}
-        <!--<li class="swiper-slide">-->
-            <!--<img  src="http://scsc.top/data/gallery_album/original_img/5b10b781767c8.jpg" lazy="loaded">-->
-        <!--</li>-->
     </ul>
     <!-- 如果需要分页器 -->
     <div class="swiper-pagination">

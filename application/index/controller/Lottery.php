@@ -41,6 +41,7 @@ Class Lottery extends Mustlogin
                 ->field(
                     'fy_lottery.type as coupon_type,
                     fy_lottery.id as coupon_id,
+                    fy_lottery.pic as lottery_pic,
                     fy_lottery.coupon_money,fy_lottery.coupon_real_money,
                     fy_goods_class.name as class_name,
                     fy_goods.*')
@@ -50,7 +51,7 @@ Class Lottery extends Mustlogin
                 ->page($page,$size)
                 ->select();
 //            dump($goodsWithLottery);
-            echo Db::name('goods')->getLastSql();die;
+          //  echo Db::name('goods')->getLastSql();die;
             return ajax_return($goodsWithLottery, '', '200');
             //带有券的商品
         }

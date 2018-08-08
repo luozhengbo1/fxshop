@@ -2877,10 +2877,13 @@ span.pink-bg {
 }
 /*************************/
 .module-nav{
-	padding: .08rem;
+	padding: .2rem .08rem .08rem .12rem;
 	width: 100%;
 	background: white;
-	margin-top: .05rem;
+	border-radius: 8px 8px 0 0 ;
+	position: relative;
+	z-index: 888;
+	top: -6px;
 }
 .module-nav li{
 	width: 20%;
@@ -4133,7 +4136,7 @@ a {
 .wallet-user-info{
 	padding: 10px;
 	border-radius: .08rem;
-	background: #a51616;
+	background: #FFAD2C;
 	margin: 0 auto;
 	font-size: .14rem;
 	color: white;
@@ -4222,7 +4225,7 @@ a {
 }
 
 .voucher-market-list li{
-	padding: 8px;
+	padding: 2px;
 	background: white;
 	margin-bottom: 4px;
 }
@@ -4248,19 +4251,20 @@ a {
 	margin-right: 8px;
 }
 .voucher-market-list .item-img{
-	width: 90%;
+	width:78%;
 	overflow: hidden;
-	max-height: .7rem;
+	max-height: .6rem;
 }
 .voucher-market-list .item-img li{
-	width: 80px;
-	height: 80px;
+	width: 70px;
+	height: 70px;
 	margin-right: 2px;
 	float: left;
 }
 .voucher-market-list .item-img img{
 	width: 100%;
 	height: 100%;
+    border-radius: 2px;
 }
 /*会员权益*/
 .member-benefits header{
@@ -4567,4 +4571,85 @@ a {
 	padding: 10px 8px 4px;
 	background: white;
 	border-bottom: 1px dotted grey;
+}
+/*
+会员中心*/
+.customer-page .customer-header{
+	padding:16px 0 30px 0;
+	background: #FFAD2C;
+	font-size: 14px;
+}
+.customer-page  .customer-header .user-info .headimgurl{
+	width: 40px;
+	height: 40px;
+	border-radius: 100%;
+}
+.customer-page  .customer-header .user-info .nickname{
+	font-size: 14px ;
+	font-weight: bold;
+	color: white;
+}
+.customer-page  .customer-header .user-info .set{
+	float: right;
+	margin-right: 10px;
+	margin-top: 10px;
+}
+.customer-page  .user-score{
+	padding: 4px;
+	border-radius: 10px;
+	background-color: rgba(193, 145, 57, 0.75);
+	color: white;
+	font-size: 10px;
+}
+.customer-page .user-relate{
+	margin-top: 20px;
+}
+.customer-page  .user-relate li{
+	width: 25%;
+	float: left;
+	text-align: center;
+}
+.customer-page .user-relate li p{
+	font-size: 14px;
+	color: white;
+}
+.customer-page  .my-order{
+	background: white;
+	position: relative;
+	border-radius: 8px 8px 0 0;
+	position: relative;
+	top: -8px;
+	padding: 6px 0 20px 0;
+	width: 98%;
+	margin: 0 auto;
+}
+.customer-page .my-order-sort li{
+	width: 20%;
+	float: left;
+	text-align: center;
+}
+.customer-page .my-order-sort li p{
+}
+.customer-page .my-service{
+	background: white;
+	padding: 8px;
+}
+.customer-page  .service-list li {
+	border-bottom: 1px solid #efecec;
+}
+.customer-page  .service-list li a{
+	padding-top: 10px;
+	padding-bottom: 10px;
+	width: 100%;
+	display: inline-block;
+}
+.customer-page  .service-list li .iconfont{
+	color: #b7b3b3!important;
+	margin-top: 6px;
+}
+.customer-page  .service-list li img{
+	width: 26px;
+	height: 26px;
+	margin-right: 10px;
+	vertical-align: middle;
 }

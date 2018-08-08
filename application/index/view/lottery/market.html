@@ -83,14 +83,16 @@
         for(var i = 0; i < data.length; i++){
             var imgArr = new Array();
 
-            if(data[i].pic){
-                imgArr = eval(data[i].pic);
+            if(data[i].lottery_pic){
+                imgArr = eval(data[i].lottery_pic);
             }
             html +='<li>';
             html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
             html +='        <div class="clear">';
             html +='            <p class="fl" ><span class="catalog border-tag" style="vertical-align: top">'+data[i].class_name+'</span><i>'+data[i].name+'</i></p>';
-            html +='            <p class="price fr f16 bold">￥'+data[i].coupon_money+'</p>';
+            if(data[i].coupon_money){
+                html +='            <p class="price fr f16 bold pr10">￥'+data[i].coupon_money+'</p>';
+            }
             html +='        </div>';
             html +='    </a>';
             html +='        <div class="clear mt5">';
@@ -115,21 +117,18 @@
         var coupon_type = data.coupon_type;
         var html='';
         switch(coupon_type){
-            case constant.coupon.dikou:
-                //  html +='                <p class="price"> '+data[i].point_score+'积分 </p>';
-                break;
             case  constant.coupon.youhui:
-                html +='                <p class="price f12"> 满'+data.coupon_real_money+'优惠'+data.coupon_money+'元 </p>';
-                html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10" onclick="getLottery('+data.coupon_id+')">立即领取</button>';
+                html +='                <p class="price f12 mt10 tc"> 满'+data.coupon_real_money+'可优惠 </p>';
+                html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10 mt10" onclick="getLottery('+data.coupon_id+')">立即领取</button>';
                 break;
             case  constant.coupon.daijin:
-                html +='                <p class="tc base-color mb10">代'+data.coupon_money+'元券</p>';
+                html +='                <p class="tc base-color mb10 mt10 tc">代'+data.coupon_money+'元券</p>';
 
-                html +='                <a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10" href="'+urlConnect("{:url('lottery/detail')}",{id:data.coupon_id,goods_id:data.id,type:'buy'})+'" >立即购买</a>';
+                html +='                <a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10 mt10" href="'+urlConnect("{:url('lottery/detail')}",{id:data.coupon_id,goods_id:data.id,type:'buy'})+'" >立即购买</a>';
                 break;
             case constant.coupon.mianyou:
-                html +='                <p class="price f12"> 包邮券 </p>';
-                html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10" onclick="getLottery('+data.coupon_id+')">立即领取</button>';
+                html +='                <p class="price f12 mt10 tc"> 包邮券 </p>';
+                html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10 mt10" onclick="getLottery('+data.coupon_id+')">立即领取</button>';
                 break;
             default:
                 //  html +='                <p class="price"> ￥'+data.price+' </p>';

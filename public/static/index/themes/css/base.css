@@ -207,6 +207,9 @@ body{
 .bg_sred{ background: #de181b!important;}
 .bg_white{ background: white!important;}
 .bg_orange{ background: orange!important;}
+.bg_black{
+    background: #0C0C0C!important;
+}
 .yellow{color: #ffe60e!important;}
 
 .radius4{border-radius: 4px;}
