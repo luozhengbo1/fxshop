@@ -11,7 +11,10 @@
 	<ul class="swiper-wrapper" >
 		 {volist name="sildeShow" id="vo" empty=""}
 			<li class="swiper-slide">
-				<a href="{$vo.url}"><img src="{$vo.pic}" alt="{$vo.name}" lazy="loaded"></a>
+				<a href="{$vo.url}">
+					<img style="min-height: 150px" data-src="{$vo.pic}" alt="{$vo.name}"  class="swiper-lazy">
+					<div class="swiper-lazy-preloader"></div>
+				</a>
 			</li>
 		 {/volist}
 	</ul>
@@ -83,6 +86,16 @@
         var headerBanner = new Swiper('.header-banner', {
             autoplay: 6000,//可选选项，自动滑动
             pagination : '.swiper-pagination',
+
+			/*
+			 * 设置为true -> 开启图片延迟加载
+			 * <img>的src属性改为data-src，class增加一个'swiper-lazy'
+			 * 如果直接用div，设置background，对应的改为data-background即可
+			 */
+			lazyLoading: true,
+			lazyLoadingInPrevNext : true,
+			// 这个为true时，↓才有用
+			lazyLoadingInPrevNextAmount: 1 // 设置在延迟加载图片时提前多少个slide
         })
 
         function dealData(data) {

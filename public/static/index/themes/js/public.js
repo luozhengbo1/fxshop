@@ -184,6 +184,9 @@ function bannerSwiper(_class) {
             el: '.swiper-pagination',
             bulletElement : 'li',
         },
+        lazy: {
+            loadPrevNext: true,
+        },
     });
 }
 //加减方法
