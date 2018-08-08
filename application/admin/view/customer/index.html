@@ -26,6 +26,11 @@
         <tr class="text-c">
             {include file="td" /}
             <td class="f-14">
+                <?php
+                    $merchant = \think\Db::table('fy_admin_user')->alias('au')->join('fy_customer c','au.openid=c.openid')->where('c.id',$vo['id'])->find();
+                    if(!$merchant){  ?>
+                {tp:menu menu='sbindMerchant' url='bindMerchant:id=$vo.id' title='绑定商户'/}
+                <?php } ?>
                 {tp:menu menu='sdetail' url='detail:id=$vo.id' title='详情'/}
                 {tp:menu menu='sdelete' /}
             </td>

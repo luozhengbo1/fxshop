@@ -16,7 +16,13 @@ $grade_res = \think\Db::table('fy_customer')->alias('c')
     ->where(['c.id'=>$vo['id'],'c.isdelete'=>'0'])
     ->find();
     echo $grade_res['name'];
-?></td>
+    ?>
+</td>
+<td><?php
+    $merchant = \think\Db::table('fy_admin_user')->alias('au')->join('fy_customer c','au.openid=c.openid')->where('c.id',$vo['id'])->find();
+    echo $merchant['account'];
+    ?>
+</td>
 <td>{$vo.login_ip}</td>
 <td>{$vo.create_time}</td>
 <!--<td>{$vo.update_time}</td>-->
