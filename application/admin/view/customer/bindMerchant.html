@@ -9,11 +9,9 @@
                 <select name="merchant" class="select" id="merchant">
                     <option value="">请选择需要绑定的商户...</option>
                     <?php
-                    $merchant_list = \think\Db::table('fy_admin_user')->where(['status'=>1,'isdelete'=>0,'account'=>['not in','admin']])->select();
+                    $merchant_list = \think\Db::table('fy_admin_user')->where(['account'=>['not in','admin'],'openid'=>''])->select();
                     foreach($merchant_list as $item){ ?>
-                    <option value="<?php echo $item['id']; ?>"
-                    <!--<?php if(!empty($merchant_name)){  echo $merchant_name['id']?'selected':'';}  ?>-->
-                    ><?php  echo $item['account']; ?></option>
+                    <option value="<?php echo $item['id']; ?>"><?php  echo $item['account']; ?></option>
                     <?php  }  ?>
                 </select>
             </div>

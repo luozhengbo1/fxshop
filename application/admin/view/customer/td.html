@@ -19,7 +19,7 @@ $grade_res = \think\Db::table('fy_customer')->alias('c')
     ?>
 </td>
 <td><?php
-    $merchant = \think\Db::table('fy_admin_user')->alias('au')->join('fy_customer c','au.openid=c.openid')->where('c.id',$vo['id'])->find();
+    $merchant = \think\Db::table('fy_admin_user')->field('account')->where('id',$vo['merchant_id'])->find();
     echo $merchant['account'];
     ?>
 </td>

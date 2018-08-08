@@ -106,6 +106,7 @@ class Customer extends Controller
 
     public function bindMerchant()
     {
+        $address = Db::name('admin_user')->where('account','not in','admin')->where('openid','')->select();
         $controller = $this->request->controller();
         // 编辑
         $id = $this->request->param('id');
@@ -119,15 +120,9 @@ class Customer extends Controller
         if ($this->request->isPost()) {
             $data = $this->request->post();
             //绑定商户
-            $res = Db::table('fy_admin_user')->where('id', $data['merchant'])->update(['openid' => $vo['openid']]);
-            if ($res) {
-                return ajax_return('', '绑定商户成功', 200);
-            } else {
-                throw new Exception($res);
-            }
+            Db::table('fy_admin_user')->where('id', $data['merchant'])->update(['openid' => $vo['openid']]);
+            Db::table('fy_customer')->where('id', $id)->update(['merchant_id' => $data['merchant']]);
         } else {
-            $merchant_list = $this->getModel($controller)->alias('c')->field('c.*,au.openid merchant_openid')->join('fy_admin_user au', 'au.openid=c.openid')->find($id);
-            $this->view->assign("merchant_name", $merchant_list);
             $this->view->assign("vo", $vo);
             return $this->view->fetch('bindMerchant');
         }

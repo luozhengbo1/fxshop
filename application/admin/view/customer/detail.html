@@ -22,7 +22,7 @@
             <label class="form-label col-xs-3 col-sm-3">绑定商户：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <input type="text" class="input-text" name="merchant" value="<?php
-                    $merchant = \think\Db::table('fy_admin_user')->alias('au')->join('fy_customer c','au.openid=c.openid')->where('c.id',$vo['id'])->find();
+                    $merchant = \think\Db::table('fy_admin_user')->field('account')->where('id',$vo['merchant_id'])->find();
                     echo $merchant['account'];
                     ?>" disabled="disabled">
             </div>
