@@ -165,6 +165,9 @@ class Lottery extends Controller
             $goods = Db::name('goods')->field('name')->where(['id'=>$data['goods_id']])->find();
             $data['goods_name'] =$goods['name'];
             unset($data['id']);
+            if(  !empty($data['pic']) ){
+                $data['pic'] = json_encode($data['pic']);
+            }
             $res = $this->getModel()->where(['id'=>$id])->update($data);
             if($res){
                 return ajax_return_adv('修改成功');
@@ -177,6 +180,7 @@ class Lottery extends Controller
                 return  $this->error('缺少参数id');
             }
             $list = $this->getModel()->where(['id'=>$id])->find();
+            $list['pic'] = json_decode($list['pic'],true);
             if($list['status']!=0){
                 return  '已经发行不可更改';
 //                return ajax_return_error("已经发行不可更改");
@@ -184,6 +188,7 @@ class Lottery extends Controller
             $this->view->assign('vo',$list);
             $this->view->assign('flag',1);
             $goods = Db::name('goods')->field('id,name')->where(['isdelete'=>0,'status'=>1])->select();
+
             $this->view->assign('goodsList',$goods);
             return $this->view->fetch(isset($this->template) ? $this->template : 'edit');
         }

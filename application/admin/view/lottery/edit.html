@@ -1,5 +1,6 @@
 {extend name="template/base" /}
 {block name="content"}
+<link rel="stylesheet" href="__STATIC__/css/layui/css/layui.css" media="all" />
 <div class="page-container">
     <form class="form form-horizontal" id="form" method="post" action="{:\\think\\Request::instance()->baseUrl()}">
         <input type="hidden" name="id" value="{$vo.id ?? ''}">
@@ -20,6 +21,26 @@
                 </div>
                 <div class="col-xs-3 col-sm-3"></div>
             </div>
+        </div>
+        <div class="form form-horizontal">
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3">奖券展示图：</label>
+            <div class="layui-upload">
+                <button type="button" class="layui-btn" id="test2">奖券展示图（多图片上传）</button>
+                <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;width: 50%;margin-left: 25%;">
+                    预览图：
+                    <div class="layui-upload-list" id="demo2">
+                        <?php if(isset($vo['pic']) ){?>
+                        {volist name="$vo.pic"  id="vo1"}
+                        <img src="{$vo1}" style="width:100px;height:100px;" />
+                        <input type="hidden" name="pic[]" value="{$vo1}">
+                        <a href="javascript:;" class="layui-btn layui-btn-primary" onclick="return delPic(this)">删除该图</a>
+                        {/volist}
+                        <?php } ?>
+                    </div>
+                </blockquote>
+            </div>
+        </div>
         </div>
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3">发放开始时间：</label>
@@ -250,5 +271,41 @@
             }
         })*/
     })
+</script>
+<!-- 多图上传js -->
+<script type="text/javascript" src="__STATIC__/js/layui.js"></script>
+<script>
+    layui.use(['form','upload'], function() {
+        var form = layui.form,
+            layer = layui.layer,
+            upload = layui.upload,
+            $ = layui.jquery;
+        //多图片上传
+        //多图片上传
+        upload.render({
+            elem: '#test2'
+            ,url: "{:url('admin/upload/upload')}"
+            ,multiple: true
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#demo2').append('<img src="'+ result +'" style="width:100px;height:100px;" alt="'+ file.name +'" class="layui-upload-img"><a href="javascript:;" class="layui-btn layui-btn-primary" onclick="return delPic(this)">删除该图</a>')
+                });
+            }
+            ,done: function(data){
+                //上传完毕
+                // console.log(data)
+                console.log(data.data.name)
+                $('#demo2').append('<input type="hidden" name="pic[]" value="'+data.data.name+'">')
+
+            }
+        });
+
+    })
+    function delPic(obj){
+        $(obj).prev().remove();
+        $(obj).prev().remove().prev().remove();
+        $(obj).remove();
+    }
 </script>
 {/block}
