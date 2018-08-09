@@ -57,11 +57,7 @@ Class Lottery extends Mustlogin
     {
         $this->assign('titleName', "券详情");
         $lottery = Db::name('lottery')
-            ->where( [
-                'id'=>['in',$id],
-            ])
-            ->find();
-
+            ->where( ['id'=>$id,])->find();
         $this->assign('lottery', $lottery);
         $this->assign('goods_id', $goods_id);
         $this->assign('type', $type);
@@ -112,7 +108,6 @@ Class Lottery extends Mustlogin
             }
             #将数量减少，记录领取用户
             $insert = [];
-           // dump($this->userInfo);
             $insert['username'] = $this->userInfo['nickname'];
             $insert['uid'] = $this->userInfo['id'];
             $insert['addtime'] = time();
@@ -121,6 +116,7 @@ Class Lottery extends Mustlogin
             $insert['lottery_name'] = $lottery['name'];
             $insert['is_use'] = 0;
             $insert['openid'] = $this->userInfo['openid'];
+            $insert['lottery_info'] = json_encode($lottery);
             $res = Db::name('lottery')->where(['id' => $data['id']])->update(['number'=>$lottery['number']-1]);
             $res1 = Db::name('lottery_log')->insert($insert);
             if ($res && $res1) {
@@ -138,37 +134,19 @@ Class Lottery extends Mustlogin
     public function mycardvoucher($page = '1', $size = '4', $status = '0')
     {
         if ($this->request->isAjax()) {
-            $userdata = Db::table('fy_customer')->field('id')->where('openid', $this->userInfo['openid'])->find();
             //取未使用过的奖券
-            if ($status == 0) {
-                $lottery_no_use = Db::table('fy_lottery_log')->alias('log')
-                    ->field('lott.*,log.uid,log.updatetime,log.is_use,log.status')
-                    ->join('fy_lottery lott', 'log.lottery_id=lott.id')
-                    ->join('fy_customer custo', 'log.uid=custo.id')
-                    ->where(['custo.id'=>$userdata['id'],'log.is_use'=>$status])
-                    ->order('expire_end_date','desc')
-                    ->page($page, $size)
-                    ->select();
-                if ($lottery_no_use) {
-                    return ajax_return($lottery_no_use, 'ok', 200);
-                } else {
-                    return ajax_return('', 'no data', 204);
-                }
-                //取使用过的奖券
-            } elseif ($status == 1) {
-                $lottery_use = Db::table('fy_lottery_log')->alias('log')
-                    ->field('lott.*,log.uid,log.updatetime,log.is_use,log.status')
-                    ->join('fy_lottery lott', 'log.lottery_id=lott.id')
-                    ->join('fy_customer custo', 'log.uid=custo.id')
-                    ->where(['custo.id'=>$userdata['id'],'log.is_use'=>$status])
-                    ->order('expire_end_date','desc')
-                    ->page($page, $size)
-                    ->select();
-                if ($lottery_use) {
-                    return ajax_return($lottery_use, 'ok', 200);
-                } else {
-                    return ajax_return('', 'no data', 204);
-                }
+            $lotteryList = Db::name('lottery_log')->alias('log')
+                ->where(['openid'=>$this->userInfo['openid'],'log.is_use'=>$status])
+                ->order('addtime','desc')
+                ->page($page, $size)
+                ->select();
+            foreach ( $lotteryList as &$v){
+                $v['lottery_info'] = json_decode( $v['lottery_info'],true);
+            }
+            if ($lotteryList) {
+                return ajax_return($lotteryList, 'ok', 200);
+            } else {
+                return ajax_return('', 'no data', 204);
             }
         } else {
             $this->assign('titleName', "卡券中心");
