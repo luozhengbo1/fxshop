@@ -223,7 +223,7 @@ Class Lottery extends Mustlogin
             $orderRow['lottery_num']=$data['lottery_num'];
             $orderRow['total_price']=$lottery['coupon_real_money']*$data['lottery_num'];
             $orderRow['pay_status']=0;
-            $orderRow['create_time']=time();
+            $orderRow['addtime']=time();
             $orderRow['lottery_info']=json_encode($lottery);
             $orderRow['is_tui']=0;
             $orderRow['order_status']=0;
@@ -258,7 +258,7 @@ Class Lottery extends Mustlogin
             $orderRow['js_api_parameters']=$jsApiParameters;
             $orderRow['prepay_id']=$unifiedOrder['prepay_id'];
             #保存订单数据
-            $res = Db::name('lottery_order')->insert($orderRow);
+            $res = Db::name('lottery_log')->insert($orderRow);
             if($res){
                 $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&order_id={$orderId}&flag=flag");
                 die(json_encode($backData));

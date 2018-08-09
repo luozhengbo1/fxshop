@@ -80,11 +80,15 @@ class WeiXin
     }
  * */
     #购买成功通知
-    public function buySuccess($goods="测试商品",$openid="omQYXwNAT5uC15TQqMGxajJzqo4s",$pay_price="10")
+    public function buySuccess($goods="测试商品",$openid="omQYXwNAT5uC15TQqMGxajJzqo4s",$pay_price="10",$flag='order')
     {
         $touser =$openid;
         $templateId=Config::get('order_pay');
-        $url = "http://shop.istiny.cc/index.php/index/order/index/param/all";
+        if($flag=="order"){
+            $url = "http://shop.istiny.cc/index.php/index/order/index/param/all";
+        }else{
+            $url = "http://shop.istiny.cc/index.php/index/lottery/mycardvoucher.html";
+        }
         $first ="我们已收到您的货款，开始为您打包商品，请耐心等待: )";
         $template = file_get_contents(__DIR__."/buySuccess.json");
         $remark = "如有问题请致电400-828-1878或直接在微信留言，小易将第一时间为您服务！";

@@ -18,7 +18,7 @@ class Pay extends  Mustlogin
             }
         }else{
             if($orderId){
-                $order = Db::name('lottery_order')->where(['order_id'=>$orderId])->find();
+                $order = Db::name('lottery_log')->where(['order_id'=>$orderId])->find();
             }
         }
 //        dump($order);die;

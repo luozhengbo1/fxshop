@@ -226,5 +226,41 @@ class Wechatpay extends Controller
         }
     }
 
+    #代金券的支付回调
+    public function  notify3()
+    {
+        # 支付成功后更新支付状态，支付时间
+        $xml = isset($GLOBALS['HTTP_RAW_POST_DATA']) ? $GLOBALS['HTTP_RAW_POST_DATA'] : '';
+        include_once 'WxPaySDK/Notify.php'; # 微信回调通知
+        include_once 'WxPaySDK/WxPay.Config.php'; # 微信回调通知
+        $notify = new \PayNotifyCallBack();
+        $wxConfig = new \WxPayConfig();
+        $notify->Handle($wxConfig, true);
+        $orderInfo = \WxPayResults::Init($wxConfig, $xml);
+        if (empty($orderInfo)) {
+            file_put_contents("wx_pay_error.log", $xml . "\r", 8);
+        } else {
+            $time = time();
+            $whereOrder=[];
+            $whereOrder = ['order_id'=>$orderInfo['out_trade_no']];
+            $lotteryOrder = Db::name('lottery_log')->where($whereOrder)->find();
+            $lotteryOrder['lottery_info'] =   json_decode($lotteryOrder['lottery_info'],true );
+            if($lotteryOrder['pay_status']!=1){#表示状态已经修改
+                Db::name('lottery_log')->where($whereOrder)->where(['pay_time'=>$time,'pay_status'=>1,'order_status'=>1]);
+                #减去对应代金券的数量
+                Db::name('lottery')->where(['id'=>$lotteryOrder['lottery_id']])->setDec('number',$lotteryOrder['lottery_num']);
+                file_put_contents("wx_pay_success.log", $xml . "\r", 8);
+            }
+            if($lotteryOrder['is_tui']==0){#消息是否推送
+                //发货消息发送
+                include_once "sendMsg/SDK/WeiXin.php";
+                $wx = new \WeiXin();
+                $result = $wx->buySuccess($lotteryOrder['lottery_info']['name'], $orderInfo['openid'], $lotteryOrder['total_price']);
+                Db::name('lottery_log')->where($whereOrder)->where(['is_tui'=>1]);
+
+            }
+        }
+    }
+
 }
 
