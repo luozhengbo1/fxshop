@@ -1,0 +1,54 @@
+{include file="Public/header-resource"}
+<script src="__STATIC__/index/plugins/qrcode.js"></script>
+<body class="title-top footer-boottom">
+{include file="Public/header-title"}
+<!--券详情-->
+
+<div class="voucher-detail">
+   <div class="content">
+
+   </div>
+    <ul class="footer-fixed footer-pay-info clear">
+        <li>
+            <p class="pl10 pt5"><i class="price bold f24">￥ {$lottery['coupon_real_money']}</i><span class="border-tag ml10"> {$lottery['coupon_real_money']/$lottery['coupon_money']}折</span> </p>
+            <p class="pl10 grey f12">门市价<i>￥ {$lottery['coupon_money']}</i></p>
+        </li>
+        <li>
+            {if condition="$type eq 'use' " /}
+            <a class="go-pay" onclick="goUse();" >立&nbsp;即&nbsp;使&nbsp;用</a>
+            {/if}
+            {if condition="$type eq 'buy' " /}
+            <a class="go-pay" href="{:url('lottery/affairm',['lottery_id'=>$lottery['id'],'goods_id'=>$lottery['goods_id']])}" >立&nbsp;即&nbsp;抢&nbsp;购</a>
+            {/if}
+
+        </li>
+    </ul>
+
+</div>
+<script>
+    var host = "http://shop.istiny.cc";
+    var url={
+        adminUserScanCode:host+"{:url('index/Lottery/adminUserScanCode')}",
+    }
+   $('.content').html(tagParse("{$lottery['desc']}"));
+    console.log(urlConnect(url.adminUserScanCode,{id:"{$lottery_log['id']}",goods_id:"{$lottery['goods_id']}",user_id:"{$lottery['user_id']}"}))
+   function goUse() {
+       //设置参数方式
+       layer.open({
+           content: ' <div id="qrcode" style="width: 200px; height: 200px"></div>'
+           ,btn: '关闭'
+       });
+
+       var qrcode = new QRCode('qrcode', {
+           text:urlConnect(url.adminUserScanCode,{id:"{$lottery_log['id']}",goods_id:"{$lottery['goods_id']}",user_id:"{$lottery['user_id']}"}),
+           width: 200,
+           height: 200,
+           colorDark : '#000000',
+           colorLight : '#ffffff',
+           correctLevel : QRCode.CorrectLevel.H
+       });
+
+   }
+</script>
+</body>
+</html>

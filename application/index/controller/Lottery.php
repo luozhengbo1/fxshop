@@ -58,12 +58,28 @@ Class Lottery extends Mustlogin
         $this->assign('titleName', "券详情");
         $lottery = Db::name('lottery')
             ->where( ['id'=>$id,])->find();
+        //  $lottery['lottery_info'] =json_decode($lottery['lottery_info'],true);
         $this->assign('lottery', $lottery);
         $this->assign('goods_id', $goods_id);
         $this->assign('type', $type);
         return  $this->view->fetch();
 
     }
+    public function useDetail($id,$goods_id,$type)
+    {
+        $this->assign('titleName', "使用详情");
+        $lottery_log = Db::name('lottery_log')
+            ->where( ['id'=>$id,])->find();
+        $lottery_log['lottery_info'] =json_decode($lottery_log['lottery_info'],true);
+     //     dump($lottery['lottery_info']);
+        $this->assign('lottery_log',  $lottery_log);
+        $this->assign('lottery',  $lottery_log['lottery_info']);
+        $this->assign('goods_id', $goods_id);
+        $this->assign('type', $type);
+        return  $this->view->fetch("useDetail");
+
+    }
+
     #券清单确认
     public function affairm($lottery_id,$goods_id)
     {
@@ -114,7 +130,8 @@ Class Lottery extends Mustlogin
             $insert['lottery_id'] = $data['id'];
             $insert['status'] = 1;
             $insert['lottery_name'] = $lottery['name'];
-            $insert['is_use'] = 0;
+            $insert['lottery_num'] = 1;
+            $insert['use_num'] = 0;
             $insert['openid'] = $this->userInfo['openid'];
             $insert['lottery_info'] = json_encode($lottery);
             $res = Db::name('lottery')->where(['id' => $data['id']])->update(['number'=>$lottery['number']-1]);
@@ -135,8 +152,17 @@ Class Lottery extends Mustlogin
     {
         if ($this->request->isAjax()) {
             //取未使用过的奖券
+            if($status ==0){
+                $where = [
+                    'openid'=>$this->userInfo['openid']
+                    ,'lottery_num'=>['>',0]];
+            }else if($status ==1){
+                $where = ['openid'=>$this->userInfo['openid'],'use_num'=>['>',0]];
+            }
             $lotteryList = Db::name('lottery_log')->alias('log')
-                ->where(['openid'=>$this->userInfo['openid'],'log.is_use'=>$status])
+               // ->where(['openid'=>$this->userInfo['openid'],'log.use_num'=>($status==0)?'0':['<>',0]])
+                   ->where($where)
+//                ->where('lenght(order_id)>0')
                 ->order('addtime','desc')
                 ->page($page, $size)
                 ->select();
@@ -168,20 +194,18 @@ Class Lottery extends Mustlogin
      */
     public function  adminUserScanCode($id,$goods_id,$user_id){
         $this->assign('titleName', "商家扫码券");
-       ;
-        $tempUser = Db::table('fy_lottery_log')->alias('log')
-            ->where([
+        $tempUser = Db::table('fy_admin_user')   ->where([
                 'openid'=> $this->userInfo['openid'],
                 'id'=>$user_id
             ])
             ->find();
         if(!empty($tempUser)){
-            $lottery = Db::name('lottery')
-                ->where( [
-                    'id'=>['in',$id],
-                ])
-                ->find();
-            $this->assign('lottery', $lottery);
+            $this->assign('titleName', "商户扫码");
+            $lottery_log = Db::name('lottery_log')
+                ->where( ['id'=>$id])->find();
+            $lottery_log['lottery_info'] =json_decode($lottery_log['lottery_info'],true);
+            $this->assign('lottery',  $lottery_log['lottery_info']);
+            $this->assign('lottery_log',  $lottery_log);
             $this->assign('goods_id', $goods_id);
             return $this->view->fetch('adminUserScanCode');
         }else{
@@ -254,6 +278,36 @@ Class Lottery extends Mustlogin
             }else{
                 return ajax_return('','支付调起失败','500');
             }
+        }
+
+    }
+    #奖券使用
+    public function useLottery()
+    {
+        if($this->request->isAjax()){
+            $data = $this->request->post();
+            if(!$data['lottery_log_id'] ||  $data['num']<0){
+                   return ajax_return('','参数不合法','500');
+            }
+            $lottery_log = Db::name('lottery_log')->where(['id'=>$data['lottery_log_id']])->find();
+            $data['num'] = ($lottery_log['lottery_num']<$data['num'])?$lottery_log['lottery_num']: $data['num'];
+            $lottery_log['lottery_info'] = json_decode( $lottery_log['lottery_info'],true);
+            $insert =[];
+            $insert['use_openid'] = $lottery_log['openid'];
+            $insert['username'] =  $lottery_log['username'];
+            $insert['create_time'] = time();
+            $insert['num'] = $data['num'];
+            $insert['lottery_id'] = $lottery_log['lottery_id'];
+            $insert['lottery_log_id'] =$lottery_log['id'];
+            $insert['shop_openid'] = $this->userInfo['openid'];
+            $insert['status'] = 1;
+            $insert['coupon_real_money'] =   $lottery_log['lottery_info'] ['coupon_real_money'];
+            $insert['coupon_money'] =   $lottery_log['lottery_info'] ['coupon_money'];
+            Db::name('use_lottery')->insert($insert);
+            #减去对应数量，加上对应使用量
+            Db::name('lottery_log')->where(['id'=>$data['lottery_log_id']])->setInc('use_num',$data['num']);
+            Db::name('lottery_log')->where(['id'=>$data['lottery_log_id']])->setDec('lottery_num',$data['num']);
+            return ajax_return('','使用成功','200');
         }
 
     }

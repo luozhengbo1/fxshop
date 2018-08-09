@@ -49,12 +49,12 @@
         console.log(data)
         var html = '';
         for (var i = 0; i < data.length; i++) {
+            if(data[i].order_id && data[i].pay_status !=1) continue;
             var coupon_type = data[i]['lottery_info']['type'];
             html += '<li>';
             html += '    <div class="product-info clear">';
             html += '        <img class="img fl" src="' + data[i]['lottery_info']['main_pic'] + '" alt="券图片">';
             html += '        <p class="fl bold f14 ml10">' + data[i]['lottery_info']['name'] + '</p>';
-
             switch(coupon_type){
                 case  constant.coupon.youhui:
                     html +='                <p class="fl bold f14 ml10"> 满'+data[i]['lottery_info']['coupon_real_money']+'优惠'+data[i]['lottery_info']['coupon_money']+'元 </p>';
@@ -75,26 +75,27 @@
             //转换时间戳
             html += '        <p class="fl grey">有效期：' + formatDate(data[i]['lottery_info']['expire_start_date'],'yyyy-MM-dd h:mm:ss') + '－' +formatDate(data[i]['lottery_info']['expire_end_date'],'yyyy-MM-dd h:mm:ss') + '</p>';
             //console.log(parseInt("{$currentTime}"),data[i].expire_end_date)
-            if (data[i].is_use == 0) {
-                if (data[i].status == 1) {
-                    if (parseInt("{$currentTime}") > data[i].expire_end_date) {
-                        html += '        <button class="fr layui-btn layui-btn-xs layui-btn-radius" disabled="disabled" style="background-color: #d0d0d0">&nbsp;&nbsp;已过期 &nbsp;&nbsp;</button>';
-                    } else {
-                        switch(coupon_type){
-                            case  constant.coupon.daijin://id:data.coupon_id,goods_id:data.id
-                                html += '        <a href="'+urlConnect("{:url('lottery/detail')}",{id:data[i].id,goods_id:data[i]['lottery_info']['goods_id'],type:'use'})+'"  class="fr layui-btn layui-btn-xs layui-btn-radius" >&nbsp;&nbsp;去使用&nbsp;&nbsp;</a>';
-                                break;
-                            default:
-                                html += '        <a  href="'+urlConnect("{:url('goods/detail')}",{id:data[i]['lottery_info']['goods_id']})+'" class="fr layui-btn layui-btn-xs layui-btn-radius" >&nbsp;&nbsp;去使用&nbsp;&nbsp;</a>';
-                                break;
-                        }
-                    }
-                } else if (data[i].status == 0) {
-                    html += '        <button class="fr layui-btn layui-btn-xs layui-btn-radius" disabled="disabled" style="background-color: #d0d0d0">&nbsp;&nbsp;已过期 &nbsp;&nbsp;</button>';
+
+           // debugger
+           // if (data[i].status == 1){
+            if (parseInt("{$currentTime}") > data[i].expire_end_date) {
+                html += '        <button class="fr layui-btn layui-btn-xs layui-btn-radius" disabled="disabled" style="background-color: #d0d0d0">&nbsp;&nbsp;已过期 &nbsp;&nbsp;</button>';
+            } else {
+                switch(coupon_type){
+                    case  constant.coupon.daijin://id:data.coupon_id,goods_id:data.id
+                        html += '        <a href="'+urlConnect("{:url('lottery/useDetail')}",{id:data[i].id,goods_id:data[i]['lottery_info']['goods_id'],type:'use'})+'"  class="fr layui-btn layui-btn-xs layui-btn-radius" >&nbsp;&nbsp;去使用&nbsp;&nbsp;</a>';
+                        break;
+                    default:
+                        html += '        <a  href="'+urlConnect("{:url('goods/detail')}",{id:data[i]['lottery_info']['goods_id']})+'" class="fr layui-btn layui-btn-xs layui-btn-radius" >&nbsp;&nbsp;去使用&nbsp;&nbsp;</a>';
+                        break;
                 }
-            } else if (data[i].is_use == 1) {
-                html += '        <button class="fr layui-btn layui-btn-xs layui-btn-radius" disabled="disabled" style="background-color: #d0d0d0">&nbsp;&nbsp;已使用 &nbsp;&nbsp;</button>';
             }
+           // } else if (data[i].status == 0) {
+           //     html += '        <button class="fr layui-btn layui-btn-xs layui-btn-radius" disabled="disabled" style="background-color: #d0d0d0">&nbsp;&nbsp;已过期 &nbsp;&nbsp;</button>';
+           // }
+            /*// else if (data[i].is_use == 1) {
+                html += '        <button class="fr layui-btn layui-btn-xs layui-btn-radius" disabled="disabled" style="background-color: #d0d0d0">&nbsp;&nbsp;已使用 &nbsp;&nbsp;</button>';
+            }*/
             html += '    </div>';
             html += '</li>';
         }
