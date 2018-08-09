@@ -122,6 +122,7 @@ class Customer extends Controller
             //绑定商户
             Db::table('fy_admin_user')->where('id', $data['merchant'])->update(['openid' => $vo['openid']]);
             Db::table('fy_customer')->where('id', $id)->update(['merchant_id' => $data['merchant']]);
+            return ajax_return_adv('绑定成功','parent','绑定成功','','','',0);
         } else {
             $this->view->assign("vo", $vo);
             return $this->view->fetch('bindMerchant');
