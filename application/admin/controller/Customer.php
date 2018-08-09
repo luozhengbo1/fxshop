@@ -6,6 +6,7 @@ namespace app\admin\controller;
 
 use app\admin\Controller;
 use think\Db;
+use think\Exception;
 
 class Customer extends Controller
 {
@@ -103,4 +104,27 @@ class Customer extends Controller
 
     }
 
+    public function bindMerchant()
+    {
+        $address = Db::name('admin_user')->where('account','not in','admin')->where('openid','')->select();
+        $controller = $this->request->controller();
+        // 编辑
+        $id = $this->request->param('id');
+        if (!$id) {
+            throw new HttpException(404, "缺少参数ID");
+        }
+        $vo = $this->getModel($controller)->find($id);
+        if (!$vo) {
+            throw new HttpException(404, '该记录不存在');
+        }
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            //绑定商户
+            Db::table('fy_admin_user')->where('id', $data['merchant'])->update(['openid' => $vo['openid']]);
+            Db::table('fy_customer')->where('id', $id)->update(['merchant_id' => $data['merchant']]);
+        } else {
+            $this->view->assign("vo", $vo);
+            return $this->view->fetch('bindMerchant');
+        }
+    }
 }
