@@ -217,36 +217,65 @@ Class Lottery extends Mustlogin
     {
         if($this->request->isAjax()){
             $data = $this->request->post();
-            if(!$data['id']){
+            if(!$data['id'] || !$data['lottery_num'] ){
                 return ajax_return_error('缺少奖券id');
             }
+            #查出券相关信息
+            $lottery = Db::name('lottery')->where(['id'=>(int)$data['id']])->find();
+            #查询库存是否足够
+            if($lottery['number']<$data['lottery_num']){
+                return ajax_return('',"库存不足，只有{$lottery['number']}张",'500');
+            }
+            #生成订单数据
+             $orderRow =[];
+            $orderRow['lottery_id']=$lottery['id'];
+            $orderRow['username']=$this->userInfo['nickname'];
+            $orderRow['openid']=$this->userInfo['openid'];
+            $orderRow['lottery_num']=$data['lottery_num'];
+            $orderRow['total_price']=$lottery['coupon_real_money']*$data['lottery_num'];
+            $orderRow['pay_status']=0;
+            $orderRow['addtime']=time();
+            $orderRow['lottery_info']=json_encode($lottery);
+            $orderRow['is_tui']=0;
+            $orderRow['order_status']=0;
             include_once "WxPaySDK/WxPay.Api.php";
             include_once "WxPaySDK/WxPay.JsApiPay.php";
             include_once 'WxPaySDK/log.php';
-            #订单总价的计算
-            #计算几个商户进行分成多个订单
-            $orderId = \WxPayConfig::MCHID.date("YmdHis");
+            include_once 'WxPaySDK/WxPay.Config.php';
+            $wxConfig = new \WxPayConfig();
             $tools = new \JsApiPay();
+            #订单总价的计算
+            $orderId = $wxConfig->GetMerchantId().date("YmdHis");
+            $orderRow['order_id']=$orderId;
+//            $orderId = \WxPayConfig::MCHID.date("YmdHis");
             //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名内，所以获取不到，使用github的实现。
             //②、统一下单
             $input = new \WxPayUnifiedOrder();
             $input->SetBody("泛亚商城 的订单");
             $input->SetAttach("附加参数");
             $input->SetOut_trade_no($orderId);
-            $input->SetTotal_fee(100);
+            $input->SetTotal_fee($orderRow['total_price']*100);
             $input->SetTime_start(date("YmdHis"));
             $input->SetTime_expire(date("YmdHis", time() + 1800));
             $input->SetGoods_tag("");
-            $input->SetNotify_url("http://".$_SERVER['HTTP_HOST']."/index.php/index/wechatpay/notify3");
+            #微信支付回调变更
+            $notifyUrl = $wxConfig->GetNotifyUrl("http://".$_SERVER['HTTP_HOST']."/index.php/index/wechatpay/notify3");
+            $input->SetNotify_url($notifyUrl);
             $input->SetTrade_type("JSAPI");
             $input->SetOpenid($this->userInfo['openid']);
-            $unifiedOrder = \WxPayApi::unifiedOrder($input);
+            $unifiedOrder = \WxPayApi::unifiedOrder($wxConfig,$input);
             $jsApiParameters= $tools->GetJsApiParameters($unifiedOrder);
-//            if(){}
-
             $jsApiParameters = base64_encode($jsApiParameters);
-            $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}");
-            die(json_encode($backData));
+            $orderRow['js_api_parameters']=$jsApiParameters;
+            $orderRow['prepay_id']=$unifiedOrder['prepay_id'];
+            #保存订单数据
+            $res = Db::name('lottery_log')->insert($orderRow);
+            if($res){
+                $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index")."?js_api_parameters={$jsApiParameters}&order_id={$orderId}&flag=flag");
+                die(json_encode($backData));
+            }else{
+                return ajax_return('','支付调起失败','500');
+            }
         }
 
     }

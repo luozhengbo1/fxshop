@@ -49,7 +49,7 @@
             <div class="layui-btn-group fr count-wrap ">
                 <button class="layui-btn layui-btn-primary layui-btn-sm fr24 minus">-</button>
                 <div class="layui-btn layui-btn-primary layui-btn-sm">
-                    <input class="sumInput" type="text" data-store ="{$lottery['number']}" data-price="{$lottery['coupon_real_money']}" value="1" id="buyNum"  onkeyup="buyNumShow();">
+                    <input class="sumInput" name="lottery_num" type="text" data-store ="{$lottery['number']}" data-price="{$lottery['coupon_real_money']}" value="1" id="buyNum"  onkeyup="buyNumShow();">
                 </div>
                 <button class="layui-btn layui-btn-primary layui-btn-sm fr24 add">+</button>
             </div>
@@ -68,8 +68,8 @@
         </li>
     </ul>
     <ul class="footer-fixed clear">
-        <li style="width: 100%">
-            <a class="affairm-go-pay" href="{:url('lottery/affairm',['lottery_id'=>$lottery['id'],'goods_id'=>$lottery['goods_id']])}" >提&nbsp;交&nbsp;订&nbsp;单</a>
+        <li>
+            <a class="affairm-go-pay" onclick="payLottery()" href="javascript:;" >提&nbsp;交&nbsp;订&nbsp;单</a>
         </li>
     </ul>
 </div>
@@ -81,6 +81,26 @@
        var buyNum = $('#buyNum').val();
        var price = parseFloat($('#buyNum').attr('data-price'));
        $('.priceShow').html((buyNum*price).toFixed(2))
+   }
+   function payLottery(id) {
+       var post_url ="{:url('lottery/paylottery')}"
+       id ="{$lottery['id']}"
+       var lottery_num = $('input[name="lottery_num"]').val()
+       $.ajax({
+           url:post_url,
+           type:'post',
+           data:{id:id,lottery_num:lottery_num },
+           dataType:'json',
+           success: function(data){
+               layer_msg(data.msg);
+               console.log(data)
+               // if(data.code ==200){
+               //     setTimeout(function(){
+                       location.href=data.redirect;
+               //     },1500);
+               // }
+           }
+       })
    }
 </script>
 </body>

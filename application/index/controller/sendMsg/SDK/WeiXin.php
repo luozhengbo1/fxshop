@@ -5,8 +5,10 @@ class WeiXin
     private $appID;
     private $appsecret;
     private $db;
+    protected $hostUrl;
     public function __construct()
     {
+        $this->hostUrl="http://".$_SERVER['SERVER_NAME']."/".$_SERVER['DOCUMENT_URI'];
      /*   foreach ($conf as $key => $val) {
             $$key = $val;
         }
@@ -80,12 +82,17 @@ class WeiXin
     }
  * */
     #购买成功通知
-    public function buySuccess($goods="测试商品",$openid="omQYXwNAT5uC15TQqMGxajJzqo4s",$pay_price="10")
+    public function buySuccess($goods="测试商品",$openid="omQYXwNAT5uC15TQqMGxajJzqo4s",$pay_price="10",$flag='order')
     {
         $touser =$openid;
         $templateId=Config::get('order_pay');
-        $url = "http://shop.istiny.cc/index.php/index/order/index/param/all";
-        $first ="我们已收到您的货款，开始为您打包商品，请耐心等待: )";
+        if($flag=="order"){
+            $first ="我们已收到您的货款，开始为您打包商品，请耐心等待: )";
+            $url = $this->hostUrl."/index/order/index/param/all";
+        }else{
+            $first ="感谢您的购买！: )";
+            $url = $this->hostUrl."/index/lottery/mycardvoucher.html";
+        }
         $template = file_get_contents(__DIR__."/buySuccess.json");
         $remark = "如有问题请致电400-828-1878或直接在微信留言，小易将第一时间为您服务！";
         $param = sprintf($template, $touser,$templateId, $url, $first, $pay_price, $goods,$remark);
@@ -97,7 +104,7 @@ class WeiXin
     {
         $touser =$openid;
         $templateId=Config::get('send');
-        $url = "http://shop.istiny.cc/index.php/index/order/index/param/all";
+        $url = $this->hostUrl."/index/order/index/param/all";
         $first = "您购买{$goods}已经发货啦，正快马加鞭向您飞奔而去。";
         #发货时间
         $sendTime=date('Y-m-d H:i:s');
@@ -112,7 +119,7 @@ class WeiXin
     {
         $touser =$openid;
         $templateId=Config::get('order_refund');
-        $url = "http://shop.istiny.cc/index.php/index/order/index/param/all";
+        $url =$this->hostUrl."/index/order/index/param/all";
         $first = "您的订单已经完成退款，原路退回到您的支付帐户（零钱20天内到账；储蓄卡1-3个工作日；信用卡2-5个工作日）请留意查收。";
         $remark= "有什么疑问请联系【0851-86701701】咨询";
         $template = file_get_contents(__DIR__."/refund.json");
@@ -126,7 +133,7 @@ class WeiXin
     {
         $touser =$openid;
         $templateId="vfjUQ3F8WVhlcbArgxX7rirho2yp9CtnI9UwDZv9UnI";
-        $url = "http://shop.istiny.cc/index.php/index/order/index/param/all";
+        $url =$this->hostUrl."/index/order/index/param/all";
         $first = "亲，物流显示您的订单已签收，请确认！";
         $remark= "如果您已收到货，请点此消息确认收货";
         $status ="已签收";
