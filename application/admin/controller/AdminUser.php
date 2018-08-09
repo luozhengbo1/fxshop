@@ -14,9 +14,11 @@
 
 namespace app\admin\controller;
 
-\think\Loader::import('controller/Controller', \think\Config::get('traits_path') , EXT);
+\think\Loader::import('controller/Controller', \think\Config::get('traits_path'), EXT);
 
 use app\admin\Controller;
+use think\Config;
+use think\Db;
 use think\Exception;
 use think\Loader;
 
@@ -82,5 +84,123 @@ class AdminUser extends Controller
     {
         // 禁止禁用 Admin 模块,权限设置节点
         $this->filterId(1, '该用户不能被禁用', '=');
+    }
+
+
+    /**
+     * 添加
+     * @return mixed
+     */
+    public function add()
+    {
+        $controller = $this->request->controller();
+        if ($this->request->isAjax()) {
+            $data = $this->request->post();
+            // 验证
+            if (class_exists($validateClass = Loader::parseClass(Config::get('app.validate_path'), 'validate', $controller))) {
+                $validate = new $validateClass();
+                if (!$validate->check($data)) {
+                    return ajax_return_adv_error($validate->getError());
+                }
+            }
+
+            // 写入数据
+            if (
+                class_exists($modelClass = Loader::parseClass(Config::get('app.model_path'), 'model', $this->parseCamelCase($controller)))
+                || class_exists($modelClass = Loader::parseClass(Config::get('app.model_path'), 'model', $controller))
+            ) {
+                //使用模型写入，可以在模型中定义更高级的操作
+                $model = new $modelClass();
+                $ret = $model->isUpdate(false)->save($data);
+            } else {
+                // 简单的直接使用db写入
+                Db::startTrans();
+                try {
+                    $model = Db::name($this->parseTable($controller));
+                    $ret = $model->insert($data);
+                    // 提交事务
+                    Db::commit();
+                } catch (\Exception $e) {
+                    // 回滚事务
+                    Db::rollback();
+
+                    return ajax_return_adv_error($e->getMessage());
+                }
+            }
+            //与customer表绑定
+            $res = Db::table('fy_customer')->alias('c')->join('fy_admin_user au', 'c.openid=au.openid')->field('c.id c_id,au.id au_id')->find();
+            Db::table('fy_customer')->where('id', $res['c_id'])->update(['merchant_id' => $res['au_id']]);
+            return ajax_return_adv('添加成功');
+        } else {
+            // 添加
+            return $this->view->fetch(isset($this->template) ? $this->template : 'edit');
+        }
+    }
+
+    /**
+     * 编辑
+     * @return mixed
+     */
+    public function edit()
+    {
+        $controller = $this->request->controller();
+
+        if ($this->request->isAjax()) {
+            // 更新
+            $data = $this->request->post();
+            if (!$data['id']) {
+                return ajax_return_adv_error("缺少参数ID");
+            }
+            // 验证
+            if (class_exists($validateClass = Loader::parseClass(Config::get('app.validate_path'), 'validate', $controller))) {
+                $validate = new $validateClass();
+                if (!$validate->check($data)) {
+                    return ajax_return_adv_error($validate->getError());
+                }
+            }
+            // 更新数据
+            if (
+                class_exists($modelClass = Loader::parseClass(Config::get('app.model_path'), 'model', $this->parseCamelCase($controller)))
+                || class_exists($modelClass = Loader::parseClass(Config::get('app.model_path'), 'model', $controller))
+            ) {
+                // 使用模型更新，可以在模型中定义更高级的操作
+                $model = new $modelClass();
+                $ret = $model->isUpdate(true)->save($data, ['id' => $data['id']]);
+            } else {
+                // 简单的直接使用db更新
+                Db::startTrans();
+                try {
+                    $model = Db::name($this->parseTable($controller));
+                    $ret = $model->where('id', $data['id'])->update($data);
+                    // 提交事务
+                    Db::commit();
+                } catch (\Exception $e) {
+                    // 回滚事务
+                    Db::rollback();
+
+                    return ajax_return_adv_error($e->getMessage());
+                }
+            }
+            //与customer表绑定
+            $account=$this->request->param('account');
+            $res1 = Db::table('fy_admin_user')->field('id,openid')->where('account', $account)->find();
+            $res2 = Db::table('fy_customer')->field('id')->where('openid', $res1['openid'])->find();
+            Db::table('fy_customer')->where('id', $res2['id'])->update(['merchant_id' => $res1['id']]);
+            return ajax_return_adv("编辑成功");
+        } else {
+            // 编辑
+            $id = $this->request->param('id');
+            if (!$id) {
+                throw new HttpException(404, "缺少参数ID");
+            }
+            $vo = $this->getModel($controller)->find($id);
+            if (!$vo) {
+                throw new HttpException(404, '该记录不存在');
+            }
+
+            $this->view->assign("vo", $vo);
+
+            return $this->view->fetch();
+        }
     }
 }
