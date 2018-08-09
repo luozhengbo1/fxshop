@@ -216,6 +216,10 @@ Class Lottery extends Mustlogin
             }
             #查出券相关信息
             $lottery = Db::name('lottery')->where(['id'=>(int)$data['id']])->find();
+            #查询库存是否足够
+            if($lottery['numbvr']<$data['number']){
+                return ajax_return('',"库存不足，只有{$lottery['number']}张",'500');
+            }
             #生成订单数据
              $orderRow =[];
             $orderRow['lottery_id']=$lottery['id'];
