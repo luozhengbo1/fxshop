@@ -33,18 +33,12 @@ Class Lottery extends Mustlogin
                 }
                 #查询所有的子分类
                 $goodsClassAllChild = getAllChildcateIds($goodsClassId);
-                $where = [
-                    'fy_goods.goods_class_id'=>['in',$goodsClassAllChild],
-                ];
+                $where['fy_goods.goods_class_id'] = ['in',$goodsClassAllChild];
             }
             $goodsWithLottery = Db::name('goods')
                 ->field(
-                    'fy_lottery.type as coupon_type,
-                    fy_lottery.id as coupon_id,
-                    fy_lottery.pic as lottery_pic,
-                    fy_lottery.coupon_money,fy_lottery.coupon_real_money,
-                    fy_goods_class.name as class_name,
-                    fy_goods.*')
+                    'fy_lottery.*,
+                    fy_goods_class.name as class_name')
                 ->join('fy_lottery', 'fy_goods.id=fy_lottery.goods_id','left')
                 ->join('fy_goods_class', 'fy_goods_class.id=fy_goods.goods_class_id','left')
                 ->where($where)
@@ -194,16 +188,28 @@ Class Lottery extends Mustlogin
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    public function  adminUserScanCode($id,$goods_id,$adminId){
+    public function  adminUserScanCode($id,$goods_id,$user_id){
         $this->assign('titleName', "商家扫码券");
-        $lottery = Db::name('lottery')
-            ->where( [
-                'id'=>['in',$id],
+       ;
+        $tempUser = Db::table('fy_lottery_log')->alias('log')
+            ->where([
+                'openid'=> $this->userInfo['openid'],
+                'id'=>$user_id
             ])
             ->find();
-        $this->assign('lottery', $lottery);
-        $this->assign('goods_id', $goods_id);
-        return $this->view->fetch('adminUserScanCode');
+        if(!empty($tempUser)){
+            $lottery = Db::name('lottery')
+                ->where( [
+                    'id'=>['in',$id],
+                ])
+                ->find();
+            $this->assign('lottery', $lottery);
+            $this->assign('goods_id', $goods_id);
+            return $this->view->fetch('adminUserScanCode');
+        }else{
+            return $this->view->fetch('noScanCode');
+        }
+
     }
 
     #券的支付接口

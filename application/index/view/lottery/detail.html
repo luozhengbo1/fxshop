@@ -26,21 +26,21 @@
 
 </div>
 <script>
-    var host = "http://10.20.1.171:81"
+    var host = "http://10.20.1.171:81";
     var url={
         adminUserScanCode:host+"{:url('index/Lottery/adminUserScanCode')}",
     }
    $('.content').html(tagParse("{$lottery['desc']}"));
-   // console.log(urlConnect(url.adminUserScanCode,{id:"{$lottery['id']}",goods_id:"{$lottery['goods_id']}",adminId:'11'}))
+    console.log(urlConnect(url.adminUserScanCode,{id:"{$lottery['id']}",goods_id:"{$lottery['goods_id']}",user_id:"{$lottery['user_id']}"}))
    function goUse() {
-// 设置参数方式
+       //设置参数方式
        layer.open({
            content: ' <div id="qrcode" style="width: 200px; height: 200px"></div>'
            ,btn: '关闭'
        });
        //http://10.20.1.171:81/index.php/index//id/33/goods_id/11/adminId/11/type/use.html
        var qrcode = new QRCode('qrcode', {
-           text:urlConnect(url.adminUserScanCode,{id:"{$lottery['id']}",goods_id:"{$lottery['goods_id']}",adminId:'11'}),
+           text:urlConnect(url.adminUserScanCode,{id:"{$lottery['id']}",goods_id:"{$lottery['goods_id']}",user_id:"{$lottery['user_id']}"}),
            width: 200,
            height: 200,
            colorDark : '#000000',

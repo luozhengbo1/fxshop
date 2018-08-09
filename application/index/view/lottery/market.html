@@ -68,7 +68,7 @@
             targetWarp:'dataListWrap',
             target:'dataList',
             page:1,
-            size:4,
+            size:10,
             ajaxData:{
                 url:url.goodsWithLottery,
                 data:{goodsClassId:classId},
@@ -82,9 +82,8 @@
         var html='';
         for(var i = 0; i < data.length; i++){
             var imgArr = new Array();
-
-            if(data[i].lottery_pic){
-                imgArr = eval(data[i].lottery_pic);
+            if(data[i].pic){
+                imgArr = eval(data[i].pic);
             }
             html +='<li>';
             html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
@@ -114,7 +113,7 @@
         return html;
     }
     function coupleTypeHtml(data) {
-        var coupon_type = data.coupon_type;
+        var coupon_type = data.type;
         var html='';
         switch(coupon_type){
             case  constant.coupon.youhui:
@@ -124,7 +123,7 @@
             case  constant.coupon.daijin:
                 html +='                <p class="tc base-color mb10 mt10 tc">代'+data.coupon_money+'元券</p>';
 
-                html +='                <a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10 mt10" href="'+urlConnect("{:url('lottery/detail')}",{id:data.coupon_id,goods_id:data.id,type:'buy'})+'" >立即购买</a>';
+                html +='                <a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10 mt10" href="'+urlConnect("{:url('lottery/detail')}",{id:data.id,goods_id:data.id,type:'buy'})+'" >立即购买</a>';
                 break;
             case constant.coupon.mianyou:
                 html +='                <p class="price f12 mt10 tc"> 包邮券 </p>';

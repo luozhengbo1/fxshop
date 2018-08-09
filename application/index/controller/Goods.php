@@ -317,11 +317,13 @@
         public function return_lottery($goods_id){
             #取出商品中发行中，未删除的所具有的券
             $time = time();
+            $arrType=[2,4];
             $lotterys = Db::name('lottery')->where([
                 "goods_id"=>$goods_id,
                 'status'=>1,
                 'isdelete'=>'0',
                 'grant_start_date' =>['<', $time],
+                'type'=>['in', $arrType],
                 'grant_end_date' =>['>', $time],
             ])->select();
 //            echo Db::name('lottery')->getLastSql();
