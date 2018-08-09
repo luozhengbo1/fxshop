@@ -69,6 +69,11 @@ layui.define('layer' , function(exports){
     ,size: 0 //文件限制大小，默认不限制
     ,number: 0 //允许同时上传的文件数，默认不限制
     ,multiple: false //是否允许多文件上传，不支持ie8-9
+
+      //modify 2018 /8/9 by jiangyongfei
+    ,width:0 //允许文件上传宽度  默认不限制
+    ,height:0//允许文件上传高度 默认不限制
+    ,scale:0//允许文件上传宽高比例  默认不限制  scale =width/height
   };
   
   //初始渲染
@@ -413,6 +418,43 @@ layui.define('layer' , function(exports){
       });
       if(limitSize) return that.msg('文件不能超过'+ limitSize);
     }
+    //上传文件尺寸限制
+      if((options.height > 0 && options.width >0 ) && !(device.ie && device.ie < 10)){
+          var limitHeight;var limitWidth;
+
+          layui.each(that.chooseFiles, function(index, file){
+              if(file.width != options.width || file.height !=options.height){
+                  elemFile.value = '';
+                  limitWidth = options.width;
+                  limitHeight = options.height;
+              }
+          });
+          if(limitHeight || limitWidth) return that.msg('上传文件尺寸：'+ '宽度：'+limitWidth +'，高度：'+limitHeight);
+      }
+      //上传文件宽高比例限制
+      if(options.scale > 0 && !(device.ie && device.ie < 10)){
+          var limitScale;
+          layui.each(that.chooseFiles, function(index, file){
+              var reader = new FileReader();
+              reader.readAsDataURL(file);
+              reader.onload = function (e) {
+                  var data = e.target.result;
+                  //加载图片获取图片真实宽度和高度
+                  var image = new Image();
+                  image.src= data;
+                  image.onload=function(){
+                      var scale =(image.width/image.height);
+                      if(scale !=options.scale){
+                          elemFile.value = '';
+                          limitScale = options.scale;
+                      }
+                  };
+              };
+          });
+          if(limitScale) return that.msg('上传文件宽高像素比例为：'+ limitScale);
+      }
+
+
     send();
   };
   

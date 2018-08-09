@@ -33,18 +33,12 @@ Class Lottery extends Mustlogin
                 }
                 #查询所有的子分类
                 $goodsClassAllChild = getAllChildcateIds($goodsClassId);
-                $where = [
-                    'fy_goods.goods_class_id'=>['in',$goodsClassAllChild],
-                ];
+                $where['fy_goods.goods_class_id'] = ['in',$goodsClassAllChild];
             }
             $goodsWithLottery = Db::name('goods')
                 ->field(
-                    'fy_lottery.type as coupon_type,
-                    fy_lottery.id as coupon_id,
-                    fy_lottery.pic as lottery_pic,
-                    fy_lottery.coupon_money,fy_lottery.coupon_real_money,
-                    fy_goods_class.name as class_name,
-                    fy_goods.*')
+                    'fy_lottery.*,
+                    fy_goods_class.name as class_name')
                 ->join('fy_lottery', 'fy_goods.id=fy_lottery.goods_id','left')
                 ->join('fy_goods_class', 'fy_goods_class.id=fy_goods.goods_class_id','left')
                 ->where($where)
@@ -199,7 +193,7 @@ Class Lottery extends Mustlogin
        ;
         $tempUser = Db::table('fy_lottery_log')->alias('log')
             ->where([
-                'openid'=> $this->userInfo['openid'],
+                'openid.id'=> $this->userInfo['openid'],
                 'id'=>$user_id
             ])
             ->find();
@@ -213,7 +207,7 @@ Class Lottery extends Mustlogin
             $this->assign('goods_id', $goods_id);
             return $this->view->fetch('adminUserScanCode');
         }else{
-            return $this->view->fetch('noScanCode');
+            return $this->view->fetch('oScanCode');
         }
 
     }

@@ -1,10 +1,4 @@
-<!DOCTYPE HTML>
-<html manifest="">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <title>QQ Test</title>
-</head>
+{include file="Public/header-resource"}
 <body>
 <a href="mqqwpa://im/chat?chat_type=wpa&uin=2550162927&version=1&src_type=web&web_src=oicqzone.com">打开qq聊天框</a>
 
@@ -14,4 +8,159 @@
 
 <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2550162927&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:2550162927:52" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
 <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2550162927&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:2550162927:53" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
+<input id="upload" type="file" >
+<section class="section-group p10">
+    <textarea style="border: none" name="desc"  data-text="商品描述" placeholder="宝贝满足你的期待吗？说说它的优点和美中不足的地方吧。" class="layui-textarea "></textarea>
+    <div class="layui-upload clear">
+        <div id="imageShow" class="upload-image-show fl">
+            <div class="upload-icon-wrap mr5" id="uploadBtn">
+                <img width="30" src="__STATIC__/index/images/photo.png">
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    var url={
+        upload:"{:url('index/upload/upload')}",
+        dele:"",
+        save:"{:url('index/order/orderComment')}",
+        returnUrl:"{:url('order/index',['param'=>'evaluate'])}",
+    }
+    layui.use('upload', function(){
+        var $ = layui.jquery
+            ,upload = layui.upload;
+        //多图片上传
+        var pr
+        upload.render({
+            elem: '#uploadBtn'
+            ,url:url.upload
+            ,multiple: true
+            ,number:5
+            ,accept: 'images' //普通文件
+            ,size: (1024*3) //限制文件大小，单位 KB
+            ,scale:1.5
+            //,exts: 'zip|rar|7z' //只允许上传压缩文件
+            //,auto: false //选完文件后不自动上传
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+            }
+            ,done: function(data){
+                console.log(data)
+
+                var html ='<div class="singer-image" style="" >';
+                html +='<img  src="'+data.data.name+'" class="layui-upload-img showImg">';
+                html +='<i class="close-btn" onclick="dele(this)"></i></div>';
+                html +='<input type="hidden" class="pic" name="pic" value="'+data.data.name+'">'
+                $('#imageShow').prepend(html);
+                //console.log(data.data.name)
+                //上传完毕
+                //上传文件个数大于了5个
+               // isShowUploadBtn();
+
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                /*var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadInst.upload();
+                });*/
+            }
+        });
+    });
+</script>
+
+<script>
+    $(function () {
+        $('#upload').change(function () {
+            testImgWidthHeight('upload', 200,200,error)
+        })
+    })
+    function error() {
+        alert('image size wrong')
+    }
+    /**
+     * 文件宽高
+     * @param eventId id
+     * @param w 宽度
+     * @param h 高度
+     * @param callback 回调函数
+     这里判断图片像素的方法是异步的，所以需要在回调函数中来进行上传的操作
+     */
+    function testImgWidthHeight(eventId, w,h,callback){
+        var input = document.getElementById(eventId);
+        debugger;
+        if(input.files){
+            //读取图片数据
+            var f = input.files[0];
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var data = e.target.result;
+                //加载图片获取图片真实宽度和高度
+                var image = new Image();
+                image.onload=function(){
+                    var width = image.width;
+                    var height = image.height;
+                    if (width != w || height != h) {
+                        //隐藏
+                        input.value="";
+                        callback && callback(false);
+                    } else {
+                        callback && callback(true);
+                    }
+                    console.log('width:'+width+'height:' + height)
+                };
+                image.src= data;
+            };
+            reader.readAsDataURL(f);
+
+        }else{
+            var image = new Image();
+            image.onload =function(){
+                var width = image.width;
+                var height = image.height;
+                var fileSize = image.fileSize;
+                alert(width+'===2==='+height+"====="+fileSize);
+            }
+            image.src = input.value;
+        }
+    }
+
+    /**
+     *文件大小
+     * @param fileData
+     * @param Max_Size
+     * @returns {boolean}
+     */
+    function testMaxSize(fileData,Max_Size){
+        var isAllow=false;
+        var size = fileData.size;
+        isAllow = size <= Max_Size;
+        if(!isAllow){
+            vue.$message({
+                message: '图片大小超过限制！',
+                type: 'warning'
+            });
+        }
+        return isAllow;
+    }
+    /**
+     * 判断图片类型
+     * @param eventId
+     * @param gif|jpg|jpeg|png|GIF|JPG|PNG
+     * @returns {boolean}
+     */
+    function testImgType(eventId) {
+        var tmpFile = document.getElementById(eventId);
+        if (!/\.(jpg)$/.test(tmpFile.value)) {
+            tmpFile.value= "";
+            vue.$message({
+                message: '图片格式不正确！',
+                type: 'warning'
+            });
+            return false;
+        }
+        return true;
+    }
+</script>
 </html>

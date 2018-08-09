@@ -79,8 +79,8 @@
    //显示购买数量 根据
    function buyNumShow(){
        var buyNum = $('#buyNum').val();
-       var price = parseInt($('#buyNum').attr('data-price'));
-       $('.priceShow').html(buyNum*price)
+       var price = parseFloat($('#buyNum').attr('data-price'));
+       $('.priceShow').html((buyNum*price).toFixed(2))
    }
 </script>
 </body>
