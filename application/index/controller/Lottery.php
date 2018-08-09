@@ -193,7 +193,7 @@ Class Lottery extends Mustlogin
        ;
         $tempUser = Db::table('fy_lottery_log')->alias('log')
             ->where([
-                'openid.id'=> $this->userInfo['openid'],
+                'openid'=> $this->userInfo['openid'],
                 'id'=>$user_id
             ])
             ->find();
@@ -207,7 +207,7 @@ Class Lottery extends Mustlogin
             $this->assign('goods_id', $goods_id);
             return $this->view->fetch('adminUserScanCode');
         }else{
-            return $this->view->fetch('oScanCode');
+            return $this->view->fetch('noScanCode');
         }
 
     }
