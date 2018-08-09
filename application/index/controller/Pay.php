@@ -23,6 +23,7 @@ class Pay extends  Mustlogin
         }
 //        dump($order);die;
         $this->assign('total',$order['total_price']);
+        $this->assign('flag',$flag?$flag:'');
         $wx_user = Session::get('wx_user');
         $this->assign('titleName', "微信支付 ");
         Session::set('storeData'.$wx_user['openid'],'');

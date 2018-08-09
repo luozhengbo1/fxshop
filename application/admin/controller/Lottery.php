@@ -32,33 +32,7 @@ class Lottery extends Controller
             if(!$validate->check($data)){
 			    return $validate->getError();
             }
-          /*  if($data['type']==1){#抵用券
-                 if( empty($data['voucher_money']) || empty( $data['voucher_real_money']) ){
-                        return ajax_return_adv_error('抵用券设置不合法');
-                 }
-            }
-            if($data['type']==2){#优惠券
-                if( empty($data['coupon_money']) || empty( $data['coupon_real_money']) ){
-                    return ajax_return_adv_error('优惠券设置不合法');
-                }
-            }
-            if($data['type']==3){#优惠券
-                if( empty($data['cash_coupon_real_money'])  ){
-                    return ajax_return_adv_error('代金券设置不合法');
-                }
-            }*/
-//            dump($data);die;
 
-            /*if($data['type']==4){#优惠券
-                if( empty($data['score_money']) || empty($data['score_real_money']) ){
-                    return ajax_return_adv_error('积分券设置不合法');
-                }
-            }
-            if($data['type']==5){#优惠券
-                if( empty($data['coupon_money']) || empty( $data['coupon_real_money']) ){
-                    return ajax_return_adv_error('生日券设置不合法');
-                }
-            }*/
             if( !empty($data['grant_start_date']) ){
                 $data['grant_start_date']=strtotime($data['grant_start_date']);
             }
@@ -114,31 +88,7 @@ class Lottery extends Controller
             if(!$validate->check($data)){
                 return $validate->getError();
             }
-           /* if($data['type']==1){#抵用券
-                if( empty($data['voucher_money']) || empty( $data['voucher_real_money']) ){
-                    return ajax_return_adv_error('抵用券设置不合法');
-                }
-            }
-            if($data['type']==2){#优惠券
-                if( empty($data['coupon_money']) || empty( $data['coupon_real_money']) ){
-                    return ajax_return_adv_error('优惠券设置不合法');
-                }
-            }
-            if($data['type']==3){#优惠券
-                if( empty($data['cash_coupon_real_money'])  ){
-                    return ajax_return_adv_error('代金券设置不合法');
-                }
-            }
-            if($data['type']==4){#优惠券
-                if( empty($data['score_money']) || empty($data['score_real_money']) ){
-                    return ajax_return_adv_error('积分券设置不合法');
-                }
-            }
-            if($data['type']==5){#优惠券
-                if( empty($data['coupon_money']) || empty( $data['coupon_real_money']) ){
-                    return ajax_return_adv_error('生日券设置不合法');
-                }
-            }*/
+        
             if( !empty($data['grant_start_date']) ){
                 $data['grant_start_date']=strtotime($data['grant_start_date']);
             }

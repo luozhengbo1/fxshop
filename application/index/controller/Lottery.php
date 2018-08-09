@@ -217,12 +217,13 @@ Class Lottery extends Mustlogin
             #查出券相关信息
             $lottery = Db::name('lottery')->where(['id'=>(int)$data['id']])->find();
             #查询库存是否足够
-            if($lottery['numbvr']<$data['number']){
+            if($lottery['number']<$data['lottery_num']){
                 return ajax_return('',"库存不足，只有{$lottery['number']}张",'500');
             }
             #生成订单数据
              $orderRow =[];
             $orderRow['lottery_id']=$lottery['id'];
+            $orderRow['username']=$this->userInfo['nickname'];
             $orderRow['openid']=$this->userInfo['openid'];
             $orderRow['lottery_num']=$data['lottery_num'];
             $orderRow['total_price']=$lottery['coupon_real_money']*$data['lottery_num'];
@@ -247,7 +248,7 @@ Class Lottery extends Mustlogin
             $input->SetBody("泛亚商城 的订单");
             $input->SetAttach("附加参数");
             $input->SetOut_trade_no($orderId);
-            $input->SetTotal_fee($lottery['coupon_real_money']*100);
+            $input->SetTotal_fee($orderRow['total_price']*100);
             $input->SetTime_start(date("YmdHis"));
             $input->SetTime_expire(date("YmdHis", time() + 1800));
             $input->SetGoods_tag("");
