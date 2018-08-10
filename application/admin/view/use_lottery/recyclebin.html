@@ -1,0 +1,10 @@
+{extend name="template/recyclebin" /}
+{block name="script"}
+<script type="text/javascript" src="__LIB__/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $(function () {
+        $("[name='username']").find("[value='{$Request.param.username}']").attr("selected", true);
+        $("[name='lottery_id']").find("[value='{$Request.param.lottery_id}']").attr("selected", true);
+    })
+</script>
+{/block}

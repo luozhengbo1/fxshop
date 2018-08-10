@@ -30,9 +30,8 @@ class LotteryLog extends Controller
         }
         $list = $this->getModel()
             ->alias('lotlog')
-            ->field('lotlog.*,cus.username')
-            ->join('fy_lottery lot','lotlog.lottery_id = lot.id')
-            ->join('fy_customer cus','lotlog.uid = cus.id')
+            ->field('lotlog.*,fy_lottery.name')
+            ->join('fy_lottery lot','lotlog.lottery_id = lot.id','left')
             ->where($map)
             ->paginate(20);
         $page = $list->render();
@@ -58,9 +57,8 @@ class LotteryLog extends Controller
         $map['lottery_id']=$lottery_id;
         $list = $this->getModel()
                 ->alias('lotlog')
-                ->field('lotlog.*,lot.name,cus.username')
-                ->join('fy_lottery lot','lotlog.lottery_id = lot.id')
-                ->join('fy_customer cus','lotlog.uid = cus.id')
+                ->field('lotlog.*,lot.name')
+                ->join('fy_lottery lot','lotlog.lottery_id = lot.id','left')
                 ->where($map)
                 ->paginate(20);
         $page = $list->render();
