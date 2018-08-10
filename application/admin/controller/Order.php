@@ -242,7 +242,9 @@ class Order extends Controller
             include_once APP_PATH . "/index/controller/WxPaySDK/WxPay.Api.php";
             include_once APP_PATH . "/index/controller/WxPaySDK/WxPay.JsApiPay.php";
             include_once APP_PATH . "/index/controller/WxPaySDK/log.php";
-            $orderId = \WxPayConfig::MCHID . date("YmdHis");
+            include_once APP_PATH . "/index/controller/WxPaySDK/WxPay.Config.php";
+            $wxConfig = new \WxPayConfig();
+            $orderId =$wxConfig->GetMerchantId().date("YmdHis");
             $res = $this->getModel()
                 ->where(['order_id' => $data['order_id']])
                 ->update(['total_price' => $data['totalPrice'], 'js_api_parameters' => '', 'prepay_id' => '', 'order_id' => $orderId, 'create_time' => time()]);#时间修改
