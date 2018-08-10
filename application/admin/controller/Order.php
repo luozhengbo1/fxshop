@@ -109,9 +109,9 @@ class Order extends Controller
         $this->view->assign('userList', $userList);
         $this->view->assign('list', $orderList);
 //        $this->view->assign('page', $page);
-        $this->view->assign('count',count($orderList));
+        $this->view->assign('count', count($orderList));
 //        dump($orderList);die;
-        return $this->  view->fetch();
+        return $this->view->fetch();
     }
 
     /**
@@ -200,18 +200,23 @@ class Order extends Controller
                 ]);
             if ($res) {
                 #确认物流，提醒买家
-                $user_data = Db::table('fy_customer')->where('openid', $orderGoods['openid'])->find();
                 $order_message = new OrderMessage();
+                $user_data = Db::table('fy_customer')->where('openid', $orderGoods['openid'])->find();
                 $user_info = ['uid' => $user_data['id'], 'openid' => $user_data['openid']];
-                $goods_data='';
-                $goods_data=$goods_data.''.$orderGoods['goods_detail']['name'].' '.$orderGoods['sku_val'].'×'.$orderGoods['goods_num'];
+
+                $goods_data = '';
+                $goods_data = $goods_data . '' . $orderGoods['goods_detail']['name'] . ' ' . $orderGoods['sku_val'] . '×' . $orderGoods['goods_num'];
                 $goods_info = ['goods_data' => $goods_data];
+
+                $order_data = Db::name('order_goods')->where(['id' => $data['id']])->find();
                 $order_info = [
-                    'order_id' => $orderGoods['order_id'],
-                    'send_time' => $orderGoods['send_time'],
-                    'logistics_name' => $orderGoods['logistics_name'],
-                    'logistics_number' => $orderGoods['logistics_number']
+                    'order_id' => $order_data['order_id'],
+                    'send_time' => $order_data['send_time'],
+                    'logistics_name' => $order_data['logistics_name'],
+                    'logistics_number' => $order_data['logistics_number'],
+                    'address' => $addressStr
                 ];
+
                 $order_message->payMessage('deliver_success', $user_info, $goods_info, $order_info);
                 return ajax_return('', '操作成功', '200');
             } else {
@@ -264,14 +269,14 @@ class Order extends Controller
             $orderGoods = Db::name('order_goods')->where(['id' => $data['ogid']])->find();
             $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'], true);
 //            dump($data);die;
-            if(!$orderGoods['after_handle_is']){ #未处理，进行处理
+            if (!$orderGoods['after_handle_is']) { #未处理，进行处理
                 Db::name('order_goods')->where(['id' => $data['ogid']])->update(['after_handle_is' => 1]);
                 Db::name('after_sale_following')->where(['id' => $data['id']])
                     ->update(['shop_wuliu_address' => $data['shop_wuliu_address']
-                        ,'handle_yes_no_time'=>time()
-                        ,'handle_time'=>time()
-                        ,'after_status'=>8
-                        ,'yes_or_no'=>1]);#同意
+                        , 'handle_yes_no_time' => time()
+                        , 'handle_time' => time()
+                        , 'after_status' => 8
+                        , 'yes_or_no' => 1]);#同意
                 if ($data['after_sale_type'] == 3) {#退款
                     #通过退款，将该商品订单改为退款 状态，
                     #计算退款金额  将退款金额计算在订单表中， 修改字段is_return 为1 ，
@@ -301,7 +306,7 @@ class Order extends Controller
 //                        #总退款加上0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成
 //                    }
                 }
-            }else{
+            } else {
                 return ajax_return('', '已经处理过了', '200');
             }
 
@@ -319,8 +324,8 @@ class Order extends Controller
             }
 //            dump($data);die;
             $orderGoods = Db::name('order_goods')->where(['id' => $data['ogid']])->find();
-            $orderGoods['goods_detail']=json_decode($orderGoods['goods_detail'],true);
-            if($data['after_sale_type']==3){#拒绝退款
+            $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'], true);
+            if ($data['after_sale_type'] == 3) {#拒绝退款
                 $goodsAttribute = Db::name('goods_attribute')->field('price')->where(['id' => $orderGoods['sku_id']])->find();
                 $returnMoney = $orderGoods['goods_num'] * $goodsAttribute['price'];
                 #如果商品包邮，退款时减去邮费
@@ -332,32 +337,32 @@ class Order extends Controller
                 $res1 = Db::name('order_goods')->where([
                     'order_id' => $orderGoods['order_id'],
                     'id' => $data['id'],
-                ])->update(['is_return' => 0, 'return_price' =>0, 'is_send' => 6]); # 0   6 完成 0 未提交
+                ])->update(['is_return' => 0, 'return_price' => 0, 'is_send' => 6]); # 0   6 完成 0 未提交
                 $ordertmp = Db::name('order')->where([
                     'order_id' => $orderGoods['order_id']])->find();
                 #退款价
                 $order = Db::name('order')->where('order_id', $orderGoods['order_id'])->find();
                 $update = [];
-                $update = ['return_price_all' =>$ordertmp['return_price_all'] - $goodsAttribute['price']];#减去退款价
+                $update = ['return_price_all' => $ordertmp['return_price_all'] - $goodsAttribute['price']];#减去退款价
                 $res = Db::name('order')
                     ->where('order_id', $orderGoods['order_id'])->update($update);
-                    #总退款加上0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成
-            }else{#维修和换货拒绝之后状态修改为完成
+                #总退款加上0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成
+            } else {#维修和换货拒绝之后状态修改为完成
                 $res1 = Db::name('order_goods')->where([
                     'order_id' => $orderGoods['order_id'],
                     'id' => $data['id'],
-                ])->update([  'is_send' => 6]);
+                ])->update(['is_send' => 6]);
             }
-            if(!$orderGoods['after_handle_is']){ #未处理，进行处理
+            if (!$orderGoods['after_handle_is']) { #未处理，进行处理
                 Db::name('order_goods')->where(['id' => $data['ogid']])->update(['after_handle_is' => 1]);
                 Db::name('after_sale_following')
                     ->where(['id' => $data['id']])
                     ->update(['refused_reason' => $data['refused_reason'],
-                        'handle_yes_no_time'=>time()
-                        ,'handle_time'=>time()
-                        ,'yes_or_no'=>2
-                        ,'after_status'=>2]);#不同意
-            }else{
+                        'handle_yes_no_time' => time()
+                        , 'handle_time' => time()
+                        , 'yes_or_no' => 2
+                        , 'after_status' => 2]);#不同意
+            } else {
 
                 return ajax_return('', '已经处理过了', '200');
             }
@@ -376,23 +381,24 @@ class Order extends Controller
             }
             $orderGoods = Db::name('order_goods')->where(['id' => $data['ogid']])->find();
             $update = [];
-            if($data['after_sale_type']==1){#换货 2 维修
-                $update['after_status']=5;
-            }else if($data['after_sale_type']==2){ #
-               #维修中
-                $update['after_status']=4;
+            if ($data['after_sale_type'] == 1) {#换货 2 维修
+                $update['after_status'] = 5;
+            } else if ($data['after_sale_type'] == 2) { #
+                #维修中
+                $update['after_status'] = 4;
             }
-            $update['handle_time']=time();
-            $update['shop_sure_get_time']=time();
-            $update['shop_sure_get_goods']=1;
+            $update['handle_time'] = time();
+            $update['shop_sure_get_time'] = time();
+            $update['shop_sure_get_goods'] = 1;
             Db::name('after_sale_following')
                 ->where(['id' => $data['id']])
                 ->update($update);#换货
-            return ajax_return('','确认收货成功','200');
+            return ajax_return('', '确认收货成功', '200');
 
         }
 
     }
+
     #商家发货中
     public function shopsSendGoods()
     {
@@ -404,8 +410,8 @@ class Order extends Controller
             $orderGoods = Db::name('order_goods')->where(['id' => $data['ogid']])->find();
             Db::name('after_sale_following')
                 ->where(['id' => $data['id']])
-                ->update(['after_status' =>6 ,"send_time"=>time(),'send_wuliu_type'=>$data['send_wuliu_type'],'send_wuliu_order'=>$data['send_wuliu_order']]);#商家发货时间
-            return ajax_return('','发货成功','200');
+                ->update(['after_status' => 6, "send_time" => time(), 'send_wuliu_type' => $data['send_wuliu_type'], 'send_wuliu_order' => $data['send_wuliu_order']]);#商家发货时间
+            return ajax_return('', '发货成功', '200');
         }
 
     }
@@ -463,7 +469,7 @@ class Order extends Controller
                     $input->SetTotal_fee($order['total_price'] * 100);   //订单标价金额，单位为分
                     $input->SetRefund_fee($orderGoods['return_price'] * 100);  //退款总金额，订单总金额，单位为分，只能为整数
                     $input->SetOp_user_id($merchid);
-                    $res = \WxPayApi::refund($wxConfig,$input);
+                    $res = \WxPayApi::refund($wxConfig, $input);
                     //退款操作
 
                     if ($res['return_code'] == 'SUCCESS' && $res['result_code'] == "SUCCESS") {
@@ -497,11 +503,11 @@ class Order extends Controller
                         $order_message = new OrderMessage();
 //                        dump($orderData);
                         $user_info = ['uid' => $user['id'], 'openid' => $user['openid']];
-                        $buy_list = json_decode($orderData['buy_list'],true);
+                        $buy_list = json_decode($orderData['buy_list'], true);
 //                        dump($buy_list);die;
                         $goods_data = '';
                         foreach ($buy_list as $buy_item) {
-                            $goods_data .=  $buy_item['goods_name'] . ' ' . $buy_item['sku_val'] . '×' . $buy_item['num'] . '<br/>';
+                            $goods_data .= $buy_item['goods_name'] . ' ' . $buy_item['sku_val'] . '×' . $buy_item['num'] . '<br/>';
                         }
                         $goods_info = ['goods_data' => $goods_data];
                         $order_info = ['refund_price' => $orderGoods['return_price'], 'refund_num' => $orderGoods['order_id']];
