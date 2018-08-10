@@ -203,10 +203,15 @@
             if($youhui.val() ){
                 totalPrice -=parseInt($youhui.find('option:selected').attr('data-value'));
             }
-            if(($mianyou.val()) || (freetype==0 && !isNaN(postage))){
+
+            if((freetype==0 && !isNaN(postage))){
                 totalPrice += postage;//加上邮费
             }
+            if($mianyou.val()!=""){
+                totalPrice -= postage;//减去邮费
+            }
         })
+
         var html='';
         totalPrice = totalPrice.toFixed(2);
         if(totalPrice>0 && totalPoint>0) html ='￥'+totalPrice+'+'+totalPoint+'积分';
