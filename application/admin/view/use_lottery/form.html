@@ -1,6 +1,6 @@
 <form class="mb-20" method="get" action="{:\\think\\Url::build($Request.action)}">
     <div class="select-box" style="width:250px">
-        <input type="text" class="input-text" style="width:250px" placeholder="用户昵称" name="username" value="{$Request.param.name}" >
+        <input type="text" class="input-text" style="width:250px" placeholder="用户昵称" name="username" value="{$Request.param.username}" >
     </div>
     <div class="select-box" style="width:250px">
         <select name="shop_openid" class="select">
@@ -15,7 +15,7 @@
             <option value="">--代金券--</option>
             {if condition="!empty($lottery)"}
             {volist name="lottery" id="voLottery"}
-            <option value="{$voLottery['id']}" {if condition="$Request.param.lottery_id eq $voLottery['id']"}selected{/if}>{$lottery_id['name']}</option>
+            <option value="{$voLottery['id']}" {if condition="$Request.param.lottery_id eq $voLottery['id']"}selected{/if}>{$voLottery['name']}</option>
             {/volist}
             {/if}
         </select>
