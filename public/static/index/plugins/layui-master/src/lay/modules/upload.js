@@ -419,7 +419,7 @@ layui.define('layer' , function(exports){
       if(limitSize) return that.msg('文件不能超过'+ limitSize);
     }
     //上传文件尺寸限制
-      if((options.height > 0 && options.width >0 ) && !(device.ie && device.ie < 10)){
+     /* if((options.height > 0 && options.width >0 ) && !(device.ie && device.ie < 10)){
           var limitHeight;var limitWidth;
 
           layui.each(that.chooseFiles, function(index, file){
@@ -430,10 +430,10 @@ layui.define('layer' , function(exports){
               }
           });
           if(limitHeight || limitWidth) return that.msg('上传文件尺寸：'+ '宽度：'+limitWidth +'，高度：'+limitHeight);
-      }
+      }*/
       //上传文件宽高比例限制
       if(options.scale > 0 && !(device.ie && device.ie < 10)){
-          var limitScale;
+          var limitScale,fileNum = 0;
           layui.each(that.chooseFiles, function(index, file){
               var reader = new FileReader();
               reader.readAsDataURL(file);
@@ -442,20 +442,27 @@ layui.define('layer' , function(exports){
                   //加载图片获取图片真实宽度和高度
                   var image = new Image();
                   image.src= data;
+                  console.log(image.width/image.height);
                   image.onload=function(){
                       var scale =(image.width/image.height);
-                      if(scale !=options.scale){
+                      ++fileNum;
+                      if(scale.toFixed(2) !=options.scale){
                           elemFile.value = '';
                           limitScale = options.scale;
+                          return that.msg('上传文件宽高像素比例为：'+ limitScale);
+                      }
+                      if(that.fileLength ==fileNum){
+                          send();
                       }
                   };
               };
           });
-          if(limitScale) return that.msg('上传文件宽高像素比例为：'+ limitScale);
+
       }
 
+      send();
 
-    send();
+
   };
   
   //事件处理

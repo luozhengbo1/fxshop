@@ -65,17 +65,16 @@ Class Lottery extends Mustlogin
         return  $this->view->fetch();
 
     }
-    public function useDetail($id,$goods_id,$type)
+    public function useDetail($id,$type,$useNum)
     {
         $this->assign('titleName', "使用详情");
         $lottery_log = Db::name('lottery_log')
             ->where( ['id'=>$id,])->find();
         $lottery_log['lottery_info'] =json_decode($lottery_log['lottery_info'],true);
-     //     dump($lottery['lottery_info']);
         $this->assign('lottery_log',  $lottery_log);
         $this->assign('lottery',  $lottery_log['lottery_info']);
-        $this->assign('goods_id', $goods_id);
         $this->assign('type', $type);
+        $this->assign('use_num',$useNum);
         return  $this->view->fetch("useDetail");
 
     }
@@ -186,13 +185,8 @@ Class Lottery extends Mustlogin
      * @param $id 券id
      * @param $goods_id 商品id
      * @param $adminId  发行券商家id
-     * @return string
-     * @throws \think\Exception
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
-     */
-    public function  adminUserScanCode($id,$goods_id,$user_id){
+     **/
+    public function  adminUserScanCode($id,$use_num,$user_id){
         $this->assign('titleName', "商家扫码券");
         $tempUser = Db::table('fy_admin_user')   ->where([
                 'openid'=> $this->userInfo['openid'],
@@ -206,7 +200,7 @@ Class Lottery extends Mustlogin
             $lottery_log['lottery_info'] =json_decode($lottery_log['lottery_info'],true);
             $this->assign('lottery',  $lottery_log['lottery_info']);
             $this->assign('lottery_log',  $lottery_log);
-            $this->assign('goods_id', $goods_id);
+            $this->assign('use_num',$use_num);
             return $this->view->fetch('adminUserScanCode');
         }else{
             return $this->view->fetch('noScanCode');

@@ -6,14 +6,11 @@
     </div>
     <ul class="footer-fixed footer-pay-info clear">
         <li>
-            <input id="data" type="hidden"
-                   data-lottery_log_id="{$lottery_log['id']}"
-            >
             <p class="pl10 pt5"><i class="price bold f24">￥ {$lottery['coupon_real_money']}</i><span class="border-tag ml10"> {$lottery['coupon_real_money']/$lottery['coupon_money']}折</span> </p>
             <p class="pl10 grey f12">门市价<i>￥ {$lottery['coupon_money']}</i></p>
         </li>
         <li>
-            <a class="go-pay" style="background: #0B61A4" onclick="agreeUse();" >同&nbsp;意&nbsp;使&nbsp;用</a>
+            <a class="go-pay" style="background: #0B61A4" onclick="agreeUse();" >同意使用{$use_num}张</a>
         </li>
     </ul>
 
@@ -23,8 +20,18 @@
     function agreeUse() {
         pub_edit({
             url:"{:url('lottery/useLottery')}",
-            data:{lottery_log_id:"{$lottery_log['id']}",num:1},
+            data:{
+                lottery_log_id:"{$lottery_log['id']}"
+                ,num:"{$use_num}"
+               // ,complete:closeWindow,
+            },
         })
+    }
+    function closeWindow()
+    {
+        window.opener = null;
+        window.open(' ', '_self', ' ');
+        window.close();
     }
 </script>
 </body>

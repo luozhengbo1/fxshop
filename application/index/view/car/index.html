@@ -229,7 +229,7 @@
                     html =totalPoint+'积分';
                     break;
                 case settlement.money_score:
-                    totalPoint=parseInt(num)*parseFloat(pointScore);
+                    totalPoint +=parseInt(num)*parseFloat(pointScore);
                     totalPrice += parseInt(num)*parseFloat(price);
                     html =totalPoint+'积分+￥'+totalPrice;
                     break;
