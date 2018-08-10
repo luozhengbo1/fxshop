@@ -2,6 +2,7 @@
     <div class="select-box" style="width:250px">
         <input type="text" class="input-text" style="width:250px" placeholder="用户昵称" name="username" value="{$Request.param.username}" >
     </div>
+    {php}if($_SESSION['think']['auth_id']==1){ {/php}
     <div class="select-box" style="width:250px">
         <select name="shop_openid" class="select">
             <option value="">--核销者--</option>
@@ -10,6 +11,7 @@
             {/volist}
         </select>
     </div>
+    {php}}{/php}
     <div class="select-box" style="width:250px">
         <select name="lottery_id" class="select">
             <option value="">--代金券--</option>

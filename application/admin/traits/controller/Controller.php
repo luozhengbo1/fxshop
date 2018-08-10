@@ -24,7 +24,6 @@ trait Controller
     public function index()
     {
         $model = $this->getModel();
-
         // 列表过滤器，生成查询Map对象
         $map = $this->search($model, [$this->fieldIsDelete => $this::$isdelete]);
 
@@ -37,10 +36,11 @@ trait Controller
         if (method_exists($this, 'filter')) {
             $this->filter($map);
         }
-
         $this->datalist($model, $map);
 //        echo    $model->getLastSql(); die;
-        return $this->  view->fetch();
+//        dump($model);
+        return $this->view->fetch();
+
     }
 
     /**

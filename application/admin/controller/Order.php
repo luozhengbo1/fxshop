@@ -269,8 +269,9 @@ class Order extends Controller
             $orderGoods = Db::name('order_goods')->where(['id' => $data['ogid']])->find();
             $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'], true);
 //            dump($data);die;
-            if (!$orderGoods['after_handle_is']) { #未处理，进行处理
-                Db::name('order_goods')->where(['id' => $data['ogid']])->update(['after_handle_is' => 1]);
+
+            if(!$orderGoods['after_handle_is']){ #未处理，进行处理
+                Db::name('order_goods')->where(['id' => $data['ogid']])->update(['after_handle_is' => 1,'after_sale_is'=>2]);
                 Db::name('after_sale_following')->where(['id' => $data['id']])
                     ->update(['shop_wuliu_address' => $data['shop_wuliu_address']
                         , 'handle_yes_no_time' => time()
@@ -353,8 +354,8 @@ class Order extends Controller
                     'id' => $data['id'],
                 ])->update(['is_send' => 6]);
             }
-            if (!$orderGoods['after_handle_is']) { #未处理，进行处理
-                Db::name('order_goods')->where(['id' => $data['ogid']])->update(['after_handle_is' => 1]);
+            if(!$orderGoods['after_handle_is']){ #未处理，进行处理
+                Db::name('order_goods')->where(['id' => $data['ogid']])->update(['after_handle_is' => 1,'after_sale_is'=>'2']);#售后完成
                 Db::name('after_sale_following')
                     ->where(['id' => $data['id']])
                     ->update(['refused_reason' => $data['refused_reason'],

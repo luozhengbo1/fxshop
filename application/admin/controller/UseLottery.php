@@ -17,12 +17,18 @@ class UseLottery extends Controller
         if ($this->request->param("username")) {
             $map['username'] = ["like", "%" . $this->request->param("username") . "%"];
         }
-        if ($this->request->param("shop_openid")) {
-            $map['shop_openid'] = ["like", "%" . $this->request->param("shop_openid") . "%"];
+        if($_SESSION['think']['auth_id']==1){
+            if ($this->request->param("shop_openid")) {
+                $map['shop_openid'] = ["like", "%" . $this->request->param("shop_openid") . "%"];
+            }
         }
         if ($this->request->param("lottery_id")) {
             $map['lottery_id'] = $this->request->param("lottery_id");
         }
+        if($_SESSION['think']['auth_id']!=1){
+            $map['shop_openid'] =empty($_SESSION['userInfo']['shop_openid'])?'':$_SESSION['userInfo']['shop_openid'];
+        }
+
 
     }
     #前置操作
