@@ -113,13 +113,29 @@
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
+        {php}if($_SESSION['think']['auth_id']==1){ {/php}
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>关联商户：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <div class="select-box">
+                    <select name="user_id" class="select" datatype="*" nullmsg="请选择关联商户" errormsg="请选择关联商户">
+                        <option value="">--请选择--</option>
+                        {volist name="userList" id="voUser"}
+                        <option value="{$voUser.id}" {if condition="isset($vo['user_id']) && $vo['user_id'] eq $voUser['id']"}selected{/if}>{$voUser.realname}&nbsp;&nbsp;&nbsp;&nbsp;{$voUser.account}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        {php}}{/php}
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>关联商品id：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <div class="select-box">
                     <select name="goods_id" class="select" datatype="*" nullmsg="请选择关联商品" errormsg="请选择关联商品">
                         <option value="">--请选择--</option>
-                       <!-- <option value="238">裤子</option>-->
+                        <option value="all">所有商品</option>
                         {volist name="goodsList" id="vo1"}
                         <option value="{$vo1.id}" {if condition="isset($vo['goods_id']) && $vo['goods_id'] eq $vo1['id']"}selected{/if}>{$vo1.name}</option>
                         {/volist}
@@ -143,6 +159,7 @@
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
+
         <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
                 <button type="submit"  class="btn btn-primary radius">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
@@ -233,43 +250,7 @@
                 console.log(ret);
             }
         });
-      /*  $('select[name="type"]').change(function () {
-            if( $(this).val()==1 ){
-                $('.quan1').css('display','block');
-                $('.quan2').css('display','none');
-                $('.quan3').css('display','none');
-                $('.quan4').css('display','none');
-                $('.quan5').css('display','none');
-            }
-            if( $(this).val()==2 ){
-                $('.quan2').css('display','block');
-                $('.quan1').css('display','none');
-                $('.quan3').css('display','none');
-                $('.quan4').css('display','none');
-                $('.quan5').css('display','none');
-            }
-            if( $(this).val()==3 ){
-                $('.quan1').css('display','none');
-                $('.quan2').css('display','none');
-                $('.quan3').css('display','block');
-                $('.quan4').css('display','none');
-                $('.quan5').css('display','none');
-            }
-            if( $(this).val()==4 ){
-                $('.quan1').css('display','none');
-                $('.quan2').css('display','none');
-                $('.quan3').css('display','none');
-                $('.quan4').css('display','block');
-                $('.quan5').css('display','none');
-            }
-            if( $(this).val()==5 ){
-                $('.quan1').css('display','none');
-                $('.quan2').css('display','none');
-                $('.quan3').css('display','none');
-                $('.quan4').css('display','none');
-                $('.quan5').css('display','block');
-            }
-        })*/
+
     })
 </script>
 <!-- 多图上传js -->

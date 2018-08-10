@@ -19,7 +19,7 @@
         public function  index()
         {
             $this->view->assign('titleName', "订单主页");
-            return $this->view->fetch('orderList');
+            return $this->view->fetch('orderlist');
         }
         #获取订单商品接口
         public function  getOrderListApi()
@@ -122,11 +122,17 @@
                     foreach ($lottery as $key=>$lot){
                         $coupon_type=$lot['type'];
                         switch($coupon_type){
+                            /*  case 1://抵扣券
+                                  array_push($dikou,$lot);
+                                  break;*/
                             case  2://优惠券
                                 $totalPrice = ($storeData[$k]['num']*$storeData[$k]['price1']);
                                 if($totalPrice>$lot['coupon_real_money']){
                                     array_push($youhui,$lot);
                                 }
+                                break;
+                            case  3://代金券
+                                array_push($daijin,$lot);
                                 break;
                             case 4://免邮
                                 //不包邮的时候
@@ -243,8 +249,6 @@
                         $totalType +=1;
                     }
                 }
-//                dump($data);
-//                dump($totalType);
                 if(count($data)==$totalType){#积分
                     $type = 1;
                 }elseif($totalType==0){#钱
@@ -254,11 +258,9 @@
                 }
                 $totalScore = $this->totalScore($data);
                 $user = getUserInfo($this->userInfo['openid']);
-
                 if($user['score']<$totalScore){
                     return ajax_return_error('用户积分不足');
                 }
-
                 $goodsall = join(array_column($data,'goodsId'),',');
                 include_once "WxPaySDK/WxPay.Api.php";
                 include_once "WxPaySDK/WxPay.JsApiPay.php";
@@ -287,9 +289,11 @@
                     $data[$k]['user_id'] = $uid;
                 }
                 $dataUser = array_values( self::array_group_by($data,'user_id'));
-//                dump($dataUser);die;
+//                dump($dataUser);
+//                dump($data);die;
                 foreach ( $dataUser as $k=>$v ){
                     $sonId[] = rand(1000,9999);
+
                     $userPrice[] = $this->calculateOrderValue($v);
                     $userPoint[] = $this->totalScore($v);
 //                    dump($userPrice[$k]);
