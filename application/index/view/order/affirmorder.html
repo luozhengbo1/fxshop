@@ -80,10 +80,10 @@
             <li class="clear">
                 <span class="fl">优惠</span>
                 <div class="fr">
-                    <select  class="w180 youhui"  onchange="showData()">
+                    <select  class="w210 youhui"  onclick="getValue(this)"  onchange="showData(this)">
                         <option value="">不使用优惠券</option>
                         {volist name="$vo['youhui']" id="vo1" empty=""}
-                        <option value="{$vo1['id']}" data-value="{$vo1['coupon_money']}">省{$vo1['coupon_money']}元：{$vo1['coupon_money']}元限时优惠券</option>
+                        <option value="{$vo1['id']}" class="lottery_id_{$vo1['id']}" data-value="{$vo1['coupon_money']}">省{$vo1['coupon_money']}元：{$vo1['coupon_money']}元限时优惠券</option>
                         {/volist}
                     </select>
                 </div>
@@ -93,10 +93,10 @@
             <li class="clear">
                 <span class="fl">免邮</span>
                 <div class="fr">
-                    <select  class="w180 mianyou" onchange="showData()">
+                    <select  class="w210 mianyou" onclick="getValue(this)" onchange="showData(this)">
                         <option value="">不使用免邮券</option>
                         {volist name="$vo['mianyou']" id="vo1" empty=""}
-                        <option value="{$vo1['id']}" data-value="">免邮券</option>
+                        <option value="{$vo1['id']}" class="lottery_id_{$vo1['id']}" data-value="">免邮券</option>
                         {/volist}
                     </select>
                 </div>
@@ -119,6 +119,10 @@
     </div>
 </section>
 <script>
+    var value_change={
+        before:'',
+        after:'',
+    }
     recodeHistoryUrl();
     $('.goodPriceTitle').each(function (index,ele) {
         $(ele).html(priceScoreShow($(ele).data('type'),$(ele).data('price'),$(ele).data('score')))
@@ -130,7 +134,7 @@
    $(function () {
        showData();
    })
-   function showServiceInfo(){
+    function showServiceInfo(){
       layer.open({
            title:'价格说明'
            ,content: '<small>因可能存在系统缓存、页面更新导致价格变动异常等不确定性情况出现，商品售价以本结算页商品价格为准；<br>如有疑问，请您立即联系销售商咨询。</small>'
@@ -140,7 +144,7 @@
            }
        });
    }
-   function saveOrder() {
+    function saveOrder() {
        saveData = new Array()//初始化数组
        $('.goodsData').each(function (index,ele) {
            var $ele = $(ele);
@@ -163,17 +167,40 @@
            };
            saveData.push(thisData);
        })
+        console.log(saveData)
+        debugger;
        pub_save({
            url:url.pay,
            return_url:'#',
            data:{arr:JSON.stringify(saveData)},
        })
    }
+    function getValue(_this) {
+        value_change.before = $(_this).val();
+    }
+    //选择券时别的券相关显示
+    function showLotterChose(_this){
+        //券 只能选择一个
+        value_change.after = $(_this).val();
+        var afterVal='lottery_id_'+value_change.after;
+        var beforeVal= 'lottery_id_'+value_change.before;
+        var $thisGoods = $(_this).parents('.orderWrap');
+        var $siblingsLi =$thisGoods.siblings();
 
-    function showData() {
+        if(value_change.after != value_change.before){
+            $siblingsLi.find('.'+afterVal).hide();
+            $siblingsLi.find('.'+beforeVal).show();
+        }
+
+
+    }
+    function showData(_this) {
+
        var totalPrice = 0,
            totalPoint=0
        ;
+       //券 只能选择一个
+        showLotterChose(_this)
         $('.goodsData').each(function (index,ele) {
             var $ele =$(ele);
             var $parents = $(ele).parents('.orderWrap');

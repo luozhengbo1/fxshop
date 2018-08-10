@@ -122,17 +122,11 @@
                     foreach ($lottery as $key=>$lot){
                         $coupon_type=$lot['type'];
                         switch($coupon_type){
-                            /*  case 1://抵扣券
-                                  array_push($dikou,$lot);
-                                  break;*/
                             case  2://优惠券
                                 $totalPrice = ($storeData[$k]['num']*$storeData[$k]['price1']);
                                 if($totalPrice>$lot['coupon_real_money']){
                                     array_push($youhui,$lot);
                                 }
-                                break;
-                            case  3://代金券
-                                array_push($daijin,$lot);
                                 break;
                             case 4://免邮
                                 //不包邮的时候
