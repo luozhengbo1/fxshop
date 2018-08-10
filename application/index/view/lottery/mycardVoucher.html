@@ -27,7 +27,7 @@
 <script>
     tabSwitch($('.nav-list-tab li'));
     $(function () {
-        loadOrderData()
+        loadOrderData();
     })
 
     function loadOrderData(status) {
@@ -41,7 +41,8 @@
                 url: "{:url('index/Lottery/mycardvoucher')}",
                 data: {status: status},
             },
-            dealFun: dealData
+            dealFun: dealData,
+            complete:useNum,
         });
     }
 
@@ -68,40 +69,46 @@
                     //html +='                <p class="fl bold f14 ml10"> 包邮券 </p>';
                     break;
             }
+            html +='<p class="sred fl bold f14 ml10">(共可用'+data[i].lottery_num+'张)</p>';
             html += '    </div>';
 
             html += '    <div class="grey mt5 mb5">' + tagParse(data[i]['lottery_info']['desc']) + '</div>';
-            html += '    <div class="clear">';
-            //转换时间戳
             html += '        <p class="fl grey">有效期：' + formatDate(data[i]['lottery_info']['expire_start_date'],'yyyy-MM-dd h:mm:ss') + '－' +formatDate(data[i]['lottery_info']['expire_end_date'],'yyyy-MM-dd h:mm:ss') + '</p>';
-            //console.log(parseInt("{$currentTime}"),data[i].expire_end_date)
-
-           // debugger
-           // if (data[i].status == 1){
+            html += '    <div class="clear mt5 btn-parents">';
             if (parseInt("{$currentTime}") > data[i].expire_end_date) {
-                html += '        <button class="fr layui-btn layui-btn-xs layui-btn-radius" disabled="disabled" style="background-color: #d0d0d0">&nbsp;&nbsp;已过期 &nbsp;&nbsp;</button>';
+                html += '        <button class="fr layui-btn layui-btn-sm layui-btn-radius" disabled="disabled" style="background-color: #d0d0d0">&nbsp;&nbsp;已过期 &nbsp;&nbsp;</button>';
             } else {
                 switch(coupon_type){
                     case  constant.coupon.daijin://id:data.coupon_id,goods_id:data.id
-                        html += '        <a href="'+urlConnect("{:url('lottery/useDetail')}",{id:data[i].id,goods_id:data[i]['lottery_info']['goods_id'],type:'use'})+'"  class="fr layui-btn layui-btn-xs layui-btn-radius" >&nbsp;&nbsp;去使用&nbsp;&nbsp;</a>';
+                        html +='<div>'
+                        html +='<span class="fl bold mt5 mr10">使用张数：</span>';
+                        html +='<div class="layui-btn-group fl count-wrap ">';
+                        html +='    <button class="layui-btn layui-btn-primary layui-btn-sm fr24 minus">-</button>';
+                        html +='    <div class="layui-btn layui-btn-primary layui-btn-sm">';
+                        html +='        <input class="sumInput tc" name="lottery_num" type="text" data-store ="'+data[i].lottery_num+'" value="1" id="buyNum"  onkeyup="buyNumShow();">';
+                        html +='    </div>';
+                        html +='    <button class="layui-btn layui-btn-primary layui-btn-sm fr24 add">+</button>';
+                        html +='</div>';
+                        html +='</div>';
+                        html += '        <a onclick="moneyCoucherUse(this,'+data[i].id+')"  href="javascript:;"  class="moneyVoucher fr layui-btn layui-btn-sm layui-btn-radius" >&nbsp;&nbsp;去使用&nbsp;&nbsp;</a>';
                         break;
                     default:
-                        html += '        <a  href="'+urlConnect("{:url('goods/detail')}",{id:data[i]['lottery_info']['goods_id']})+'" class="fr layui-btn layui-btn-xs layui-btn-radius" >&nbsp;&nbsp;去使用&nbsp;&nbsp;</a>';
+                        html += '        <a  href="'+urlConnect("{:url('goods/detail')}",{id:data[i]['lottery_info']['goods_id']})+'" class="fr layui-btn layui-btn-sm layui-btn-radius" >&nbsp;&nbsp;去使用&nbsp;&nbsp;</a>';
                         break;
                 }
             }
-           // } else if (data[i].status == 0) {
-           //     html += '        <button class="fr layui-btn layui-btn-xs layui-btn-radius" disabled="disabled" style="background-color: #d0d0d0">&nbsp;&nbsp;已过期 &nbsp;&nbsp;</button>';
-           // }
-            /*// else if (data[i].is_use == 1) {
-                html += '        <button class="fr layui-btn layui-btn-xs layui-btn-radius" disabled="disabled" style="background-color: #d0d0d0">&nbsp;&nbsp;已使用 &nbsp;&nbsp;</button>';
-            }*/
             html += '    </div>';
             html += '</li>';
         }
         return html;
     }
-
+    function useNum() {
+        new countCalculate();//数字计算
+    }
+    function moneyCoucherUse(_this,log_id){
+        var useNum = $(_this).parents('.btn-parents').find('.sumInput').val();
+        location.href = urlConnect("{:url('lottery/useDetail')}",{id:log_id,type:'use',useNum:useNum})
+    }
 </script>
 </body>
 </html>

@@ -14,19 +14,21 @@
             <p class="pl10 grey f12">门市价<i>￥ {$lottery['coupon_money']}</i></p>
         </li>
         <li>
-            {if condition="$type eq 'use' " /}
-            <a class="go-pay" onclick="goUse();" >立&nbsp;即&nbsp;使&nbsp;用</a>
-            {/if}
-            {if condition="$type eq 'buy' " /}
-            <a class="go-pay" href="{:url('lottery/affairm',['lottery_id'=>$lottery['id'],'goods_id'=>$lottery['goods_id']])}" >立&nbsp;即&nbsp;抢&nbsp;购</a>
-            {/if}
-
+            <input type="hidden"
+                class="saveData"
+                   data-id="{$lottery_log['id']}"
+                   data-goods_id="{$lottery['goods_id']}"
+                   data-user_id="{$lottery['user_id']}"
+                   data-use_num="{$use_num}"
+            >
+            <a class="go-pay" onclick="goUse();" >立即使用{$use_num}张</a>
         </li>
     </ul>
 
 </div>
 <script>
-    var host = "http://shop.istiny.cc";
+   // var host = "http://shop.istiny.cc";
+   var host ="http://10.20.1.171:81";
     var url={
         adminUserScanCode:host+"{:url('index/Lottery/adminUserScanCode')}",
     }
@@ -40,7 +42,7 @@
        });
 
        var qrcode = new QRCode('qrcode', {
-           text:urlConnect(url.adminUserScanCode,{id:"{$lottery_log['id']}",goods_id:"{$lottery['goods_id']}",user_id:"{$lottery['user_id']}"}),
+           text:urlConnect(url.adminUserScanCode,$('.saveData').data()),
            width: 200,
            height: 200,
            colorDark : '#000000',
