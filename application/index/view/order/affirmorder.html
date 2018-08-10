@@ -50,6 +50,7 @@
         </a>
 
         <ul class="service-info">
+            {if condition="$vo['service']" /}
             <li class="clear">
                 <span class="fl">服务信息</span>
                 <!--<span class="fr">
@@ -58,14 +59,13 @@
                          <img style="width: 20px; height: 20px"  src="__STATIC__/index/images/info.png">价格说明
                     </a>&ndash;&gt;
                  </span>-->
-                {if condition="$vo['service']" /}
                 {volist name="$vo['service']" id="service"}
                 <span class="content orange-border ml10">
                     {$service}
                 </span>
                 {/volist}
-                {/if}
             </li>
+            {/if}
             <li class="clear">
                 <span class="fl">快递</span>
                 <span class="fr">

@@ -130,7 +130,7 @@
                 data:{status:status},
             },
             dealFun:dealData,
-            complete: backTime,
+            complete: loadComplete,
         });
     }
     function dealData(result) {
@@ -257,9 +257,7 @@
             html +='</li>';
 
         }
-        setTimeout(function () {
-            bindTab();
-        },100)
+
         return html;
     }
     function modifyComplete(data) {
@@ -267,7 +265,10 @@
             loadOrderData()
         },1500)
     }
-
+    function loadComplete() {
+        backTime();
+        bindTab();
+    }
     function cancelAfterSale(order_id,goods_id,sku_id){
         pub_edit({
             url:url.cancleAfterSale,
