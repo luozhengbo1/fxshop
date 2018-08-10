@@ -988,6 +988,7 @@
                     $insert['pic']=join($data['pic'],',');
                 }
                 $insert['openid']=$this->userInfo['openid'];
+                $insert['ogid']=$orderGoods['id'];
                 $insert['username']=$this->userInfo['nickname'];
                 $insert['goods_id']= $data['goods_id'] ;
                 #所属商户
