@@ -291,6 +291,9 @@ Class Lottery extends Mustlogin
             }
             $lottery_log = Db::name('lottery_log')->where(['id'=>$data['lottery_log_id']])->find();
             $data['num'] = ($lottery_log['lottery_num']<$data['num'])?$lottery_log['lottery_num']: $data['num'];
+            if($lottery_log['lottery_num']==0){
+                return ajax_return('','没有券核销或核销过了','500');
+            }
             $lottery_log['lottery_info'] = json_decode( $lottery_log['lottery_info'],true);
             $insert =[];
             $insert['use_openid'] = $lottery_log['openid'];

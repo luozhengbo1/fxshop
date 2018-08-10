@@ -330,7 +330,7 @@ class Order extends Controller
                 $res1 = Db::name('order_goods')->where([
                     'order_id' => $orderGoods['order_id'],
                     'id' => $data['id'],
-                ])->update(['is_return' => 0, 'return_price' =>0, 'is_send' => 6, 'after_sale_is' => 0]); # 0   6 完成 0 未提交
+                ])->update(['is_return' => 0, 'return_price' =>0, 'is_send' => 6]); # 0   6 完成 0 未提交
                 $ordertmp = Db::name('order')->where([
                     'order_id' => $orderGoods['order_id']])->find();
                 #退款价
@@ -340,6 +340,11 @@ class Order extends Controller
                 $res = Db::name('order')
                     ->where('order_id', $orderGoods['order_id'])->update($update);
                     #总退款加上0未支付1已支付2待评价，3待回复，5部分退款，6全部退款，7取消订单，8订单完成
+            }else{#维修和换货拒绝之后状态修改为完成
+                $res1 = Db::name('order_goods')->where([
+                    'order_id' => $orderGoods['order_id'],
+                    'id' => $data['id'],
+                ])->update([  'is_send' => 6]);
             }
             if(!$orderGoods['after_handle_is']){ #未处理，进行处理
                 Db::name('order_goods')->where(['id' => $data['ogid']])->update(['after_handle_is' => 1]);
