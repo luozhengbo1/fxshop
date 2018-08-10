@@ -62,7 +62,6 @@ MyPageload.prototype.init = function(options){
         console.log('scroll1:'+me.opts.loading);
         setTimeout(function () {
             if(refreshOk(me)){
-                console.log('scrolltest:'+me.opts.loading);
                 me.opts.loading = true;
                 loadDown(me);
             }
@@ -160,4 +159,11 @@ function hideEmptyWrap(){
     if($('.empty-wrap').size()>0) {
         $('.empty-wrap').hide();
     }
+}
+//导航时
+function bindTab() {
+    $('#navListTab').find('li').attr('onclick','loadOrderData()');
+}
+function unbindTab() {
+    $('#navListTab').find('li').removeAttr('onclick');
 }

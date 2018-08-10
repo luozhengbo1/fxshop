@@ -24,12 +24,12 @@
 </style>
 <section>
    <ul class="product-order-list-tab nav-list-tab" id="navListTab">
-       <li id="nav_all"  class="active"  data-status="all"><a href="javascript:;">全部</a></li>
-       <li id="nav_pay" data-status="0"><a href="javascript:;"  >待付款</a></li>
-       <li id="nav_deliver" data-status="1"><a href="javascript:;"  >待发货</a></li>
-       <li id="nav_takeDeliver" data-status="2"><a href="javascript:;"  >待收货</a></li>
-       <li id="nav_refund" data-status="3"><a href="javascript:;"  >待退款</a></li>
-       <li id="nav_evaluate" data-status="4"><a href="javascript:;"  >待评价</a></li>
+       <li onclick="loadOrderData()" id="nav_all"  class="active"  data-status="all"><a href="javascript:;">全部</a></li>
+       <li onclick="loadOrderData()" id="nav_pay" data-status="0"><a href="javascript:;"  >待付款</a></li>
+       <li onclick="loadOrderData()" id="nav_deliver" data-status="1"><a href="javascript:;"  >待发货</a></li>
+       <li onclick="loadOrderData()" id="nav_takeDeliver" data-status="2"><a href="javascript:;"  >待收货</a></li>
+       <li onclick="loadOrderData()" id="nav_refund" data-status="3"><a href="javascript:;"  >待退款</a></li>
+       <li onclick="loadOrderData()" id="nav_evaluate" data-status="4"><a href="javascript:;"  >待评价</a></li>
    </ul>
     <div id="dataListWrap">
         <ul id="orderList" class="product-order-list mt50">
@@ -113,10 +113,11 @@
 
     }
 
-    tabSwitch($('.nav-list-tab li'),loadOrderData);
+    tabSwitch($('.nav-list-tab li'));
     $('#nav_'+nav_param).click();
     function loadOrderData(){
         var status = $('#navListTab').find('.active').attr('data-status');
+        unbindTab();
         initData('orderList');
         hideEmptyWrap();
         pageload({
@@ -256,6 +257,9 @@
             html +='</li>';
 
         }
+        setTimeout(function () {
+            bindTab();
+        },100)
         return html;
     }
     function modifyComplete(data) {
