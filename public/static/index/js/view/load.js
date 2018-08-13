@@ -96,12 +96,16 @@ MyPageload.prototype.init = function(options){
             type:'post',
             data:data || {},
             dataType:'json',
+            async:false,  //同步方式发起请求
             success: function(data){
                 //  console.log('=========test2=================')
                 var code = data.code;
                 var data = data.data;//数据
                 if (code=='200'){
                     //如果获取的数据还没有条数多，表明数据已经没有了
+                    if(me.opts.page ==1 && $('#dataList').size()>0){
+                        $('#dataList').empty();
+                    }
                     if(me.opts.page ==1 && data.length ==0){
                         //me.$domDown.html(me.opts.domDown.emptyData);
                         showEmptyWrap(me)
@@ -162,8 +166,10 @@ function hideEmptyWrap(){
 }
 //导航时
 function bindTab() {
-    $('#navListTab').find('li').attr('onclick','loadOrderData()');
+  //  $('#navListTab').find('li').attr('onclick','loadOrderData()');
+
 }
-function unbindTab() {
-    $('#navListTab').find('li').removeAttr('onclick');
+function unbindTab(shadow) {
+    layer.close(shadow);
+  //  $('#navListTab').find('li').removeAttr('onclick');
 }

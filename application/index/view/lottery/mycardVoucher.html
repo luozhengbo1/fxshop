@@ -4,8 +4,8 @@
 <!--卡券列表-->
 <section>
     <ul class="nav-list-tab" id="navListTab">
-        <li class="w50p active" data-type="noUse" data-status="0" onclick="loadOrderData()"><a href="javascript:;" >未使用</a></li>
-        <li class="w50p"  data-type="isUse" data-status="1" onclick="loadOrderData()"><a href="javascript:;" >使用记录</a></li>
+        <li class="w50p active" data-type="noUse" data-status="0" ><a href="javascript:;" >未使用</a></li>
+        <li class="w50p"  data-type="isUse" data-status="1"><a href="javascript:;" >使用记录</a></li>
     </ul>
     <div id="dataListWrap">
         <ul id="dataList" class="mycard-voucher-list mt50">
@@ -25,20 +25,20 @@
     </div>
 </section>
 <script>
-    tabSwitch($('.nav-list-tab li'));
+    tabSwitch($('.nav-list-tab li'),loadOrderData);
     $(function () {
-        loadOrderData();
+        $('.nav-list-tab li').first().click();
     })
 
     function loadOrderData() {
         var status = $('#navListTab').find('.active').attr('data-status');
-        unbindTab()
+      //  loadShadow();
         initData('dataList');
         pageload({
             targetWarp: 'dataListWrap',
             target: 'dataList',
             page: 1,
-            size: 4,
+            size: 15,
             ajaxData: {
                 url: "{:url('index/Lottery/mycardvoucher')}",
                 data: {status: status},
@@ -55,29 +55,41 @@
         for (var i = 0; i < data.length; i++) {
             if(data[i].order_id && data[i].pay_status !=1) continue;
             var coupon_type = data[i]['lottery_info']['type'];
-            html += '<li>';
+            var bg_color = 'bg_qianred';
+            switch(coupon_type){
+                case  constant.coupon.youhui:
+                    bg_color = 'bg_qianred';
+                    break;
+                case  constant.coupon.daijin:
+                    bg_color = 'bg_orange';
+                    break;
+                case constant.coupon.mianyou:
+                    bg_color = 'bg_green';
+                    break;
+            }
+            html += '<li class="lottery_bg '+bg_color+'">';
             html += '    <div class="product-info clear">';
             html += '        <img class="img fl" src="' + data[i]['lottery_info']['main_pic'] + '">';
-            html += '        <p class="fl bold f14 ml10">' + data[i]['lottery_info']['name'] + '</p>';
+            html += '        <p class="fl bold f14 ml10 white">' + data[i]['lottery_info']['name'] + '</p>';
 
             if(noUse){
-                html +='<p class="sred fl bold f14 ml10">(共可用'+data[i].lottery_num+'张)</p>';
+                html +='<p class="fl bold f14 ml10 white">(共可用'+data[i].lottery_num+'张)</p>';
             }else
-                html +='<p class="sred fl bold f14 ml10">(已使用'+data[i].lottery_num+'张)</p>';
+                html +='<p class="fl bold f14 ml10 white">(已使用'+data[i].lottery_num+'张)</p>';
             html += '    </div>';
             //html += '    <div class="grey mt5 mb5">' + tagParse(data[i]['lottery_info']['desc']) + '</div>';
             switch(coupon_type){
                 case  constant.coupon.youhui:
-                    html +='                <p class="grey f14 lh30"> 满'+data[i]['lottery_info']['coupon_real_money']+'优惠'+data[i]['lottery_info']['coupon_money']+'元 </p>';
+                    html +='                <p class="grey f14 lh30 white"> 满'+data[i]['lottery_info']['coupon_real_money']+'优惠'+data[i]['lottery_info']['coupon_money']+'元 </p>';
                     break;
                 case  constant.coupon.daijin:
-                    html +='                <p class="grey f14 lh30">'+data[i]['lottery_info']['coupon_real_money']+'代'+data[i]['lottery_info']['coupon_money']+'元券</p>';
+                    html +='                <p class="grey f14 lh30 white">'+data[i]['lottery_info']['coupon_real_money']+'代'+data[i]['lottery_info']['coupon_money']+'元券</p>';
                     break;
                 case constant.coupon.mianyou:
                     break;
             }
             if(noUse){
-            html += '    <p class="fl grey">有效期：' + formatDate(data[i]['lottery_info']['expire_start_date'],'yyyy-MM-dd h:mm:ss') + '－' +formatDate(data[i]['lottery_info']['expire_end_date'],'yyyy-MM-dd h:mm:ss') + '</p>';
+            html += '    <p class="fl white">有效期：' + formatDate(data[i]['lottery_info']['expire_start_date'],'yyyy-MM-dd h:mm:ss') + '－' +formatDate(data[i]['lottery_info']['expire_end_date'],'yyyy-MM-dd h:mm:ss') + '</p>';
             html += '    <div class="clear mt5 btn-parents">';
 
                 if (parseInt("{$currentTime}") > data[i].expire_end_date) {
@@ -86,7 +98,7 @@
                     switch(coupon_type){
                         case  constant.coupon.daijin://id:data.coupon_id,goods_id:data.id
                             html +='<div>'
-                            html +='<span class="fl bold mt5 mr10">使用张数：</span>';
+                            html +='<span class="fl bold mt5 mr10 white">使用张数：</span>';
                             html +='<div class="layui-btn-group fl count-wrap ">';
                             html +='    <button class="layui-btn layui-btn-primary layui-btn-sm fr24 minus">-</button>';
                             html +='    <div class="layui-btn layui-btn-primary layui-btn-sm">';
@@ -104,7 +116,7 @@
                 }
             html += '    </div>';
             }else{
-                html +='<p class="grey">已使用</p>'
+                html +='<p class="white">已使用</p>'
             }
 
             html += '</li>';
@@ -113,13 +125,13 @@
     }
     function useNum() {
         new countCalculate();//数字计算
-        bindTab();
+        //closeLoadShadow();
     }
     function moneyCoucherUse(_this,log_id){
         var useNum = $(_this).parents('.btn-parents').find('.sumInput').val();
         location.href = urlConnect("{:url('lottery/useDetail')}",{id:log_id,type:'use',useNum:useNum})
     }
-  
+
 </script>
 </body>
 </html>

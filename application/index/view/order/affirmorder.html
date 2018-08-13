@@ -53,12 +53,6 @@
             {if condition="$vo['service']" /}
             <li class="clear">
                 <span class="fl">服务信息</span>
-                <!--<span class="fr">
-
-                   &lt;!&ndash; <a href="javascript:;" onclick="showServiceInfo()">
-                         <img style="width: 20px; height: 20px"  src="__STATIC__/index/images/info.png">价格说明
-                    </a>&ndash;&gt;
-                 </span>-->
                 {volist name="$vo['service']" id="service"}
                 <span class="content orange-border ml10">
                     {$service}
@@ -171,6 +165,7 @@
            saveData.push(thisData);
        })
         console.log(saveData)
+      //  debugger;
        pub_save({
            url:url.pay,
            return_url:'#',

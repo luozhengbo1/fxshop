@@ -28,6 +28,7 @@
 
 
     function loadOrderData(){
+        //loadShadow();
         var start = $('#evaluate_nav').find('.active').attr('data-start');
         var end = $('#evaluate_nav').find('.active').attr('data-end');
         initData('evaluateList');
@@ -41,8 +42,12 @@
                 data:{id:"{$goods_id}",start:start,end:end},
             },
             dealFun:dealData,
-            complete:imageLazy,
+            complete:loadComplete,
         });
+    }
+    function loadComplete() {
+        imageLazy();
+        //closeLoadShadow();
     }
 </script>
 </body>
