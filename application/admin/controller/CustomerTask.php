@@ -48,11 +48,10 @@ class CustomerTask extends Controller
     public function excel()
     {
         if ($this->request->isPost()) {
-            $id = $_POST['id'];
             $header = ['用户名', '任务名称', '参与时间', '完成状态', '获得奖励积分', '创建时间', '更新时间'];
             $data = \think\Db::name("customer_task_log")
                 ->field("uid,task_id,time,status,reward_score,create_time,update_time")
-                ->where('task_id', $id)
+                ->where('task_id', $_POST['id'])
                 ->order("id desc")->select();
             //处理任务参与详情中的用户名、任务名称、时间、状态数据
             $user_list = Db::table('fy_customer')->field('id,nickname')->select();

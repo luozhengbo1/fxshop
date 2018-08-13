@@ -75,8 +75,8 @@ class Customer extends Mustlogin
 
     /**
      * 收藏夹列表
-     * @param string $page  页数
-     * @param string $size  每页的数据行
+     * @param string $page 页数
+     * @param string $size 每页的数据行
      */
     public function collect_list($page = '1', $size = '10')
     {
@@ -249,7 +249,7 @@ class Customer extends Mustlogin
                             $save['reward_score'] = $score;
                             Db::table('fy_customer_sign')->insert($save);
                             //新增日志记录
-                            $score+=2;
+                            $score += 2;
                             $this->insertSignlog($score);
                         } else {
                             //是否已达到最大连续签到天数？continue_day重置为1
@@ -290,12 +290,10 @@ class Customer extends Mustlogin
                 }
             }
 
-            //判断前一天是否签到
-            if ($this->isSignYesterday()) {
+            //前一天未签到或签到满15天，continue_day重置为0,并渲染到页面
+            if (!$this->isSignYesterday()) {
                 $this->userInfo['continuity_day'] = 0;
-            }
-            //判断是否已达到最大连续签到天数，若达到，前端显示的continue_day为0，否则显示为相应的连续签到天数
-            if ($this->userInfo['continuity_day'] == 15) {
+            } elseif ($this->userInfo['continuity_day'] == 15) {
                 $this->userInfo['continuity_day'] = 0;
             }
             $this->assign('user', $this->userInfo);
@@ -305,12 +303,10 @@ class Customer extends Mustlogin
             $score_flags = array();
             if ($this->userInfo['continuity_day'] >= 3) {
                 $score_flags[0] = 1;
-            }
-            if ($this->userInfo['continuity_day'] >= 7) {
+            } elseif ($this->userInfo['continuity_day'] >= 7) {
                 $score_flags[0] = 1;
                 $score_flags[1] = 1;
-            }
-            if ($this->userInfo['continuity_day'] == 15) {
+            } elseif ($this->userInfo['continuity_day'] == 15) {
                 $score_flags[0] = 1;
                 $score_flags[1] = 1;
                 $score_flags[2] = 1;
@@ -374,8 +370,8 @@ class Customer extends Mustlogin
 
     /**
      * 活动中心
-     * @param string $page  页数
-     * @param string $size  每页的数据行
+     * @param string $page 页数
+     * @param string $size 每页的数据行
      */
     public function myactivity($page = '1', $size = '4')
     {
@@ -402,8 +398,8 @@ class Customer extends Mustlogin
 
     /**
      * 我的钱包
-     * @param string $page  页数
-     * @param string $size  每页的数据行
+     * @param string $page 页数
+     * @param string $size 每页的数据行
      */
     public function mywallet($page = '1', $size = '4')
     {
@@ -476,8 +472,8 @@ class Customer extends Mustlogin
 
     /**
      * 会员权益中心
-     * @param string $page  页数
-     * @param string $size  每页的数据行
+     * @param string $page 页数
+     * @param string $size 每页的数据行
      */
     public function memberrights($page = '1', $size = '20')
     {
@@ -511,7 +507,7 @@ class Customer extends Mustlogin
 
     /**
      * 会员等级规则
-     * @param $type  1 会员等级规则|2 会员升级攻略
+     * @param $type 1 会员等级规则|2 会员升级攻略
      */
     public function memberrule($type)
     {
@@ -543,8 +539,8 @@ class Customer extends Mustlogin
 
     /**
      * 赚积分
-     * @param string $page  页数
-     * @param string $size  每页的数据行
+     * @param string $page 页数
+     * @param string $size 每页的数据行
      */
     public function getscore($page = '1', $size = '10')
     {
@@ -630,8 +626,8 @@ class Customer extends Mustlogin
 
     /**
      * 消息中心
-     * @param string $page  页数
-     * @param string $size  每页的数据行
+     * @param string $page 页数
+     * @param string $size 每页的数据行
      */
     public function message($page = '1', $size = '4')
     {
