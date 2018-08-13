@@ -4031,7 +4031,7 @@ a {
 	text-align: center;
 }
 .nav-list-tab li.active{
-	border-bottom: 1px solid orangered;
+	border-bottom: 2px solid orangered;
 }
 .nav-list-tab li.active a{
 	color: orangered;
