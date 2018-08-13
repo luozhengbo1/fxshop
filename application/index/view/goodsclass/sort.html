@@ -25,8 +25,8 @@
         <div class="menu-left" id="sidebar">
             <ul><!--<li class="active">名酒茶礼</li>--></ul>
         </div>
-        <div id="dataListWrap" style="width: 70%; float: right">
-            <ul class="child_category clear" id="goodsList">
+        <div id="dataListWrap" style="width: 72%; float: right">
+            <ul class="child_category clear" id="dataList">
                <!-- <li class="tc radius4">
                     <a href="">
                         <img class="good-img" alt="" src="">
@@ -68,10 +68,11 @@
         }
     }
     function getGoods(data) {
-        initData('goodsList');
+        //loadShadow();
+        initData('dataList');
         pageload({
             targetWarp:'dataListWrap',
-            target:'goodsList',
+            target:'dataList',
             page:1,
             size:10,
             ajaxData:{
@@ -79,8 +80,12 @@
                 data:data,
             },
             dealFun:dealData,
-            complete:imageLazy,
+            complete:loadComplete
         });
+    }
+    function loadComplete() {
+        imageLazy();
+       // closeLoadShadow();
     }
     function dealData(data) {
         var html='';

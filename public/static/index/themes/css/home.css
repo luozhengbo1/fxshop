@@ -3678,7 +3678,9 @@ a {
 	overflow: hidden;
 	width: 96%;
 	margin: 0 auto;
-	background:#F24B4B;background-image:url('//gw.alicdn.com/tps/TB1t.K6LXXXXXbaapXXXXXXXXXX-44-32.png');color:#FFFFFF;
+	background:#F24B4B;
+	background-image:url(../../images/bg.png);
+	color:#FFFFFF;
 	margin-bottom: 6px;
 }
 .show.detail_popup .main-voucher{
@@ -4029,7 +4031,7 @@ a {
 	text-align: center;
 }
 .nav-list-tab li.active{
-	border-bottom: 1px solid orangered;
+	border-bottom: 2px solid orangered;
 }
 .nav-list-tab li.active a{
 	color: orangered;
@@ -4189,7 +4191,6 @@ a {
 	position: relative;
 }
 .mycard-voucher-list li{
-	background: white;
 	border-radius: 8px;
 	width: 98%;
 	margin: 0 auto;
@@ -4677,4 +4678,7 @@ a {
 	height: 26px;
 	margin-right: 10px;
 	vertical-align: middle;
+}
+.lottery_bg{
+	background-image: url(../../images/bg.png);
 }

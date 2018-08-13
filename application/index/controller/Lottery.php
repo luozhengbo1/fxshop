@@ -35,7 +35,7 @@ Class Lottery extends Mustlogin
                 $goodsClassAllChild = getAllChildcateIds($goodsClassId);
                 $where['fy_goods.goods_class_id'] = ['in',$goodsClassAllChild];
             }
-            $goodsWithLottery = Db::name('goods')
+            $lotterys = Db::name('goods')
                 ->field(
                     'fy_lottery.*,
                     fy_goods_class.name as class_name')
@@ -44,9 +44,19 @@ Class Lottery extends Mustlogin
                 ->where($where)
                 ->page($page,$size)
                 ->select();
+            $lotteryLogs = Db::name('lottery_log')->where(['openid' => $this->userInfo['openid']])->select();
+
+            foreach ($lotterys as $k=>$lottery){
+                foreach ($lotteryLogs as $key=>$log){
+                    //有领券记录
+                    if($lottery['id'] == $log['lottery_id'] ){
+                        $lotterys[$k]['lotteryLog'] =$log;
+                    }
+                }
+            }
 //            dump($goodsWithLottery);
           //  echo Db::name('goods')->getLastSql();die;
-            return ajax_return($goodsWithLottery, '', '200');
+            return ajax_return($lotterys, '', '200');
             //带有券的商品
         }
         return $this->view->fetch('market');

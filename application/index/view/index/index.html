@@ -147,7 +147,7 @@
         function getNotice() {
             $.ajax({
                 type:'post',
-                data:{page:1, size:2},
+                data:{page:1, size:5},
                 url:"{:url('index/notice/getNotice')}",
                 success:function (data) {
                     var code = data.code, result = data.data;
