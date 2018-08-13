@@ -4,8 +4,8 @@
 <!--卡券列表-->
 <section>
     <ul class="nav-list-tab" id="navListTab">
-        <li class="w50p active" data-type="noUse" data-status="0" onclick="loadOrderData()"><a href="javascript:;" >未使用</a></li>
-        <li class="w50p"  data-type="isUse" data-status="1" onclick="loadOrderData()"><a href="javascript:;" >使用记录</a></li>
+        <li class="w50p active" data-type="noUse" data-status="0" ><a href="javascript:;" >未使用</a></li>
+        <li class="w50p"  data-type="isUse" data-status="1"><a href="javascript:;" >使用记录</a></li>
     </ul>
     <div id="dataListWrap">
         <ul id="dataList" class="mycard-voucher-list mt50">
@@ -25,20 +25,20 @@
     </div>
 </section>
 <script>
-    tabSwitch($('.nav-list-tab li'));
+    tabSwitch($('.nav-list-tab li'),loadOrderData);
     $(function () {
-        loadOrderData();
+        $('.nav-list-tab li').first().click();
     })
 
     function loadOrderData() {
         var status = $('#navListTab').find('.active').attr('data-status');
-        unbindTab()
+        loadShadow();
         initData('dataList');
         pageload({
             targetWarp: 'dataListWrap',
             target: 'dataList',
             page: 1,
-            size: 4,
+            size: 15,
             ajaxData: {
                 url: "{:url('index/Lottery/mycardvoucher')}",
                 data: {status: status},
@@ -113,13 +113,13 @@
     }
     function useNum() {
         new countCalculate();//数字计算
-        bindTab();
+        closeLoadShadow();
     }
     function moneyCoucherUse(_this,log_id){
         var useNum = $(_this).parents('.btn-parents').find('.sumInput').val();
         location.href = urlConnect("{:url('lottery/useDetail')}",{id:log_id,type:'use',useNum:useNum})
     }
-  
+
 </script>
 </body>
 </html>

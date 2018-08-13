@@ -90,6 +90,22 @@
             done: function (e, data) {
                 layer.close(layer_msg);
                 callback(callbackId,data.result.data.name);
+            },
+            add: function (e, data) {
+                var uploadErrors = [];
+                var kb = data.originalFiles[0]['size']/1024;//1M = 1024kb
+                var limitSize =1024*3 // 1024*3
+                console.log('===================================='+data.originalFiles[0]['size']) ;
+                if (kb >limitSize) {
+                    uploadErrors.push('Tamaño de Archivo demasiado Grande');
+                }
+                if(uploadErrors.length > 0) {
+                    alert('图片大小不能超过'+limitSize/1024 +'M');
+                } else {
+                    data.context = $('<p/>').text('Subiendo...').appendTo(document.body);
+                    data.submit();
+                }
+
             }
         });
         $('#drag').bind('drop dragover', function (e) {

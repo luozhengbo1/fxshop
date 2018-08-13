@@ -290,15 +290,31 @@ function validBuyNum() {
 
 //加载函数
 //
+
 function layerLoad(){
     var html ='<div class="f14"><span class="layer_loading"></span><p>加载中...</p></div>'
     var loading = layer.open({
          content: html
         ,skin: 'msg'
-        ,time: 200000 //2秒后自动关闭
+        ,time: 200000 //200秒后自动关闭
         ,shadeClose: false
     });
     return loading;
+}
+
+function loadShadow() {
+    var html =''
+    html +='<div class="load-shadow">';
+    html +='    <div class="shodow-content">';
+    html +='      <span class="layer_loading"></span>';
+    html +='        <p>加载中...</p>';
+    html +='    </div>';
+    html +='</div>';
+    $('body .load-shadow').remove();
+    $('body').append(html);
+}
+function closeLoadShadow() {
+    $('body .load-shadow').hide().remove('.load-shadow');
 }
 function layerLoad2() {
     //loading带文字
