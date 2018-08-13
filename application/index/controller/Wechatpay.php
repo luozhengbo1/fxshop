@@ -29,7 +29,7 @@ class Wechatpay extends Controller
         $notify = new \PayNotifyCallBack();
         $notify->Handle($wxConfig, true);
         $orderInfo = \WxPayResults::Init($wxConfig, $xml);
-//        $orderInfo['out_trade_no']="144121740220180808160606";
+//        $orderInfo['out_trade_no']="144121740220180813145711";
 //        $orderInfo['openid']="omQYXwNAT5uC15TQqMGxajJzqo4s";
         if (empty($orderInfo)) {
             file_put_contents("wx_pay_error.log", $xml . "\r", 8);
@@ -71,10 +71,17 @@ class Wechatpay extends Controller
                             Db::name('goods_attribute')->where(['id' => $v['sku_id']])->update(['store' => $store]);
                             #加上销量
                             Db::name('goods')->where(['id' => $goodsStore['goods_id']])->setInc('buy_num', $goodsStore['store']);
-                            #扣取相应的积分
+                            #将优惠券记录为失效
+                            if( $v['is_lottery']==1 && $v['lottery_log_id']){
+                                $lotteryLog = Db::name('lottery_log')->where(['id'=>$v['lottery_log_id']])->find();
+                                $dec_lottery_num = $lotteryLog['lottery_num']-1;
+                                if($dec_lottery_num>=0){
+                                    Db::name('lottery_log')->where(['id'=>$v['lottery_log_id']])->update(['lottery_num'=>$dec_lottery_num,'use_num'=>$lotteryLog['use_num']+1]);
+                                }
+                            }
                         }
+                        #扣取相应的积分
                         $totalScore = $this->totalScore($goodsOrder);
-
                         #将用户积分扣取，并将扣取记录记下来
                         $decScore = $user['score'] - $totalScore;
                         if ($decScore < 0) $decScore = 0;
@@ -147,7 +154,8 @@ class Wechatpay extends Controller
         $wxConfig = new \WxPayConfig();
         $notify->Handle($wxConfig, true);
         $orderInfo = \WxPayResults::Init($wxConfig, $xml);
-//        $orderInfo['out_trade_no']="144121740220180720145045";
+//        $orderInfo['out_trade_no']="1441217402201808131457117325";
+//        $orderInfo['openid']="omQYXwNAT5uC15TQqMGxajJzqo4s";
         if (empty($orderInfo)) {
             file_put_contents("wx_pay_error.log", $xml . "\r", 8);
         } else {
@@ -155,7 +163,6 @@ class Wechatpay extends Controller
             #付款成功通知
             $orderData = Db::name('order')->where(['order_id' => $orderInfo['out_trade_no']])->find();
             if ($orderData['is_tui'] == 0) {
-
                 #减对应商品的库存
                 $goodsname = '';
                 $goods_data = '';
@@ -171,6 +178,14 @@ class Wechatpay extends Controller
                     $goodsDa = Db::name('goods')->where(['id' => $goodsStore['goods_id']])->find();
                     $goodsname .= $goodsDa['name'] . "  " . $v['sku_val'] . "*" . $v['goods_num'] . "   ";
                     $goods_data .= $goods_data . '' . $goodsDa['name'] . "  " . $v['sku_val'] . "×" . $v['goods_num'] . "<br/>";
+                    #将优惠券记录为失效
+                    if( $v['is_lottery']==1 && $v['lottery_log_id']){
+                        $lotteryLog = Db::name('lottery_log')->where(['id'=>$v['lottery_log_id']])->find();
+                        $dec_lottery_num = $lotteryLog['lottery_num']-1;
+                        if($dec_lottery_num>=0){
+                            Db::name('lottery_log')->where(['id'=>$v['lottery_log_id']])->update(['lottery_num'=>$dec_lottery_num,'use_num'=>$lotteryLog['use_num']+1]);
+                        }
+                    }
                 }
                 include_once "sendMsg/SDK/WeiXin.php";
                 $wx = new \WeiXin();
