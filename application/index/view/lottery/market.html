@@ -118,7 +118,11 @@
         switch(coupon_type){
             case  constant.coupon.youhui:
                 html +='                <p class="price f12 mt10 tc"> 满'+data.coupon_real_money+'可优惠 </p>';
-                html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10 mt10" onclick="getLottery('+data.id+')">立即领取</button>';
+                if(data.lotteryLog)
+                    html +='                <button class="layui-btn layui-btn-xs layui-btn-radius bg_grey pl10 pr10 mt10">已领取</button>';
+                else
+                    html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10 mt10" onclick="getLottery('+data.id+',this)">立即领取</button>';
+
                 break;
             case  constant.coupon.daijin:
                 html +='                <p class="tc base-color mb10 mt10 tc">代'+data.coupon_money+'元券</p>';
@@ -127,7 +131,7 @@
                 break;
             case constant.coupon.mianyou:
                 html +='                <p class="price f12 mt10 tc"> 包邮券 </p>';
-                html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10 mt10" onclick="getLottery('+data.id+')">立即领取</button>';
+                html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10 mt10" onclick="getLottery('+data.id+',this)">立即领取</button>';
                 break;
             default:
                 //  html +='                <p class="price"> ￥'+data.price+' </p>';
@@ -158,11 +162,18 @@
             }
         })
     }
-    function getLottery(id) {
+    function getLottery(id,_this) {
         pub_edit({
             url:url.getLottery,
             data:{id:id},
-        })
+        });
+        setTimeout(function () {
+            $(_this)
+                .removeClass('layui-btn-danger')
+                .addClass('bg_grey')
+                .removeAttr('onclick')
+                .html('已领取');
+        },1500);
     }
 </script>
 </body>
