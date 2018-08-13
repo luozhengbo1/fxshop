@@ -103,7 +103,7 @@
                     //查询用户有效的券
                     $lottery = Db::name('lottery')
                         ->alias('lottery')
-                        ->field('lottery.*')
+                        ->field('lottery.*,fy_lottery_log.id as lottery_log_id')
                         ->join('fy_lottery_log','fy_lottery_log.lottery_id=lottery.id')
                         ->where([
                             "fy_lottery.goods_id"=>$v['goodsId'],
@@ -146,9 +146,10 @@
                     $storeData[$k]['youhui']=$youhui;
                     $storeData[$k]['daijin']=$daijin;
                     $storeData[$k]['mianyou']=$mianyou;
-                    //dump($storeData);
                    // $storeData[$k] = array_merge($storeData[$k], Db::name('goods')->where(['id'=>$v['goodsId']])->find());
                 }
+//                dump($storeData);
+
                 #如果有地址就取出地址
                 $address = Db::name('customer_address')->alias('ca')
                     ->field('ca.*')
@@ -234,7 +235,6 @@
         {
             if($this->request->isAjax()){
                 $data = json_decode(str_replace('&quot;','"', $this->request->post()['arr']),true);
-//                dump($data);die;
                 if(!$data[0]['addressId']){
                     return ajax_return('','请选择收货地址');
                 }
@@ -273,10 +273,8 @@
                     $price = 0.01; #至少支付一分钱
                 }
 //                $orderId = \WxPayConfig::MCHID.date("YmdHis");
-                #
                 $wxConfig = new \WxPayConfig();
                 $orderId =$wxConfig->GetMerchantId().date("YmdHis");
-
                 $time = time();
                 $orderAll = [
                     'order_id'=>$orderId,
@@ -289,14 +287,11 @@
                     $data[$k]['user_id'] = $uid;
                 }
                 $dataUser = array_values( self::array_group_by($data,'user_id'));
-//                dump($dataUser);
-//                dump($data);die;
                 foreach ( $dataUser as $k=>$v ){
                     $sonId[] = rand(1000,9999);
 
                     $userPrice[] = $this->calculateOrderValue($v);
                     $userPoint[] = $this->totalScore($v);
-//                    dump($userPrice[$k]);
                     $orderRow[$k] = array(
                         "order_id" => $orderId.$sonId[$k],
                         "address_id" => $data[$k]['addressId'],
@@ -323,7 +318,6 @@
                             'goods_id'=>$val['goodsId'],
                             'user_id'=>$orderRow[$k]["user_id"],
                         ];
-
                     }
                     #商品详情根据用户分组之后更新
                     $buyListAll = $this->array_group_by($getNameSkuNum,'user_id');
@@ -331,10 +325,14 @@
                 }
                 $orderAll['son_id']= join($sonId,',');
                 $orderGoods=[];
+//                dump($data);die;
                 foreach ($data as $k=> $v){
                     $goodsData = Db::name('goods')->where(['id'=>$v['goodsId']])->find();
                     $orderGoods[$k]['goods_id'] = $v['goodsId'];
                     $orderGoods[$k]['goods_num'] = $v['num'];
+                    #该商品实际支付价格
+                    $skuVal = Db::name('goods_attribute')->where(['id'=>$v['skuId']])->find();
+                    $orderGoods[$k]['real_pay_price'] = $v['num']*($skuVal['price']+$goodsData['postage']);
                     $orderGoods[$k]['words'] = $v['words'];
                     $orderGoods[$k]['sku_val'] = $v['val'];
                     $orderGoods[$k]['sku_id'] = $v['skuId'];
@@ -344,17 +342,57 @@
                     $orderGoods[$k]['address_detail']= json_encode(Db::name('customer_address')->where(['id'=> $v['addressId'] ])->find());
                     $orderGoods[$k]['user_id'] = $goodsData['user_id'] ;
                     foreach ($orderRow as $value ){
+                        #加上对应的order_id
                         if($goodsData['user_id'] ==$value['user_id'] ){
                             $orderGoods[$k]['order_id'] =  $value['order_id'];
                         }
                     }
+                    #添加优惠券id如果存在
+                    if(isset($v['youhuiId']) && isset($v['youhui_lottery_log_id']) ){
+                        $lotteryLog = Db::name('lottery_log')->where(['id'=>$v['youhui_lottery_log_id']])->find();
+                        if($lotteryLog['lottery_num']<0){#表示该券已经使用
+                            return ajax_return('',$lotteryLog['lottery_name']."该券已经使用");
+                        }
+                        $orderGoods[$k]['lottery_id'] = $v['youhuiId'] ;
+                        $orderGoods[$k]['lottery_log_id'] = $v['youhui_lottery_log_id'] ;
+                        $orderGoods[$k]['is_lottery'] = 1 ;
+                        $lottery[$k] = Db::name('lottery')->where(['id'=>$v['youhuiId']])->find();
+                        $orderGoods[$k]['lottery_detail'] = json_encode($lottery[$k]) ;
+                        #将去订单的价格
+                    }else{
+                        $orderGoods[$k]['is_lottery'] = 0 ;
+                        $orderGoods[$k]['lottery_id']='';
+                        $orderGoods[$k]['lottery_detail'] ='';
+                        $orderGoods[$k]['lottery_log_id'] ='';
+                    }
+
                 }
+//                dump($orderGoods);die;
+                #减去子订单对应的价格
+                $lotteryTotalPrice =0;
+                foreach ($orderGoods as $k=>$v){
+                    if( isset($v['lottery_id']) && $v['is_lottery']==1){
+                        $v['lottery_detail'] = json_decode($v['lottery_detail'] ,true);
+                        foreach ($orderRow as &$value ){
+                            if(   $value['order_id'] == $v['order_id']){
+                                #z子订单检出优惠券面额
+                                $value['total_price']=$value['total_price'] - $v['lottery_detail']['coupon_real_money'];
+                                $orderGoods[$k]['real_pay_price'] =   $orderGoods[$k]['real_pay_price']-  $v['lottery_detail']['coupon_real_money'];
+                                #总金额统计
+                                $lotteryTotalPrice+=$v['lottery_detail']['coupon_real_money'];
+
+                            }
+                        }
+                    }
+
+                }
+                #减去订单总价上的优惠价
+                $orderAll['total_price'] =    $orderAll['total_price'] -$lotteryTotalPrice;
                 #计算几个商户进行分成多个订单
                 $tools = new \JsApiPay();
                 //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名内，所以获取不到，使用github的实现。
                 //②、统一下单
                 $input = new \WxPayUnifiedOrder();
-
                 $input->SetBody("泛亚商城 的订单");
                 $input->SetAttach("附加参数");
                 $input->SetOut_trade_no($orderId);
@@ -371,14 +409,12 @@
                 $jsApiParameters= $tools->GetJsApiParameters($unifiedOrder);
 //                $orderAll['prepay_id'] = $unifiedOrder['prepay_id'];
 //                $orderAll['js_api_parameters'] = $jsApiParameters;
-
                 # 插入订单数据
                 $addId1 =Db::name("order_all")->insert($orderAll);
                 $addId2 =Db::name("order")->insertAll($orderRow);
                 $addId3 =Db::name("order_goods")->insertAll($orderGoods);
-
-                #减少库存。
                 foreach ($orderGoods as $value ){
+                    #减少库存。
                     Db::name('goods_attribute')->where(['id'=>$value['sku_id']])->setDec('store',$value['goods_num']);
                 }
 //                dump($type);die;
@@ -675,13 +711,14 @@
                     'order_id'=>$data['order_id'],
                     'goods_id'=>$data['goods_id'],
                     'sku_id'=>$data['sku_id'],
-                ])->update(['is_return'=>1,'return_price'=>$goodsAttribute['price'],'is_send'=>3]); # 待退款  3退款中 7退款中/退货退款
+//                ])->update(['is_return'=>1,'return_price'=>$goodsAttribute['price'],'is_send'=>3]); # 待退款  3退款中 7退款中/退货退款
+                ])->update(['is_return'=>1,'return_price'=>$orderGoods['real_pay_price'],'is_send'=>3]); # 待退款  3退款中 7退款中/退货退款 就是实际付款金额
                 $ordertmp = Db::name('order')->field('return_price_all')->where([
                     'order_id'=>$data['order_id']])->find();
                 #退款价
                 $order = Db::name('order')->where('order_id',$data['order_id'])->find();
                 $update =[];
-                $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all']];
+                $update = ['return_price_all'=>$orderGoods['real_pay_price']+$ordertmp['return_price_all']];
 //                if($goodsAttribute['price']+$ordertmp['return_price_all']==$order['total_price'] ){
 //                }else{
 //                    $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all'],'order_status'=>4];

@@ -83,7 +83,7 @@
                     <select  class="w210 youhui"  onclick="getValue(this)"  onchange="showData(this)">
                         <option value="">不使用优惠券</option>
                         {volist name="$vo['youhui']" id="vo1" empty=""}
-                        <option value="{$vo1['id']}" class="lottery_id_{$vo1['id']}" data-value="{$vo1['coupon_money']}">省{$vo1['coupon_money']}元：{$vo1['coupon_money']}元限时优惠券</option>
+                        <option value="{$vo1['id']}" class="lottery_id_{$vo1['id']}"  data-lottery_log_id="{$vo1['lottery_log_id']}" data-value="{$vo1['coupon_money']}">省{$vo1['coupon_money']}元：{$vo1['coupon_money']}元限时优惠券</option>
                         {/volist}
                     </select>
                 </div>
@@ -93,10 +93,10 @@
             <li class="clear">
                 <span class="fl">免邮</span>
                 <div class="fr">
-                    <select  class="w210 mianyou" onclick="getValue(this)" onchange="showData(this)">
+                    <select  class="w210 mianyou" onclick="getValue(this)"  onchange="showData(this)">
                         <option value="">不使用免邮券</option>
                         {volist name="$vo['mianyou']" id="vo1" empty=""}
-                        <option value="{$vo1['id']}" class="lottery_id_{$vo1['id']}" data-value="">免邮券</option>
+                        <option value="{$vo1['id']}"  data-lottery_log_id="{$vo1['lottery_log_id']}" class="lottery_id_{$vo1['id']}" data-value="">免邮券</option>
                         {/volist}
                     </select>
                 </div>
@@ -164,11 +164,13 @@
                pointScore:$ele.data('score'),
                youhuiId:$youhui.val(),
                baoyouId:$mianyou.val(),
+               youhui_lottery_log_id:$youhui.find('option:selected').data('lottery_log_id'),
+               mianyou_lottery_log_id:$mianyou.find('option:selected').data('lottery_log_id'),
+
            };
            saveData.push(thisData);
        })
         console.log(saveData)
-        debugger;
        pub_save({
            url:url.pay,
            return_url:'#',
