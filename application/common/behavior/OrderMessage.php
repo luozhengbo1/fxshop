@@ -41,9 +41,10 @@ class OrderMessage
                 'title' => '订单发货通知',
                 'detail' => '您购买的 ' . $goods_info['goods_data'] . ' 已经发货啦，正快马加鞭向您飞奔而去。<br/>' .
                     '订单编号：' . $order_info['order_id'] . '<br/>' .
-                    '发货时间：' . $order_info['send_time'] . '<br/>' .
+                    '发货时间：' . date('Y-m-d H:i:s',$order_info['send_time']) . '<br/>' .
                     '物流公司：' . $order_info['logistics_name'] . '<br/>' .
                     '快递单号：' . $order_info['logistics_number'] . '<br/>' .
+                    '收货地址：' . $order_info['address'] . '<br/>'.
                     '请保持手机畅通！'
             ];
             $msg = json_encode($text);

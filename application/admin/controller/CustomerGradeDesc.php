@@ -25,16 +25,11 @@ class CustomerGradeDesc extends Controller
         if ($this->request->isAjax()) {
             // 插入
             $data = $this->request->except(['id']);
-            //根据类型检测出是否有会员等级规则、会员升级攻略、会员权益说明
-            $grade_desc_res = Model('CustomerGradeDesc')->where(['type' => $data['type'], 'isdelete' => 0])->select();
-            if ($grade_desc_res) {
-                if ($data['type'] == 1) {
-                    return ajax_return_error('会员等级规则模板只能有一个', '200');
-                } else if ($data['type'] == 2) {
-                    return ajax_return_error('会员升级攻略模板只能有一个', '200');
-                } else if ($data['type'] == 3) {
-                    return ajax_return_error('会员权益说明模板只能有一个', '200');
-                }
+            //验证模板是否唯一
+            $where=['type' => $data['type'], 'isdelete' => 0];
+            $msg=$this->validateGradeType($where,$data['type']);
+            if(!empty($msg)){
+                return ajax_return_error($msg,200);
             }
             // 验证
             if (class_exists($validateClass = Loader::parseClass(Config::get('app.validate_path'), 'validate', $controller))) {
@@ -77,7 +72,6 @@ class CustomerGradeDesc extends Controller
 
     /**
      * 编辑
-     * @return mixed
      */
     public function edit()
     {
@@ -89,27 +83,13 @@ class CustomerGradeDesc extends Controller
             if (!$data['id']) {
                 return ajax_return_adv_error("缺少参数ID");
             }
-            $grade_list = Model('CustomerGradeDesc')->where('isdelete', 0)->select();
-            foreach ($grade_list as $item) {
-                $item = $item->toArray();
-                //不与本身做对比，避免出现编辑不成功
-                if ($data['id'] != $item['id']) {
-                    $grade_desc_res = Model('CustomerGradeDesc')->where(['id' => ['not in', $data['id']], 'type' => $data['type'], 'isdelete' => 0])->select();
-                    if ($grade_desc_res) {
-                        //若修改的类型在数据库中存在，提示错误信息
-                        if ($grade_desc_res) {
-                            if ($data['type'] == $item['type']) {
-                                return ajax_return_error('会员等级规则模板只能有一个！', 200);
-                            } elseif ($data['type'] == 2) {
-                                return ajax_return_error('会员升级攻略模板只能有一个！', 200);
-                            } elseif ($data['type'] == 3) {
-                                return ajax_return_error('会员权益说明模板只能有一个！', 200);
-                            }
-                        }
-                    }
-                }
+            //验证模板是否唯一
+            $where=['id'=>['not in',$data['id']],'type' => $data['type'], 'isdelete' => 0];
+            $msg=$this->validateGradeType($where,$data['type']);
+            if(!empty($msg)){
+                return ajax_return_error($msg,200);
             }
-            // 验证
+            //验证
             if (class_exists($validateClass = Loader::parseClass(Config::get('app.validate_path'), 'validate', $controller))) {
                 $validate = new $validateClass();
                 if (!$validate->check($data)) {
@@ -157,5 +137,25 @@ class CustomerGradeDesc extends Controller
 
             return $this->view->fetch();
         }
+    }
+
+    /**
+     * 验证模板类型是否唯一
+     * @param $where   查询条件
+     * @param $type    模板类型
+     */
+    protected function validateGradeType($where,$type){
+        $grade_desc_res = Model('CustomerGradeDesc')->where($where)->select();
+        $msg='';
+        if ($grade_desc_res) {
+            if ($type == 1) {
+                $msg='会员等级规则模板只能有一个';
+            } else if ($type == 2) {
+                $msg='会员升级攻略模板只能有一个';
+            } else if ($type == 3) {
+                $msg='会员权益说明模板只能有一个';
+            }
+        }
+        return $msg;
     }
 }

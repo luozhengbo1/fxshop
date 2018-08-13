@@ -22,6 +22,21 @@ class Lottery extends Controller
         if ($this->request->param("type")) {
             $map['type'] = $this->request->param("type");
         }
+        if ($_SESSION['think']['auth_id']!=1) {
+            $map['user_id'] = $_SESSION['think']['auth_id'];
+        }
+    }
+    #商户
+    public function  beforeAdd()
+    {
+        $goods = Db::name('goods')->field('id,name')->where(['isdelete'=>0,'status'=>1])->select();
+        $this->view->assign('goodsList',$goods);
+        $userList = Db::name('admin_user')->where(['isdelete'=>0,'status'=>1,'id'=>['>',1]])->select();
+        $this->view->assign('userList',$userList);
+    }
+    public function beforeEdit()
+    {
+        $this->beforeAdd();
     }
 
     public function add()
@@ -32,63 +47,7 @@ class Lottery extends Controller
             if(!$validate->check($data)){
 			    return $validate->getError();
             }
-
-            if( !empty($data['grant_start_date']) ){
-                $data['grant_start_date']=strtotime($data['grant_start_date']);
-            }
-            if( !empty($data['grant_end_date']) ){
-                $data['grant_end_date']=strtotime($data['grant_end_date']);
-            }
-            if( ($data['grant_end_date']) < ($data['grant_start_date']) ){
-                return ajax_return_adv_error('开始时间必须小于结束时间');
-            }
-
-            if( $data['expire_start_date'] ){
-                $data['expire_start_date']=strtotime($data['expire_start_date']);
-            }else{
-                return ajax_return_adv_error('开始时间必须');
-            }
-            if( $data['expire_end_date'] ){
-                $data['expire_end_date']=strtotime($data['expire_end_date']);
-            }else{
-                return ajax_return_adv_error('结束时间必须');
-            }
-            if( $data['expire_end_date'] <= $data['expire_start_date']){
-                return ajax_return_adv_error('开始时间必须小于结束时间');
-            }
-            $model = new \app\common\model\Lottery;
-            if($data['goods_id']){
-                $goods = Db::name('goods')->field('id,name')->find();
-                $data['goods_name'] = $goods['name'];
-            }
-            $data['user_id']= $_SESSION['think']['auth_id'];
-            unset($data['id']);
-            #剩余量
-            $data['surplus_number']=$data['number'];
-
-            $res = $model->insert($data);
-            if($res){
-                return ajax_return_adv('添加成功');
-            }else{
-                return ajax_return_adv_error('添加失败');
-            }
-        }else{
-            $goods = Db::name('goods')->field('id,name')->where(['isdelete'=>0,'status'=>1])->select();
-            $this->view->assign('goodsList',$goods);
-
-            return $this->view->fetch(isset($this->template) ? $this->template : 'edit');
-        }
-
-    }
-    public function edit()
-    {
-        if($this->request->isPost()){
             $data = $this->request->post();
-            $validate = \think\Loader::validate('Lottery');
-            if(!$validate->check($data)){
-                return $validate->getError();
-            }
-        
             if( !empty($data['grant_start_date']) ){
                 $data['grant_start_date']=strtotime($data['grant_start_date']);
             }
@@ -111,7 +70,61 @@ class Lottery extends Controller
             if($data['expire_end_date'] <=  $data['expire_start_date']){
                 return ajax_return_adv_error('有效结束时间必须大于开始时间');
             }
+            $model = new \app\common\model\Lottery;
+            if($data['goods_id']){
+                $goods = Db::name('goods')->field('id,name')->find();
+                $data['goods_name'] = $goods['name'];
+            }
+            $data['user_id']= $data['user_id']?$data['user_id']:$_SESSION['think']['auth_id'];
+            unset($data['id']);
+            #剩余量
+            $data['surplus_number']=$data['number'];
+
+            $res = $model->insert($data);
+            if($res){
+                return ajax_return_adv('添加成功');
+            }else{
+                return ajax_return_adv_error('添加失败');
+            }
+        }else{
+            return $this->view->fetch(isset($this->template) ? $this->template : 'edit');
+        }
+
+    }
+    public function edit()
+    {
+        if($this->request->isPost()){
+            $data = $this->request->post();
+            $validate = \think\Loader::validate('Lottery');
+            if(!$validate->check($data)){
+                return $validate->getError();
+            }
+            $data = $this->request->post();
+            if( !empty($data['grant_start_date']) ){
+                $data['grant_start_date']=strtotime($data['grant_start_date']);
+            }
+            if( !empty($data['grant_end_date']) ){
+                $data['grant_end_date']=strtotime($data['grant_end_date']);
+            }
+            if( ($data['grant_end_date']) < ($data['grant_start_date']) ){
+                return ajax_return_adv_error('开始时间必须小于结束时间');
+            }
+            if( $data['expire_start_date'] ){
+                $data['expire_start_date']=strtotime($data['expire_start_date']);
+            }else{
+                return ajax_return_adv_error('开始时间必须');
+            }
+            if( $data['expire_end_date'] ){
+                $data['expire_end_date']=strtotime($data['expire_end_date']);
+            }else{
+                return ajax_return_adv_error('结束时间必须');
+            }
+            if($data['expire_end_date'] <=  $data['expire_start_date']){
+                return ajax_return_adv_error('有效结束时间必须大于开始时间');
+            }
+
             $id = $data['id'];
+            $data['user_id']= $data['user_id']?$data['user_id']:$_SESSION['think']['auth_id'];
             $data['surplus_number']= $data['number'];
             $goods = Db::name('goods')->field('name')->where(['id'=>$data['goods_id']])->find();
             $data['goods_name'] =$goods['name'];

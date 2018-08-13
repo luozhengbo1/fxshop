@@ -55,16 +55,12 @@ class Message extends Controller
         if ($this->request->isAjax()) {
             // 插入
             $data = $this->request->except(['id']);
-            //根据类型检测出是否有积分清零提醒、积分清零、生日消息
-            $message_res = Model('Message')->where(['type' => $data['type'], 'isdelete' => 0])->select();
-            if ($message_res) {
-                if ($data['type'] == 1) {
-                    return ajax_return_error('积分清零提醒消息模板只能有一个', '200');
-                } else if ($data['type'] == 2) {
-                    return ajax_return_error('积分清零消息模板只能有一个', '200');
-                } else if ($data['type'] == 3) {
-                    return ajax_return_error('生日消息模板只能有一个', '200');
-                }
+            //检测特殊消息类型是否唯一
+            $where=['type' => $data['type'], 'isdelete' => 0];
+            $msg=$this->validateMsgType($where,$data['type']);
+
+            if(!empty($msg)){
+                return ajax_return_error($msg,200);
             }
 
             // 验证
@@ -120,23 +116,11 @@ class Message extends Controller
             if (!$data['id']) {
                 return ajax_return_adv_error("缺少参数ID");
             }
-            //根据类型检测出是否有积分清零提醒、积分清零、生日消息
-            $message_list = Model('Message')->where('isdelete', 0)->select();
-            foreach ($message_list as $item) {
-                $item = $item->toArray();
-                //不与本身做对比，避免出现编辑不成功
-                if ($data['id'] != $item['id']) {
-                    $message_res = Model('Message')->where(['id' => ['not in', $data['id']], 'type' => $data['type'], 'isdelete' => 0])->select();
-                    if ($message_res) {
-                        if ($data['type'] == 1) {
-                            return ajax_return_error('积分清零提醒消息模板只能有一个', '200');
-                        } else if ($data['type'] == 2) {
-                            return ajax_return_error('积分清零消息模板只能有一个', '200');
-                        } else if ($data['type'] == 3) {
-                            return ajax_return_error('生日消息模板只能有一个', '200');
-                        }
-                    }
-                }
+            //检测特殊消息类型是否唯一
+            $where=['id' => ['not in', $data['id']], 'type' => $data['type'], 'isdelete' => 0];
+            $msg=$this->validateMsgType($where,$data['type']);
+            if(!empty($msg)){
+                return ajax_return_error($msg,200);
             }
             // 验证
             if (class_exists($validateClass = \think\Loader::parseClass(\think\Config::get('app.validate_path'), 'validate', $controller))) {
@@ -188,8 +172,30 @@ class Message extends Controller
         }
     }
 
-    public
-    function sendUser()
+    /**
+     * 验证特殊消息类型是否唯一
+     * @param $where  查询条件
+     * @param $type   消息类型
+     */
+    protected function validateMsgType($where,$type){
+        $message_res = Model('Message')->where($where)->select();
+        $msg='';
+        if ($message_res) {
+            if ($type == 1) {
+                $msg='积分清零提醒消息模板只能有一个';
+            } else if ($type == 2) {
+                $msg='积分清零消息模板只能有一个';
+            } else if ($type == 3) {
+                $msg='生日消息模板只能有一个';
+            }
+        }
+        return $msg;
+    }
+
+    /**
+     * 消息发送
+     */
+    public function sendUser()
     {
         if ($this->request->isAjax()) {
             $data = $this->request->post();

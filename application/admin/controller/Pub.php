@@ -137,6 +137,7 @@ class Pub
                 Session::set('real_name', $auth_info['realname']);
                 Session::set('last_login_ip', $auth_info['last_login_ip']);
                 Session::set('last_login_time', $auth_info['last_login_time']);
+                Session::set('userInfo', $auth_info);
 
                 // 超级管理员标记
                 if ($auth_info['id'] == 1) {

@@ -85,6 +85,7 @@ class Controller
         if (method_exists($this, $beforeAction)) {
             $this->$beforeAction();
         }
+
     }
 
     /**

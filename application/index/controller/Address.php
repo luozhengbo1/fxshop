@@ -54,42 +54,35 @@ class Address extends Mustlogin
         if ($this->request->isAjax()) {
             $data = $this->request->post();
             $id = $data['id'];
+            $time = time();
+            $save_data = [
+                'name' => $data['name'],
+                'mobile' => $data['mobile'],
+                'address' => $data['address'],
+                'street' => $data['street'],
+                'updatetime' => $time
+            ];
             //若前端通过ajax传递了参数id，则进行编辑操作
             if ($id) {
-                $time = time();
-                $data = [
-                    'name' => $data['name'],
-                    'mobile' => $data['mobile'],
-                    'address' => $data['address'],
-                    'street' => $data['street'],
-                    'updatetime' => $time
-                ];
-                Db::table('fy_customer_address')->where('id', $id)->update($data);
+                Db::table('fy_customer_address')->where('id', $id)->update($save_data);
                 return ajax_return('', '保存成功', 200);
             } else {
                 //若前端没有传递参数id，则进行新增操作
                 $uid = $this->getUid();
-                $useraddress = Db::name('customer_address')->where(['uid'=>$uid])->find();
-                $time = time();
-
-                $data = [
-                    'uid' => $uid,
-                    'name' => $data['name'],
-                    'mobile' => $data['mobile'],
-                    'address' => $data['address'],
-                    'street' => $data['street'],
-                    'addtime' => $time,
-                    'updatetime' => $time,
-                    'status' => 0
-                ];
-                if(empty($useraddress)){
-                    $data['status']=1;
+                $save_data['uid'] = $uid;
+                $save_data['addtime'] = $time;
+                $save_data['status'] = 0;
+                //若新增的地址为第一条，则设为默认地址
+                $useraddress = Db::name('customer_address')->where(['uid' => $uid])->find();
+                if (empty($useraddress)) {
+                    $save_data['status'] = 1;
                 }
-                Db::table('fy_customer_address')->insert($data);
+                //插入新增的地址
+                Db::table('fy_customer_address')->insert($save_data);
 
                 $msg = $this->getScore();
-                if($msg ==""){
-                    $msg="新增成功";
+                if ($msg == "") {
+                    $msg = "新增成功";
                 }
                 return ajax_return('', $msg, 200);
             }
@@ -118,12 +111,13 @@ class Address extends Mustlogin
             if (!$id) {
                 return $this->error('缺少参数id');
             }
-            $res = Db::table('fy_customer_address')->where('id',$id)->find();
-            if($res['status']==1){
-                $address = Db::table('fy_customer_address')->where(['id'=>['not in',$id],'uid'=>$res['uid']])->order('updatetime','desc')->find();
-                Db::table('fy_customer_address')->where('id',$address['id'])->update(['status'=>1]);
-            }
+            $res = Db::table('fy_customer_address')->where('id', $id)->find();
+            //删除后将最新一条地址设为默认地址
             Db::table('fy_customer_address')->delete($id);
+            if ($res['status'] == 1) {
+                $address = Db::table('fy_customer_address')->where(['uid' => $res['uid']])->order('updatetime', 'desc')->find();
+                Db::table('fy_customer_address')->where('id', $address['id'])->update(['status' => 1]);
+            }
             return ajax_return('', '删除成功', 200);
         }
     }
@@ -147,34 +141,35 @@ class Address extends Mustlogin
                 return ajax_return('', '该地址已经是默认地址', 200);
             } else {
                 $time = time();
-                Db::table('fy_customer_address')->where('id', $id)->setField('status', 1);
-                Db::table('fy_customer_address')->where('id', $id)->setField('updatetime', $time);
-                Db::table('fy_customer_address')->where('id', 'not in', $id)->where('uid', $uid)->setField('status', 0);
+                Db::table('fy_customer_address')->where('id', $id)->update(['status' => 1, 'updatetime' => $time]);
+                Db::table('fy_customer_address')->where(['id' => ['not in', $id], 'uid' => $uid])->update(['status' => 0, 'updatetime' => $time]);
 
 
                 $msg = $this->getScore();
-                if($msg ==""){
-                    $msg ='设置默认地址成功';
+                if ($msg == "") {
+                    $msg = '设置默认地址成功';
                 }
                 return ajax_return('', $msg, 200);
             }
         }
     }
-    public function getScore(){
+
+    public function getScore()
+    {
         //如果用户信息都已经完善了，奖励100积分  $oldUser中信息没有完善   $userData中数据完善了，说明数据第一次完善 奖励100积分
         $user = session('wx_user');
         $userData = Db::table('fy_customer')->where('openid', $user['openid'])->find();
-        $userDataStatus =  !empty($userData['nickname']) && !empty($userData['mobile']) && !empty($userData['email']);//true 已完善
+        $userDataStatus = !empty($userData['nickname']) && !empty($userData['mobile']) && !empty($userData['email']);//true 已完善
         $time = time();
-        $msg="";
-        if( $userDataStatus){
+        $msg = "";
+        if ($userDataStatus) {
             $scoreLog = Db::table('fy_score_log')->where([
-                'openid'=>$user['openid'],
+                'openid' => $user['openid'],
                 'source' => 11,
             ])->find();
             // dump($scoreLog);
             // die;
-            if(empty($scoreLog)) {
+            if (empty($scoreLog)) {
                 $userData['score'] += 100;
                 $msg = '信息已完善,恭喜获得100积分';
                 Db::table('fy_score_log')->insert([
