@@ -15,18 +15,13 @@ class CustomerTask extends Controller
     protected static $blacklist = [];
 
     /**
-     * 会员信息详情
+     * 会员任务参与详情
      */
     public function detail()
     {
         $controller = $this->request->controller();
         // 查询单个任务的参与情况
         $id = $this->request->param('id');
-        $model_task = new TaskLog();
-        $list_task_achive = $model_task->alias('task')
-            ->where('task_id', $id)
-            ->join('fy_customer customer', 'task.uid=customer.id and customer.isdelete=0')
-            ->paginate(10);
         if (!$id) {
             throw new HttpException(404, "缺少参数ID");
         }
@@ -34,11 +29,15 @@ class CustomerTask extends Controller
         if (!$vo) {
             throw new HttpException(404, '该记录不存在');
         }
-
-        $page = $list_task_achive->render();
+        $model_task = new TaskLog();
+        $list_task_log = $model_task->alias('task')
+            ->where('task_id', $id)
+            ->join('fy_customer customer', 'task.uid=customer.id and customer.isdelete=0')
+            ->paginate(10);
+        $page = $list_task_log->render();
         // 模板变量赋值
         $this->view->assign('page', $page);
-        $this->view->assign("task", $list_task_achive);
+        $this->view->assign("task", $list_task_log);
         return $this->view->fetch('detail', ['id' => $id]);
 
     }
