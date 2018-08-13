@@ -29,7 +29,25 @@ class Lottery extends Controller
     #商户
     public function  beforeAdd()
     {
+        $goods = Db::name('goods')->field('id,name')->where(['isdelete'=>0,'status'=>1])->select();
+        $this->view->assign('goodsList',$goods);
+        $userList = Db::name('admin_user')->where(['isdelete'=>0,'status'=>1,'id'=>['>',1]])->select();
+        $this->view->assign('userList',$userList);
+    }
+    public function beforeEdit()
+    {
+        $this->beforeAdd();
+    }
+
+    public function add()
+    {
         if($this->request->isPost()){
+            $data = $this->request->post();
+            $validate = \think\Loader::validate('Lottery');
+            if(!$validate->check($data)){
+			    return $validate->getError();
+            }
+            $data = $this->request->post();
             if( !empty($data['grant_start_date']) ){
                 $data['grant_start_date']=strtotime($data['grant_start_date']);
             }
@@ -52,26 +70,6 @@ class Lottery extends Controller
             if($data['expire_end_date'] <=  $data['expire_start_date']){
                 return ajax_return_adv_error('有效结束时间必须大于开始时间');
             }
-        }
-        $goods = Db::name('goods')->field('id,name')->where(['isdelete'=>0,'status'=>1])->select();
-        $this->view->assign('goodsList',$goods);
-        $userList = Db::name('admin_user')->where(['isdelete'=>0,'status'=>1,'id'=>['>',1]])->select();
-        $this->view->assign('userList',$userList);
-    }
-    public function beforeEdit()
-    {
-        $this->beforeAdd();
-    }
-
-    public function add()
-    {
-        if($this->request->isPost()){
-            $data = $this->request->post();
-            $validate = \think\Loader::validate('Lottery');
-            if(!$validate->check($data)){
-			    return $validate->getError();
-            }
-
             $model = new \app\common\model\Lottery;
             if($data['goods_id']){
                 $goods = Db::name('goods')->field('id,name')->find();
@@ -100,6 +98,29 @@ class Lottery extends Controller
             $validate = \think\Loader::validate('Lottery');
             if(!$validate->check($data)){
                 return $validate->getError();
+            }
+            $data = $this->request->post();
+            if( !empty($data['grant_start_date']) ){
+                $data['grant_start_date']=strtotime($data['grant_start_date']);
+            }
+            if( !empty($data['grant_end_date']) ){
+                $data['grant_end_date']=strtotime($data['grant_end_date']);
+            }
+            if( ($data['grant_end_date']) < ($data['grant_start_date']) ){
+                return ajax_return_adv_error('开始时间必须小于结束时间');
+            }
+            if( $data['expire_start_date'] ){
+                $data['expire_start_date']=strtotime($data['expire_start_date']);
+            }else{
+                return ajax_return_adv_error('开始时间必须');
+            }
+            if( $data['expire_end_date'] ){
+                $data['expire_end_date']=strtotime($data['expire_end_date']);
+            }else{
+                return ajax_return_adv_error('结束时间必须');
+            }
+            if($data['expire_end_date'] <=  $data['expire_start_date']){
+                return ajax_return_adv_error('有效结束时间必须大于开始时间');
             }
 
             $id = $data['id'];
