@@ -39,7 +39,8 @@ class CustomerGrade extends Controller
             // 验证经验值区间是否设置正确
             $model_grade = new \app\common\model\CustomerGrade();
             $list_grade = $model_grade->where('isdelete', 0)->select();
-            for ($i = 0; $i < count($list_grade); $i++) {
+            $length=count($list_grade);
+            for ($i = 0; $i < $length; $i++) {
                 $item = $list_grade[$i]->toArray();
                 //起始积分和结束积分均不能在数据库中的积分区间内
                 if ($data['experience_start'] >= $item['experience_start'] && $data['experience_start'] <= $item['experience_end']) {
@@ -116,7 +117,8 @@ class CustomerGrade extends Controller
 
             $model_grade = new \app\common\model\CustomerGrade();
             $list_grade = $model_grade->where('isdelete', 0)->select();
-            for ($i = 0; $i < count($list_grade); $i++) {
+            $length = count($list_grade);
+            for ($i = 0; $i < $length; $i++) {
                 $item = $list_grade[$i]->toArray();
                 //从数据库中取得的本条数据不参与区间验证，防止将取得的数据的结束积分修改为更小失败
                 if ($data['id'] != $item['id']) {

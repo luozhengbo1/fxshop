@@ -182,7 +182,7 @@ class AdminUser extends Controller
                 }
             }
             //与customer表绑定
-            $account=$this->request->param('account');
+            $account = $this->request->param('account');
             $res1 = Db::table('fy_admin_user')->field('id,openid')->where('account', $account)->find();
             $res2 = Db::table('fy_customer')->field('id')->where('openid', $res1['openid'])->find();
             Db::table('fy_customer')->where('id', $res2['id'])->update(['merchant_id' => $res1['id']]);
@@ -202,5 +202,28 @@ class AdminUser extends Controller
 
             return $this->view->fetch();
         }
+    }
+
+    /**
+     * 默认禁用操作
+     */
+    public function forbid()
+    {
+        //禁用的同时下架该商户名下所有商品
+        $user_id = $this->request->param('id');
+        Db::table('fy_goods g')->join('fy_admin_user au', 'au.id=g.user_id')->where('au.id', $user_id)->update(['g.status' => 0]);
+        return $this->updateField($this->fieldStatus, 0, "禁用成功");
+    }
+
+
+    /**
+     * 默认恢复操作
+     */
+    public function resume()
+    {
+        //恢复的同时上架该商户名下所有商品
+        $user_id = $this->request->param('id');
+        Db::table('fy_goods g')->join('fy_admin_user au', 'au.id=g.user_id')->where('au.id', $user_id)->update(['g.status' => 1]);
+        return $this->updateField($this->fieldStatus, 1, "恢复成功");
     }
 }
