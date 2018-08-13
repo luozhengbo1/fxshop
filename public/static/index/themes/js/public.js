@@ -488,7 +488,7 @@ function pub_edit(json){
                     }
                 }
             })
-        },500)
+        },100)
     }
 }
 function pub_del(json){

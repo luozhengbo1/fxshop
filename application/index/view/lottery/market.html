@@ -163,17 +163,24 @@
         })
     }
     function getLottery(id,_this) {
-        pub_edit({
+        loadShadow();
+        $.ajax({
+            type:'post',
             url:url.getLottery,
             data:{id:id},
-        });
-        setTimeout(function () {
-            $(_this)
-                .removeClass('layui-btn-danger')
-                .addClass('bg_grey')
-                .removeAttr('onclick')
-                .html('已领取');
-        },1500);
+            dataType:'json',
+            success: function(data){
+                closeLoadShadow();
+                layer_msg(data.msg);
+                if(data.code ==200){
+                    $(_this)
+                        .removeClass('layui-btn-danger')
+                        .addClass('bg_grey')
+                        .removeAttr('onclick')
+                        .html('已领取');
+                }
+            }
+        })
     }
 </script>
 </body>
