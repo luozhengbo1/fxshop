@@ -118,7 +118,7 @@
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>关联商户：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <div class="select-box">
-                    <select name="user_id" class="select" datatype="*" nullmsg="请选择关联商户" errormsg="请选择关联商户">
+                    <select name="user_id" id="select_user_id" class="select" datatype="*" nullmsg="请选择关联商户" errormsg="请选择关联商户">
                         <option value="">--请选择--</option>
                         {volist name="userList" id="voUser"}
                         <option value="{$voUser.id}" {if condition="isset($vo['user_id']) && $vo['user_id'] eq $voUser['id']"}selected{/if}>{$voUser.realname}&nbsp;&nbsp;&nbsp;&nbsp;{$voUser.account}</option>
@@ -132,7 +132,7 @@
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>关联商品id：</label>
             <div class="formControls col-xs-6 col-sm-6">
-                <div class="select-box">
+                <div class="select-box"  id="goodsList">
                     <select name="goods_id" class="select" datatype="*" nullmsg="请选择关联商品" errormsg="请选择关联商品">
                         <option value="">--请选择--</option>
                         <option value="all">所有商品</option>
@@ -256,6 +256,22 @@
 <!-- 多图上传js -->
 <script type="text/javascript" src="__STATIC__/js/layui.js"></script>
 <script>
+    $(document).ready(function(){
+        $('#select_user_id').change(function(){
+            alert($(this).children('option:selected').val());
+            var p1=$(this).children('option:selected').val();//这就是selected的值
+            $.ajax({
+                url:"{:url('lottery/getUserGoods')}",
+                type:'post',
+                data:{user_id:p1},
+                success:function (data) {
+                    console.log(data)
+                   // goodsList();
+                }
+            })
+        })
+    })
+
     layui.use(['form','upload'], function() {
         var form = layui.form,
             layer = layui.layer,
