@@ -711,13 +711,14 @@
                     'order_id'=>$data['order_id'],
                     'goods_id'=>$data['goods_id'],
                     'sku_id'=>$data['sku_id'],
-                ])->update(['is_return'=>1,'return_price'=>$goodsAttribute['price'],'is_send'=>3]); # 待退款  3退款中 7退款中/退货退款
+//                ])->update(['is_return'=>1,'return_price'=>$goodsAttribute['price'],'is_send'=>3]); # 待退款  3退款中 7退款中/退货退款
+                ])->update(['is_return'=>1,'return_price'=>$orderGoods['real_pay_price'],'is_send'=>3]); # 待退款  3退款中 7退款中/退货退款 就是实际付款金额
                 $ordertmp = Db::name('order')->field('return_price_all')->where([
                     'order_id'=>$data['order_id']])->find();
                 #退款价
                 $order = Db::name('order')->where('order_id',$data['order_id'])->find();
                 $update =[];
-                $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all']];
+                $update = ['return_price_all'=>$orderGoods['real_pay_price']+$ordertmp['return_price_all']];
 //                if($goodsAttribute['price']+$ordertmp['return_price_all']==$order['total_price'] ){
 //                }else{
 //                    $update = ['return_price_all'=>$goodsAttribute['price']+$ordertmp['return_price_all'],'order_status'=>4];

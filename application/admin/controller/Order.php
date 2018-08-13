@@ -450,7 +450,7 @@ class Order extends Controller
                     if ($orderGoods['is_return'] != 1) {
                         return ajax_return_error('没有退款单');
                     }
-                    if ($orderGoods['return_price'] <= 0) {
+                    if ($orderGoods['real_pay_price'] <= 0) {
                         return ajax_return_error('退款金额不能小于0');
                     }
                     include_once APP_PATH . '/index/controller/WxPaySDK/WxPay.Config.php';
@@ -468,7 +468,7 @@ class Order extends Controller
                     //$input->SetTransaction_id($order['transaction_id']);  //微信官方生成的订单流水号，在支付成功中有返回
                     $input->SetOut_refund_no(uniqid() . time());   //退款单号
                     $input->SetTotal_fee($order['total_price'] * 100);   //订单标价金额，单位为分
-                    $input->SetRefund_fee($orderGoods['return_price'] * 100);  //退款总金额，订单总金额，单位为分，只能为整数
+                    $input->SetRefund_fee($orderGoods['real_pay_price'] * 100);  //退款总金额，订单总金额，单位为分，只能为整数
                     $input->SetOp_user_id($merchid);
                     $res = \WxPayApi::refund($wxConfig, $input);
                     //退款操作
@@ -477,7 +477,7 @@ class Order extends Controller
                         file_put_contents("wx_refund_success.log", print_r($res, true) . "\r", 8);
                         //修改订单状态 将订单总金额减少退款金额
                         $orderData = Db::name('order')->field('total_price,buy_list')->where(['order_id' => $order_id])->find();
-                        $decPrice = $orderData['total_price'] - $orderGoods['return_price'];#减去订单总价
+                        $decPrice = $orderData['total_price'] - $orderGoods['real_pay_price'];#减去订单总价
                         if ($decPrice < 0) $decPrice = 0;
                         $updateRes = Db::name('order')->where(['order_id' => $order_id])->update(['total_price' => $decPrice]);
                         Db::name('order_goods')->where(['id' => $data['id']])->update(['is_return' => 2, 'is_send' => 4]);#已退款，退货完成
