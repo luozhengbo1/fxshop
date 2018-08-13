@@ -104,9 +104,11 @@ class Customer extends Controller
 
     }
 
+    /**
+     * 绑定商户
+     */
     public function bindMerchant()
     {
-        $address = Db::name('admin_user')->where('account','not in','admin')->where('openid','')->select();
         $controller = $this->request->controller();
         // 编辑
         $id = $this->request->param('id');

@@ -8,8 +8,8 @@ $dbname = 'tpadmin';
 $conn = mysqli_connect($servername, $username, $password, $dbname) or die("连接失败：$conn->connect_error");
 $user_query = "SELECT id,openid,nickname,create_time,score,birthday FROM fy_customer WHERE isdelete=0";
 $user_result = mysqli_query($conn, $user_query) or die('Error: ' . mysqli_error($conn));;
-$lottery_query = "SELECT * FROM fy_lottery WHERE isdelete=0 and status=1";
-$lottery_result = mysqli_query($conn, $lottery_query) or die('Error: ' . mysqli_error($conn));;
+//$lottery_query = "SELECT * FROM fy_lottery WHERE isdelete=0 and status=1";
+//$lottery_result = mysqli_query($conn, $lottery_query) or die('Error: ' . mysqli_error($conn));;
 
 if ($user_result->num_rows > 0) {
 
@@ -23,7 +23,7 @@ if ($user_result->num_rows > 0) {
         $score = $row['score'];
         $birthday = $row['birthday'];
 
-        //计算时间差（年）
+        //计算当前与用户注册时间的时间差（年）
         $now_time = time();
         $time_sub = ($now_time - $create_time) / (60 * 60 * 24 * 365);
 
@@ -45,7 +45,7 @@ if ($user_result->num_rows > 0) {
             mysqli_query($conn, $update_query) or die('Error: ' . mysqli_error($conn));
             //新增score日志记录
             $score = -$score;
-            $insert_query = "INSERT INTO fy_score_log (uid,source_id,source,score,time) VALUES ($id,0,10,$score,$now_time)";
+            $insert_query = "INSERT INTO fy_score_log (uid,openid,source_id,source,score,time) VALUES ($id,'" . $openid . "',0,10,$score,$now_time)";
             mysqli_query($conn, $insert_query) or die('Error: ' . mysqli_error($conn));
             //新增一条清零message
             $message_query = "SELECT id  FROM fy_message WHERE type=2 and isdelete=0";
