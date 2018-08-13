@@ -50,7 +50,7 @@
         </a>
 
         <ul class="service-info">
-            {if condition="$vo['service'][0]" /}
+            {if condition="$vo['service']" /}
             <li class="clear">
                 <span class="fl">服务信息</span>
                 {volist name="$vo['service']" id="service"}
