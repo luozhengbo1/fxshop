@@ -32,7 +32,7 @@
 
     function loadOrderData() {
         var status = $('#navListTab').find('.active').attr('data-status');
-        loadShadow();
+      //  loadShadow();
         initData('dataList');
         pageload({
             targetWarp: 'dataListWrap',
@@ -113,7 +113,7 @@
     }
     function useNum() {
         new countCalculate();//数字计算
-        closeLoadShadow();
+        //closeLoadShadow();
     }
     function moneyCoucherUse(_this,log_id){
         var useNum = $(_this).parents('.btn-parents').find('.sumInput').val();

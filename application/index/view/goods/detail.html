@@ -83,7 +83,7 @@
         <li class="fr tr">{$goods['yieldly']??'贵阳'}</li>
     </ul>
     <div class="mb10">
-        {if condition="$lotterys" /}
+        {if condition="$lotterys[0]['type'] neq ''" /}
         <p class="detail-block" id="goodsLottery" onclick="showPop('goodsVoucher')">
             <span class="title">优惠</span>
             <span class="content">
@@ -101,7 +101,7 @@
             <!-- <i class="detail_footer-icon"></i>-->
         </p>
         {/if}
-        {if condition="$goods['service']" /}
+        {if condition="$goods['service'][0] neq '' " /}
         <p class="detail-block " onclick="showPop('goodsService')">
             <span class="title">服务</span>
             <span class="content orange-border">{$goods['service'][0]??''}</span>

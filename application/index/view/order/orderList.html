@@ -117,7 +117,7 @@
     $('#nav_'+nav_param).click();
     function loadOrderData(){
         var status = $('#navListTab').find('.active').attr('data-status');
-        loadShadow();
+        //loadShadow();
         initData('orderList');
         hideEmptyWrap();
         pageload({
@@ -179,7 +179,7 @@
                 html +='            <h3 class="title ellipsis">'+detail.name+'</h3>';
                 html +='            <p class="sku f12 grey">'+data[i].sku_val+'</p>';
                 html +='            <div class="order-serviceinfo clear">';
-                if(service){
+                if(service && service.length>0){
                     for(var n=0; n<service.length; n++){
                         html +='<span class="service">'+service[n]+'</span>';
                     }
@@ -267,7 +267,7 @@
     }
     function loadComplete() {
         backTime();
-        closeLoadShadow();
+      //  closeLoadShadow();
     }
     function cancelAfterSale(order_id,goods_id,sku_id){
         pub_edit({

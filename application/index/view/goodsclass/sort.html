@@ -25,7 +25,7 @@
         <div class="menu-left" id="sidebar">
             <ul><!--<li class="active">名酒茶礼</li>--></ul>
         </div>
-        <div id="dataListWrap" style="width: 70%; float: right">
+        <div id="dataListWrap" style="width: 72%; float: right">
             <ul class="child_category clear" id="dataList">
                <!-- <li class="tc radius4">
                     <a href="">
@@ -68,7 +68,7 @@
         }
     }
     function getGoods(data) {
-        loadShadow();
+        //loadShadow();
         initData('dataList');
         pageload({
             targetWarp:'dataListWrap',
@@ -85,7 +85,7 @@
     }
     function loadComplete() {
         imageLazy();
-        closeLoadShadow();
+       // closeLoadShadow();
     }
     function dealData(data) {
         var html='';
