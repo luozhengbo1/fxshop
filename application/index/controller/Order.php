@@ -19,7 +19,7 @@
         public function  index()
         {
             $this->view->assign('titleName', "订单主页");
-            return $this->view->fetch('orderlist');
+            return $this->view->fetch('orderList');
         }
         #获取订单商品接口
         public function  getOrderListApi()
