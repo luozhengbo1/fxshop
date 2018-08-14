@@ -763,7 +763,7 @@
                     }
                 }
             }
-
+//            dump($orderDetail);die;
             $this->view->assign('address',$address) ;
             $this->view->assign('orderDetail',$orderDetail);
 
