@@ -389,7 +389,6 @@
                 #减去订单总价上的优惠价
                 $orderAll['total_price'] =    $orderAll['total_price'] -$lotteryTotalPrice;
                 #计算几个商户进行分成多个订单
-             
                 $tools = new \JsApiPay();
                 //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名内，所以获取不到，使用github的实现。
                 //②、统一下单
