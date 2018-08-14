@@ -29,7 +29,7 @@ class Lottery extends Controller
     #商户
     public function  beforeAdd()
     {
-        $goods = Db::name('goods')->field('id,name')->where(['isdelete'=>0,'status'=>1])->select();
+        $goods = Db::name('goods')->field('id,name')->where(['isdelete'=>0,'status'=>1,'user_id'=>$_SESSION['think']['auth_id']])->select();
         $this->view->assign('goodsList',$goods);
         $userList = Db::name('admin_user')->where(['isdelete'=>0,'status'=>1,'id'=>['>',1]])->select();
         $this->view->assign('userList',$userList);
