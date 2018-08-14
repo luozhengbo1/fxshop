@@ -80,13 +80,23 @@ class Goods extends Controller
                     }
                 }
     		}
+
     		if( $data['free_type']!=1 ){#不包邮
     		    if( empty($data['postage']) ){
                     return ajax_return_adv_error('请填写邮费');
                 }
     			$goods['postage'] = $data['postage'];
     		}
-    		#服务信息
+            #服务信息
+            if($data['service'] && is_array($data['service'])){
+                foreach ($data['service'] as $k=> &$v1){
+                    if(empty($v1)){
+
+                        unset($data['service'][$k] );
+                    }
+                }
+            }
+            #服务信息
             $goods['service'] = json_encode($data['service']);
             #服务电话
             $goods['service_mobile'] = $data['service_mobile'];
@@ -145,7 +155,7 @@ class Goods extends Controller
     		if( !empty($data['routine_key']) || !empty($data['routine_val'])   ){
                 #参数为空删除
                 foreach ($data['routine_key'] as $key=>&$roval){
-                    if($roval=='' && $data['routine_val'][$key]=='' ){
+                    if(trim($roval)=='' && trim($data['routine_val'][$key])=='' ){
                         unset($data['routine_key'][$key]);
                         unset($data['routine_val'][$key]);
                     }
@@ -305,6 +315,15 @@ class Goods extends Controller
                 $goods['postage'] = '';
             }
             #服务信息
+            if($data['service'] && is_array($data['service'])){
+                foreach ($data['service'] as $k=> &$v1){
+                    if(empty($v1)){
+
+                        unset($data['service'][$k] );
+                    }
+                }
+            }
+            #服务信息
             $goods['service'] = json_encode($data['service']);
             #服务电话
             $goods['service_mobile'] = $data['service_mobile'];
@@ -364,7 +383,7 @@ class Goods extends Controller
             if( !empty($data['routine_key']) || !empty($data['routine_val'])   ){
                 #参数为空删除
                 foreach ($data['routine_key'] as $key=>&$roval){
-                    if($roval=='' && $data['routine_val'][$key]=='' ){
+                    if(trim($roval)=='' && trim($data['routine_val'][$key])=='' ){
                         unset($data['routine_key'][$key]);
                         unset($data['routine_val'][$key]);
                     }

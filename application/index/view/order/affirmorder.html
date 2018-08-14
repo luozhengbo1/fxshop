@@ -77,7 +77,11 @@
                     <select  class="w210 youhui"  onclick="getValue(this)"  onchange="showData(this)">
                         <option value="">不使用优惠券</option>
                         {volist name="$vo['youhui']" id="vo1" empty=""}
-                        <option value="{$vo1['id']}" class="lottery_id_{$vo1['id']}"  data-lottery_log_id="{$vo1['lottery_log_id']}" data-value="{$vo1['coupon_money']}">省{$vo1['coupon_money']}元：{$vo1['coupon_money']}元限时优惠券</option>
+                            {php} if($vo1['goods_id']== 'all'){{/php}
+                                <option value="{$vo1['id']}" class="lottery_id_{$vo1['id']}"  data-lottery_log_id="{$vo1['lottery_log_id']}" data-value="{$vo1['coupon_money']}">通用优惠券{$vo1['coupon_money']}元</option>
+                            {php}}else{{/php}
+                                <option value="{$vo1['id']}" class="lottery_id_{$vo1['id']}"  data-lottery_log_id="{$vo1['lottery_log_id']}" data-value="{$vo1['coupon_money']}">省{$vo1['coupon_money']}元：{$vo1['name']}</option>
+                            {php}}{/php}
                         {/volist}
                     </select>
                 </div>

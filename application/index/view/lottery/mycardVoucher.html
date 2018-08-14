@@ -110,7 +110,12 @@
                             html += '        <a onclick="moneyCoucherUse(this,'+data[i].id+')"  href="javascript:;"  class="moneyVoucher fr layui-btn layui-btn-sm layui-btn-radius" >&nbsp;&nbsp;去使用&nbsp;&nbsp;</a>';
                             break;
                         default:
-                            html += '        <a  href="'+urlConnect("{:url('goods/detail')}",{id:data[i]['lottery_info']['goods_id']})+'" class="fr layui-btn layui-btn-sm layui-btn-radius" >&nbsp;&nbsp;去使用&nbsp;&nbsp;</a>';
+                            if(data[i]['lottery_info']['goods_id']=='all'){
+                                html += '        <a  href="{:url(\'goodsclass/sort\',array(\'param\'=>\'sort\'))}" class="fr layui-btn layui-btn-sm layui-btn-radius" >&nbsp;&nbsp;去使用&nbsp;&nbsp;</a>';
+
+                            }else{
+                                html += '        <a  href="'+urlConnect("{:url('goods/detail')}",{id:data[i]['lottery_info']['goods_id']})+'" class="fr layui-btn layui-btn-sm layui-btn-radius" >&nbsp;&nbsp;去使用&nbsp;&nbsp;</a>';
+                            }
                             break;
                     }
                 }
