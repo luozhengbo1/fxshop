@@ -135,7 +135,9 @@
                 <div class="select-box"  id="goodsList">
                     <select name="goods_id" class="select" datatype="*" nullmsg="请选择关联商品" errormsg="请选择关联商品">
                         <option value="">--请选择--</option>
+                        {php}if($_SESSION['think']['auth_id']==1){ {/php}
                         <option value="all">所有商品</option>
+                        {php}}{/php}
                         {volist name="goodsList" id="vo1"}
                         <option value="{$vo1.id}" {if condition="isset($vo['goods_id']) && $vo['goods_id'] eq $vo1['id']"}selected{/if}>{$vo1.name}</option>
                         {/volist}

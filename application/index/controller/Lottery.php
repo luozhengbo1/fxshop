@@ -190,11 +190,15 @@ Class Lottery extends Mustlogin
                 ->order('addtime','desc')
                 ->page($page, $size)
                 ->select();
-            foreach ( $lotteryList as &$v){
-                $v['lottery_info'] = json_decode( $v['lottery_info'],true);
+            foreach ( $lotteryList as $k=> &$v){
+//                $v['lottery_info'] = json_decode( $v['lottery_info'],true);
+                $v['lottery_info'] =Db::name('lottery')->where(['id'=>$v['lottery_id'],'isdelete'=>0])->find();
+                if(!$v['lottery_info']){
+                    unset($lotteryList[$k]);
+                }
             }
             if ($lotteryList) {
-                return ajax_return($lotteryList, 'ok', 200);
+                return ajax_return(array_values($lotteryList), 'ok', 200);
             } else {
                 return ajax_return('', 'no data', 204);
             }

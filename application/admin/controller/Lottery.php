@@ -72,14 +72,13 @@ class Lottery extends Controller
             }
             $model = new \app\common\model\Lottery;
             if($data['goods_id']){
-                $goods = Db::name('goods')->field('id,name')->find();
+                $goods = Db::name('goods')->field('id,name')->where('id',$data['goods_id'])->find();
                 $data['goods_name'] = $goods['name'];
             }
             $data['user_id']= $data['user_id']?$data['user_id']:$_SESSION['think']['auth_id'];
             unset($data['id']);
             #剩余量
             $data['surplus_number']=$data['number'];
-
             $res = $model->insert($data);
             if($res){
                 return ajax_return_adv('添加成功');
