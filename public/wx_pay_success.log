@@ -270,4 +270,21 @@
 <total_fee>1</total_fee>
 <trade_type><![CDATA[JSAPI]]></trade_type>
 <transaction_id><![CDATA[4200000145201808107033796929]]></transaction_id>
-</xml>
+</xml><xml><appid><![CDATA[wxd9da51e6bae6c3c0]]></appid>
+<attach><![CDATA[附加参数]]></attach>
+<bank_type><![CDATA[CFT]]></bank_type>
+<cash_fee><![CDATA[1]]></cash_fee>
+<fee_type><![CDATA[CNY]]></fee_type>
+<is_subscribe><![CDATA[Y]]></is_subscribe>
+<mch_id><![CDATA[1441217402]]></mch_id>
+<nonce_str><![CDATA[bzmoyyjg0vgh6zjdi4m72wjdie5rzitd]]></nonce_str>
+<openid><![CDATA[omQYXwAnbPpTEgNYpxhqkRrfcoqE]]></openid>
+<out_trade_no><![CDATA[144121740220180814140549]]></out_trade_no>
+<result_code><![CDATA[SUCCESS]]></result_code>
+<return_code><![CDATA[SUCCESS]]></return_code>
+<sign><![CDATA[2549D4A80D126A7A824742D3FB07D5B9F708FFF6EDF43E712AD4AC7BD81F4727]]></sign>
+<time_end><![CDATA[20180814140600]]></time_end>
+<total_fee>1</total_fee>
+<trade_type><![CDATA[JSAPI]]></trade_type>
+<transaction_id><![CDATA[4200000143201808142218957221]]></transaction_id>
+</xml>
