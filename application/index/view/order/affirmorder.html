@@ -210,6 +210,8 @@
                 stype = $ele.data('stype')
             ;
             var $mianyou = $parents.find('.mianyou')//免邮券
+
+
                 ,$youhui=$parents.find('.youhui')//优惠券
 
             switch(stype){
@@ -231,7 +233,8 @@
             if((freetype==0 && !isNaN(postage))){
                 totalPrice += postage;//加上邮费
             }
-            if($mianyou.val()!=""){
+            console.log($mianyou.val())
+            if($mianyou.val() && $mianyou.val()!=""){
                 totalPrice -= postage;//减去邮费
             }
         })
