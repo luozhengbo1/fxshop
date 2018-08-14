@@ -2860,6 +2860,7 @@ span.pink-bg {
 	padding: 0 .02rem;
 	padding: .08rem 0;
 	background: white;
+	border-radius: 0 0 8px 8px;
 }
 .announcement .image{width: 14%;}
 .announcement .content{
