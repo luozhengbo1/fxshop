@@ -33,7 +33,10 @@ class Customer extends Mustlogin
         $this->assign('count_collect', $count_collect);
 
         //会员卡券数量
-        $count_lottery = Db::name('lottery_log')->where(['uid'=> $user_data['id'],'lottery_num'=>['>',0]])
+        $count_lottery = Db::name('lottery_log')
+            ->alias('log')
+            ->join('lottery lott','log.lottery_id=lott.id')
+            ->where(['log.uid'=> $user_data['id'],'log.lottery_num'=>['>',0],'lott.isdelete'=>0])
             ->count();
         $this->assign('count_lottery', $count_lottery);
 
