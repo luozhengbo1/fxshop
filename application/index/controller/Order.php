@@ -856,7 +856,7 @@
             $orderDetail['address_detail'] = json_decode($orderDetail['address_detail'],true);
 
             $user = Db::name('customer')->where(['openid'=>$this->userInfo['openid']])->find();
-            $userAddress = Db::table('fy_customer_address')->where(
+            $userAddress = Db::name('customer_address')->where(
                 ['uid' => $user['id'], 'status' => 1]
             )->find();
             //dump($userAddress);

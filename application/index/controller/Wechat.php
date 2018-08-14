@@ -66,7 +66,7 @@ class WeChat extends Controller
             //新增score日志记录
             $user = $customer->where('openid', $userInfo['openid'])->find();
             $time = time();
-            Db::table('fy_score_log')->insert([
+            Db::name('score_log')->insert([
                 'uid' => $user['id'],
                 'openid' => $userInfo['openid'],
                 'source_id' => 0,

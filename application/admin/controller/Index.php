@@ -86,43 +86,43 @@ class Index extends Controller
 //        return $this->view->fetch();
 
         //待处理事项
-        $count_need_pay = Db::table('fy_order')
+        $count_need_pay = Db::name('order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
             ->where(['fy_order.order_status' => 0, 'fy_order.pay_status' => 0])->count();
         $this->view->assign('count_need_pay', $count_need_pay);
 
-        $count_need_deliver = Db::table('fy_order')
+        $count_need_deliver = Db::name('order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
             ->where(['fy_order.order_status' => 1, 'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 0])
             ->count();
         $this->view->assign('count_need_deliver', $count_need_deliver);
 
-        $count_need_refund = Db::table('fy_order')
+        $count_need_refund = Db::name('order')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
             ->where(['fy_order.order_status' => ['in', 5, 6], 'fy_order.pay_status' => 1])
             ->count();
         $this->view->assign('count_need_refund', $count_need_refund);
 
-        $admin_data = Db::table('fy_admin_user')->where('id', UID)->find();
+        $admin_data = Db::name('admin_user')->where('id', UID)->find();
         $count_need_drawcash=$admin_data['balance'];
         $this->view->assign('count_need_drawcash', $count_need_drawcash);
 
         //指标展示
-        $count_visitor = Db::table('fy_customer_login_log')
+        $count_visitor = Db::name('customer_login_log')
             ->field(['date_format(login_time,"%Y-%m-%d")' => 'days', 'count(id)' => 'count'])
             ->group('days')
             ->select();
-        $count_finish = Db::table('fy_order')
+        $count_finish = Db::name('order')
             ->field(['FROM_UNIXTIME(create_time,"%Y-%m-%d")' => 'days', 'count(id)' => 'count'])
             ->where('order_status', 8)
             ->group('days')
             ->select();
-        $count_pay = Db::table('fy_order')
+        $count_pay = Db::name('order')
             ->field(['FROM_UNIXTIME(create_time,"%Y-%m-%d")' => 'days', 'count(id)' => 'count'])
             ->where('pay_status', 1)
             ->group('days')
             ->select();
-        $count_pay_money = Db::table('fy_wx_pay_refund_log')
+        $count_pay_money = Db::name('wx_pay_refund_log')
             ->field(['FROM_UNIXTIME(create_time,"%Y-%m-%d")' => 'days', 'sum(money)' => 'money'])
             ->where('isdelete', 0)
             ->group('days')
