@@ -101,12 +101,13 @@
                         $tempGoods['service'] = json_decode($tempGoods['service'],true);
                     }
                     //查询用户有效的券
+                    $arrGoodsId =[$v['goodsId'],'all'];
                     $lottery = Db::name('lottery')
                         ->alias('lottery')
                         ->field('lottery.*,fy_lottery_log.id as lottery_log_id')
                         ->join('fy_lottery_log','fy_lottery_log.lottery_id=lottery.id')
                         ->where([
-                            "fy_lottery.goods_id"=>$v['goodsId'],
+                            "fy_lottery.goods_id"=>['in',$arrGoodsId],
                             'fy_lottery.status'=>1,
                             'fy_lottery.isdelete'=>0,
                             'fy_lottery.expire_start_date' =>['<', $time],
@@ -131,14 +132,14 @@
                                     array_push($youhui,$lot);
                                 }
                                 break;
-                            case  3://代金券
+                           /* case  3://代金券
                                 array_push($daijin,$lot);
                                 break;
                             case 4://免邮
                                 //不包邮的时候
                                 if($storeData[$k]['free_type']==0){
                                     array_push($mianyou,$lot);
-                                }
+                                }*/
                                 break;
                         }
                     }
@@ -762,7 +763,7 @@
                     }
                 }
             }
-
+//            dump($orderDetail);die;
             $this->view->assign('address',$address) ;
             $this->view->assign('orderDetail',$orderDetail);
 

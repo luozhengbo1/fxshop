@@ -18,34 +18,49 @@ Class Lottery extends Mustlogin
         if($this->request->isAjax()){
             $page = $this->request->param('page');
             $size = $this->request->param('size');
+            $type = $this->request->param('type');//type:0通用券
             $goodsClassId = $this->request->param('goodsClassId');
             $time = time();
-            $where =[
-                'fy_goods.status'=>1,
-                'fy_goods.isdelete'=>'0',
-                'fy_lottery.grant_start_date' => ['<', $time],
-                'fy_lottery.grant_end_date' => ['>', $time],
-                'fy_lottery.status' =>1,
-            ];
-            if($goodsClassId !='all'){
-                if(!$goodsClassId){
-                    return ajax_return_error('缺少参数分类id');
-                }
-                #查询所有的子分类
-                $goodsClassAllChild = getAllChildcateIds($goodsClassId);
-                $where['fy_goods.goods_class_id'] = ['in',$goodsClassAllChild];
-            }
-            $lotterys = Db::name('goods')
-                ->field(
-                    'fy_lottery.*,
-                    fy_goods_class.name as class_name')
-                ->join('fy_lottery', 'fy_goods.id=fy_lottery.goods_id','left')
-                ->join('fy_goods_class', 'fy_goods_class.id=fy_goods.goods_class_id','left')
-                ->where($where)
-                ->page($page,$size)
-                ->select();
-            $lotteryLogs = Db::name('lottery_log')->where(['openid' => $this->userInfo['openid']])->select();
+            if($type !=0){
+                $where =[
+                    'fy_goods.status'=>1,
+                    'fy_goods.isdelete'=>'0',
+                    'fy_lottery.grant_start_date' => ['<', $time],
+                    'fy_lottery.grant_end_date' => ['>', $time],
+                    'fy_lottery.status' =>1,
+                ];
 
+                if($goodsClassId !='all'){
+                    if(!$goodsClassId){
+                        return ajax_return_error('缺少参数分类id');
+                    }
+                    #查询所有的子分类
+                    $goodsClassAllChild = getAllChildcateIds($goodsClassId);
+                    $where['fy_goods.goods_class_id'] = ['in',$goodsClassAllChild];
+                }
+                $lotterys = Db::name('goods')
+                    ->field(
+                        'fy_lottery.*,
+                    fy_goods_class.name as class_name')
+                    ->join('fy_lottery', 'fy_goods.id=fy_lottery.goods_id','left')
+                    ->join('fy_goods_class', 'fy_goods_class.id=fy_goods.goods_class_id','left')
+                    ->where($where)
+                    ->page($page,$size)
+                    ->select();
+            }else{
+                $lotterys = Db::name('lottery')
+                    ->where([
+                        'grant_start_date' => ['<', $time],
+                        'grant_end_date' => ['>', $time],
+                        'status' =>1,
+                        'goods_id' =>'all',
+                    ])
+                    ->page($page,$size)
+                    ->select();
+               // dump($lotterys);
+               // die;
+            }
+            $lotteryLogs = Db::name('lottery_log')->where(['openid' => $this->userInfo['openid']])->select();
             foreach ($lotterys as $k=>$lottery){
                 foreach ($lotteryLogs as $key=>$log){
                     //有领券记录
