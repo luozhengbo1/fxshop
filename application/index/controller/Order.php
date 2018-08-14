@@ -376,10 +376,10 @@
                         foreach ($orderRow as &$value ){
                             if(   $value['order_id'] == $v['order_id']){
                                 #z子订单检出优惠券面额
-                                $value['total_price']=$value['total_price'] - $v['lottery_detail']['coupon_real_money'];
-                                $orderGoods[$k]['real_pay_price'] =   $orderGoods[$k]['real_pay_price']-  $v['lottery_detail']['coupon_real_money'];
+                                $value['total_price']=$value['total_price'] - $v['lottery_detail']['coupon_money'];
+                                $orderGoods[$k]['real_pay_price'] =   $orderGoods[$k]['real_pay_price']-  $v['lottery_detail']['coupon_money'];
                                 #总金额统计
-                                $lotteryTotalPrice+=$v['lottery_detail']['coupon_real_money'];
+                                $lotteryTotalPrice+=$v['lottery_detail']['coupon_money'];
 
                             }
                         }
@@ -389,6 +389,7 @@
                 #减去订单总价上的优惠价
                 $orderAll['total_price'] =    $orderAll['total_price'] -$lotteryTotalPrice;
                 #计算几个商户进行分成多个订单
+             
                 $tools = new \JsApiPay();
                 //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名内，所以获取不到，使用github的实现。
                 //②、统一下单
@@ -687,13 +688,13 @@
                 #积分商品不支持退货退款
                 $goods = Db::name('goods')->where(['id'=>$data['goods_id']])->find();
 //                if($goods['settlement_type']==2 || $goods['settlement_type']==3){
-           //     if($goods['settlement_type']==2 ){
-             //       return ajax_return_error('积分商品不支持退换');
-               // }
+                if($goods['settlement_type']==2 ){
+                    return ajax_return_error('积分商品不支持退换');
+                }
                 $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'],true);
-               // if($orderGoods['goods_detail']['is_return_goods']==0){
-                //    return ajax_return_error('该商品不支持退换货');
-               // }
+                if($orderGoods['goods_detail']['is_return_goods']==0){
+                    return ajax_return_error('该商品不支持退换货');
+                }
                 #查询是否使用优惠券
                 $order =  Db::name('order')->where([
                     'order_id'=>$data['order_id'],'is_lottery'=>1])->find();
