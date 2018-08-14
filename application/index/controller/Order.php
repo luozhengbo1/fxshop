@@ -750,15 +750,19 @@
                 ->where(['fy_order.order_id'=>$id])
                 ->select();
             $address = json_decode($orderDetail[0]['address_detail'],true);
-            foreach (  $orderDetail as $k=> $v){
-                $orderDetail[$k]['goods_detail'] = json_decode($orderDetail[$k]['goods_detail'],true);
-                #服务信息
-                if( !empty( $orderDetail[$k]['goods_detail']['service']) ){
-                    $orderDetail[$k]['goods_detail']['service'] = json_decode($orderDetail[$k]['goods_detail']['service'],true);
-                }else{
-                    $orderDetail[$k]['goods_detail']['service']=[];
+            if(!empty($orderDetail) && is_array($orderDetail)){
+                foreach (  $orderDetail as $k=> $v){
+                    $orderDetail[$k]['goods_detail'] = json_decode($orderDetail[$k]['goods_detail'],true);
+                    $orderDetail[$k]['lottery_detail'] = json_decode($orderDetail[$k]['lottery_detail'],true);
+                    #服务信息
+                    if( !empty( $orderDetail[$k]['goods_detail']['service']) ){
+                        $orderDetail[$k]['goods_detail']['service'] = json_decode($orderDetail[$k]['goods_detail']['service'],true);
+                    }else{
+                        $orderDetail[$k]['goods_detail']['service']=[];
+                    }
                 }
             }
+
             $this->view->assign('address',$address) ;
             $this->view->assign('orderDetail',$orderDetail);
 
