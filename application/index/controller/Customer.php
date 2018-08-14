@@ -33,7 +33,7 @@ class Customer extends Mustlogin
         $this->assign('count_collect', $count_collect);
 
         //会员卡券数量
-        $count_lottery = Db::table('fy_lottery_log')->where('uid', $user_data['id'])
+        $count_lottery = Db::table('fy_lottery_log')->where(['uid'=> $user_data['id'],'use_num'=>0])
             ->count();
         $this->assign('count_lottery', $count_lottery);
 
