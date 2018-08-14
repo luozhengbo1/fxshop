@@ -128,8 +128,8 @@ class AdminUser extends Controller
                 }
             }
             //与customer表绑定
-            $res = Db::table('fy_customer')->alias('c')->join('fy_admin_user au', 'c.openid=au.openid')->field('c.id c_id,au.id au_id')->find();
-            Db::table('fy_customer')->where('id', $res['c_id'])->update(['merchant_id' => $res['au_id']]);
+            $res = Db::name('customer')->alias('c')->join('fy_admin_user au', 'c.openid=au.openid')->field('c.id c_id,au.id au_id')->find();
+            Db::name('customer')->where('id', $res['c_id'])->update(['merchant_id' => $res['au_id']]);
             return ajax_return_adv('添加成功');
         } else {
             // 添加
@@ -183,9 +183,9 @@ class AdminUser extends Controller
             }
             //与customer表绑定
             $account = $this->request->param('account');
-            $res1 = Db::table('fy_admin_user')->field('id,openid')->where('account', $account)->find();
-            $res2 = Db::table('fy_customer')->field('id')->where('openid', $res1['openid'])->find();
-            Db::table('fy_customer')->where('id', $res2['id'])->update(['merchant_id' => $res1['id']]);
+            $res1 = Db::name('admin_user')->field('id,openid')->where('account', $account)->find();
+            $res2 = Db::name('customer')->field('id')->where('openid', $res1['openid'])->find();
+            Db::name('customer')->where('id', $res2['id'])->update(['merchant_id' => $res1['id']]);
             return ajax_return_adv("编辑成功");
         } else {
             // 编辑
@@ -211,7 +211,7 @@ class AdminUser extends Controller
     {
         //禁用的同时下架该商户名下所有商品
         $user_id = $this->request->param('id');
-        Db::table('fy_goods g')->join('fy_admin_user au', 'au.id=g.user_id')->where('au.id', $user_id)->update(['g.status' => 0]);
+        Db::name('goods g')->join('fy_admin_user au', 'au.id=g.user_id')->where('au.id', $user_id)->update(['g.status' => 0]);
         return $this->updateField($this->fieldStatus, 0, "禁用成功");
     }
 
@@ -223,7 +223,7 @@ class AdminUser extends Controller
     {
         //恢复的同时上架该商户名下所有商品
         $user_id = $this->request->param('id');
-        Db::table('fy_goods g')->join('fy_admin_user au', 'au.id=g.user_id')->where('au.id', $user_id)->update(['g.status' => 1]);
+        Db::name('goods g')->join('fy_admin_user au', 'au.id=g.user_id')->where('au.id', $user_id)->update(['g.status' => 1]);
         return $this->updateField($this->fieldStatus, 1, "恢复成功");
     }
 }

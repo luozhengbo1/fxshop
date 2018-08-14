@@ -217,7 +217,7 @@ Class Lottery extends Mustlogin
      **/
     public function  adminUserScanCode($id,$use_num,$user_id){
         $this->assign('titleName', "商家扫码券");
-        $tempUser = Db::table('fy_admin_user')   ->where([
+        $tempUser = Db::name('admin_user')   ->where([
                 'openid'=> $this->userInfo['openid'],
                 'id'=>$user_id
             ])

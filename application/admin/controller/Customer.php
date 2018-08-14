@@ -30,7 +30,7 @@ class Customer extends Controller
         //按会员等级搜索
         if ($this->request->param("grade")) {
             $id = $this->request->param("grade");
-            $grade = Db::table('fy_customer_grade')->where('id', $id)->find();
+            $grade = Db::name('customer_grade')->where('id', $id)->find();
             $map['experience'] = ['between', [$grade['experience_start'], $grade['experience_end']]];
         }
 
@@ -62,7 +62,7 @@ class Customer extends Controller
                 ->order("id desc")->select();
 
             //处理等级数据、性别、时间数据
-            $grade_list = Db::table('fy_customer_grade')->field('name,experience_start,experience_end')->where(['isdelete' => 0])->select();
+            $grade_list = Db::name('customer_grade')->field('name,experience_start,experience_end')->where(['isdelete' => 0])->select();
             foreach ($data as &$v) {
                 foreach ($grade_list as $grade_val) {
                     if ($v['experience'] >= $grade_val['experience_start'] && $v['experience'] <= $grade_val['experience_end']) {
@@ -122,8 +122,8 @@ class Customer extends Controller
         if ($this->request->isPost()) {
             $data = $this->request->post();
             //绑定商户
-            Db::table('fy_admin_user')->where('id', $data['merchant'])->update(['openid' => $vo['openid']]);
-            Db::table('fy_customer')->where('id', $id)->update(['merchant_id' => $data['merchant']]);
+            Db::name('admin_user')->where('id', $data['merchant'])->update(['openid' => $vo['openid']]);
+            Db::name('customer')->where('id', $id)->update(['merchant_id' => $data['merchant']]);
             return ajax_return_adv('绑定成功','parent','绑定成功','','','',0);
         } else {
             $this->view->assign("vo", $vo);
