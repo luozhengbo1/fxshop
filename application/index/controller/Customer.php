@@ -501,7 +501,7 @@ class Customer extends Mustlogin
         } else {
             $this->assign('user_data', $user_data);
             $this->assign('titleName', "会员权益");
-            return $this->view->fetch("memberBenefits");
+            return $this->view->fetch("memberbenefits");
         }
     }
 
@@ -533,7 +533,7 @@ class Customer extends Mustlogin
         } else if ($type == 2) {
             $this->assign('titleName', "会员升级攻略");
         }
-        return $this->view->fetch("memberRule");
+        return $this->view->fetch("memberrule");
 
     }
 

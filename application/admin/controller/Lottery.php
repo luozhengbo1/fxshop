@@ -100,7 +100,7 @@ class Lottery extends Controller
             if(!$data['user_id']){
                 $data['user_id']=$_SESSION['think']['auth_id'];
             }
-            $goods = Db::name('goods')->where(['user_id'=>$data['user_id']])->find();
+            $goods = Db::name('goods')->where(['user_id'=>$data['user_id']])->select();
             return ajax_return($goods,'ok','200');
         }
 
