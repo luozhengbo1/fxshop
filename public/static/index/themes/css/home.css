@@ -4233,7 +4233,7 @@ a {
 }
 .voucher-market-catalogs {
 	margin: 4px auto;
-	padding: 8px 0;
+	padding: 8px 10px;
 	background: white;
 }
 .voucher-market-catalogs li.active{
