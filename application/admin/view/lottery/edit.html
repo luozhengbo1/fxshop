@@ -115,10 +115,10 @@
         </div>
         {php}if($_SESSION['think']['auth_id']==1){ {/php}
         <div class="row cl">
-            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>关联商户：</label>
+            <label class="form-label col-xs-3 col-sm-3">关联商户：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <div class="select-box">
-                    <select name="user_id" id="select_user_id" onchange="getGoodsByUser(this);" class="select" datatype="*" nullmsg="请选择关联商户" errormsg="请选择关联商户">
+                    <select name="user_id" id="select_user_id" onchange="getGoodsByUser(this);" class="select">
                         <option value="">--请选择--</option>
                         {volist name="userList" id="voUser"}
                         <option value="{$voUser.id}" {if condition="isset($vo['user_id']) && $vo['user_id'] eq $voUser['id']"}selected{/if}>{$voUser.realname}&nbsp;&nbsp;&nbsp;&nbsp;{$voUser.account}</option>

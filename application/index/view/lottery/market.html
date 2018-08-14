@@ -64,6 +64,7 @@
     function goodsWithLottery(){
         initData('dataList');
         var classId = $('#voucherClass').find('.active').attr('data-classid');
+        var type = $('#voucherClass').find('.active').attr('data-type');
         pageload({
             targetWarp:'dataListWrap',
             target:'dataList',
@@ -71,7 +72,7 @@
             size:10,
             ajaxData:{
                 url:url.goodsWithLottery,
-                data:{goodsClassId:classId},
+                data:{goodsClassId:classId,type:type},
             },
             dealFun:dealData,
             complete:imageLazy,
@@ -79,6 +80,7 @@
     }
 
     function dealData(data) {
+        var class_name = $('#voucherClass').find('.active').html();
         var html='';
         for(var i = 0; i < data.length; i++){
             var imgArr = new Array();
@@ -88,7 +90,7 @@
             html +='<li>';
             html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].goods_id})+'" >';
             html +='        <div class="clear">';
-            html +='            <p class="fl" ><span class="catalog border-tag" style="vertical-align: top">'+data[i].class_name+'</span><i>'+data[i].name+'</i></p>';
+            html +='            <p class="fl" ><span class="catalog border-tag" style="vertical-align: top">'+class_name+'</span><i>'+data[i].name+'</i></p>';
             if(data[i].coupon_money){
                 html +='            <p class="price fr f16 bold pr10">￥'+data[i].coupon_money+'</p>';
             }
@@ -146,12 +148,13 @@
             url:url.getGoodsClass,
             success:function (data) {
                 var html='', code = data.code,data = data.data;
-                html +=' <li  data-classid="all"   >全部</li>';
+               // html +=' <li  data-classid="all"   >全部</li>';
                 if(code=='200'){
                     for(var i = 0; i < data.length; i++){
                         //html +=' <li class="w20p fl tc" data-classid="'+data[i].id+'"  ><img class="w80p" src="'+data[i].pic+'"></li>';
-                        html +=' <li class="tc f10" data-classid="'+data[i].id+'"  >'+data[i].name+'</li>';
+                        html +=' <li class="tc f10" data-classid="'+data[i].id+'"   data-type="'+constant.lottery.goods+'" >'+data[i].name+'</li>';
                     }
+                    html +=' <li  data-classid="all" data-type="'+constant.lottery.all+'"   >通用券</li>';
                     $('#voucherClass').empty().append(html);
                     var $targetLi = $('#voucherClass li');
                     tabSwitch($targetLi,goodsWithLottery);
