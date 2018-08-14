@@ -687,13 +687,13 @@
                 #积分商品不支持退货退款
                 $goods = Db::name('goods')->where(['id'=>$data['goods_id']])->find();
 //                if($goods['settlement_type']==2 || $goods['settlement_type']==3){
-                if($goods['settlement_type']==2 ){
-                    return ajax_return_error('积分商品不支持退换');
-                }
+           //     if($goods['settlement_type']==2 ){
+             //       return ajax_return_error('积分商品不支持退换');
+               // }
                 $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'],true);
-                if($orderGoods['goods_detail']['is_return_goods']==0){
-                    return ajax_return_error('该商品不支持退换货');
-                }
+               // if($orderGoods['goods_detail']['is_return_goods']==0){
+                //    return ajax_return_error('该商品不支持退换货');
+               // }
                 #查询是否使用优惠券
                 $order =  Db::name('order')->where([
                     'order_id'=>$data['order_id'],'is_lottery'=>1])->find();
