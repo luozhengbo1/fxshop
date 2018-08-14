@@ -544,22 +544,24 @@ class Order extends Controller
 
     }
     #退钱
-    public function  refund1()
-    {
-        include_once APP_PATH . '/index/controller/WxPaySDK/WxPay.Config.php';
-        $wxConfig = new \WxPayConfig();
-        $merchid = $wxConfig->GetMerchantId();
-        $orderId = "144121740220180813163551";
-        $input = new \WxPayRefund();
-        $input->SetOut_trade_no($orderId);   //自己的订单号
-        //$input->SetTransaction_id($order['transaction_id']);  //微信官方生成的订单流水号，在支付成功中有返回
-        $input->SetOut_refund_no(uniqid() . time());   //退款单号
-        $input->SetTotal_fee($order['total_price'] * 100);   //订单标价金额，单位为分
-        $input->SetRefund_fee($orderGoods['real_pay_price'] * 100);  //退款总金额，订单总金额，单位为分，只能为整数
-        $input->SetOp_user_id($merchid);
-        $res = \WxPayApi::refund($wxConfig, $input);
-
-    }
+//    public function  refund1()
+//    {
+//        include_once APP_PATH . '/index/controller/WxPaySDK/WxPay.Api.php';
+//        include_once APP_PATH . '/index/controller/WxPaySDK/WxPay.Config.php';
+//        $wxConfig = new \WxPayConfig();
+//        $merchid = $wxConfig->GetMerchantId();
+//        $orderId = "1441217402201808131632589993";
+//        $input = new \WxPayRefund();
+//        $input->SetOut_trade_no($orderId);   //自己的订单号
+//        //$input->SetTransaction_id($order['transaction_id']);  //微信官方生成的订单流水号，在支付成功中有返回
+//        $input->SetOut_refund_no(uniqid() . time());   //退款单号
+//        $input->SetTotal_fee(10.03 * 100);   //订单标价金额，单位为分
+//        $input->SetRefund_fee(9.97* 100);  //退款总金额，订单总金额，单位为分，只能为整数
+//        $input->SetOp_user_id($merchid);
+//        $res = \WxPayApi::refund($wxConfig, $input);
+//        dump($res);
+//
+//    }
 
 
 }

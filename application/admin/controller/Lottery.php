@@ -91,6 +91,20 @@ class Lottery extends Controller
         }
 
     }
+
+    #获取指定用户的商品
+    public function getUserGoods()
+    {
+        if($this->request->isAjax()){
+            $data=$this->request->post();
+            if(!$data['user_id']){
+                $data['user_id']=$_SESSION['think']['auth_id'];
+            }
+            $goods = Db::name('')->where(['user_id'=>$data['user_id']])->find();
+            return ajax_return($goods,'ok','200');
+        }
+
+    }
     public function edit()
     {
         if($this->request->isPost()){

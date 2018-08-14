@@ -40,6 +40,9 @@
                 <td>售后理由</td>
                 {/if}
                 <td>退货退款操作</td>
+                <td>是否使用优惠券</td>
+                <td>优惠券名称</td>
+                <td>优惠券面额</td>
             </tr>
             </thead>
             <tbody>
@@ -70,6 +73,20 @@
                     {elseif condition="$vo.is_return eq 2" /}
                     已退款
                     {/if}
+                </td>
+                <td>{php}echo $vo['is_lottery']?'是':'否' ;{/php}</td>
+                <td>{php}
+                    if( !empty($vo['lottery_detail'] )){
+                        $vo['lottery_detail'] =json_decode($vo['lottery_detail'],true);
+                            echo    $vo['lottery_detail']['name'];
+                    }
+                    {/php}</td>
+                <td>
+                    {php}
+                    if( !empty($vo['lottery_detail'] )){
+                        echo    "满".$vo['lottery_detail']['coupon_real_money']."减".$vo['lottery_detail']['coupon_money'];
+                    }
+                    {/php}
                 </td>
             </tr>
             </tbody>
