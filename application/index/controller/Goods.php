@@ -318,8 +318,9 @@
             #取出商品中发行中，未删除的所具有的券
             $time = time();
             $arrType=[2,4];
+            $arrGoodsId =[$goods_id,'all'];
             $lotterys = Db::name('lottery')->where([
-                "goods_id"=>$goods_id,
+                "goods_id"=>['in',$arrGoodsId],
                 'status'=>1,
                 'isdelete'=>'0',
                 'grant_start_date' =>['<', $time],

@@ -696,6 +696,10 @@ var constant={
         ,7:'用户确认收货'
         ,8:'同意'
         ,9:'售后完成'
+    },
+    lottery:{
+        all:0,//通用券
+        goods:1//商品券
     }
 }
 var settlement={
