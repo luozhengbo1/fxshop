@@ -74,6 +74,14 @@ class WeChat extends Controller
                 'score' => 10,
                 'time' => $time
             ]);
+            #将新人礼包记录。
+            $insertLog =[];
+            $insertLog['openid']= $userInfo['openid'];
+            $insertLog['create_time']= $time;
+            #该id写死了
+            $insertLog['gift_bag_id']= 3;
+            $insertLog['type']= 1;
+            Db::name('gift_bag_log')->insert($insertLog);
         } else {
             # 更新登录时间
             $up['update_time'] = strtotime(date("Y-m-d H:i:s"));

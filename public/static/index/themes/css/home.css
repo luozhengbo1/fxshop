@@ -2860,6 +2860,7 @@ span.pink-bg {
 	padding: 0 .02rem;
 	padding: .08rem 0;
 	background: white;
+	border-radius: 0 0 8px 8px;
 }
 .announcement .image{width: 14%;}
 .announcement .content{
@@ -4232,7 +4233,7 @@ a {
 }
 .voucher-market-catalogs {
 	margin: 4px auto;
-	padding: 8px 0;
+	padding: 8px 10px;
 	background: white;
 }
 .voucher-market-catalogs li.active{

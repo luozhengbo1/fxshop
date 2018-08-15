@@ -88,16 +88,16 @@ class Goods extends Controller
     			$goods['postage'] = $data['postage'];
     		}
             #服务信息
-            if($data['service'] && is_array($data['service'])){
+            if(isset($data['service']) && is_array($data['service'])){
                 foreach ($data['service'] as $k=> &$v1){
                     if(empty($v1)){
 
                         unset($data['service'][$k] );
                     }
                 }
+                $goods['service'] = json_encode($data['service']);
             }
             #服务信息
-            $goods['service'] = json_encode($data['service']);
             #服务电话
             $goods['service_mobile'] = $data['service_mobile'];
     		#是否包邮
@@ -315,16 +315,17 @@ class Goods extends Controller
                 $goods['postage'] = '';
             }
             #服务信息
-            if($data['service'] && is_array($data['service'])){
+            if(isset($data['service']) && is_array($data['service'])){
                 foreach ($data['service'] as $k=> &$v1){
                     if(empty($v1)){
 
                         unset($data['service'][$k] );
                     }
                 }
+                #服务信息
+                $goods['service'] = json_encode($data['service']);
             }
-            #服务信息
-            $goods['service'] = json_encode($data['service']);
+
             #服务电话
             $goods['service_mobile'] = $data['service_mobile'];
             #是否包邮

@@ -303,6 +303,10 @@
     $('#goodPriceTitle').html(priceScoreShow($('#goodPriceTitle').data('type'),$('#goodPriceTitle').data('price'),$('#goodPriceTitle').data('score')));
     //showarea  展示区域1-限时抢购2-积分商城3-日常售卖4-热销产品
     var show_area = $('#popupMain').attr('data-showarea');
+    var currentTime = parseInt("{$currentTime}");
+    setInterval(function () {
+        currentTime +=1;
+    },1000);
     var url = {
         getSku:"{:url('index/goods/getSku')}",
         addCar:"{:url('index/car/addCar')}",
@@ -374,6 +378,7 @@
                     var data = res.data;
                     for(var i=0; i<data.length; i++){
                         var coupon_type = data[i].type;
+                        var lotteryLog = data[i].lotteryLog;
                         html +='<div class="tax-box">'
                         html += '<div class="clear">'
                         html += '    <div class="fl w70p" style="">'
@@ -386,8 +391,19 @@
                                 html += '        <p class="tc mt5"> 包邮券</p>'
                                 break;
                         }
-                       // html += '        <p class="tc mt5">剩余有效期：' +returnTime(parseInt(data[i].expire_end_date)-parseInt(data[i].expire_start_date))  + '</p>'
-                        html += '        <p class="tc mt5">剩余有效期：' +returnTime(parseInt(data[i].expire_end_date)-parseInt("{$currentTime}") )+ '</p>'
+                        console.log('================================='+currentTime)
+                        if(data[i].expire_type ==constant.dataType.date){
+                            html += '        <p class="tc mt5">剩余有效期：' +returnTime(parseInt(data[i].expire_end_date)-currentTime ,'dd H:mm')+ '</p>'
+                        }else if(data[i].expire_type ==constant.dataType.day){
+
+                            if(lotteryLog){
+                               var time = parseInt(lotteryLog.addtime)+(parseInt(data[i].expire_time)*24*60*60);
+                                html += '  <p class="tc mt5">剩余有效期：' +returnTime(time-currentTime ,'dd H:mm')+ '</p>'
+                            }else{
+                                 html += '        <p class="tc mt5">剩余有效期：' +data[i].expire_time+ '天</p>'
+                            }
+                        }
+
                         html += '    </div>'
                         html += '    <div class="tax-split fl" >'
                         html += '        <div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>'

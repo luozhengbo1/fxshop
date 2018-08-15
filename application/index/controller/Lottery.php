@@ -24,8 +24,8 @@ Class Lottery extends Mustlogin
             if($type !=0){
                 $where =[
                     'fy_goods.isdelete'=>'0',
-//                    'fy_lottery.grant_start_date' => ['<', $time],
-//                    'fy_lottery.grant_end_date' => ['>', $time],
+                   // 'fy_lottery.grant_start_date' => ['<', $time],
+                   // 'fy_lottery.grant_end_date' => ['>', $time],
                     'fy_lottery.status' =>1,
                 ];
 
@@ -49,8 +49,8 @@ Class Lottery extends Mustlogin
             }else{
                 $lotterys = Db::name('lottery')
                     ->where([
-//                        'grant_start_date' => ['<', $time],
-//                        'grant_end_date' => ['>', $time],
+                        //'grant_start_date' => ['<', $time],
+                        //'grant_end_date' => ['>', $time],
                         'status' =>1,
                         'goods_id' =>'all',
                     ])
@@ -68,9 +68,23 @@ Class Lottery extends Mustlogin
                     }
                 }
             }
-//            dump($lotterys);die;
+            $resultLottery  = array();
+            foreach ($lotterys as $k=>$lot){
+                #expire_type 0 表示有效期是按日期设置 1 按天数设置
+                if($lot['expire_type'] ==0 &&
+                    $lot['grant_start_date']<$time &&
+                    $lot['grant_end_date']>$time){
+                    array_push($resultLottery, $lot);
+                }else if($lot['expire_type'] == 1){
+                    array_push($resultLottery, $lot);
+                }
+
+            }
+           // dump($resultLottery);die;
+           // dump($lotterys);
+
           //  echo Db::name('goods')->getLastSql();die;
-            return ajax_return($lotterys, '', '200');
+            return ajax_return($resultLottery, '', '200');
             //带有券的商品
         }
         return $this->view->fetch('market');
@@ -143,6 +157,7 @@ Class Lottery extends Mustlogin
             }
             #查询是否领取过这个奖券
             $lotteryLog = Db::name('lottery_log')->where(['openid' => $this->userInfo['openid'], 'lottery_id' => $data['id']])->find();
+
             if ($lotteryLog) {
                 return ajax_return_error('每人只能领一张');
             }

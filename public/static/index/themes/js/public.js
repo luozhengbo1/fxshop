@@ -700,6 +700,10 @@ var constant={
     lottery:{
         all:0,//通用券
         goods:1//商品券
+    },
+    dataType:{
+        date:0//日期类型
+        ,day:1//天数类型
     }
 }
 var settlement={
@@ -761,7 +765,7 @@ function endTimer(intDiff) {
 
     }, 1000);
 }
-function returnTime(intDiff) {
+function returnTime(intDiff,type) {
     var day=0,
         hour=0,
         minute=0,
@@ -772,6 +776,9 @@ function returnTime(intDiff) {
         second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
         if (minute <= 9) minute = '0' + minute;
         if (second <= 9) second = '0' + second;
+        if(type){
+            if(type =='dd H:mm') return day+'天'+hour+'时'+minute+'分';
+        }
         return day+'天'+hour+'时'+minute+'分'+second+'秒';
 }
 /**
