@@ -20,13 +20,14 @@ Class Lottery extends Mustlogin
             $size = $this->request->param('size');
             $type = $this->request->param('type');//type:0通用券
             $goodsClassId = $this->request->param('goodsClassId');
+
             $time = time();
             if($type !=0){
                 $where =[
                     'fy_goods.status'=>1,
                     'fy_goods.isdelete'=>'0',
-                    'fy_lottery.grant_start_date' => ['<', $time],
-                    'fy_lottery.grant_end_date' => ['>', $time],
+                   // 'fy_lottery.grant_start_date' => ['<', $time],
+                   // 'fy_lottery.grant_end_date' => ['>', $time],
                     'fy_lottery.status' =>1,
                 ];
 
@@ -50,15 +51,13 @@ Class Lottery extends Mustlogin
             }else{
                 $lotterys = Db::name('lottery')
                     ->where([
-                        'grant_start_date' => ['<', $time],
-                        'grant_end_date' => ['>', $time],
+                        //'grant_start_date' => ['<', $time],
+                        //'grant_end_date' => ['>', $time],
                         'status' =>1,
                         'goods_id' =>'all',
                     ])
                     ->page($page,$size)
                     ->select();
-               // dump($lotterys);
-               // die;
             }
             $lotteryLogs = Db::name('lottery_log')->where(['openid' => $this->userInfo['openid']])->select();
             foreach ($lotterys as $k=>$lottery){
@@ -69,9 +68,24 @@ Class Lottery extends Mustlogin
                     }
                 }
             }
-//            dump($goodsWithLottery);
+            $resultLottery  = array();
+            foreach ($lotterys as $k=>$lot){
+               #expire_type 0 表示有效期是按日期设置 1 按天数设置
+                //dump($lot);
+                if($lot['expire_type'] ==0 &&
+                    $lot['grant_start_date']<$time &&
+                    $lot['grant_end_date']<$time){
+                    array_push($resultLottery, $lot);
+                }else if($lot['expire_type'] == 1){
+                    array_push($resultLottery, $lot);
+                }
+
+            }
+           // dump($resultLottery);die;
+           // dump($lotterys);
+
           //  echo Db::name('goods')->getLastSql();die;
-            return ajax_return($lotterys, '', '200');
+            return ajax_return($resultLottery, '', '200');
             //带有券的商品
         }
         return $this->view->fetch('market');

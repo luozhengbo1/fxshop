@@ -155,7 +155,7 @@
                         //html +=' <li class="w20p fl tc" data-classid="'+data[i].id+'"  ><img class="w80p" src="'+data[i].pic+'"></li>';
                         html +=' <li class="tc f10" data-classid="'+data[i].id+'"   data-type="'+constant.lottery.goods+'" >'+data[i].name+'</li>';
                     }
-                    html +=' <li  data-classid="all" data-type="'+constant.lottery.all+'"   >通用券</li>';
+                    html +=' <li  class="tc f10"  data-classid="all" data-type="'+constant.lottery.all+'"   >通用券</li>';
                     $('#voucherClass').empty().append(html);
                     var $targetLi = $('#voucherClass li');
                     tabSwitch($targetLi,goodsWithLottery);
