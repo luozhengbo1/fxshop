@@ -23,10 +23,9 @@ Class Lottery extends Mustlogin
             $time = time();
             if($type !=0){
                 $where =[
-                    'fy_goods.status'=>1,
                     'fy_goods.isdelete'=>'0',
-                    'fy_lottery.grant_start_date' => ['<', $time],
-                    'fy_lottery.grant_end_date' => ['>', $time],
+//                    'fy_lottery.grant_start_date' => ['<', $time],
+//                    'fy_lottery.grant_end_date' => ['>', $time],
                     'fy_lottery.status' =>1,
                 ];
 
@@ -50,8 +49,8 @@ Class Lottery extends Mustlogin
             }else{
                 $lotterys = Db::name('lottery')
                     ->where([
-                        'grant_start_date' => ['<', $time],
-                        'grant_end_date' => ['>', $time],
+//                        'grant_start_date' => ['<', $time],
+//                        'grant_end_date' => ['>', $time],
                         'status' =>1,
                         'goods_id' =>'all',
                     ])
@@ -69,7 +68,7 @@ Class Lottery extends Mustlogin
                     }
                 }
             }
-//            dump($goodsWithLottery);
+//            dump($lotterys);die;
           //  echo Db::name('goods')->getLastSql();die;
             return ajax_return($lotterys, '', '200');
             //带有券的商品
@@ -137,12 +136,13 @@ Class Lottery extends Mustlogin
             if ($lottery['number'] < 1) {
                 return ajax_return_error('奖券已经被领取完');
             }
-            if ($lottery['grant_start_date'] > time() || $lottery['grant_end_date'] < time()) {
-                return ajax_return_error('领取时间不对');
+            if($lottery['expire_type']!=1){
+                if ($lottery['grant_start_date'] > time() || $lottery['grant_end_date'] < time()) {
+                    return ajax_return_error('领取时间不对');
+                }
             }
             #查询是否领取过这个奖券
             $lotteryLog = Db::name('lottery_log')->where(['openid' => $this->userInfo['openid'], 'lottery_id' => $data['id']])->find();
-
             if ($lotteryLog) {
                 return ajax_return_error('每人只能领一张');
             }
@@ -187,7 +187,7 @@ Class Lottery extends Mustlogin
                // ->where(['openid'=>$this->userInfo['openid'],'log.use_num'=>($status==0)?'0':['<>',0]])
                    ->where($where)
 //                ->where('lenght(order_id)>0')
-                ->order('addtime','desc')
+                ->order('id DESC')
                 ->page($page, $size)
                 ->select();
             foreach ( $lotteryList as $k=> &$v){
@@ -217,7 +217,7 @@ Class Lottery extends Mustlogin
      **/
     public function  adminUserScanCode($id,$use_num,$user_id){
         $this->assign('titleName', "商家扫码券");
-        $tempUser = Db::name('admin_user')   ->where([
+        $tempUser = Db::table('fy_admin_user')   ->where([
                 'openid'=> $this->userInfo['openid'],
                 'id'=>$user_id
             ])
