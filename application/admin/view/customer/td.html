@@ -18,11 +18,6 @@ $grade_res = \think\Db::table('fy_customer')->alias('c')
     echo $grade_res['name'];
     ?>
 </td>
-<td><?php
-    $merchant = \think\Db::table('fy_admin_user')->field('account')->where('id',$vo['merchant_id'])->find();
-    echo $merchant['account'];
-    ?>
-</td>
 <td>{$vo.login_ip}</td>
 <td>{$vo.create_time}</td>
 <!--<td>{$vo.update_time}</td>-->
