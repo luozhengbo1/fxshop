@@ -168,8 +168,6 @@
                     $storeData[$k]['mianyou']=$mianyou;
                    // $storeData[$k] = array_merge($storeData[$k], Db::name('goods')->where(['id'=>$v['goodsId']])->find());
                 }
-//                dump($storeData);
-
                 #如果有地址就取出地址
                 $address = Db::name('customer_address')->alias('ca')
                     ->field('ca.*')
@@ -194,8 +192,8 @@
                     "fy_lottery.goods_id"=>['in',$idArr],
                     'fy_lottery.status'=>1,
                     'fy_lottery.isdelete'=>'0',
-                    'fy_lottery.expire_start_date' =>['<', $time],
-                    'fy_lottery.expire_end_date' =>['>', $time],
+//                    'fy_lottery.expire_start_date' =>['<', $time],
+//                    'fy_lottery.expire_end_date' =>['>', $time],
                     'fy_lottery_log.openid'=>$this->userInfo['openid'],
                 ])
                 ->select();
@@ -259,6 +257,7 @@
                     return ajax_return('','请选择收货地址');
                 }
                 $totalType = 0;
+                $time = time();
                 foreach ($data as $k=>$v) {
                     $goodsAttribute = Db::name('goods_attribute')->where(['id' => $v['skuId']])->find();
                     $goods = Db::name('goods')->where(['id' => $v['goodsId']])->find();
@@ -268,6 +267,19 @@
                     if($goods['settlement_type']==2  ){#积分结算
                         $totalType +=1;
                     }
+                    #查询使用优惠券是否过期
+                    $checkLotteryLog = Db::name('lottery_log')->field('addtime,lottery_info')->where(['id'=>$v['youhui_lottery_log_id']])->find();
+                    $checkLotteryLog['lottery_info'] =  json_decode( $checkLotteryLog['lottery_info'],true);
+                    if($checkLotteryLog['lottery_info']['expire_type']==1){
+                        if($time > ($checkLotteryLog['lottery_info']['expire_time']*60*24*60 + $checkLotteryLog['addtime'])  ){
+                            return ajax_return('', '使用的券已经过期', '500');
+                        }
+                    }else{
+                        if( $time < $checkLotteryLog['lottery_info']['expire_start_date']  || $time > $checkLotteryLog['lottery_info']['expire_end_date'] ){
+                            return ajax_return('', '使用的券已经过期', '500');
+                        }
+                    }
+
                 }
                 if(count($data)==$totalType){#积分
                     $type = 1;
@@ -309,7 +321,6 @@
                 $dataUser = array_values( self::array_group_by($data,'user_id'));
                 foreach ( $dataUser as $k=>$v ){
                     $sonId[] = rand(1000,9999);
-
                     $userPrice[] = $this->calculateOrderValue($v);
                     $userPoint[] = $this->totalScore($v);
                     $orderRow[$k] = array(

@@ -20,11 +20,9 @@ Class Lottery extends Mustlogin
             $size = $this->request->param('size');
             $type = $this->request->param('type');//type:0通用券
             $goodsClassId = $this->request->param('goodsClassId');
-
             $time = time();
             if($type !=0){
                 $where =[
-                    'fy_goods.status'=>1,
                     'fy_goods.isdelete'=>'0',
                    // 'fy_lottery.grant_start_date' => ['<', $time],
                    // 'fy_lottery.grant_end_date' => ['>', $time],
@@ -58,6 +56,8 @@ Class Lottery extends Mustlogin
                     ])
                     ->page($page,$size)
                     ->select();
+               // dump($lotterys);
+               // die;
             }
             $lotteryLogs = Db::name('lottery_log')->where(['openid' => $this->userInfo['openid']])->select();
             foreach ($lotterys as $k=>$lottery){
@@ -147,12 +147,10 @@ Class Lottery extends Mustlogin
             }
             $lottery = Db::name('lottery')->where(['id' => $data['id'], 'status' => '1'])->find();
           //  dump($lottery);
-
             if ($lottery['number'] < 1) {
                 return ajax_return_error('奖券已经被领取完');
             }
-            #expire_type 0 表示有效期是按日期设置 1 按天数设置
-            if($lottery['expire_type'] ==0){
+            if($lottery['expire_type']!=1){
                 if ($lottery['grant_start_date'] > time() || $lottery['grant_end_date'] < time()) {
                     return ajax_return_error('领取时间不对');
                 }
@@ -204,7 +202,7 @@ Class Lottery extends Mustlogin
                // ->where(['openid'=>$this->userInfo['openid'],'log.use_num'=>($status==0)?'0':['<>',0]])
                    ->where($where)
 //                ->where('lenght(order_id)>0')
-                ->order('addtime','desc')
+                ->order('id DESC')
                 ->page($page, $size)
                 ->select();
             foreach ( $lotteryList as $k=> &$v){

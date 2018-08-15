@@ -89,8 +89,16 @@
                     break;
             }
             if(noUse){
-            html += '    <p class="fl white">有效期：' + formatDate(data[i]['lottery_info']['expire_start_date'],'yyyy-MM-dd h:mm:ss') + '－' +formatDate(data[i]['lottery_info']['expire_end_date'],'yyyy-MM-dd h:mm:ss') + '</p>';
-            html += '    <div class="clear mt5 btn-parents">';
+                if(data[i]['lottery_info']['expire_type']==1){
+                    var expire_end_time=data[i]['addtime']+data[i]['lottery_info']['expire_time']*60*60*24;
+                    console.log(data[i]['addtime']);
+                    console.log(data[i]['lottery_info']['expire_time']);
+                    console.log(expire_end_time);
+                    html += '    <p class="fl white">有效期：' + formatDate(data[i]['addtime'],'yyyy-MM-dd h:mm:ss') + '－' +formatDate(expire_end_time,'yyyy-MM-dd h:mm:ss') + '</p>';
+                }else{
+                    html += '    <p class="fl white">有效期：' + formatDate(data[i]['lottery_info']['expire_start_date'],'yyyy-MM-dd h:mm:ss') + '－' +formatDate(data[i]['lottery_info']['expire_end_date'],'yyyy-MM-dd h:mm:ss') + '</p>';
+                }
+                html += '    <div class="clear mt5 btn-parents">';
                 if (parseInt("{$currentTime}") > data[i].expire_end_date) {
                     html += '        <button class="fr bg_grey layui-btn layui-btn-sm layui-btn-radius" disabled="disabled" style="background-color: #d0d0d0">&nbsp;&nbsp;已过期 &nbsp;&nbsp;</button>';
                 } else if(data[i]['lottery_info']['status']==0){

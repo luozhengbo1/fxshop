@@ -54,8 +54,8 @@ class CustomerTask extends Controller
                 ->where('task_id', $_POST['id'])
                 ->order("id desc")->select();
             //处理任务参与详情中的用户名、任务名称、时间、状态数据
-            $user_list = Db::table('fy_customer')->field('id,nickname')->select();
-            $task_list = Db::table('fy_customer_task')->field('id,name')->select();
+            $user_list = Db::name('customer')->field('id,nickname')->select();
+            $task_list = Db::name('customer_task')->field('id,name')->select();
             foreach ($data as &$v) {
                 foreach ($user_list as $user_v) {
                     if ($v['uid'] == $user_v['id']) {
