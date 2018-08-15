@@ -1,0 +1,117 @@
+{extend name="template/base" /}
+{block name="content"}
+<div class="page-container">
+    <form class="form form-horizontal" id="form" method="post" action="{:\\think\\Request::instance()->baseUrl()}">
+        <input type="hidden" name="id" value="{$vo.id ?? ''}">
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3">礼包名称：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" placeholder="" name="name" value="{$vo.name ?? ''}" >
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3">状态：</label>
+            <div class="formControls col-xs-6 col-sm-6 skin-minimal">
+                <div class="radio-box">
+                    <input type="radio" name="status" id="status-1" value="1">
+                    <label for="status-1">启用</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" name="status" id="status-0" value="0">
+                    <label for="status-0">禁用</label>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3">奖券：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                {php}
+                $time = time();
+                    if(isset($lottery) && is_array($lottery) ){
+                        foreach( $lottery as $vLot){
+
+
+                            if($vLot['expire_type']!=1){
+                                if($time >$vLot['grant_start_date'] &&  $time <$vLot['grant_end_date']){
+                {/php}
+                                    <input type='checkbox' value='{$vLot["id"]}'  {php} if(isset($vo['lottery_id']) && is_array($vo['lottery_id']) ){
+                                                                                            foreach($vo['lottery_id'] as $vlId){
+                                                                                                if($vlId == $vLot['id']){
+                                                                                                    echo "checked";
+                                                                                                }
+                                                                                            }
+                                                                                    }{/php}
+                name='lottery_id[]' title='{$vLot["name"]}'>
+                                    {$vLot['name']}
+                                    满{$vLot['coupon_real_money']}减{$vLot['coupon_money']}
+                                    使用有效期：{$vLot['expire_start_date']|date="Y-m-d H:i:s",###}-{$vLot['expire_end_date']|date="Y-m-d H:i:s",###}
+                                    <br />
+                {php}
+                                }
+                            }else{
+                {/php}
+                                <input type='checkbox' value='{$vLot["id"]}' {php} if(isset($vo['lottery_id']) && is_array($vo['lottery_id']) ){
+                                                                                        foreach($vo['lottery_id'] as $vlId){
+                                                                                            if($vlId == $vLot['id']){
+                                                                                                echo "checked";
+                                                                                            }
+                                                                                        }
+                                                                                }{/php}
+                name='lottery_id[]' title='{$vLot["name"]}'>
+                                {$vLot['name']}
+                                    满{$vLot['coupon_real_money']}减{$vLot['coupon_money']}
+                                    领取之后{$vLot['expire_time']}天有效
+                                <br />
+                {php}
+                            }
+
+                        }
+                    }
+                {/php}
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3">描述：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <textarea class="weui-textarea" placeholder="请输入文本" rows="15" cols="160" name="desc" value="{$vo.desc ?? ''}" ></textarea>
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <button type="submit" class="btn btn-primary radius">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
+                <button type="button" class="btn btn-default radius ml-20" onClick="layer_close();">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </form>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript" src="__LIB__/Validform/5.3.2/Validform.min.js"></script>
+<script>
+    $(function () {
+        $("[name='status'][value='{$vo.status ?? ''}']").prop("checked", true);
+
+        $('.skin-minimal input').iCheck({
+            checkboxClass: 'icheckbox-blue',
+            radioClass: 'iradio-blue',
+            increaseArea: '20%'
+        });
+
+        $("#form").Validform({
+            tiptype: 2,
+            ajaxPost: true,
+            showAllError: true,
+            callback: function (ret){
+                ajax_progress(ret);
+            }
+        });
+    })
+</script>
+{/block}

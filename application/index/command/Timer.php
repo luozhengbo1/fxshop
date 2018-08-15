@@ -94,7 +94,7 @@ if ($user_result->num_rows > 0) {
         $now_birth_seconds = $now_seconds - $birth_seconds;
         //判断当前用户是否一周后过生日
         if ($now_birth_month == 0 && $now_birth_day == -7) {
-            if ($now_birth_hour == 0 && $now_birth_minutes == 0 && $now_birth_seconds = 1) {
+            if ($now_birth_hour == 0 && $now_birth_minutes == 0 && $now_birth_seconds == 1) {
                 //给生日为一周后的用户推送礼包消息
                 $message_query = "SELECT id  FROM fy_message WHERE type=3 and isdelete=0";
                 $message_list = mysqli_query($conn, $message_query) or die('Error: ' . mysqli_error($conn));
