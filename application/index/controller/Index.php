@@ -54,7 +54,14 @@ class Index extends Mustlogin
     }
     public function birthdayCustomerGiftBag($gift_bag_id=2)
     {
-        return $this->newCustomerGiftBag(2);
+        if($this->request->isAjax()){
+            #青铜之上
+            if($this->userInfo['experience']>1999){
+                return $this->newCustomerGiftBag(2);
+            }
+        }
+        #不同等级得到不同积分。
+
     }
     public function demo()
     {
