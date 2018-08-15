@@ -58,6 +58,89 @@
 		</ul>-->
 	</div>
 </div>
+
+<div class="gift-content" id="giftContent" style="display: none">
+	<div class="cover-bg"  onclick="closePop('giftContent')"></div>
+	<div class="gift-wrap">
+		<div class="header">
+			<p class="white h40 f14 tc">恭喜你，获得大礼包一个</p>
+		</div>
+		<div class="gift-body">
+			<div class="tax-box lanse_bg">
+				<div class="clear">
+					<div class="fl w70p" style="">
+						<p class="tc f16 mt5">优惠券</p>
+						<p class="tc mt5"> 满100.00优惠20.00元 </p>
+						<p class="tc mt5">剩余有效期：119天20时15分</p>
+					</div>
+					<div class="tax-split fl">
+						<div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>
+					</div>
+					<div class="fl" style="width: 28%">
+						<div class="f14 tc lh70">
+							已领取
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tax-box lanse_bg">
+				<div class="clear">
+					<div class="fl w70p" style="">
+						<p class="tc f16 mt5">优惠券</p>
+						<p class="tc mt5"> 满100.00优惠20.00元 </p>
+						<p class="tc mt5">剩余有效期：119天20时15分</p>
+					</div>
+					<div class="tax-split fl">
+						<div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>
+					</div>
+					<div class="fl" style="width: 28%">
+						<div class="f14 tc lh70">
+							已领取
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tax-box lanse_bg">
+				<div class="clear">
+					<div class="fl w70p" style="">
+						<p class="tc f16 mt5">优惠券</p>
+						<p class="tc mt5"> 满100.00优惠20.00元 </p>
+						<p class="tc mt5">剩余有效期：119天20时15分</p>
+					</div>
+					<div class="tax-split fl">
+						<div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>
+					</div>
+					<div class="fl" style="width: 28%">
+						<div class="f14 tc lh70">
+							已领取
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tax-box lanse_bg">
+				<div class="clear">
+					<div class="fl w70p" style="">
+						<p class="tc f16 mt5">优惠券</p>
+						<p class="tc mt5"> 满100.00优惠20.00元 </p>
+						<p class="tc mt5">剩余有效期：119天20时15分</p>
+					</div>
+					<div class="tax-split fl">
+						<div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>
+					</div>
+					<div class="fl" style="width: 28%">
+						<div class="f14 tc lh70">
+							已领取
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="gift-footer clear pl10 pr10 mt5">
+			<button class="fl layui-btn layui-btn-danger layui-btn-radius layui-btn-xs"  onclick="closePop('giftContent')">&nbsp;不&nbsp;看&nbsp;了&nbsp;</button>
+			<a href="{:\\think\\Url::build(\'Lottery/mycardvoucher\')}" class="fr layui-btn layui-btn-normal layui-btn-radius layui-btn-xs">&nbsp;去&nbsp;看&nbsp;看&nbsp;</a>
+		</div>
+	</div>
+</div>
 <!--商品列表-->
 <div class="module-hot-goods">
 	<div class="pt5 pb5 bg_white mb5"><img style="width:100%" alt="热销商品" src="__STATIC__/index/images/hot_goods.jpg"></div>
@@ -79,6 +162,10 @@
 </div>
 {include file="Public/footer"}
 	<script>
+        showPop('giftContent');
+		function giftShow() {
+			$('body').append('<div class="layer-shadow-bg"></div>')
+        }
         getNotice();
         loadGoodsData();
         changeSearchBg();

@@ -838,14 +838,32 @@ function kefu(mobile,qq) {
     var html ='<p class="f14 mb10"><a href="tel://'+mobile+'" >联系卖家:'+mobile+'</p>';
         html +='<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2550162927&site=qq&menu=yes&t='+new Date().getTime()+'">联系客服：<img border="0" src="http://wpa.qq.com/pa?p=2:2550162927:52" alt="点击这里给我发消息" title="点击这里给我发消息"/>2550162927</a>';
     layer.open({
-        content: html
+         content: html
         ,btn: '关闭'
     });
 
 }
+function showPop(id) {
+    var $dom = $('#'+id);
+    this.mainViewScroll = $(window).scrollTop();
+    $dom.show();
+    setTimeout(function() {
+        $dom.addClass('show');
+        $('body').addClass('overflowHide');
+        //obj.popupshow = true;
+    }, 50);
+}
+function closePop(id) {
+    var $dom = $('#'+id);
+    $('body').removeClass('overflowHide');
+    $dom.removeClass('show');
+    window.scrollTo(0, this.mainViewScroll);
+    setTimeout(function() {
+        $dom.hide();
+    }, 50);
+}
 
-
-
+//查看礼包
 
 
 

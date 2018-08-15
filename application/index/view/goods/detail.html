@@ -250,24 +250,6 @@
         </div>
     </div>
 </div>
-
-<div class="detail_popup show" id="goodsService" style="display:none ">
-    <div class="cover-bg"  onclick="closePop('goodsService')"></div>
-    <div class=" main-voucher" >
-        <div class="header h60 lh60">
-            <i class="close" onclick="closePop('goodsService')"></i>
-            <p class="f16 bold blackRed">服务信息</p>
-        </div>
-        <div class="body mb70 order-serviceinfo pr10 pl10">
-            {if condition="$goods['service']" /}
-            {volist name="$goods['service']" id="service"}
-            <p class="service">{$service}</p>
-            {/volist}
-            {/if}
-
-        </div>
-    </div>
-</div>
 {include file="Public/footer-shop"}
 {include file="Public/footer-quick-nav"}
 <script type="text/javascript">
@@ -566,25 +548,7 @@
         }
         return true;
     }
-    function showPop(id) {
-        var $dom = $('#'+id);
-        this.mainViewScroll = $(window).scrollTop();
-        $dom.show();
-        setTimeout(function() {
-            $dom.addClass('show');
-            $('body').addClass('overflowHide');
-            //obj.popupshow = true;
-        }, 50);
-    }
-    function closePop(id) {
-        var $dom = $('#'+id);
-        $('body').removeClass('overflowHide');
-        $dom.removeClass('show');
-        window.scrollTo(0, this.mainViewScroll);
-        setTimeout(function() {
-            $dom.hide();
-        }, 50);
-    }
+
     function getLottery(id) {
         pub_edit({
             url:url.getLottery,
