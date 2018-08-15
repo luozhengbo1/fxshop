@@ -290,7 +290,6 @@
                 $dataUser = array_values( self::array_group_by($data,'user_id'));
                 foreach ( $dataUser as $k=>$v ){
                     $sonId[] = rand(1000,9999);
-
                     $userPrice[] = $this->calculateOrderValue($v);
                     $userPoint[] = $this->totalScore($v);
                     $orderRow[$k] = array(
