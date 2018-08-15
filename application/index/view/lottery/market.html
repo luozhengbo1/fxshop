@@ -102,7 +102,11 @@
             html +='        </div>';
             html +='    </a>';
             html +='        <div class="clear mt5">';
-            html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
+            if(data[i].goods_id=='all'){
+                html +='    <a href="{:url(\'goodsclass/sort\',array(\'param\'=>\'sort\'))}" >';
+            }else{
+                html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
+            }
             html +='            <ul class="item-img clear fl">';
             for(var n=0; n<imgArr.length; n++){
                 if(n<3)
@@ -159,7 +163,7 @@
                         //html +=' <li class="w20p fl tc" data-classid="'+data[i].id+'"  ><img class="w80p" src="'+data[i].pic+'"></li>';
                         html +=' <li class="tc f10" data-classid="'+data[i].id+'"   data-type="'+constant.lottery.goods+'" >'+data[i].name+'</li>';
                     }
-                    html +=' <li  class="tc f10"  data-classid="all" data-type="'+constant.lottery.all+'"   >通用券</li>';
+                    html +=' <li  data-classid="all" data-type="'+constant.lottery.all+'"   >通用券</li>';
                     $('#voucherClass').empty().append(html);
                     var $targetLi = $('#voucherClass li');
                     tabSwitch($targetLi,goodsWithLottery);
