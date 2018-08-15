@@ -45,7 +45,16 @@ class Index extends Mustlogin
             if( trim($giftBag['lottery_id']) ){
                 $lotteryId = explode(',', trim($giftBag['lottery_id']));
                 foreach ($lotteryId as $vId){
-                    $lotteryList[] = Db::name('lottery')->where(['id'=>$vId])->find();
+                    $lottery = Db::name('lottery')->where(['id'=>$vId])->find();
+                    $lotteryList[] =  $lottery ;
+                    Db::name('lottery_log')->insert([
+                        'addtime'=>time(),
+                        'lottery_id'=>$vId,
+                        'lottery_name'=>$lottery['name'],
+                        'lottery_num'=>1,
+                        'status'=>1,
+                        'lottery_info'=>json_encode($lottery),
+                    ]);
                 }
             }
         }
