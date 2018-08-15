@@ -8,10 +8,11 @@
         width: 40px;
         border-radius: 100%;
         float: left;
-        background: grey;
+        background: rgb(17, 178, 216);
         margin-right: 8px;
         color: white;
         text-align: center;
+        margin-bottom: 4px;
     }
 </style>
 <div class="nav-list-tab clear" style="padding: 10px 5px">
@@ -89,9 +90,9 @@
             }
             html +='<li>';
             if(data[i].goods_id=='all'){
-                html +='    <a href="{:url(\'goodsclass/sort\',array(\'param\'=>\'sort\'))}" >';
+                html +='    <a href="'+urlConnect("{:url('goodsclass/sort',['param'=>'sort'])}")+'" >';
             }else{
-                html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
+                html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].goods_id})+'" >';
             }
             html +='        <div class="clear">';
             html +='            <p class="fl" ><span class="catalog border-tag" style="vertical-align: top">'+class_name+'</span><i>'+data[i].name+'</i></p>';
