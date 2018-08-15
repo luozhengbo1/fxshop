@@ -187,7 +187,7 @@ Class Lottery extends Mustlogin
                // ->where(['openid'=>$this->userInfo['openid'],'log.use_num'=>($status==0)?'0':['<>',0]])
                    ->where($where)
 //                ->where('lenght(order_id)>0')
-                ->order('addtime','desc')
+                ->order('id DESC')
                 ->page($page, $size)
                 ->select();
             foreach ( $lotteryList as $k=> &$v){
