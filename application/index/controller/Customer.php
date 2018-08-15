@@ -35,8 +35,8 @@ class Customer extends Mustlogin
         //会员卡券数量
         $count_lottery = Db::name('lottery_log')
             ->alias('log')
-            ->join('lottery lott','log.lottery_id=lott.id')
-            ->where(['log.uid'=> $user_data['id'],'log.lottery_num'=>['>',0],'lott.isdelete'=>0])
+            ->join('lottery lott', 'log.lottery_id=lott.id')
+            ->where(['log.uid' => $user_data['id'], 'log.lottery_num' => ['>', 0], 'lott.isdelete' => 0])
             ->count();
         $this->assign('count_lottery', $count_lottery);
 
@@ -78,8 +78,6 @@ class Customer extends Mustlogin
 
     /**
      * 收藏夹列表
-     * @param string $page 页数
-     * @param string $size 每页的数据行
      */
     public function collect_list($page = '1', $size = '10')
     {
@@ -373,8 +371,6 @@ class Customer extends Mustlogin
 
     /**
      * 活动中心
-     * @param string $page 页数
-     * @param string $size 每页的数据行
      */
     public function myactivity($page = '1', $size = '4')
     {
@@ -401,8 +397,6 @@ class Customer extends Mustlogin
 
     /**
      * 我的钱包
-     * @param string $page 页数
-     * @param string $size 每页的数据行
      */
     public function mywallet($page = '1', $size = '4')
     {
@@ -475,8 +469,6 @@ class Customer extends Mustlogin
 
     /**
      * 会员权益中心
-     * @param string $page 页数
-     * @param string $size 每页的数据行
      */
     public function memberrights($page = '1', $size = '20')
     {
@@ -542,8 +534,6 @@ class Customer extends Mustlogin
 
     /**
      * 赚积分
-     * @param string $page 页数
-     * @param string $size 每页的数据行
      */
     public function getscore($page = '1', $size = '10')
     {
@@ -629,41 +619,29 @@ class Customer extends Mustlogin
 
     /**
      * 消息中心
-     * @param string $page 页数
-     * @param string $size 每页的数据行
      */
-    public function message($page = '1', $size = '4')
+    public function message($page = '1', $size = '10')
     {
         $this->assign('titleName', "个人消息 ");
         if ($this->request->isAjax()) {
             //查出所有的msg
-            $message_user_list = Db::name('message_user')->where('openid', $this->userInfo['openid'])->page($page, $size)->select();
-            //处理text非空、message_id非空的数据
-            $text_list = array();
-            $msg_ids = '';
-            foreach ($message_user_list as $k => $v) {
-                //将订单消息赋给text_list
+            $message_user_list = Db::name('message_user')
+                ->alias('m_u')
+                ->field('m_u.*,m.title,m.pic,m.detail')
+                ->join('fy_message m', 'm.id=m_u.message_id', 'left')
+                ->where('m_u.openid', $this->userInfo['openid'])
+                ->page($page, $size)
+                ->order('m_u.id desc')
+                ->select();
+            //处理订单中的text字段
+            foreach ($message_user_list as $k => &$v) {
                 if ($v['text'] != null) {
-                    $text_list[$k] = $v;
-                    $text = json_decode($v['text']);
-                    $text_list[$k]['title'] = $text->title;
-                    $text_list[$k]['detail'] = $text->detail;
-                }
-                //将消息的message_id赋给msg_ids
-                if ($v['message_id'] != null) {
-                    $msg_ids = $v['message_id'] . ',' . $msg_ids;
+                    $v['text'] = json_decode($v['text'], true);
+                    $message_user_list[$k]['title'] = $v['text']['title'];
+                    $message_user_list[$k]['detail'] = $v['text']['detail'];
                 }
             }
-            //联表查询message_id在msg_ids中的消息
-            $message_list = Db::name('message_user')
-                ->alias('u')
-                ->join('fy_message m', 'u.message_id=m.id')
-                ->order('u.create_time', 'desc')
-                ->where(['message_id' => ['in', $msg_ids], 'u.openid' => $this->userInfo['openid'], 'm.status' => 1, 'm.isdelete' => 0, 'm.is_send' => 1])
-                ->select();
-            //将订单消息和普通消息组合，返回给前端
-            $all_message_list = array_merge($message_list, $text_list);
-            return ajax_return($all_message_list, 'OK', 200);
+            return ajax_return($message_user_list, 'OK', 200);
         } else {
             return $this->view->fetch();
         }
@@ -671,17 +649,25 @@ class Customer extends Mustlogin
 
     /**
      * 消息详情
-     * @param $id  需要查看详情的消息ID
+     * @param $message_user_id        查看详情的消息的ID
+     * @param string $message_id      0 订单消息  | 1 普通消息，需要联表查询
      */
-    public function msg_detail($id)
+    public function msg_detail($message_user_id,$message_id ='0')
     {
         $this->assign('titleName', "消息详情");
-        $message = Db::name('message')
-            ->where([
-                'id' => $id,
-            ])
-            ->find();
-        $this->assign('message', $message);
+        if ($message_id == 0) {
+            $message_info = Db::name('message_user')->where('id', $message_user_id)->find();
+            $message_info['text'] = json_decode($message_info['text'], true);
+            $message_info['pic'] = '__ROOT__/static/index/images/order.jpg';
+            $message_info['title'] = $message_info['text']['title'];
+            $message_info['detail'] = $message_info['text']['detail'];
+            $this->assign('message', $message_info);
+        } else {
+            $message = Db::name('message')->where(['id' => $message_id])->find();
+            $this->assign('message', $message);
+        }
+        //若本条消息未读，则置为已读
+        Db::name('message_user')->where(['openid'=>$this->userInfo['openid'],'id'=>$message_user_id,'is_read'=>0])->update(['is_read'=>1,'update_time'=>time()]);
         return $this->view->fetch("msgDetail");
     }
 }

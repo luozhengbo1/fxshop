@@ -29,32 +29,22 @@
         for (var i = 0; i < data.length; i++) {
             html += '<li class="clear" >';
             //显示普通消息
+            html += '<a href="'+urlConnect(url.msg_detail,{message_user_id:data[i].id,message_id:data[i].message_id})+'">'
+            html += '     <div class="img">';
             if(data[i].message_id!=null){
-                html += '<a href="'+urlConnect(url.msg_detail,{id:data[i].message_id})+'">'
-                html += '     <div class="img">';
                 html += '         <img src="' + data[i].pic + '">';
-                html += '     </div>';
-                html += '     <div class="content">';
-                html += '         <p class="clear mt5">';
-                html += '             <span class="name fl">' + data[i].title + '</span>';
-                html += '             <span class="time grey fr">' + new Date(parseInt(data[i].create_time)*1000).Format("yyyy-MM-dd hh:mm:ss") + '</span>';
-                html += '         </p>';
-                html += '         <p class="desc grey mt5  ellipsis-oneline">' + data[i].detail + '</p>';
-                html += '     </div>';
-                html +='</a>'
             }else{
-                //显示订单消息
-                html += '     <div class="img">';
                 html += '         <img src="__ROOT__/static/index/images/order.jpg">';
-                html += '     </div>';
-                html += '     <div class="content">';
-                html += '         <p class="clear mt5">';
-                html += '             <span class="name fl">' + data[i].title + '</span>';
-                html += '             <span class="time grey fr">' + new Date(parseInt(data[i].create_time)*1000).Format("yyyy-MM-dd") + '</span>';
-                html += '         </p>';
-                html += '         <p class="desc grey mt5  ">' + data[i].detail + '</p>';
-                html += '     </div>';
             }
+            html += '     </div>';
+            html += '     <div class="content">';
+            html += '         <p class="clear mt5">';
+            html += '             <span class="name fl">' + data[i].title + '</span>';
+            html += '             <span class="time grey fr">' + new Date(parseInt(data[i].create_time)*1000).Format("yyyy-MM-dd") + '</span>';
+            html += '         </p>';
+            html += '         <p class="desc grey mt5  ellipsis-oneline">' + data[i].detail + '</p>';
+            html += '     </div>';
+            html +='</a>'
             html += ' </li>';
         }
         return html;
@@ -64,7 +54,7 @@
         targetWarp: 'dataListWrap',
         target: 'goodsList',
         page: 1,
-        size: 4,
+        size: 10,
         ajaxData: {
             url: "{:url('index/customer/message')}",
             data: {},
