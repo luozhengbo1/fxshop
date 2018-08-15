@@ -250,24 +250,6 @@
         </div>
     </div>
 </div>
-
-<div class="detail_popup show" id="goodsService" style="display:none ">
-    <div class="cover-bg"  onclick="closePop('goodsService')"></div>
-    <div class=" main-voucher" >
-        <div class="header h60 lh60">
-            <i class="close" onclick="closePop('goodsService')"></i>
-            <p class="f16 bold blackRed">服务信息</p>
-        </div>
-        <div class="body mb70 order-serviceinfo pr10 pl10">
-            {if condition="$goods['service']" /}
-            {volist name="$goods['service']" id="service"}
-            <p class="service">{$service}</p>
-            {/volist}
-            {/if}
-
-        </div>
-    </div>
-</div>
 {include file="Public/footer-shop"}
 {include file="Public/footer-quick-nav"}
 <script type="text/javascript">
@@ -373,61 +355,7 @@
             data:{goods_id:"{$goods['id']}"},
             dataType:'json',
             success: function(res){
-                if(res.code==200){
-                    var html =''
-                    var data = res.data;
-                    for(var i=0; i<data.length; i++){
-                        var coupon_type = data[i].type;
-                        var lotteryLog = data[i].lotteryLog;
-                        html +='<div class="tax-box">'
-                        html += '<div class="clear">'
-                        html += '    <div class="fl w70p" style="">'
-                        html += '        <p class="tc f16 mt5">'+data[i].name+'</p>'
-                        switch(coupon_type){
-                            case  constant.coupon.youhui:
-                                html += '        <p class="tc mt5"> 满'+data[i].coupon_real_money+'优惠'+data[i].coupon_money+'元 </p>'
-                                break;
-                            case constant.coupon.mianyou:
-                                html += '        <p class="tc mt5"> 包邮券</p>'
-                                break;
-                        }
-                        console.log('================================='+currentTime)
-                        if(data[i].expire_type ==constant.dataType.date){
-                            html += '        <p class="tc mt5">剩余有效期：' +returnTime(parseInt(data[i].expire_end_date)-currentTime ,'dd H:mm')+ '</p>'
-                        }else if(data[i].expire_type ==constant.dataType.day){
-
-                            if(lotteryLog){
-                               var time = parseInt(lotteryLog.addtime)+(parseInt(data[i].expire_time)*24*60*60);
-                                html += '  <p class="tc mt5">剩余有效期：' +returnTime(time-currentTime ,'dd H:mm')+ '</p>'
-                            }else{
-                                 html += '        <p class="tc mt5">剩余有效期：' +data[i].expire_time+ '天</p>'
-                            }
-                        }
-
-                        html += '    </div>'
-                        html += '    <div class="tax-split fl" >'
-                        html += '        <div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>'
-                        html += '    </div>'
-                        html += '    <div class="fl" style="width: 28%" >'
-                        if(data[i].lotteryLog){
-                            html += '        <div class="f14 tc lh70" >已领取</div>'
-                        }else{
-                            html += '        <div class="f14 tc lh70" onclick="getLottery('+data[i].id+')">立即领取</div>'
-                        }
-
-                        html += '    </div>'
-                        html += '</div>'
-                        html += '</div>'
-                    }
-                    if(data.length>0){
-                        $("#lotterysContainer").empty().append(html) ;
-                    }
-                    else {
-                        $('#goodsLottery').hide();
-                        $("#lotterysContainer").empty().append('<p class="tc">该商品暂无相关券</p>') ;
-                    }
-                }
-
+                dealLottery(res);
             }
         })
     }
@@ -566,25 +494,7 @@
         }
         return true;
     }
-    function showPop(id) {
-        var $dom = $('#'+id);
-        this.mainViewScroll = $(window).scrollTop();
-        $dom.show();
-        setTimeout(function() {
-            $dom.addClass('show');
-            $('body').addClass('overflowHide');
-            //obj.popupshow = true;
-        }, 50);
-    }
-    function closePop(id) {
-        var $dom = $('#'+id);
-        $('body').removeClass('overflowHide');
-        $dom.removeClass('show');
-        window.scrollTo(0, this.mainViewScroll);
-        setTimeout(function() {
-            $dom.hide();
-        }, 50);
-    }
+
     function getLottery(id) {
         pub_edit({
             url:url.getLottery,
