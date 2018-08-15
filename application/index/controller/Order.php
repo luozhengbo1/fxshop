@@ -102,19 +102,38 @@
                     }
                     //查询用户有效的券
                     $arrGoodsId =[$v['goodsId'],'all'];
-                    $lottery = Db::name('lottery')
+                    $lottery = array();
+                    $tempLottery = Db::name('lottery')
                         ->alias('lottery')
-                        ->field('lottery.*,fy_lottery_log.id as lottery_log_id')
+                        ->field('lottery.*,fy_lottery_log.addtime,fy_lottery_log.id as lottery_log_id')
                         ->join('fy_lottery_log','fy_lottery_log.lottery_id=lottery.id')
                         ->where([
                             "fy_lottery.goods_id"=>['in',$arrGoodsId],
                             'fy_lottery.status'=>1,
                             'fy_lottery.isdelete'=>0,
-                            'fy_lottery.expire_start_date' =>['<', $time],
-                            'fy_lottery.expire_end_date' =>['>', $time],
+                            //'fy_lottery.expire_start_date' =>['<', $time],
+                            //'fy_lottery.expire_end_date' =>['>', $time],
                             'fy_lottery_log.openid'=>$this->userInfo['openid'],
                         ])
                         ->select();
+                    foreach ($tempLottery as $key=>$lot){
+                        #expire_type 0 表示有效期是按日期设置 1 按天数设置
+                        if($lot['expire_type'] ==0 &&
+                            $lot['grant_start_date']<$time &&
+                            $lot['grant_end_date']>$time){
+                            array_push($lottery, $lot);
+                        }else if($lot['expire_type'] == 1){
+                           $expireTime = $lot['addtime']+($lot['expire_time']*24*60*60);
+                           #判断领取的券是否已经过期
+                           if($time<$expireTime){
+                               array_push($lottery, $lot);
+                           }
+                        }
+
+                    }
+                   // dump($tempLottery);
+                   // dump($lottery);
+                   // die;
                     $storeData[$k] = array_merge($storeData[$k], $tempGoods);
                     $dikou = [];
                     $youhui= [];

@@ -70,11 +70,10 @@ Class Lottery extends Mustlogin
             }
             $resultLottery  = array();
             foreach ($lotterys as $k=>$lot){
-               #expire_type 0 表示有效期是按日期设置 1 按天数设置
-                //dump($lot);
+                #expire_type 0 表示有效期是按日期设置 1 按天数设置
                 if($lot['expire_type'] ==0 &&
                     $lot['grant_start_date']<$time &&
-                    $lot['grant_end_date']<$time){
+                    $lot['grant_end_date']>$time){
                     array_push($resultLottery, $lot);
                 }else if($lot['expire_type'] == 1){
                     array_push($resultLottery, $lot);
@@ -148,11 +147,15 @@ Class Lottery extends Mustlogin
             }
             $lottery = Db::name('lottery')->where(['id' => $data['id'], 'status' => '1'])->find();
           //  dump($lottery);
+
             if ($lottery['number'] < 1) {
                 return ajax_return_error('奖券已经被领取完');
             }
-            if ($lottery['grant_start_date'] > time() || $lottery['grant_end_date'] < time()) {
-                return ajax_return_error('领取时间不对');
+            #expire_type 0 表示有效期是按日期设置 1 按天数设置
+            if($lottery['expire_type'] ==0){
+                if ($lottery['grant_start_date'] > time() || $lottery['grant_end_date'] < time()) {
+                    return ajax_return_error('领取时间不对');
+                }
             }
             #查询是否领取过这个奖券
             $lotteryLog = Db::name('lottery_log')->where(['openid' => $this->userInfo['openid'], 'lottery_id' => $data['id']])->find();

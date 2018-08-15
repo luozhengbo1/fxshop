@@ -89,7 +89,11 @@
                 imgArr = eval(data[i].pic);
             }
             html +='<li>';
-            html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].goods_id})+'" >';
+            if(data[i].goods_id=='all'){
+                html +='    <a href="'+urlConnect("{:url('goodsclass/sort',['param'=>'sort'])}")+'" >';
+            }else{
+                html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].goods_id})+'" >';
+            }
             html +='        <div class="clear">';
             html +='            <p class="fl" ><span class="catalog border-tag" style="vertical-align: top">'+class_name+'</span><i>'+data[i].name+'</i></p>';
             if(data[i].coupon_money){

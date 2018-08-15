@@ -314,9 +314,10 @@
             $lotterys =$this->return_lottery($goods_id);
             return ajax_return($lotterys,'',200);
         }
-        public function return_lottery($goods_id){
+        public function return_lottery_demo($goods_id){
             #取出商品中发行中，未删除的所具有的券
             $time = time();
+            $resultLottery=array();
             $arrType=[2,4];
             $arrGoodsId =[$goods_id,'all'];
             $lotterys = Db::name('lottery')->where([
@@ -339,6 +340,69 @@
                     }
                 }
             }
+            foreach ($lotterys as $k=>$lot){
+                #expire_type 0 表示有效期是按日期设置 1 按天数设置
+                if($lot['expire_type'] ==0 &&
+                    $lot['grant_start_date']<$time &&
+                    $lot['grant_end_date']>$time){
+                    array_push($resultLottery, $lot);
+                }else if($lot['expire_type'] == 1){
+                    array_push($resultLottery, $lot);
+                }
+
+            }
+            return $resultLottery;
+        }
+        public function return_lottery($goods_id){
+            #取出商品中发行中，未删除的所具有的券
+            $time = time();
+            $lotterys=array();
+            $arrType=[2,4];
+            $arrGoodsId =[$goods_id,'all'];
+            $tempLottery = Db::name('lottery')->where([
+                "goods_id"=>['in',$arrGoodsId],
+                'status'=>1,
+                'isdelete'=>'0',
+                // 'grant_start_date' =>['<', $time],
+                'type'=>['in', $arrType],
+                // 'grant_end_date' =>['>', $time],
+            ])->select();
+//            echo Db::name('lottery')->getLastSql();
+//            dump($lotterys);die;
+            #查询领取过这个奖券
+            $lotteryLogs = Db::name('lottery_log')->where(['openid' => $this->userInfo['openid']])->select();
+            foreach ($tempLottery as $k=>$lottery){
+                foreach ($lotteryLogs as $key=>$log){
+                    //有领券记录
+                    if($lottery['id'] == $log['lottery_id'] ){
+                        $tempLottery[$k]['lotteryLog'] =$log;
+                    }
+                }
+            }
+            // dump($tempLottery);
+            foreach ($tempLottery as $key=>$lot){
+                #expire_type 0 表示有效期是按日期设置 1 按天数设置
+                if($lot['expire_type'] ==0 &&
+                    $lot['grant_start_date']<$time &&
+                    $lot['grant_end_date']>$time){
+                    array_push($lotterys, $lot);
+                }else if($lot['expire_type'] == 1){
+                    #已经领取过券的需要判断领取的券是否过期
+                    // dump($lot['expire_type']);
+                    if(!empty( $tempLottery[$key]['lotteryLog'])){
+                        $expireTime = $lot['lotteryLog']['addtime']+($lot['expire_time']*24*60*60);
+                        #判断领取的券是否已经过期
+                        if($time<$expireTime){
+                            array_push($lotterys, $lot);
+                        }
+                    }else{
+                        array_push($lotterys, $lot);
+                    }
+                }
+
+            }
+
+
             return $lotterys;
         }
 	}
