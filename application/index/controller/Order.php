@@ -267,16 +267,18 @@
                     if($goods['settlement_type']==2  ){#积分结算
                         $totalType +=1;
                     }
-                    #查询使用优惠券是否过期
-                    $checkLotteryLog = Db::name('lottery_log')->field('addtime,lottery_info')->where(['id'=>$v['youhui_lottery_log_id']])->find();
-                    $checkLotteryLog['lottery_info'] =  json_decode( $checkLotteryLog['lottery_info'],true);
-                    if($checkLotteryLog['lottery_info']['expire_type']==1){
-                        if($time > ($checkLotteryLog['lottery_info']['expire_time']*60*24*60 + $checkLotteryLog['addtime'])  ){
-                            return ajax_return('', '使用的券已经过期', '500');
-                        }
-                    }else{
-                        if( $time < $checkLotteryLog['lottery_info']['expire_start_date']  || $time > $checkLotteryLog['lottery_info']['expire_end_date'] ){
-                            return ajax_return('', '使用的券已经过期', '500');
+                    if(!empty($v['youhui_lottery_log_id'])){
+                        #查询使用优惠券是否过期
+                        $checkLotteryLog = Db::name('lottery_log')->field('addtime,lottery_info')->where(['id'=>$v['youhui_lottery_log_id']])->find();
+                        $checkLotteryLog['lottery_info'] =  json_decode( $checkLotteryLog['lottery_info'],true);
+                        if($checkLotteryLog['lottery_info']['expire_type']==1){
+                            if($time > ($checkLotteryLog['lottery_info']['expire_time']*60*24*60 + $checkLotteryLog['addtime'])  ){
+                                return ajax_return('', '使用的券已经过期', '500');
+                            }
+                        }else{
+                            if( $time < $checkLotteryLog['lottery_info']['expire_start_date']  || $time > $checkLotteryLog['lottery_info']['expire_end_date'] ){
+                                return ajax_return('', '使用的券已经过期', '500');
+                            }
                         }
                     }
 

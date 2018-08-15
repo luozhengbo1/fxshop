@@ -95,12 +95,12 @@ if ($user_result->num_rows > 0) {
         //判断当前用户是否一周后过生日
         if ($now_birth_month == 0 && $now_birth_day == -7) {
             if ($now_birth_hour == 0 && $now_birth_minutes == 0 && $now_birth_seconds == 1) {
-                //给生日为一周后的用户推送礼包消息
-                $message_query = "SELECT id  FROM fy_message WHERE type=3 and isdelete=0";
+                //生日礼包记录
+                $message_query = "SELECT * FROM fy_gift_bag WHERE id=3 and isdelete=0  and status=1";
                 $message_list = mysqli_query($conn, $message_query) or die('Error: ' . mysqli_error($conn));
                 $message_array = mysqli_fetch_array($message_list);
                 $message_id = $message_array['id'];
-                $message_user_insert_query = "INSERT INTO fy_message_user (uid,openid,message_id,create_time)  VALUES ($id,'" . $openid . "',$message_id,$now_time)";
+                $message_user_insert_query = "INSERT INTO fy_gift_bag_log (openid,gift_bag_id,create_time,type)  VALUES ('" . $openid . "',$message_id,$now_time,2)";
                 mysqli_query($conn, $message_user_insert_query) or die('Error: ' . mysqli_error($conn));
             }
         }
