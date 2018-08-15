@@ -26,12 +26,6 @@
         <tr class="text-c">
             {include file="td" /}
             <td class="f-14">
-                <?php
-                $merchant_list=\think\Db::table('fy_admin_user')->where(['status'=>1,'isdelete'=>0,'account'=>['not in','admin'],'openid'=>null])->select();
-                if(!$merchant_list){
-                    if(!$vo['merchant_id']){ ?>
-                {tp:menu menu='sbindMerchant' url='bindMerchant:id=$vo.id' title='绑定商户'/}
-                <?php } } ?>
                 {tp:menu menu='sdetail' url='detail:id=$vo.id' title='详情'/}
                 {tp:menu menu='sdelete' /}
             </td>
