@@ -12,7 +12,10 @@ class Index extends Mustlogin
 {
     public function index()
     {
+
+
         $this->userInfo['uid'] = isset($this->userInfo['id'])?$this->userInfo['id']:'';
+
         Hook::exec('app\\index\\behavior\\LoginLog', 'run',  $this->userInfo);
         #获取轮播图数据
         $sildeShow = new  Sildeshow($num = 6);
@@ -26,12 +29,33 @@ class Index extends Mustlogin
         return $this->fetch();
     }
 
+
     public function message($page = '1', $size = '4')
     {
         $this->assign('titleName', "个人消息 ");
         return $this->view->fetch();
     }
-
+    public function newCustomerGiftBag($gift_bag_id=3)
+    {
+        #查询是否有新人礼包
+        $giftBagLog = Db::name('gift_bag_log')->where(['openid'=> $this->userInfo['openid'],'status'=>0,'gift_bag_id'=>$gift_bag_id])->find();
+        $lotteryList=[];
+        if($giftBagLog){#未发放
+            $giftBag = Db::name('gift_bag')->where(['id'=>$giftBagLog['gift_bag_id']])->find();
+            if( trim($giftBag['lottery_id']) ){
+                $lotteryId = explode(',', trim($giftBag['lottery_id']));
+                foreach ($lotteryId as $vId){
+                    $lotteryList[] = Db::name('lottery')->where(['id'=>$vId])->find();
+                }
+            }
+        }
+        $giftBagLog = Db::name('gift_bag_log')->where(['openid'=> $this->userInfo['openid'],'gift_bag_id'=>$gift_bag_id])->update(['status'=>1]);
+        return ajax_return($lotteryList,'ok',200);
+    }
+    public function birthdayCustomerGiftBag($gift_bag_id=2)
+    {
+        return $this->newCustomerGiftBag(2);
+    }
     public function demo()
     {
         $this->assign('titleName', "demo");

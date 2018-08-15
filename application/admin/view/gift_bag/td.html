@@ -1,0 +1,10 @@
+<td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
+<td>{$vo.id}</td>
+<td>{$vo.name}</td>
+<td>{$vo.create_time|date="Y-m-d H:i:s",###}</td>
+<td>{php}if($vo['update_time']){
+    echo date($vo['update_time'],'Y-m-d H:i:s');
+    }{/php}</td>
+<td>{$vo.status|get_status}</td>
+<td>{$vo.lottery_id}</td>
+<td>{$vo.desc}</td>

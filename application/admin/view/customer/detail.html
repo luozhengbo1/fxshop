@@ -6,25 +6,15 @@
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3">头像：</label>
             <div class="formControls col-xsa'd'd-6 col-sm-6">
-                <input type="hidden" class="input-text"  name="headimgurl" value="{$vo.headimgurl ?? ''}">
+                <input type="hidden" class="input-text" name="headimgurl" value="{$vo.headimgurl ?? ''}">
                 <img src="{$vo.headimgurl ?? ''}" width="100" height="100">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
         <div class="row cl">
-        <label class="form-label col-xs-3 col-sm-3">用户名：</label>
-        <div class="formControls col-xs-6 col-sm-6">
-            <input type="text" class="input-text" name="username" value="{$vo.username ?? ''}" disabled="disabled">
-        </div>
-        <div class="col-xs-3 col-sm-3"></div>
-    </div>
-        <div class="row cl">
-            <label class="form-label col-xs-3 col-sm-3">绑定商户：</label>
+            <label class="form-label col-xs-3 col-sm-3">用户名：</label>
             <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text" name="merchant" value="<?php
-                    $merchant = \think\Db::table('fy_admin_user')->field('account')->where('id',$vo['merchant_id'])->find();
-                    echo $merchant['account'];
-                    ?>" disabled="disabled">
+                <input type="text" class="input-text" name="username" value="{$vo.username ?? ''}" disabled="disabled">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
@@ -80,7 +70,8 @@
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3">经验值：</label>
             <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text" name="experience" value="{$vo.experience ?? ''}" disabled="disabled">
+                <input type="text" class="input-text" name="experience" value="{$vo.experience ?? ''}"
+                       disabled="disabled">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
@@ -130,7 +121,7 @@
             tiptype: 2,
             ajaxPost: true,
             showAllError: true,
-            callback: function (ret){
+            callback: function (ret) {
                 ajax_progress(ret);
             }
         });
