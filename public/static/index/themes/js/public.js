@@ -706,6 +706,10 @@ var constant={
     dataType:{
         date:0//日期类型
         ,day:1//天数类型
+    },
+    giftType:{
+        newPerson:3//新人
+        ,birthday:2//生日
     }
 }
 var settlement={
@@ -866,7 +870,62 @@ function closePop(id) {
 //查看礼包
 
 
+function dealLottery(res) {
+    if(res.code==200){
+        var html =''
+        var data = res.data;
+        for(var i=0; i<data.length; i++){
+            var coupon_type = data[i].type;
+            var lotteryLog = data[i].lotteryLog;
+            html +='<div class="tax-box">'
+            html += '<div class="clear">'
+            html += '    <div class="fl w70p" style="">'
+            html += '        <p class="tc f16 mt5">'+data[i].name+'</p>'
+            switch(coupon_type){
+                case  constant.coupon.youhui:
+                    html += '        <p class="tc mt5"> 满'+data[i].coupon_real_money+'优惠'+data[i].coupon_money+'元 </p>'
+                    break;
+                case constant.coupon.mianyou:
+                    html += '        <p class="tc mt5"> 包邮券</p>'
+                    break;
+            }
+            console.log('================================='+currentTime)
+            if(data[i].expire_type ==constant.dataType.date){
+                html += '        <p class="tc mt5">剩余有效期：' +returnTime(parseInt(data[i].expire_end_date)-currentTime ,'dd H:mm')+ '</p>'
+            }else if(data[i].expire_type ==constant.dataType.day){
 
+                if(lotteryLog){
+                    var time = parseInt(lotteryLog.addtime)+(parseInt(data[i].expire_time)*24*60*60);
+                    html += '  <p class="tc mt5">剩余有效期：' +returnTime(time-currentTime ,'dd H:mm')+ '</p>'
+                }else{
+                    html += '        <p class="tc mt5">剩余有效期：' +data[i].expire_time+ '天</p>'
+                }
+            }
+
+            html += '    </div>'
+            html += '    <div class="tax-split fl" >'
+            html += '        <div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>'
+            html += '    </div>'
+            html += '    <div class="fl" style="width: 28%" >'
+            if(data[i].lotteryLog){
+                html += '        <div class="f14 tc lh70" >已领取</div>'
+            }else{
+                html += '        <div class="f14 tc lh70" onclick="getLottery('+data[i].id+')">立即领取</div>'
+            }
+
+            html += '    </div>'
+            html += '</div>'
+            html += '</div>'
+        }
+        if(data.length>0){
+            $("#lotterysContainer").empty().append(html) ;
+        }
+        else {
+            $('#goodsLottery').hide();
+            $("#lotterysContainer").empty().append('<p class="tc">该商品暂无相关券</p>') ;
+        }
+    }
+}
 
 
 

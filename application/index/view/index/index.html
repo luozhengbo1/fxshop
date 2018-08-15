@@ -60,14 +60,14 @@
 </div>
 
 <div class="gift-content" id="giftContent" style="display: none">
-	<div class="cover-bg"  onclick="closePop('giftContent')"></div>
+	<div class="cover-bg close" onclick="closePop('giftContent')"></div>
 	<div class="gift-wrap">
 		<div class="header">
-			<p class="white h40 f14 tc">恭喜你，获得大礼包一个</p>
+			<p class="white h40 f14 tc title">恭喜你，获得大礼包一个</p>
 		</div>
-		<div class="gift-body">
-			<div class="tax-box lanse_bg">
-				<div class="clear">
+		<div class="gift-body" id="lotterysContainer">
+			<!--<div class="tax-box lanse_bg">
+				&lt;!&ndash;<div class="clear">
 					<div class="fl w70p" style="">
 						<p class="tc f16 mt5">优惠券</p>
 						<p class="tc mt5"> 满100.00优惠20.00元 </p>
@@ -81,62 +81,11 @@
 							已领取
 						</div>
 					</div>
-				</div>
-			</div>
-			<div class="tax-box lanse_bg">
-				<div class="clear">
-					<div class="fl w70p" style="">
-						<p class="tc f16 mt5">优惠券</p>
-						<p class="tc mt5"> 满100.00优惠20.00元 </p>
-						<p class="tc mt5">剩余有效期：119天20时15分</p>
-					</div>
-					<div class="tax-split fl">
-						<div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>
-					</div>
-					<div class="fl" style="width: 28%">
-						<div class="f14 tc lh70">
-							已领取
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="tax-box lanse_bg">
-				<div class="clear">
-					<div class="fl w70p" style="">
-						<p class="tc f16 mt5">优惠券</p>
-						<p class="tc mt5"> 满100.00优惠20.00元 </p>
-						<p class="tc mt5">剩余有效期：119天20时15分</p>
-					</div>
-					<div class="tax-split fl">
-						<div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>
-					</div>
-					<div class="fl" style="width: 28%">
-						<div class="f14 tc lh70">
-							已领取
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="tax-box lanse_bg">
-				<div class="clear">
-					<div class="fl w70p" style="">
-						<p class="tc f16 mt5">优惠券</p>
-						<p class="tc mt5"> 满100.00优惠20.00元 </p>
-						<p class="tc mt5">剩余有效期：119天20时15分</p>
-					</div>
-					<div class="tax-split fl">
-						<div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>
-					</div>
-					<div class="fl" style="width: 28%">
-						<div class="f14 tc lh70">
-							已领取
-						</div>
-					</div>
-				</div>
-			</div>
+				</div>&ndash;&gt;
+			</div>-->
 		</div>
 		<div class="gift-footer clear pl10 pr10 mt5">
-			<button class="fl layui-btn layui-btn-danger layui-btn-radius layui-btn-xs"  onclick="closePop('giftContent')">&nbsp;不&nbsp;看&nbsp;了&nbsp;</button>
+			<button class="fl layui-btn layui-btn-danger layui-btn-radius layui-btn-xs close"  onclick="closePop('giftContent')">&nbsp;不&nbsp;看&nbsp;了&nbsp;</button>
 			<a href="{:\\think\\Url::build(\'Lottery/mycardvoucher\')}" class="fr layui-btn layui-btn-normal layui-btn-radius layui-btn-xs">&nbsp;去&nbsp;看&nbsp;看&nbsp;</a>
 		</div>
 	</div>
@@ -162,14 +111,32 @@
 </div>
 {include file="Public/footer"}
 	<script>
-        showPop('giftContent');
-		function giftShow() {
-			$('body').append('<div class="layer-shadow-bg"></div>')
-        }
-        getNotice();
-        loadGoodsData();
-        changeSearchBg();
-        getActive();
+
+        var currentTime = parseInt("{$currentTime}");
+        setInterval(function () {
+            currentTime +=1;
+        },1000);
+        var newPersonClose=true;
+		$(function () {
+            getGift(constant.giftType.newPerson,"{:url('index/index/newCustomerGiftBag')}");
+            getNotice();
+            loadGoodsData();
+            changeSearchBg();
+            getActive();
+            $('#giftContent .close').click(function () {
+                newPersonClose=true;
+            });
+            var timer = setInterval(function () {
+                //新人礼包关闭后执行
+                if(newPersonClose){
+                    newPersonClose = false;
+                    getGift(constant.giftType.birthday,"{:url('index/index/birthdayCustomerGiftBag')}");
+                    $('.gift-wrap .header .title').html('恭喜你，获得生日大礼包一个');
+                    clearInterval(timer);
+                }
+
+            },1000);
+        })
         var headerBanner = new Swiper('.header-banner', {
             autoplay: 6000,//可选选项，自动滑动
             pagination : '.swiper-pagination',
@@ -285,6 +252,26 @@
                 }
             })
         }
+
+        function getGift(giftStatus,req_url){
+            newPersonClose=false;
+            $.ajax({
+                type:'post',
+                data:{gift_bag_id:giftStatus},
+                //"{:url('index/index/birthdayCustomerGiftBag')}"
+               // url:"{:url('index/index/newCustomerGiftBag')}",
+				url:req_url,
+                success:function (res) {
+                    dealLottery(res);
+                    if(res.data.length>0){
+                        $('.gift-wrap .header .title').html('恭喜你，获得新人大礼包一个');
+                        showPop('giftContent');
+					}else{
+                        newPersonClose=true;
+					}
+                }
+            })
+		}
 
 	</script>
 </body>
