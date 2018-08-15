@@ -54,35 +54,35 @@
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
-        <div class="row cl bbb" style="display:none">
+        <div class="row cl bbb" style="display:{php} if( isset($vo['expire_type']) &&  $vo['expire_type']==1){ echo 'block';}else{ echo 'none';}{/php}">
             <label class="form-label col-xs-3 col-sm-3">有效期天数：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <input type="number" style="width:160px" class="input-text" placeholder="30天，填上30即可" name="expire_time" value="{$vo.expire_time ?? ''}">
             </div>
             <div class="col-xs-3 col-sm-3">领取之后有效期天数</div>
         </div>
-        <div class="row cl aaa"  style="display:block" >
+        <div class="row cl aaa"  style="display:{php} if( isset($vo['expire_type']) &&  $vo['expire_type']==1){ echo 'none';}else{ echo 'block';}{/php}" >
             <label class="form-label col-xs-3 col-sm-3">发放开始时间：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <input type="text" class="input-text Wdate" placeholder="奖券发放开始时间" name="grant_start_date"  value="{$vo.grant_start_date ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}   nullmsg="请填写奖券发放开始时间" errormsg="请填写奖券发放开始时间">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
-        <div class="row cl aaa" style="display:block">
+        <div class="row cl aaa" style="display:{php} if( isset($vo['expire_type']) &&  $vo['expire_type']==1){ echo 'none';}else{ echo 'block';}{/php}">
             <label class="form-label col-xs-3 col-sm-3">发放结束时间：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <input type="text" class="input-text Wdate" placeholder="奖券发放结束时间" name="grant_end_date"  value="{$vo['grant_end_date'] ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal} nullmsg="请填写奖券发放结束时间" errormsg="请填写奖券发放结束时间">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
-        <div class="row cl aaa"   style="display:block">
+        <div class="row cl aaa"   style="display:{php} if( isset($vo['expire_type']) &&  $vo['expire_type']==1){ echo 'none';}else{ echo 'block';}{/php}">
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>有效期开始时间：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <input type="text" class="input-text Wdate" autocomplete="off" placeholder="奖券有效期开始时间" name="expire_start_date"value="{$vo['expire_start_date'] ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" {/literal}   nullmsg="请填写奖券有效期开始时间" errormsg="请填写奖券有效期开始时间">
             </div>
             <div class="col-xs-3 col-sm-3"></div>
         </div>
-        <div class="row cl aaa"  style="display:block">
+        <div class="row cl aaa"  style="display:{php} if( isset($vo['expire_type']) &&  $vo['expire_type']==1){ echo 'none';}else{ echo 'block';}{/php}">
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>有效期结束时间：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <input type="text" class="input-text Wdate" autocomplete="off" placeholder="奖券有效期结束时间" name="expire_end_date" value="{$vo['expire_end_date'] ?? ''}" {literal} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd  H:mm:ss'})" {/literal} nullmsg="请填写奖券有效期结束时间" errormsg="请填写奖券有效期结束时间">
