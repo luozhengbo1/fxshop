@@ -170,13 +170,13 @@ class Address extends Mustlogin
             // dump($scoreLog);
             // die;
             if (empty($scoreLog)) {
-                $userData['score'] += 100;
-                $msg = '信息已完善,恭喜获得100积分';
+                $userData['score'] += 5;
+                $msg = '信息已完善,恭喜获得5积分';
                 Db::table('fy_score_log')->insert([
                     'uid' => $userData['id'],
                     'openid' => $userData['openid'],
                     'source' => 11,
-                    'score' => 100,
+                    'score' => 5,
                     'time' => $time
                 ]);
             }

@@ -598,13 +598,13 @@ class Customer extends Mustlogin
             $msg = '修改成功';
             $time = time();
             if ($oldUserStatus && $userDataStatus) {
-                $userData['score'] += 100;
-                $msg = '信息已完善,恭喜获得100积分';
+                $userData['score'] += 5;
+                $msg = '信息已完善,恭喜获得5积分';
                 Db::name('score_log')->insert([
                     'uid' => $userData['id'],
                     'openid' => $userData['openid'],
                     'source' => 11,
-                    'score' => 100,
+                    'score' => 5,
                     'time' => $time
                 ]);
             }
