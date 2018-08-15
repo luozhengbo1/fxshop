@@ -96,7 +96,7 @@ MyPageload.prototype.init = function(options){
             type:'post',
             data:data || {},
             dataType:'json',
-            async:false,  //同步方式发起请求
+            //async:false,  //同步方式发起请求
             success: function(data){
                 //  console.log('=========test2=================')
                 var code = data.code;

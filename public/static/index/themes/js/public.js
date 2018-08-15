@@ -590,11 +590,11 @@ function tagParse(tag){
 function backTime(){
     //28分株
     $('.sulfTime').each(function (index, ele) {
-        var endTime = (parseInt($(ele).attr('data-createtime')) +30*60);
+        var endTime = (parseInt($(ele).attr('data-createtime')) +1*60);
         var currentTime = parseInt(new Date().getTime()/1000);
-        console.log(endTime,currentTime)
-        if(endTime > currentTime){
-            setInterval(function () {
+        console.log(endTime,currentTime);
+        setInterval(function () {
+            if(endTime > currentTime){
                 currentTime = parseInt(new Date().getTime()/1000);
                 var sulfTime = endTime-currentTime;
                 var secondTime = parseInt(sulfTime/60);
@@ -604,16 +604,18 @@ function backTime(){
                   $(ele).html(showText);
                 else{
                     $(ele).html('订单已过期，重新下单吧');
-                    $(ele).parents('.orderWrap').find('.orderCancel').remove();
+                    if($(ele).parents('.orderWrap').find('.orderCancel').size()>0){
+                        $(ele).parents('.orderWrap').find('.orderCancel').click();
+                    }
+                   // $(ele).parents('.orderWrap').find('.orderCancel').remove();
                     $(ele).parents('.orderWrap').find('.orderPay').remove();
                 }
-            },1000)
-        }else{
-            var showText = '订单已过期，重新下单吧';
-            $(ele).html(showText);
-             $(ele).parents('.orderWrap').find('.orderCancel').remove();
-             $(ele).parents('.orderWrap').find('.orderPay').remove();
-        }
+            }else{
+                var showText = '订单已过期，重新下单吧';
+                 $(ele).html(showText);
+                 $(ele).parents('.orderWrap').find('.orderPay').remove();
+            }
+        },1000)
     })
 }
 
@@ -704,6 +706,10 @@ var constant={
     dataType:{
         date:0//日期类型
         ,day:1//天数类型
+    },
+    giftType:{
+        newPerson:3//新人
+        ,birthday:2//生日
     }
 }
 var settlement={
@@ -836,17 +842,90 @@ function kefu(mobile,qq) {
     var html ='<p class="f14 mb10"><a href="tel://'+mobile+'" >联系卖家:'+mobile+'</p>';
         html +='<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2550162927&site=qq&menu=yes&t='+new Date().getTime()+'">联系客服：<img border="0" src="http://wpa.qq.com/pa?p=2:2550162927:52" alt="点击这里给我发消息" title="点击这里给我发消息"/>2550162927</a>';
     layer.open({
-        content: html
+         content: html
         ,btn: '关闭'
     });
 
 }
+function showPop(id) {
+    var $dom = $('#'+id);
+    this.mainViewScroll = $(window).scrollTop();
+    $dom.show();
+    setTimeout(function() {
+        $dom.addClass('show');
+        $('body').addClass('overflowHide');
+        //obj.popupshow = true;
+    }, 50);
+}
+function closePop(id) {
+    var $dom = $('#'+id);
+    $('body').removeClass('overflowHide');
+    $dom.removeClass('show');
+    window.scrollTo(0, this.mainViewScroll);
+    setTimeout(function() {
+        $dom.hide();
+    }, 50);
+}
+
+//查看礼包
 
 
+function dealLottery(res) {
+    if(res.code==200){
+        var html =''
+        var data = res.data;
+        for(var i=0; i<data.length; i++){
+            var coupon_type = data[i].type;
+            var lotteryLog = data[i].lotteryLog;
+            html +='<div class="tax-box">'
+            html += '<div class="clear">'
+            html += '    <div class="fl w70p" style="">'
+            html += '        <p class="tc f16 mt5">'+data[i].name+'</p>'
+            switch(coupon_type){
+                case  constant.coupon.youhui:
+                    html += '        <p class="tc mt5"> 满'+data[i].coupon_real_money+'优惠'+data[i].coupon_money+'元 </p>'
+                    break;
+                case constant.coupon.mianyou:
+                    html += '        <p class="tc mt5"> 包邮券</p>'
+                    break;
+            }
+            console.log('================================='+currentTime)
+            if(data[i].expire_type ==constant.dataType.date){
+                html += '        <p class="tc mt5">剩余有效期：' +returnTime(parseInt(data[i].expire_end_date)-currentTime ,'dd H:mm')+ '</p>'
+            }else if(data[i].expire_type ==constant.dataType.day){
 
+                if(lotteryLog){
+                    var time = parseInt(lotteryLog.addtime)+(parseInt(data[i].expire_time)*24*60*60);
+                    html += '  <p class="tc mt5">剩余有效期：' +returnTime(time-currentTime ,'dd H:mm')+ '</p>'
+                }else{
+                    html += '        <p class="tc mt5">剩余有效期：' +data[i].expire_time+ '天</p>'
+                }
+            }
 
+            html += '    </div>'
+            html += '    <div class="tax-split fl" >'
+            html += '        <div class="line" style="border-color:#FFFFFF;opacity: 1;"></div>'
+            html += '    </div>'
+            html += '    <div class="fl" style="width: 28%" >'
+            if(data[i].lotteryLog){
+                html += '        <div class="f14 tc lh70" >已领取</div>'
+            }else{
+                html += '        <div class="f14 tc lh70" onclick="getLottery('+data[i].id+')">立即领取</div>'
+            }
 
-
+            html += '    </div>'
+            html += '</div>'
+            html += '</div>'
+        }
+        if(data.length>0){
+            $("#lotterysContainer").empty().append(html) ;
+        }
+        else {
+            $('#goodsLottery').hide();
+            $("#lotterysContainer").empty().append('<p class="tc">该商品暂无相关券</p>') ;
+        }
+    }
+}
 
 
 
