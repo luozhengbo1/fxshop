@@ -590,11 +590,11 @@ function tagParse(tag){
 function backTime(){
     //28分株
     $('.sulfTime').each(function (index, ele) {
-        var endTime = (parseInt($(ele).attr('data-createtime')) +30*60);
+        var endTime = (parseInt($(ele).attr('data-createtime')) +1*60);
         var currentTime = parseInt(new Date().getTime()/1000);
-        console.log(endTime,currentTime)
-        if(endTime > currentTime){
-            setInterval(function () {
+        console.log(endTime,currentTime);
+        setInterval(function () {
+            if(endTime > currentTime){
                 currentTime = parseInt(new Date().getTime()/1000);
                 var sulfTime = endTime-currentTime;
                 var secondTime = parseInt(sulfTime/60);
@@ -604,16 +604,18 @@ function backTime(){
                   $(ele).html(showText);
                 else{
                     $(ele).html('订单已过期，重新下单吧');
-                    $(ele).parents('.orderWrap').find('.orderCancel').remove();
+                    if($(ele).parents('.orderWrap').find('.orderCancel').size()>0){
+                        $(ele).parents('.orderWrap').find('.orderCancel').click();
+                    }
+                   // $(ele).parents('.orderWrap').find('.orderCancel').remove();
                     $(ele).parents('.orderWrap').find('.orderPay').remove();
                 }
-            },1000)
-        }else{
-            var showText = '订单已过期，重新下单吧';
-            $(ele).html(showText);
-             $(ele).parents('.orderWrap').find('.orderCancel').remove();
-             $(ele).parents('.orderWrap').find('.orderPay').remove();
-        }
+            }else{
+                var showText = '订单已过期，重新下单吧';
+                 $(ele).html(showText);
+                 $(ele).parents('.orderWrap').find('.orderPay').remove();
+            }
+        },1000)
     })
 }
 
