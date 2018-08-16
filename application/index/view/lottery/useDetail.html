@@ -32,9 +32,14 @@
    var host ="http://10.20.1.171:81";
     var url={
         adminUserScanCode:host+"{:url('index/Lottery/adminUserScanCode')}",
+        responseLottery:"{:url('index/Lottery/responseLottery')}",
+        mycardvoucher:"{:url('index/Lottery/mycardvoucher')}",
     }
+    var timer = setInterval(function () {
+        showResult('{$unique_flag}');
+    },2000)
    $('.content').html(tagParse("{$lottery['desc']}"));
-  //  console.log(urlConnect(url.adminUserScanCode,$('.saveData').data()))
+    console.log(urlConnect(url.adminUserScanCode,$('.saveData').data()))
    function goUse() {
        //设置参数方式
        layer.open({
@@ -50,8 +55,23 @@
            correctLevel : QRCode.CorrectLevel.H
        });
    }
-   function show() {
-       
+   function showResult(unique_flag) {
+       $.ajax({
+           url:url.responseLottery,
+           type:'post',
+           data:{unique_flag:unique_flag},
+           dataType:'json',
+           success: function(res){
+               var data = res.data;
+               if(res.code ==200 && data && data['unique_flag'] == unique_flag){
+                   layer_msg('使用成功');
+                   clearInterval(timer);
+                  setTimeout(function () {
+                      window.location.href=url.mycardvoucher;
+                  },1500)
+               }
+           }
+       })
    }
 </script>
 </body>

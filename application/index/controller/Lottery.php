@@ -232,7 +232,7 @@ Class Lottery extends Mustlogin
      * @param $goods_id 商品id
      * @param $user_id  发行券商家id
      **/
-    public function  adminUserScanCode($id,$use_num,$user_id){
+    public function  adminUserScanCode($id,$use_num,$user_id,$unique_flag){
         $this->assign('titleName', "商家扫码券");
         $tempUser=Db::name('admin_user_customer')->where(['user_id'=>$user_id,'customer_id'=>$this->userInfo['id']])->find();
         if(!empty($tempUser)){
@@ -243,6 +243,7 @@ Class Lottery extends Mustlogin
             $this->assign('lottery',  $lottery_log['lottery_info']);
             $this->assign('lottery_log',  $lottery_log);
             $this->assign('use_num',$use_num);
+            $this->assign('unique_flag',$unique_flag);
             return $this->view->fetch('adminUserScanCode');
         }else{
             return $this->view->fetch('noScanCode');
@@ -342,12 +343,19 @@ Class Lottery extends Mustlogin
             $insert['status'] = 1;
             $insert['coupon_real_money'] =   $lottery_log['lottery_info'] ['coupon_real_money'];
             $insert['coupon_money'] =   $lottery_log['lottery_info'] ['coupon_money'];
+            $insert['unique_flag'] =$data['unique_flag'];
             Db::name('use_lottery')->insert($insert);
             #减去对应数量，加上对应使用量
             Db::name('lottery_log')->where(['id'=>$data['lottery_log_id']])->setInc('use_num',$data['num']);
             Db::name('lottery_log')->where(['id'=>$data['lottery_log_id']])->setDec('lottery_num',$data['num']);
             return ajax_return('','使用成功','200');
         }
+
+    }
+    #商户扫码后 用户手机响应相应的扫码成功提示
+    public function responseLottery($unique_flag) {
+        $use_lottery = Db::name('use_lottery')->where(['unique_flag'=>$unique_flag])->find();
+        return ajax_return($use_lottery,'','200');
 
     }
     //获取唯一序列号
@@ -357,4 +365,5 @@ Class Lottery extends Mustlogin
         $uuid = substr($charid, 0, 8).substr($charid, 8, 4).substr($charid,12, 4).substr($charid,16, 4).substr($charid,20,12);
         return $uuid;
     }
+
 }
