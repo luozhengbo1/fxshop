@@ -1,13 +1,13 @@
 <form class="mb-20" method="get" action="{:\\think\\Url::build($Request.action)}">
     <div class="select-box" style="width:250px">
-        <input type="text" class="input-text" style="width:250px" placeholder="用户昵称" name="username" value="{$Request.param.username}" >
+        <input type="text" class="input-text" style="width:250px" placeholder="用户昵称" name="user_name" value="{$Request.param.user_name}" >
     </div>
     {php}if($_SESSION['think']['auth_id']==1){ {/php}
     <div class="select-box" style="width:250px">
-        <select name="shop_openid" class="select">
+        <select name="shop_id" class="select">
             <option value="">--核销者--</option>
             {volist name="adminUser" id="voUser"}
-            <option value="{$voUser['openid']}" {if condition="$Request.param.shop_openid eq $voUser['openid']"}selected{/if}>{$voUser['account']}&nbsp;&nbsp;&nbsp;&nbsp;{$voUser['realname']}</option>
+            <option value="{$voUser['id']}" {if condition="$Request.param.shop_id eq $voUser['id']"}selected{/if}>{$voUser['account']}&nbsp;&nbsp;&nbsp;&nbsp;{$voUser['realname']}</option>
             {/volist}
         </select>
     </div>

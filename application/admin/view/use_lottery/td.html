@@ -7,10 +7,8 @@
 <td>{php} if(!empty($vo['lottery_id'])) {echo \think\Db::name('lottery')->field('name')->where('id',$vo['lottery_id'])->find()['name'];}{/php}</td>
 <td>{$vo.lottery_log_id??''}</td>
 <td>{php}
-    if(!empty($vo['shop_openid'])){
-    $user =  \think\Db::name('admin_user')->field('realname,account')->where('openid',$vo['shop_openid'])->find();
-    echo $user['account'];
+    echo $vo['account'];
     echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-    echo $user['realname'];
-   } {/php}</td>
+    echo $vo['realname'];
+   {/php}</td>
 <td>{$vo.coupon_real_money??''}元代{$vo.coupon_money??''}元</td>
