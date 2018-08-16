@@ -39,7 +39,6 @@ class UseLottery extends Controller
                 }else{
                     $map['shop_openid']=0;
                 }
-                dump($map);
             }
         }
 
@@ -71,13 +70,11 @@ class UseLottery extends Controller
      */
     public function index()
     {
-        $model = $this->getModel();
-
         // 自定义过滤器
         if (method_exists($this, 'filter')) {
             $this->filter($map);
         }
-        $list = $model->alias('u_l')
+        $list = $this->getModel()->alias('u_l')
             ->field('u_l.*,ad_u.account,ad_u.realname')
             ->join('fy_customer c', 'u_l.shop_openid=c.openid')
             ->join('fy_admin_user_customer ad_u_c', 'c.id=ad_u_c.customer_id')
