@@ -314,7 +314,11 @@ function loadShadow() {
     $('body').append(html);
 }
 function closeLoadShadow() {
-    $('body .load-shadow').hide().remove('.load-shadow');
+    if($('body .load-shadow').size()>0){
+        setTimeout(function () {
+            $('body .load-shadow').hide().remove('.load-shadow');
+        },200)
+    }
 }
 function layerLoad2() {
     //loading带文字
@@ -349,6 +353,8 @@ function tabSwitch($target,complete) {
             console.log('click')
             $target.removeClass('active')
             $(ele).addClass('active');
+            //加载
+            loadShadow();
             if(complete){
                 complete()
             }

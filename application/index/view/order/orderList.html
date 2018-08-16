@@ -32,7 +32,7 @@
        <li  id="nav_evaluate" data-status="4"><a href="javascript:;"  >待评价</a></li>
    </ul>
     <div id="dataListWrap">
-        <ul id="orderList" class="product-order-list mt50">
+        <ul id="dataList" class="product-order-list mt50">
            <!-- <li>
                 <div class="item-list pt10 module clear ">
                     <div class="clear order_box_hd">
@@ -118,11 +118,11 @@
     function loadOrderData(){
         var status = $('#navListTab').find('.active').attr('data-status');
         //loadShadow();
-        initData('orderList');
+        initData('dataList');
         hideEmptyWrap();
         pageload({
             targetWarp:'dataListWrap',
-            target:'orderList',
+            target:'dataList',
             page:1,
             size:4,
             ajaxData:{
