@@ -36,7 +36,7 @@ class GoodsComment extends Controller
         }
     }
 
-    #恢复评论
+    #回复评论
     public function  returnComment()
     {
         if($this->request->isAjax()){
@@ -45,16 +45,16 @@ class GoodsComment extends Controller
             $goodsComment = Db::name('goodsComment')->where(['id'=>$data['id']])->find();
             if($res){
                 Db::name('order_goods')->where(['id'=>$goodsComment['ogid']])->update(['is_send'=>6]);
-                #加上10积分
-                Db::name('customer')->where(['openid'=>$goodsComment['openid']])->setInc('score',10);
-                #加上用户积分记录
-                Db::name('score_log')->insert([
-                    'openid'=>$goodsComment['openid'],
-                    'source_id'=>$data['id'],
-                    'source'=>11,
-                    'source'=>10,
-                    'time'=>time(),
-                ]);
+//                #加上10积分
+//                Db::name('customer')->where(['openid'=>$goodsComment['openid']])->setInc('score',10);
+//                #加上用户积分记录
+//                Db::name('score_log')->insert([
+//                    'openid'=>$goodsComment['openid'],
+//                    'source_id'=>$data['id'],
+//                    'source'=>11,
+//                    'source'=>10,
+//                    'time'=>time(),
+//                ]);
             }
 
             return ajax_return_adv('回复成功','parent','回复成功','');
@@ -64,6 +64,8 @@ class GoodsComment extends Controller
             return $this->view->fetch();
         }
     }
+
+    //默认恢复操作
     public function resume()
     {
         $id = $this->request->param('id');
@@ -76,7 +78,7 @@ class GoodsComment extends Controller
                 'openid'=>$goodsComment['openid'],
                 'source_id'=>$id,
                 'source'=>11,
-                'source'=>10,
+                'score'=>10,
                 'time'=>time(),
             ]);
         }
