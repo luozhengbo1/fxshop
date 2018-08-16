@@ -16,6 +16,7 @@
 		complete:fun,数据加载完成后调用函数
      });
 */
+var requsetNum = 0; //请求次数
 var pageload = function(options){
     return new MyPageload(this, options);
 };
@@ -59,7 +60,7 @@ MyPageload.prototype.init = function(options){
     // 加载下方
 
     $(window).on('scroll',function(){
-        console.log('scroll1:'+me.opts.loading);
+      //  console.log('scroll1:'+me.opts.loading);
         setTimeout(function () {
             if(refreshOk(me)){
                 me.opts.loading = true;
@@ -73,7 +74,8 @@ MyPageload.prototype.init = function(options){
         me.$domDown.html(me.domDown);
         me.opts.loading = true;
         setTimeout(function () {
-            loadDownFn(me);
+            ++requsetNum;
+            loadDownFn(me,requsetNum);
         },200)
     }
     // 如果文档高度不大于窗口高度，数据较少，自动加载下方数据
@@ -86,7 +88,7 @@ MyPageload.prototype.init = function(options){
         }
     }
     //下拉卡加载执行函数
-    function loadDownFn(me) {
+    function loadDownFn(me,currentNum) {
         var data=$.extend(true, {$t:new Date().getTime()}, {
             page:me.opts.page,
             size:me.opts.size,
@@ -99,11 +101,13 @@ MyPageload.prototype.init = function(options){
             //async:false,  //同步方式发起请求
             success: function(data){
                 //  console.log('=========test2=================')
+                console.log('总共请求次数'+requsetNum,'当前是第几次'+currentNum)
                 var code = data.code;
                 var data = data.data;//数据
                 if (code=='200'){
-                    //如果获取的数据还没有条数多，表明数据已经没有了
-                    if(me.opts.page ==1 && $('#dataList').size()>0){
+                    //第一页，说明是点击导航 只插入最后一次请求的数据
+                    if(requsetNum!=currentNum)   return;
+                    if(me.opts.page ==1 && $('#dataList').size()>0 ){
                         $('#dataList').empty();
                     }
                     if(me.opts.page ==1 && data.length ==0){
@@ -132,9 +136,11 @@ MyPageload.prototype.init = function(options){
                     me.opts.noData=true;
                 }
                 me.opts.loading = false;
+                closeLoadShadow();
             },
             error: function(xhr, type){
                 console.error('网络错误');
+                closeLoadShadow();
                 // 即使加载出错，也得重置
             }
         });
