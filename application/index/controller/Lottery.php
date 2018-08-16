@@ -244,6 +244,12 @@ Class Lottery extends Mustlogin
             $this->assign('lottery_log',  $lottery_log);
             $this->assign('use_num',$use_num);
             $this->assign('unique_flag',$unique_flag);
+            $use_lottery = Db::name('use_lottery')->where(['unique_flag'=>$unique_flag])->find();
+            $is_use =0;//没有核销过
+            if(!empty($use_lottery)){
+                $is_use =1;
+            }
+            $this->assign('is_use',$is_use);
             return $this->view->fetch('adminUserScanCode');
         }else{
             return $this->view->fetch('noScanCode');
@@ -325,6 +331,10 @@ Class Lottery extends Mustlogin
             $data = $this->request->post();
             if(!$data['lottery_log_id'] ||  $data['num']<0){
                    return ajax_return('','参数不合法','500');
+            }
+            $use_lottery = Db::name('use_lottery')->where(['unique_flag'=>$data['unique_flag']])->find();
+            if(!empty($use_lottery)){
+                return ajax_return('','该券已经核销过了','500');
             }
             $lottery_log = Db::name('lottery_log')->where(['id'=>$data['lottery_log_id']])->find();
             $data['num'] = ($lottery_log['lottery_num']<$data['num'])?$lottery_log['lottery_num']: $data['num'];

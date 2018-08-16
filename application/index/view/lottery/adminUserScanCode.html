@@ -16,7 +16,12 @@
             <p class="pl10 grey f12">门市价<i>￥ {$lottery['coupon_money']}</i></p>
         </li>
         <li>
+            {if condition="$is_use eq 0" /}
             <a class="go-pay" style="background: #0B61A4" onclick="agreeUse(this);" >同意使用{$use_num}张</a>
+            {/if}
+            {if condition="$is_use eq 1" /}
+            <a class="go-pay" style="background: #4c4d4e"  >已使用{$use_num}张</a>
+            {/if}
         </li>
     </ul>
 
