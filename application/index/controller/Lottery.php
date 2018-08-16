@@ -113,6 +113,8 @@ Class Lottery extends Mustlogin
         $this->assign('lottery',  $lottery_log['lottery_info']);
         $this->assign('type', $type);
         $this->assign('use_num',$useNum);
+        $this->assign('unique_flag',$this->generateNum());
+
         return  $this->view->fetch("useDetail");
 
     }
@@ -230,7 +232,7 @@ Class Lottery extends Mustlogin
      * @param $goods_id 商品id
      * @param $user_id  发行券商家id
      **/
-    public function  adminUserScanCode($id,$use_num,$user_id){
+    public function  adminUserScanCode($id,$use_num,$user_id,$unique_flag){
         $this->assign('titleName', "商家扫码券");
         $tempUser=Db::name('admin_user_customer')->where(['user_id'=>$user_id,'customer_id'=>$this->userInfo['id']])->find();
         if(!empty($tempUser)){
@@ -241,6 +243,13 @@ Class Lottery extends Mustlogin
             $this->assign('lottery',  $lottery_log['lottery_info']);
             $this->assign('lottery_log',  $lottery_log);
             $this->assign('use_num',$use_num);
+            $this->assign('unique_flag',$unique_flag);
+            $use_lottery = Db::name('use_lottery')->where(['unique_flag'=>$unique_flag])->find();
+            $is_use =0;//没有核销过
+            if(!empty($use_lottery)){
+                $is_use =1;
+            }
+            $this->assign('is_use',$is_use);
             return $this->view->fetch('adminUserScanCode');
         }else{
             return $this->view->fetch('noScanCode');
@@ -323,6 +332,10 @@ Class Lottery extends Mustlogin
             if(!$data['lottery_log_id'] ||  $data['num']<0){
                    return ajax_return('','参数不合法','500');
             }
+            $use_lottery = Db::name('use_lottery')->where(['unique_flag'=>$data['unique_flag']])->find();
+            if(!empty($use_lottery)){
+                return ajax_return('','该券已经核销过了','500');
+            }
             $lottery_log = Db::name('lottery_log')->where(['id'=>$data['lottery_log_id']])->find();
             $data['num'] = ($lottery_log['lottery_num']<$data['num'])?$lottery_log['lottery_num']: $data['num'];
             if($lottery_log['lottery_num']==0){
@@ -340,6 +353,7 @@ Class Lottery extends Mustlogin
             $insert['status'] = 1;
             $insert['coupon_real_money'] =   $lottery_log['lottery_info'] ['coupon_real_money'];
             $insert['coupon_money'] =   $lottery_log['lottery_info'] ['coupon_money'];
+            $insert['unique_flag'] =$data['unique_flag'];
             Db::name('use_lottery')->insert($insert);
             #减去对应数量，加上对应使用量
             Db::name('lottery_log')->where(['id'=>$data['lottery_log_id']])->setInc('use_num',$data['num']);
@@ -348,4 +362,18 @@ Class Lottery extends Mustlogin
         }
 
     }
+    #商户扫码后 用户手机响应相应的扫码成功提示
+    public function responseLottery($unique_flag) {
+        $use_lottery = Db::name('use_lottery')->where(['unique_flag'=>$unique_flag])->find();
+        return ajax_return($use_lottery,'','200');
+
+    }
+    //获取唯一序列号
+    public function generateNum() {
+        //strtoupper转换成全大写的
+        $charid = strtoupper(md5(uniqid(mt_rand(), true)));
+        $uuid = substr($charid, 0, 8).substr($charid, 8, 4).substr($charid,12, 4).substr($charid,16, 4).substr($charid,20,12);
+        return $uuid;
+    }
+
 }

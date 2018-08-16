@@ -5,26 +5,47 @@
 
     </div>
     <ul class="footer-fixed footer-pay-info clear">
+        <input type="hidden"
+               class="saveData"
+               data-lottery_log_id="{$lottery_log['id']}"
+               data-num="{$use_num}"
+               data-unique_flag="{$unique_flag}"
+        >
         <li>
-            <p class="pl10 pt5"><i class="price bold f24">￥ {$lottery['coupon_real_money']}</i><span class="border-tag ml10"> {$lottery['coupon_real_money']/$lottery['coupon_money']}折</span> </p>
+            <p class="pl10 pt5"><i class="price bold f24">￥ {$lottery['coupon_real_money']}</i><span class="border-tag ml10"> {$lottery['coupon_real_money']*10/$lottery['coupon_money']}折</span> </p>
             <p class="pl10 grey f12">门市价<i>￥ {$lottery['coupon_money']}</i></p>
         </li>
         <li>
-            <a class="go-pay" style="background: #0B61A4" onclick="agreeUse();" >同意使用{$use_num}张</a>
+            {if condition="$is_use eq 0" /}
+            <a class="go-pay" style="background: #0B61A4" onclick="agreeUse(this);" >同意使用{$use_num}张</a>
+            {/if}
+            {if condition="$is_use eq 1" /}
+            <a class="go-pay" style="background: #4c4d4e"  >已使用{$use_num}张</a>
+            {/if}
         </li>
     </ul>
 
 </div>
 <script>
     $('.content').html(tagParse("{$lottery['desc']}"));
-    function agreeUse() {
-        pub_edit({
+    function agreeUse(_this) {
+        $.ajax({
             url:"{:url('lottery/useLottery')}",
             data:{
                 lottery_log_id:"{$lottery_log['id']}"
                 ,num:"{$use_num}"
-               // ,complete:closeWindow,
+                ,unique_flag:"{$unique_flag}"
             },
+            type:'post',
+            dataType:'json',
+            success: function(res){
+                layer_msg(res.msg);
+                if(res.code ==200){
+                  $(_this).removeAttr('onclick')
+                         .css('background','#4c4d4e')
+                         .html('已使用{$use_num}张')
+                }
+            }
         })
     }
     function closeWindow()

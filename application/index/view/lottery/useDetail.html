@@ -10,7 +10,7 @@
    </div>
     <ul class="footer-fixed footer-pay-info clear">
         <li>
-            <p class="pl10 pt5"><i class="price bold f24">￥ {$lottery['coupon_real_money']}</i><span class="border-tag ml10"> {$lottery['coupon_real_money']/$lottery['coupon_money']}折</span> </p>
+            <p class="pl10 pt5"><i class="price bold f24">￥ {$lottery['coupon_real_money']}</i><span class="border-tag ml10"> {$lottery['coupon_real_money']*10/$lottery['coupon_money']}折</span> </p>
             <p class="pl10 grey f12">门市价<i>￥ {$lottery['coupon_money']}</i></p>
         </li>
         <li>
@@ -20,6 +20,7 @@
                    data-goods_id="{$lottery['goods_id']}"
                    data-user_id="{$lottery['user_id']}"
                    data-use_num="{$use_num}"
+                   data-unique_flag="{$unique_flag}"
             >
             <a class="go-pay" onclick="goUse();" >立即使用{$use_num}张</a>
         </li>
@@ -31,16 +32,20 @@
    var host ="http://10.20.1.171:81";
     var url={
         adminUserScanCode:host+"{:url('index/Lottery/adminUserScanCode')}",
+        responseLottery:"{:url('index/Lottery/responseLottery')}",
+        mycardvoucher:"{:url('index/Lottery/mycardvoucher')}",
     }
+    var timer = setInterval(function () {
+        showResult('{$unique_flag}');
+    },2000)
    $('.content').html(tagParse("{$lottery['desc']}"));
-    console.log(urlConnect(url.adminUserScanCode,{id:"{$lottery_log['id']}",goods_id:"{$lottery['goods_id']}",user_id:"{$lottery['user_id']}"}))
+    console.log(urlConnect(url.adminUserScanCode,$('.saveData').data()))
    function goUse() {
        //设置参数方式
        layer.open({
            content: ' <div id="qrcode" style="width: 200px; height: 200px"></div>'
            ,btn: '关闭'
        });
-
        var qrcode = new QRCode('qrcode', {
            text:urlConnect(url.adminUserScanCode,$('.saveData').data()),
            width: 200,
@@ -49,7 +54,24 @@
            colorLight : '#ffffff',
            correctLevel : QRCode.CorrectLevel.H
        });
-
+   }
+   function showResult(unique_flag) {
+       $.ajax({
+           url:url.responseLottery,
+           type:'post',
+           data:{unique_flag:unique_flag},
+           dataType:'json',
+           success: function(res){
+               var data = res.data;
+               if(res.code ==200 && data && data['unique_flag'] == unique_flag){
+                   layer_msg('使用成功');
+                   clearInterval(timer);
+                  setTimeout(function () {
+                      window.location.href=url.mycardvoucher;
+                  },1500)
+               }
+           }
+       })
    }
 </script>
 </body>
