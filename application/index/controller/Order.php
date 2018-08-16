@@ -16,8 +16,8 @@ Class Order extends Mustlogin
     {
         parent::__construct();
         $this->userInfo = Session::get('wx_user');
-        dump($this->userInfo);
-        die;
+      //  dump($this->userInfo);
+       // die;
         $this->view->assign('param', $this->request->param('param'));
     }
 
