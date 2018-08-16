@@ -113,6 +113,8 @@ Class Lottery extends Mustlogin
         $this->assign('lottery',  $lottery_log['lottery_info']);
         $this->assign('type', $type);
         $this->assign('use_num',$useNum);
+        $this->assign('unique_flag',$this->generateNum());
+
         return  $this->view->fetch("useDetail");
 
     }
@@ -351,5 +353,12 @@ Class Lottery extends Mustlogin
             return ajax_return('','使用成功','200');
         }
 
+    }
+    //获取唯一序列号
+    public function generateNum() {
+        //strtoupper转换成全大写的
+        $charid = strtoupper(md5(uniqid(mt_rand(), true)));
+        $uuid = substr($charid, 0, 8).substr($charid, 8, 4).substr($charid,12, 4).substr($charid,16, 4).substr($charid,20,12);
+        return $uuid;
     }
 }
