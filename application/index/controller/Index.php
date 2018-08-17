@@ -54,6 +54,9 @@ class Index extends Mustlogin
                     $lotteryList[$k] =  $lottery ;
                     $insert =[ 'addtime'=>time(),
                         'lottery_id'=>$vId,
+                        'openid'=>$this->userInfo['openid'],
+                        'uid'=>$this->userInfo['id'],
+                        'username'=>$this->userInfo['nickname'],
                         'lottery_name'=>$lottery['name'],
                         'lottery_num'=>1,
                         'status'=>1,

@@ -258,12 +258,10 @@
             $.ajax({
                 type:'post',
                 data:{gift_bag_id:giftStatus},
-                //"{:url('index/index/birthdayCustomerGiftBag')}"
-               // url:"{:url('index/index/newCustomerGiftBag')}",
 				url:req_url,
                 success:function (res) {
                     dealLottery(res);
-                    if(res.data.length>0){
+                    if(res.data && res.data.length>0){
                         $('.gift-wrap .header .title').html('恭喜你，获得新人大礼包一个');
                         showPop('giftContent');
 					}else{
