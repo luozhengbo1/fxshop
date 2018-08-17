@@ -75,6 +75,7 @@
             </a>
             <div class="module  clear pr10 pt5 mb5" >
                 <div class="cont tr total-info">
+                    {if condition="$vo['lottery_detail'] "}
                     <p class="lh30 clear pl10" id="goodsLottery" onclick="showPop('goodsVoucher')">
                         <span class="fl"> {$vo['lottery_detail']['name']}</span>
                         <span class="fr">
@@ -82,7 +83,7 @@
                         </span>
                         <i class="detail_footer-icon"></i>
                     </p>
-
+                    {/if}
                     <span class="f14">共<b>{$vo['goods_num']}</b>件商品</span>
                     <span class="f14">合计:
                         <b class="goodPriceTitle"

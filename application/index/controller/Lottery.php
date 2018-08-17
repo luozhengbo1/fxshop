@@ -215,11 +215,11 @@ Class Lottery extends Mustlogin
                     unset($lotteryList[$k]);
                 }
             }
-            if ($lotteryList) {
+           // if ($lotteryList) {
                 return ajax_return(array_values($lotteryList), 'ok', 200);
-            } else {
+            /*} else {
                 return ajax_return('', 'no data', 204);
-            }
+            }*/
         } else {
             $this->assign('titleName', "卡券中心");
             return $this->view->fetch('mycardVoucher');
