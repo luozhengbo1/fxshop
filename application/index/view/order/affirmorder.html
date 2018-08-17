@@ -235,11 +235,11 @@
             }
 
             if((freetype==0 && !isNaN(postage))){
-                totalPrice += postage;//加上邮费
+                totalPrice += (postage*parseInt(num));//加上邮费
             }
             console.log($mianyou.val())
             if($mianyou.val() && $mianyou.val()!=""){
-                totalPrice -= postage;//减去邮费
+                totalPrice -=  (postage*parseInt(num));//减去邮费
             }
         })
 
