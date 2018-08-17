@@ -110,7 +110,7 @@ function orderBtnHtml(json){
     switch(json.order_status)
     {
         case 1://已支付
-            if(json.is_send==0 && json.show_area !=showArea.score)
+            if(json.is_send==0 && json.settlement_type !=settlement.score)
                 html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="refund(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">退款</a>';
             if(json.is_send ==1)
                 html +='        <button class="layui-btn  layui-btn-danger layui-btn-radius layui-btn-xs " onclick="sureDeliver(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">确认收货</button>';
@@ -120,7 +120,7 @@ function orderBtnHtml(json){
             }
 
             if(json.is_send ==2 || json.is_send ==5 || json.is_send ==6 || json.is_send ==7){
-                if(json.show_area !=showArea.score){
+                if(json.settlement_type !=settlement.score){
                     if(json.after_sale_is==afterSale.yes){
                         html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="cancelAfterSale(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">取消申请</a>';
                         html +='        <a class="layui-btn layui-btn-primary layui-btn-xs  layui-btn-radius" onclick="orderTrack(\''+json.order_id+'\',\''+json.goods_id+'\',\''+json.sku_id+'\')">售后详情</a>';

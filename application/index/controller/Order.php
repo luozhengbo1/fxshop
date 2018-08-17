@@ -458,7 +458,7 @@ Class Order extends Mustlogin
                     die(json_encode($backData));
                 } else {
                     #将用户积分扣取，并将扣取记录记下来
-//                    $decScore = $user['score'] - $totalScore;
+                    $decScore = $user['score'] - $totalScore;
                     if ($decScore < 0) $decScore = 0;
                     Db::name('customer')->where(['openid' => $this->userInfo['openid']])->update(['score' => $decScore]);
                     #记录

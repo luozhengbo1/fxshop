@@ -61,9 +61,11 @@
             });
         }
         function dealData(data) {
-	console.log(data)
-	var html='';
+	//console.log(data)
+	        var html='';
             for(var i = 0; i < data.length; i++){
+                if(!activeFlag) continue;//已经结束的活动不显示
+
                 var skuData=data[i].skuData,totalNum=data[i].buy_num;
                 for(var n=0; n<skuData.length; n++){
                     totalNum +=skuData[n].store;
