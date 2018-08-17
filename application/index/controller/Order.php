@@ -16,6 +16,8 @@ Class Order extends Mustlogin
     {
         parent::__construct();
         $this->userInfo = Session::get('wx_user');
+      //  dump($this->userInfo);
+       // die;
         $this->view->assign('param', $this->request->param('param'));
     }
 
@@ -62,6 +64,7 @@ Class Order extends Mustlogin
                     $where = ['fy_order.openid' => $this->userInfo['openid'], 'fy_order.pay_status' => 1, 'fy_order_goods.is_send' => 2];
                 }
             }
+//                dump($where);
             $orderList = Db::name('order')
                 ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id')
                 ->join('fy_goods_attribute', 'fy_goods_attribute.id=fy_order_goods.sku_id')
@@ -69,6 +72,7 @@ Class Order extends Mustlogin
                 ->order('fy_order.create_time desc')
                 ->page($page, $size)
                 ->select();
+//                echo Db::name('order')->getLastSql();
             foreach ($orderList as $k => $v) {
 
                 $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'], true);
@@ -85,6 +89,7 @@ Class Order extends Mustlogin
         $this->view->assign('titleName', "确认订单");
         if ($this->request->isGet()) {
             $storeData = Session::get('storeData ' . $this->userInfo['openid']);
+//                dump($storeData);die;
             if (empty($storeData)) {
                 $this->redirect('index/order/index');
                 exit;
@@ -133,6 +138,9 @@ Class Order extends Mustlogin
                     }
 
                 }
+                // dump($tempLottery);
+                // dump($lottery);
+                // die;
                 $storeData[$k] = array_merge($storeData[$k], $tempGoods);
                 $dikou = [];
                 $youhui = [];
@@ -173,6 +181,7 @@ Class Order extends Mustlogin
                 ->join('fy_customer', 'fy_customer.id=ca.uid')
                 ->where(['fy_customer.openid' => $this->userInfo['openid'], 'ca.status' => 1])
                 ->find();
+            //dump($storeData);die;
             $this->view->assign('address', $address ? $address : '');
             $this->view->assign('storeData', $storeData);
             return $this->view->fetch();
@@ -231,10 +240,13 @@ Class Order extends Mustlogin
             }
             $totalScore = $this->totalScore($storeData);
             $user = Db::name('customer')->where(['openid' => $this->userInfo['openid']])->find();
+//                dump($totalScore);
             if ($totalScore > $user['score']) {
                 return ajax_return('', '你的积分不足', '500');
             }
+//                dump($res);die;
             Session::set('storeData ' . $this->userInfo['openid'], $storeData);
+//                dump(  Session::get('storeData '.$this->userInfo['openid']));die;
 //                $res = Db::name('order_confirm')->insert($data);
             if (!empty($storeData)) {
                 return ajax_return('', '提交成功', '200');
@@ -299,6 +311,7 @@ Class Order extends Mustlogin
             include_once 'WxPaySDK/WxPay.Config.php';
             #订单总价的计算
             $price = $this->calculateOrderValue($data);
+//                dump($price);die;
             if ($price == 0) {
                 $price = 0.01; #至少支付一分钱
             }
@@ -354,6 +367,7 @@ Class Order extends Mustlogin
             }
             $orderAll['son_id'] = join($sonId, ',');
             $orderGoods = [];
+//                dump($data);die;
             foreach ($data as $k => $v) {
                 $goodsData = Db::name('goods')->where(['id' => $v['goodsId']])->find();
                 $orderGoods[$k]['goods_id'] = $v['goodsId'];
@@ -395,6 +409,7 @@ Class Order extends Mustlogin
                 }
 
             }
+//                dump($orderGoods);die;
             #减去子订单对应的价格
             $lotteryTotalPrice = 0;
             foreach ($orderGoods as $k => $v) {
@@ -425,7 +440,7 @@ Class Order extends Mustlogin
             $input->SetOut_trade_no($orderId);
             $input->SetTotal_fee($orderAll['total_price'] * 100);
             $input->SetTime_start(date("YmdHis"));
-            $input->SetTime_expire(date("YmdHis", time() + 1800));
+            $input->SetTime_expire(date("YmdHis", time() + 60));
             $input->SetGoods_tag("");
             #微信支付回调变更
             $notifyUrl = $wxConfig->GetNotifyUrl("http://" . $_SERVER['HTTP_HOST'] . "/index.php/index/wechatpay/notify");
@@ -444,12 +459,14 @@ Class Order extends Mustlogin
                 #减少库存。
                 Db::name('goods_attribute')->where(['id' => $value['sku_id']])->setDec('store', $value['goods_num']);
             }
+//                dump($type);die;
             #将库存减少，半小时后不付款恢复 或者支付成功减库存
             if ($addId1 > 0 && $addId2 > 0 && $addId3 > 0) {
                 # 清空购物车^M
                 foreach ($data as $k => $v) {
                     if ($v['carId']) {
                         $res = Db::name('car')->where(['id' => $v['carId']])->delete();
+//                            dump($res);die;^M
                     }
                 }
                 if ($type == 0 || $type == 2) { #钱 和积分加钱
@@ -458,7 +475,7 @@ Class Order extends Mustlogin
                     die(json_encode($backData));
                 } else {
                     #将用户积分扣取，并将扣取记录记下来
-//                    $decScore = $user['score'] - $totalScore;
+                    $decScore = $user['score'] - $totalScore;
                     if ($decScore < 0) $decScore = 0;
                     Db::name('customer')->where(['openid' => $this->userInfo['openid']])->update(['score' => $decScore]);
                     #记录
@@ -467,9 +484,10 @@ Class Order extends Mustlogin
                     $scoreLog['source'] = 7;
                     $scoreLog['source_id'] = 0;
                     $scoreLog['uid'] = $user['id'];
-                    $scoreLog['score'] = -$totalScore;
+                    $scoreLog['score'] = -$decScore;
                     $scoreLog['time'] = time();
                     Db::name('score_log')->insert($scoreLog);
+//                        dump($orderRow);die;
                     foreach ($orderRow as $val) {
                         $res = Db::name('order')->where(['order_id' => $val['order_id']])->update(['pay_status' => 1, 'order_status' => 1, 'pay_time' => time()]);#将订单状态修改为1
                     }
@@ -504,6 +522,7 @@ Class Order extends Mustlogin
     {
         if ($this->request->isAjax()) {
             $data = $this->request->post();
+//                dump($data);die;
             if (!$data['id']) {
                 return ajax_return_error('缺少订单id');
             }
@@ -542,6 +561,7 @@ Class Order extends Mustlogin
                     'code' => 200,
                     'redirect' => url("pay/index") . "?js_api_parameters={$jsApiParameters}&id={$orderData['id']}");
             } else {
+//                    dump($orderData['total_price']*100);die;
                 include_once "WxPaySDK/WxPay.Api.php";
                 include_once "WxPaySDK/WxPay.JsApiPay.php";
                 include_once 'WxPaySDK/log.php';
@@ -558,7 +578,7 @@ Class Order extends Mustlogin
                 $input->SetOut_trade_no($orderData['order_id']);
                 $input->SetTotal_fee($orderData['total_price'] * 100);
                 $input->SetTime_start(date("YmdHis"));
-                $input->SetTime_expire(date("YmdHis", time() + 1800));
+                $input->SetTime_expire(date("YmdHis", time() + 60));
                 $input->SetGoods_tag("");
                 #微信支付回调变更
                 $notifyUrl = $wxConfig->GetNotifyUrl("http://" . $_SERVER['HTTP_HOST'] . "/index.php/index/wechatpay/notify1");
@@ -566,6 +586,7 @@ Class Order extends Mustlogin
                 $input->SetTrade_type("JSAPI");
                 $input->SetOpenid($this->userInfo['openid']);
                 $unifiedOrder = \WxPayApi::unifiedOrder($wxConfig, $input);
+//                    dump($unifiedOrder);die;
                 $jsApiParameters = $tools->GetJsApiParameters($unifiedOrder);
 
                 Db::name('order')
@@ -589,6 +610,7 @@ Class Order extends Mustlogin
     #统计积分合计
     public function totalScore($data)
     {
+//            dump($data);die;
         $pay = 0;
         foreach ($data as $val) {
             $goods = Db::name('goods')->where(['id' => $val['goodsId']])->find();
@@ -674,13 +696,11 @@ Class Order extends Mustlogin
                     ->where(['experience_start' => ['<=', $user['experience']], 'experience_end' => ['>=', $user['experience']]])
                     ->find();
 
-                //判断加了经验值之后是否升级
-                $total_money=Db::name('order')->field('total_price')->where('order_id',$data['order_id'])->find();
                 $grade_list = Db::name('customer_grade')->where('isdelete', 0)->select();
                 foreach ($grade_list as $v) {
                     //青铜会员不参与判断,送经验值前会员的经验值没达到下一等级，则判断送了经验值后是否升级了
                     if ($v['experience_start'] != 0 && $user['experience'] < $v['experience_start']) {
-                        $experience_middle = $user['experience'] + $total_money['total_price'];
+                        $experience_middle = $user['experience'] + $goods['return_score'];
                         if ($v['experience_start'] <= $experience_middle && $experience_middle < $v['experience_end']) {
                             $score = 0;
                             if ($v['experience_start'] == '2000') {
@@ -690,11 +710,9 @@ Class Order extends Mustlogin
                             } elseif ($v['experience_start'] == '30000') {
                                 $score = 1000;
                             }
-                            //赠送升级积分
                             Db::name('customer')->where('openid', $this->userInfo['openid'])->setInc('score', $score);
-                            //插入积分日志记录
                             Db::name('score_log')->insert([
-                                'uid' => $user['id'],
+                                'uid' => $this->userInfo['uid'],
                                 'openid' => $this->userInfo['openid'],
                                 'source_id' => 0,
                                 'source' => 4,
@@ -704,10 +722,10 @@ Class Order extends Mustlogin
                         }
                     }
                 }
+
                 #不同等级得到不同积分。
-                //获取订单总价
                 Db::name('customer')->where(['openid' => $this->userInfo['openid']])->update([
-                    'experience' => $user['experience'] + $total_money['total_price'],
+                    'experience' => $user['experience'] + $goods['return_score'],
                     'score' => $user['score'] + $goods['return_score'] * $grade['goods_score_rate'],
                 ]);
 //                    $is_first_upgrade=0;
@@ -822,6 +840,7 @@ Class Order extends Mustlogin
                 }
             }
         }
+//            dump($orderDetail);die;
         $this->view->assign('address', $address);
         $this->view->assign('orderDetail', $orderDetail);
 
@@ -918,6 +937,7 @@ Class Order extends Mustlogin
         $userAddress = Db::table('fy_customer_address')->where(
             ['uid' => $user['id'], 'status' => 1]
         )->find();
+        //dump($userAddress);
         $this->assign('userAddress', $userAddress);
 
         $this->view->assign('orderDetail', $orderDetail);
@@ -1040,6 +1060,8 @@ Class Order extends Mustlogin
         $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'], true);
         $this->view->assign('orderDetail', $orderGoods);
         $this->view->assign('userInfo', $this->userInfo);
+        //dump($this->userInfo);
+        //dump($orderGoods);
         return $this->view->fetch('orderTrack');
     }
 
@@ -1102,6 +1124,8 @@ Class Order extends Mustlogin
 
             #将这个订单修改为已评价
 //                Db::name('order_')->where(['order_id'=>$data['order_id']])->update(['order_status'=>8]);
+            //echo Db::name('order_goods')->getLastSql();
+            // dump($res);
             if ($res && $res1) {
                 return ajax_return('', '确认成功', '200');
             } else {
