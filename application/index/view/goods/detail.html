@@ -410,8 +410,8 @@
                 console.log(data)
                 skuZhuhe= result;
                 //商品添加有规格属性的时候
-                console.log(result && result>0 && result.attribute_name)
-                if(result && result>0 && result.attribute_name){
+                console.log(result && result.length>0 && result[0].attribute_name)
+                if(result && result.length>0 && result[0].attribute_name){
                     choseFirst()//获取到组合sku后选中第一个
                 }else{
                     //直接显示商品属性
