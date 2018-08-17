@@ -27,6 +27,7 @@ Class Lottery extends Mustlogin
                     // 'fy_lottery.grant_start_date' => ['<', $time],
                     // 'fy_lottery.grant_end_date' => ['>', $time],
                     'fy_lottery.status' => 1,
+                    'fy_lottery.use_type' => 0,
                 ];
 
                 if ($goodsClassId != 'all') {
@@ -53,6 +54,7 @@ Class Lottery extends Mustlogin
                         //'grant_end_date' => ['>', $time],
                         'status' => 1,
                         'goods_id' => 'all',
+                        'use_type' => 0,
                     ])
                     ->page($page, $size)
                     ->select();
