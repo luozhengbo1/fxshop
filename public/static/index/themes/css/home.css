@@ -3157,6 +3157,7 @@ a {
 	width: 100%;
 	background: white;
 	border-top: 1px solid #ccc7c7;
+    z-index: 20;
 }
 .footer-nav li{
 	float: left;
