@@ -5,6 +5,7 @@ $username = 'lzb';
 $password = '123456';
 $dbname = 'tpadmin';
 //include_once 'dbConfig.php';
+
 $conn = mysqli_connect($servername, $username, $password, $dbname) or die("连接失败：$conn->connect_error");
 $expre =time()-60;
 $query = "SELECT id,order_id,create_time FROM fy_order WHERE pay_status=0 and order_status=0";
