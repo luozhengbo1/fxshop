@@ -298,4 +298,40 @@ Array
     [return_msg] => OK
     [sign] => 2C105F19643BEB1B4B1328D0B595AC305C018BBD54D1FE99468F6CCE5EF10353
 )
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => NOTENOUGH
+    [err_code_des] => 基本账户余额不足，请充值后重新发起
+    [mch_id] => 1441217402
+    [nonce_str] => ZKHUyQFBge1sWrfu
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 18607F3AB026EF6ACC47DE3442B11644A9991ECF42F057CBDC503E9DCE3F944E
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => NOTENOUGH
+    [err_code_des] => 基本账户余额不足，请充值后重新发起
+    [mch_id] => 1441217402
+    [nonce_str] => 7dOmBDE7MiCVpJzE
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 8C549C918D5F590A64FDEDCA0C71E438CFF6CB8166436891F3767ADB9CFB77E1
+)
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => NOTENOUGH
+    [err_code_des] => 基本账户余额不足，请充值后重新发起
+    [mch_id] => 1441217402
+    [nonce_str] => npDjG7kbvpvLe4i7
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 1A4E0D511BC70BB839ECC1D7879352A4DA42B6D31EDCA1B73AC1BF39B7D74EAA
+)
 

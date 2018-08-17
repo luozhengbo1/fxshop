@@ -403,6 +403,8 @@ Class Order extends Mustlogin
                     $orderGoods[$k]['is_lottery'] = 1;
                     $lottery[$k] = Db::name('lottery')->where(['id' => $v['youhuiId']])->find();
                     $orderGoods[$k]['lottery_detail'] = json_encode($lottery[$k]);
+//                    dump($lottery[$k]);
+//                    dump($orderGoods);die;
                     #将去订单的价格
                 } else {
                     $orderGoods[$k]['is_lottery'] = 0;
@@ -832,7 +834,7 @@ Class Order extends Mustlogin
             ->select();
         $address = json_decode($orderDetail[0]['address_detail'], true);
         if (!empty($orderDetail) && is_array($orderDetail)) {
-            foreach ($orderDetail as $k => $v) {
+            foreach ($orderDetail as $k => &$v) {
                 $orderDetail[$k]['goods_detail'] = json_decode($orderDetail[$k]['goods_detail'], true);
                 $orderDetail[$k]['lottery_detail'] = json_decode($orderDetail[$k]['lottery_detail'], true);
                 #服务信息
@@ -843,7 +845,6 @@ Class Order extends Mustlogin
                 }
             }
         }
-//            dump($orderDetail);die;
         $this->view->assign('address', $address);
         $this->view->assign('orderDetail', $orderDetail);
 
