@@ -74,9 +74,13 @@ class AdminUser extends Controller
             if (!$user_id) {
                 throw new Exception("缺少必要参数");
             }
-            // 读取用户列表
-            $list_customer = Db::name("customer")->field('id,nickname,username')->select();
-
+            // 读取未被其他商户绑定的用户列表
+            $list=Db::name("admin_user_customer")->field('customer_id')->where("user_id", 'not in',$user_id)->select();
+            foreach ($list as $k=>$v) {
+                $list[$k]=$v['customer_id'];
+            }
+            $list_customer_id=implode(',',$list);
+            $list_customer = Db::name("customer")->field('id,nickname,username')->where('id','not in',$list_customer_id)->select();
             // 已授权用户
             $list_user_customer = Db::name("admin_user_customer")->where("user_id", $user_id)->select();
             $checks = filter_value($list_user_customer, "customer_id", true);
