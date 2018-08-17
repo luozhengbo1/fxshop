@@ -44,7 +44,7 @@
 
 <!--轮播图-->
 <a  name="good-detail-content"></a>
-<div class="swiper-container header-banner bg_black">
+<div class="swiper-container header-banner" style="background-color: grey">
     <ul class="swiper-wrapper" style="min-height: 2rem" >
         {volist name="goods['pic']" id="vo"}
         <li class="swiper-slide">
@@ -326,8 +326,13 @@
         skuId:'',
         val:'',
     }
-
+    //请求状态 true请求完成
+    var requestStatus = {
+        sku:false,
+        lottery:false,
+    }
     $(function () {
+        loadShadow();
         navTab();
         eventDeal( );//页面点击事件处理
         new countCalculate(buyNumShow);//数字计算
@@ -346,6 +351,19 @@
         imageLazy();
         goodsLottery();
         $('#goodDetail').append(tagParse("{$goods['detail']??''}"));
+        var shadowTimer = setInterval(function () {
+            var close = true;
+            for(var key in requestStatus){
+                if(requestStatus[key] ==false){
+                    close = false;
+                    break;
+                }
+            }
+            if(close) {
+                closeLoadShadow();
+                clearInterval(shadowTimer);
+            }
+        },300)
 
     })
     //获取商品评论
@@ -373,6 +391,7 @@
             dataType:'json',
             success: function(res){
                 dealLottery(res);
+                requestStatus.lottery = true;
             }
         })
     }
@@ -380,7 +399,6 @@
     //获取sku组合值
     function getSku(id) {
         //var loading =  layerLoad2();
-        loadShadow();
         $.ajax({
             url:url.getSku,
             type:'post',
@@ -392,7 +410,7 @@
                 skuZhuhe= result;
                 choseFirst()//获取到组合sku后选中第一个
                // layer.close(loading);
-                closeLoadShadow();
+                requestStatus.sku=true;
             }
         })
     }

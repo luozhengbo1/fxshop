@@ -185,7 +185,7 @@
             Db::name('search')->insert($data);
             $searchId = Db::name('search')->getLastInsID();
             if( empty($goodsList) ){
-                return ajax_return_error('什么也没有搜到','500','');
+                return ajax_return_error('什么也没有搜到','200','');
             }else{
                 Db::name('search')
                     ->where(['id'=>$searchId])

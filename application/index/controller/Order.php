@@ -311,7 +311,6 @@ Class Order extends Mustlogin
             include_once 'WxPaySDK/WxPay.Config.php';
             #订单总价的计算
             $price = $this->calculateOrderValue($data);
-//                dump($price);die;
             if ($price == 0) {
                 $price = 0.01; #至少支付一分钱
             }

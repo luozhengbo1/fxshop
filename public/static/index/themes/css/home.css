@@ -4713,7 +4713,7 @@ a {
 .gift-wrap .tax-box{
 	background-color: rgba(18, 78, 218, 0.94)!important;
 }
-.tax-box .tax-split:after, .tax-box .tax-split:before{
+.gift-wrap .tax-box .tax-split:after, .gift-wrap .tax-box .tax-split:before{
 	background-color: #581ce4!important;
 }
 

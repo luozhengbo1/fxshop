@@ -106,15 +106,16 @@
                 $status   = $vo['order_status'];
                 {/php}
                 <div class="tr goodsBtnShow"
-                     data-order_status="{$status}",
-                     data-show_area="{$vo['goods_detail']['show_area']}",
-                     data-is_send="{$vo['is_send']}",
-                     data-order_id="{$orderDetail[0]['order_id']}",
-                     data-goods_id="{$vo['goods_id']}",
-                     data-sku_id="{$vo['sku_id']}",
-                     data-logistics_name="{$vo['logistics_name']}",
-                     data-logistics_number="{$vo['logistics_number']}",
+                     data-order_status="{$status}"
+                     data-show_area="{$vo['goods_detail']['show_area']}"
+                     data-is_send="{$vo['is_send']}"
+                     data-order_id="{$orderDetail[0]['order_id']}"
+                     data-goods_id="{$vo['goods_id']}"
+                     data-sku_id="{$vo['sku_id']}"
+                     data-logistics_name="{$vo['logistics_name']}"
+                     data-logistics_number="{$vo['logistics_number']}"
                      data-after_sale_is="{$vo['after_sale_is']}"
+                     data-settlement_type="{$vo['goods_detail']['settlement_type']}",
                 >
 
                 </div>
