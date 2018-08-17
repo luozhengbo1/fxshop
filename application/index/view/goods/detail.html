@@ -203,7 +203,7 @@
             <i class="close" id="popupClose"></i>
         </div>
         <div class="body">
-            <div id="popupSkuArea" style="min-height: 1rem" >
+            <div id="popupSkuArea"  >
                 {foreach name="$arr" item="vo" key="k"}
                 {php} $skuName= explode('_',$k); {/php}
                 <div class="sku_kind" data-id="{$skuName[0]}" value="{$skuName[1]}" >{$skuName[1]}</div>
@@ -220,7 +220,7 @@
                 <div class="layui-btn-group fr count-wrap ">
                     <button class="layui-btn layui-btn-primary layui-btn-sm fr24 minus">-</button>
                     <div class="layui-btn layui-btn-primary layui-btn-sm">
-                        <input class="sumInput tc" type="text" data-store ="1" value="1" id="buyNum"  onkeyup="buyNumShow();">
+                        <input class="sumInput tc lh30" type="text" data-store ="1" value="1" id="buyNum"  onkeyup="buyNumShow();">
                     </div>
                     <button class="layui-btn layui-btn-primary layui-btn-sm fr24 add">+</button>
                 </div>
@@ -405,14 +405,32 @@
             data:{id:id},
             dataType:'json',
             success: function(data){
+               // debugger;
                 var code = data.code,result = data.data;
                 console.log(data)
                 skuZhuhe= result;
-                choseFirst()//获取到组合sku后选中第一个
+                //商品添加有规格属性的时候
+                console.log(result && result>0 && result.attribute_name)
+                if(result && result>0 && result.attribute_name){
+                    choseFirst()//获取到组合sku后选中第一个
+                }else{
+                    //直接显示商品属性
+                    showGoodsAttr();
+                }
                // layer.close(loading);
                 requestStatus.sku=true;
             }
         })
+    }
+    function showGoodsAttr() {
+        var item = skuZhuhe[0];
+        $('#goodPrice').html(priceScoreShow($('#goodPriceTitle').data('type'),item.price,item.point_score));
+        $('#goodChoseSku').empty().append('<span>已选</span><i class="ml10" id="showBuyNum"></i>个');
+        $('#sulfStore').html('剩余数量:'+item.store);
+        $('#buyNum').attr('data-store',item.store);//item.pointPrice  item.id
+        saveData.skuId = item.id;
+        saveData.val = '';
+        buyNumShow();
     }
     //选择sku属性值
     function  choseSku(_this) {
@@ -476,6 +494,7 @@
         }
 
     }
+
     //显示购买数量 根据
     function buyNumShow(){
         var buyNum = $('#buyNum').val();

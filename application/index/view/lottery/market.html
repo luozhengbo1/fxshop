@@ -1,8 +1,10 @@
 {include file="Public/header-resource"}
 <body class="title-top footer-boottom">
 {include file="Public/header-title"}
+<link rel="stylesheet" type="text/css" type="text/css" href="__STATIC__/index/plugins/swiper3.4/css/swiper.min.css">
+<script type="text/javascript"  src="__STATIC__/index/plugins/swiper3.4/js/swiper.js"></script>
 <style>
-    .voucher-market-catalogs li{
+    .voucher-market-catalogs li span{
         line-height: 40px;
         height: 40px;
         width: 40px;
@@ -13,6 +15,11 @@
         color: white;
         text-align: center;
         margin-bottom: 4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
     }
 </style>
 <div class="nav-list-tab clear" style="padding: 10px 5px">
@@ -26,10 +33,12 @@
 <section class="mt40">
 
     <div><img  width="100%" src="__STATIC__/index/images/voucher.png"></div>
-    <ul class="voucher-market-catalogs clear" id="voucherClass">
-       <!-- <li class="w20p fl tc"><img class="w80p" src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg"></li>
-        -->
-    </ul>
+    <div class="swiper-container ">
+        <ul class="voucher-market-catalogs swiper-wrapper" id="voucherClass">
+            <!-- <li class="w20p fl tc"><img class="w80p" src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg"></li>
+             -->
+        </ul>
+    </div>
     <div id="dataListWrap">
             <ul id="dataList" class="voucher-market-list">
            <!-- <li>
@@ -160,19 +169,28 @@
                // html +=' <li  data-classid="all"   >全部</li>';
                 if(code=='200'){
                     for(var i = 0; i < data.length; i++){
-                        //html +=' <li class="w20p fl tc" data-classid="'+data[i].id+'"  ><img class="w80p" src="'+data[i].pic+'"></li>';
-                        html +=' <li class="tc f10" data-classid="'+data[i].id+'"   data-type="'+constant.lottery.goods+'" >'+data[i].name+'</li>';
+                        html +=' <li class="swiper-slide" data-classid="'+data[i].id+'"   data-type="'+constant.lottery.goods+'" ><span>'+data[i].name+'</span></li>';
                     }
-                    html +=' <li  data-classid="all" data-type="'+constant.lottery.all+'"   >通用券</li>';
+                    html +=' <li  class="swiper-slide" data-classid="all f10" data-type="'+constant.lottery.all+'" ><span class="tc f10 ">通用券</span></li>';
                     $('#voucherClass').empty().append(html);
                     var $targetLi = $('#voucherClass li');
                     tabSwitch($targetLi,goodsWithLottery);
                     var firstLi = $targetLi[0];
                     firstLi.click();
+                    sortSwiper();
                 }
 
             }
         })
+    }
+    function sortSwiper(){
+        var swiper = new Swiper('.swiper-container', {
+            pagination: '.swiper-pagination',
+            slidesPerView: 6,
+            slidesPerColumn: 2,
+            paginationClickable: true,
+            spaceBetween: 2
+        });
     }
     function getLottery(id,_this) {
         loadShadow();
@@ -194,6 +212,7 @@
             }
         })
     }
+
 </script>
 </body>
 </html>

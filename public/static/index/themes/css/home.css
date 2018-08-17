@@ -3157,6 +3157,7 @@ a {
 	width: 100%;
 	background: white;
 	border-top: 1px solid #ccc7c7;
+    z-index: 20;
 }
 .footer-nav li{
 	float: left;
@@ -4236,7 +4237,7 @@ a {
 	padding: 8px 10px;
 	background: white;
 }
-.voucher-market-catalogs li.active{
+.voucher-market-catalogs li.active span{
 	background-color: #de181b;
 	border-radius: 50%;
 }
