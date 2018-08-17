@@ -16,8 +16,8 @@ Class Order extends Mustlogin
     {
         parent::__construct();
         $this->userInfo = Session::get('wx_user');
-        dump($this->userInfo);
-        die;
+      //  dump($this->userInfo);
+       // die;
         $this->view->assign('param', $this->request->param('param'));
     }
 
@@ -440,7 +440,7 @@ Class Order extends Mustlogin
             $input->SetOut_trade_no($orderId);
             $input->SetTotal_fee($orderAll['total_price'] * 100);
             $input->SetTime_start(date("YmdHis"));
-            $input->SetTime_expire(date("YmdHis", time() + 1800));
+            $input->SetTime_expire(date("YmdHis", time() + 60));
             $input->SetGoods_tag("");
             #微信支付回调变更
             $notifyUrl = $wxConfig->GetNotifyUrl("http://" . $_SERVER['HTTP_HOST'] . "/index.php/index/wechatpay/notify");
@@ -578,7 +578,7 @@ Class Order extends Mustlogin
                 $input->SetOut_trade_no($orderData['order_id']);
                 $input->SetTotal_fee($orderData['total_price'] * 100);
                 $input->SetTime_start(date("YmdHis"));
-                $input->SetTime_expire(date("YmdHis", time() + 1800));
+                $input->SetTime_expire(date("YmdHis", time() + 60));
                 $input->SetGoods_tag("");
                 #微信支付回调变更
                 $notifyUrl = $wxConfig->GetNotifyUrl("http://" . $_SERVER['HTTP_HOST'] . "/index.php/index/wechatpay/notify1");

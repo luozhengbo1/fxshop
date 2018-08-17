@@ -57,6 +57,7 @@ class Index extends Mustlogin
                         'lottery_name'=>$lottery['name'],
                         'lottery_num'=>1,
                         'status'=>1,
+                        'openid'=>$this->userInfo['openid'],
                         'lottery_info'=>json_encode($lottery),];
                     $lotteryList[$k]['lotteryLog'] =  $insert ;
                     Db::name('lottery_log')->insert($insert);
