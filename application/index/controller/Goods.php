@@ -185,7 +185,7 @@
             Db::name('search')->insert($data);
             $searchId = Db::name('search')->getLastInsID();
             if( empty($goodsList) ){
-                return ajax_return_error('什么也没有搜到','200','');
+                return ajax_return_error('什么也没有搜到','500','');
             }else{
                 Db::name('search')
                     ->where(['id'=>$searchId])
@@ -365,6 +365,7 @@
                 'isdelete'=>'0',
                 // 'grant_start_date' =>['<', $time],
                 'type'=>['in', $arrType],
+                'use_type'=>0,
                 // 'grant_end_date' =>['>', $time],
             ])->select();
 //            echo Db::name('lottery')->getLastSql();

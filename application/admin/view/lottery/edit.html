@@ -43,12 +43,24 @@
         </div>
         </div>
         <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>使用场合：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <div class="select-box"  id="">
+                    <select name="use_type"  class="select" datatype="*" nullmsg="使用场合" errormsg="使用场合">
+                        <option value="0"  {if condition="isset($vo['expire_type']) &&  $vo['expire_type'] eq 0"}selected{/if}>商品</option>
+                        <option value="1"  {if condition="isset($vo['expire_type']) &&  $vo['expire_type'] eq 0"}selected{/if}>礼包</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-3 col-sm-3"></div>
+        </div>
+        <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>有效期类型：</label>
             <div class="formControls col-xs-6 col-sm-6">
                 <div class="select-box"  id="">
                     <select name="expire_type" onchange="expireTime(this);"  class="select"  id="expire_time" datatype="*" nullmsg="有效期类型" errormsg="有效期类型">
-                        <option value="0">日期时间设置</option>
-                        <option value="1" >天数设置</option>
+                        <option value="0" {if condition="isset($vo['expire_type']) &&  $vo['expire_type'] eq 0"}selected{/if}>日期时间设置</option>
+                        <option value="1"  {if condition="isset($vo['expire_type']) &&  $vo['expire_type'] eq 1"}selected{/if}>天数设置</option>
                     </select>
                 </div>
             </div>

@@ -125,9 +125,12 @@ Class Order extends Mustlogin
                     ->select();
                 foreach ($tempLottery as $key => $lot) {
                     #expire_type 0 表示有效期是按日期设置 1 按天数设置
+//                    if ($lot['expire_type'] == 0 &&
+//                        $lot['grant_start_date'] < $time &&
+//                        $lot['grant_end_date'] > $time) {
                     if ($lot['expire_type'] == 0 &&
-                        $lot['grant_start_date'] < $time &&
-                        $lot['grant_end_date'] > $time) {
+                        $lot['expire_start_date'] < $time &&
+                        $lot['expire_end_date'] > $time) {
                         array_push($lottery, $lot);
                     } else if ($lot['expire_type'] == 1) {
                         $expireTime = $lot['addtime'] + ($lot['expire_time'] * 24 * 60 * 60);
@@ -138,23 +141,15 @@ Class Order extends Mustlogin
                     }
 
                 }
-                // dump($tempLottery);
-                // dump($lottery);
-                // die;
                 $storeData[$k] = array_merge($storeData[$k], $tempGoods);
-                $dikou = [];
-                $youhui = [];
-                $daijin = [];
-                $mianyou = [];
+                $dikou = [];$youhui = [];$daijin = [];$mianyou = [];
                 foreach ($lottery as $key => $lot) {
                     $coupon_type = $lot['type'];
                     switch ($coupon_type) {
-                        /*  case 1://抵扣券
-                              array_push($dikou,$lot);
-                              break;*/
+
                         case  2://优惠券
                             $totalPrice = ($storeData[$k]['num'] * $storeData[$k]['price1']);
-                            if ($totalPrice > $lot['coupon_real_money']) {
+                            if ($totalPrice >= $lot['coupon_real_money']) {
                                 array_push($youhui, $lot);
                             }
                             break;
@@ -169,6 +164,7 @@ Class Order extends Mustlogin
                             break;
                     }
                 }
+//                dump($youhui);
                 $storeData[$k]['dikou'] = $dikou;
                 $storeData[$k]['youhui'] = $youhui;
                 $storeData[$k]['daijin'] = $daijin;
@@ -267,6 +263,7 @@ Class Order extends Mustlogin
             }
             $totalType = 0;
             $time = time();
+            $totalLotteryAll = 0;
             foreach ($data as $k => $v) {
                 $goodsAttribute = Db::name('goods_attribute')->where(['id' => $v['skuId']])->find();
                 $goods = Db::name('goods')->where(['id' => $v['goodsId']])->find();
@@ -280,17 +277,23 @@ Class Order extends Mustlogin
                     #查询使用优惠券是否过期
                     $checkLotteryLog = Db::name('lottery_log')->field('addtime,lottery_info')->where(['id' => $v['youhui_lottery_log_id']])->find();
                     $checkLotteryLog['lottery_info'] = json_decode($checkLotteryLog['lottery_info'], true);
+                    if( $checkLotteryLog['lottery_info']['goods_id']=='all'){
+                        $totalLotteryAll+=1;
+                    }
                     if ($checkLotteryLog['lottery_info']['expire_type'] == 1) {
                         if ($time > ($checkLotteryLog['lottery_info']['expire_time'] * 60 * 24 * 60 + $checkLotteryLog['addtime'])) {
-                            return ajax_return('', '使用的券已经过期', '500');
+                            return ajax_return('', '使用的券不在使用期限内', '500');
                         }
                     } else {
                         if ($time < $checkLotteryLog['lottery_info']['expire_start_date'] || $time > $checkLotteryLog['lottery_info']['expire_end_date']) {
-                            return ajax_return('', '使用的券已经过期', '500');
+                            return ajax_return('', '使用的券不在使用期限内', '500');
                         }
                     }
                 }
 
+            }
+            if($totalLotteryAll>1){
+                return ajax_return('', '一个订单只能使用一张通用优惠券', '500');
             }
             if (count($data) == $totalType) {#积分
                 $type = 1;
@@ -311,6 +314,7 @@ Class Order extends Mustlogin
             include_once 'WxPaySDK/WxPay.Config.php';
             #订单总价的计算
             $price = $this->calculateOrderValue($data);
+//                dump($price);die;
             if ($price == 0) {
                 $price = 0.01; #至少支付一分钱
             }
