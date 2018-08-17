@@ -138,23 +138,15 @@ Class Order extends Mustlogin
                     }
 
                 }
-                // dump($tempLottery);
-                // dump($lottery);
-                // die;
                 $storeData[$k] = array_merge($storeData[$k], $tempGoods);
-                $dikou = [];
-                $youhui = [];
-                $daijin = [];
-                $mianyou = [];
+                $dikou = [];$youhui = [];$daijin = [];$mianyou = [];
                 foreach ($lottery as $key => $lot) {
                     $coupon_type = $lot['type'];
                     switch ($coupon_type) {
-                        /*  case 1://抵扣券
-                              array_push($dikou,$lot);
-                              break;*/
+
                         case  2://优惠券
                             $totalPrice = ($storeData[$k]['num'] * $storeData[$k]['price1']);
-                            if ($totalPrice > $lot['coupon_real_money']) {
+                            if ($totalPrice >= $lot['coupon_real_money']) {
                                 array_push($youhui, $lot);
                             }
                             break;
@@ -169,6 +161,7 @@ Class Order extends Mustlogin
                             break;
                     }
                 }
+//                dump($youhui);
                 $storeData[$k]['dikou'] = $dikou;
                 $storeData[$k]['youhui'] = $youhui;
                 $storeData[$k]['daijin'] = $daijin;
@@ -311,6 +304,7 @@ Class Order extends Mustlogin
             include_once 'WxPaySDK/WxPay.Config.php';
             #订单总价的计算
             $price = $this->calculateOrderValue($data);
+//                dump($price);die;
             if ($price == 0) {
                 $price = 0.01; #至少支付一分钱
             }
