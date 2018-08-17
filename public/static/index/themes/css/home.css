@@ -4236,7 +4236,7 @@ a {
 	padding: 8px 10px;
 	background: white;
 }
-.voucher-market-catalogs li.active{
+.voucher-market-catalogs li.active span{
 	background-color: #de181b;
 	border-radius: 50%;
 }
