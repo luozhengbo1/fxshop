@@ -37,21 +37,21 @@
             $where = [];
             $where=['status'=>1,'isdelete'=>'0'];
             if($show_area!="all"){
-
                 $where['show_area'] =$show_area;
             }
             $goodsList = Db::name('goods')
+                ->field('id,name,buy_num,original_price,basic_price,main_image,basic_price,price_real,settlement_type,score')
                 ->where($where)
                 ->order('orderby desc ,create_time DESC')
                 ->page($page,$size)
                 ->select();
-            foreach ($goodsList as $k=>$v){
-                $goods_attribute = Db::name('goods_attribute')
-                    ->where(['goods_id'=>$v['id']])
-                    ->page($page,$size)
-                    ->select();
-                $goodsList[$k]['skuData'] =$goods_attribute;
-            }
+//            foreach ($goodsList as $k=>$v){
+//                $goods_attribute = Db::name('goods_attribute')
+//                    ->where(['goods_id'=>$v['id']])
+//                    ->page($page,$size)
+//                    ->select();
+//                $goodsList[$k]['skuData'] =$goods_attribute;
+//            }
             return ajax_return($goodsList,'ok','200');
         }
         #获取这个商品的详情
@@ -105,7 +105,6 @@
                 $goods['service'] = json_decode($goods['service'],true);
             }
             #查询该商品是否有优惠券在这里显示的一定是商品优惠券
-
           //  dump($goods);
             $this->view->assign('goods',$goods);
             $this->view->assign('skuData',$skuData);

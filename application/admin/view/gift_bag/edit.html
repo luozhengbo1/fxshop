@@ -1,7 +1,7 @@
 {extend name="template/base" /}
 {block name="content"}
 <div class="page-container">
-    <form class="form form-horizontal" id="form" method="post" action="{:\\think\\Request::instance()->baseUrl()}">
+    <form class="form form-horizontal" id="form"  style="margin-top: 50px;" method="post" action="{:\\think\\Request::instance()->baseUrl()}">
         <input type="hidden" name="id" value="{$vo.id ?? ''}">
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3">礼包名称：</label>

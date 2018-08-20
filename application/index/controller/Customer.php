@@ -36,7 +36,8 @@ class Customer extends Mustlogin
         $count_lottery = Db::name('lottery_log')
             ->alias('log')
             ->join('lottery lott', 'log.lottery_id=lott.id')
-            ->where(['log.uid' => $user_data['id'], 'log.lottery_num' => ['>', 0], 'lott.isdelete' => 0])
+//            ->where(['log.uid' => $user_data['id'], 'log.lottery_num' => ['>', 0], 'lott.isdelete' => 0])
+            ->where(['log.openid' => $user_data['openid'], 'log.lottery_num' => ['>', 0], 'lott.isdelete' => 0])
             ->count();
         $this->assign('count_lottery', $count_lottery);
 
