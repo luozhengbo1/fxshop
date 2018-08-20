@@ -626,7 +626,7 @@ body{
     background-repeat: no-repeat;
 }
 .layui-progress {
-    background-color: #696767!important;
+  /*  background-color: #696767!important;*/
     color: white;
 }
 .param_table {
