@@ -1,12 +1,16 @@
 {include file="Public/header-resource"}
 <body class="title-top footer-boottom">
+<style>
+
+    .sgreen{color: #15b25b}
+</style>
 {include file="Public/header-title"}
 <section class="mt5">
     <div class="aui-product-set">
         <a href="{:\\think\\Url::build(\'Address/index\')}" class="aui-address-cell" >
             <div class="aui-address-cell-bd">我的收货地址</div>
             <div class="right-side-arrow  {if condition='$userAddress.id neq null' /}active{/if}">
-                <i class="address-show {if condition='$userAddress.id neq null' /}sgreen{/if}">{$userAddress.address ??'设置默认地址'}</i>
+                <i class="address-show address-show {if condition='$userAddress.id neq null' /}sgreen{/if}">{$userAddress.address ??'设置默认地址'}</i>
                 <i class="iconfont icon-right-arrow"></i>
             </div>
         </a>

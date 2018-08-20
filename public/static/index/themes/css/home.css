@@ -4719,10 +4719,28 @@ a {
 }
 
 
+span.layui-progress-text {
+	background-image: url(../../images/bfbbg.png);
+	display: inline-block;
+	width: 33px;
+	height: 16px;
+	text-align: center;
+	line-height: 16px;
+	color: white;
+	font-size: 11px;
+}
 
 
-
-
+.address-show{
+	color: #333;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	width: 100px;
+	float: left;
+}
 
 
 
