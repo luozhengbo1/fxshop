@@ -9,6 +9,5 @@ class Lottery extends Validate
         "name|奖券名称" => "require",
         "type|奖券类型" => "require",
         "number|奖券数量" => "require",
-        "goods_id|关联商品id" => "require",
     ];
 }
