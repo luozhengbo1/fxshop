@@ -5,17 +5,12 @@ use think\Db;
 
 Class Notice extends Mustlogin
 {
-    protected  $model;
-    public function  __construct()
-    {
-        parent::__construct();
-        $this->model = Db::name('notice');
-    }
 
     #获取所哟普的公告信息
     public  function  getNotice($page="1",$size="10")
     {
-        $list = $this->model
+        $list = Db::name('notice')
+            ->field('id,title,create_time,update_time')
             ->where(['status'=>'1','isdelete'=>'0'])
             ->order('orderby DESC, create_time desc')
             ->page($page,$size)
@@ -34,15 +29,6 @@ Class Notice extends Mustlogin
     public function index()
     {
         $this->assign('titleName', "商城公告");
-        $list = $this->model
-            ->where(['status'=>'1','isdelete'=>'0'])
-            ->order('orderby DESC, create_time desc')
-            ->select();
-        foreach ($list as $k=>$v){
-            $list[$k]['create_time'] = date('Y-m-d H:i:s',$v['create_time']);
-            $list[$k]['update_time'] = date('Y-m-d H:i:s',$v['update_time']);
-        }
-       $this->assign('list',$list);
         return  $this->view->fetch();
 
     }
@@ -54,7 +40,10 @@ Class Notice extends Mustlogin
         if(!$id){
             return $this->error('缺少参数id');
         }
-        $notice = $this->model->where(['id'=>$id,'status'=>1,'isdelete'=>'0'])->find();
+        $notice =  Db::name('notice')
+            ->field('id,title,create_time,update_time,desc,detail,status,orderby,isdelete')
+            ->where(['id'=>$id,'status'=>1,'isdelete'=>'0'])
+            ->find();
         if( !empty($notice) ){
             $notice['create_time'] = date('Y-m-d H:i:s',$notice['create_time']);
             $notice['update_time'] = date('Y-m-d H:i:s',$notice['update_time']);

@@ -2,7 +2,7 @@
 {block name="content"}
 <link rel="stylesheet" href="__STATIC__/css/layui/css/layui.css" media="all" />
 <div class="page-container">
-    <form class="form form-horizontal" id="form" method="post" action="{:\\think\\Request::instance()->baseUrl()}">
+    <form class="form form-horizontal" id="form" method="post"  style="margin-top: 50px;" action="{:\\think\\Request::instance()->baseUrl()}">
         <input type="hidden" name="id" value="{$vo.id ?? ''}">
         <div class="row cl">
             <label class="form-label col-xs-3 col-sm-3"><span class="c-red">*</span>奖券名称：</label>

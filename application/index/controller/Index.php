@@ -12,10 +12,7 @@ class Index extends Mustlogin
 {
     public function index()
     {
-
-
         $this->userInfo['uid'] = isset($this->userInfo['id'])?$this->userInfo['id']:'';
-
         Hook::exec('app\\index\\behavior\\LoginLog', 'run',  $this->userInfo);
         #获取轮播图数据
         $sildeShow = new  Sildeshow($num = 6);
@@ -28,7 +25,6 @@ class Index extends Mustlogin
         $this->view->assign('titleName', "泛亚商城");
         return $this->fetch();
     }
-
 
     public function message($page = '1', $size = '4')
     {
@@ -66,8 +62,6 @@ class Index extends Mustlogin
         }
         $giftBagLog = Db::name('gift_bag_log')->where(['openid'=> $this->userInfo['openid'],'gift_bag_id'=>$gift_bag_id])->update(['status'=>1]);
         return $lotteryList;
-
-
     }
     public function birthdayCustomerGiftBag($gift_bag_id=2)
     {
@@ -79,12 +73,6 @@ class Index extends Mustlogin
             }
         }
         #不同等级得到不同积分。
-
-    }
-    public function demo()
-    {
-        $this->assign('titleName', "demo");
-        return $this->view->fetch();
     }
 
 }

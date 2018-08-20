@@ -78,7 +78,9 @@ class Lottery extends Controller
                 $goods = Db::name('goods')->field('id,name')->where('id',$data['goods_id'])->find();
                 $data['goods_name'] = $goods['name'];
             }
-            $data['user_id']= $data['user_id']?$data['user_id']:$_SESSION['think']['auth_id'];
+
+            $data['user_id']= isset($data['user_id'])?$data['user_id']:$_SESSION['think']['auth_id'];
+//            dump($data);die;
             unset($data['id']);
             #剩余量
             $data['surplus_number']=$data['number'];
@@ -142,7 +144,7 @@ class Lottery extends Controller
             }
 
             $id = $data['id'];
-            $data['user_id']= $data['user_id']?$data['user_id']:$_SESSION['think']['auth_id'];
+            $data['user_id']= isset($data['user_id'])?$data['user_id']:$_SESSION['think']['auth_id'];
             $data['surplus_number']= $data['number'];
             $goods = Db::name('goods')->field('name')->where(['id'=>$data['goods_id']])->find();
             $data['goods_name'] =$goods['name'];
