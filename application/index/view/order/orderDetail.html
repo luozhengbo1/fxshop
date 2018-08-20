@@ -156,13 +156,13 @@
             html=0,
             stype = $ele.data('stype');
         if(freetype==constant.freeType.noFree && postage>0){
-            totalPrice += postage;//加上邮费
+            totalPrice += postage* num;//加上邮费
         }
         switch(stype){
             case settlement.money:
                 totalPrice += parseInt(num)*parseFloat(price);
-                // html ='￥'+totalPrice;
-                html ='￥'+"{$orderDetail[0]['total_price']}";
+                html ='￥'+totalPrice;
+                // html ='￥'+"{$orderDetail[0]['total_price']}";
                 break;
             case settlement.score:
                 totalPoint +=(parseInt(num)*parseFloat(pointScore));
