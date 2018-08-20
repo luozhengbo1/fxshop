@@ -181,7 +181,9 @@
             $data['openid'] =$this->userInfo['openid'];
             $data['search'] =$name;
             $data['create_time'] = time();
-            Db::name('search')->insert($data);
+            if(!empty($name) &&  !empty( $data['openid'])){
+                Db::name('search')->insert($data);
+            }
             $searchId = Db::name('search')->getLastInsID();
             if( empty($goodsList) ){
                 return ajax_return_error('什么也没有搜到','500','');
@@ -350,6 +352,7 @@
                 }
 
             }
+//            dump($resultLottery);die;
             return $resultLottery;
         }
         public function return_lottery($goods_id){
@@ -401,7 +404,6 @@
                 }
 
             }
-
 
             return $lotterys;
         }
