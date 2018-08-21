@@ -23,30 +23,35 @@ Class Lottery extends Mustlogin
             $time = time();
             if ($type != 0) {
                 $where = [
-                    'fy_goods.isdelete' => '0',
                     // 'fy_lottery.grant_start_date' => ['<', $time],
                     // 'fy_lottery.grant_end_date' => ['>', $time],
                     'fy_lottery.status' => 1,
                     'fy_lottery.use_type' => 0,
                 ];
 
-                if ($goodsClassId != 'all') {
+                if ($goodsClassId != 'all') {#非通用
                     if (!$goodsClassId) {
                         return ajax_return_error('缺少参数分类id');
                     }
                     #查询所有的子分类
                     $goodsClassAllChild = getAllChildcateIds($goodsClassId);
                     $where['fy_goods.goods_class_id'] = ['in', $goodsClassAllChild];
-                }
-                $lotterys = Db::name('goods')
-                    ->field(
-                        'fy_lottery.*,
-                    fy_goods_class.name as class_name')
+                    $where['fy_goods.isdelete'] = 0;
+                    $lotterys = Db::name('goods')
+                    ->field('fy_lottery.*')
                     ->join('fy_lottery', 'fy_goods.id=fy_lottery.goods_id', 'left')
                     ->join('fy_goods_class', 'fy_goods_class.id=fy_goods.goods_class_id', 'left')
-                    ->where($where)
-                    ->page($page, $size)
-                    ->select();
+                        ->where($where)
+                        ->page($page, $size)
+                        ->select();
+                }else{
+                    $lotterys = Db::name('lottery')
+                        ->where($where)
+                        ->page($page, $size)
+                        ->select();
+                }
+
+//                echo Db::name('goods')->getLastSql();die;
             } else {
                 $lotterys = Db::name('lottery')
                     ->where([

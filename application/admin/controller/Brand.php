@@ -43,13 +43,19 @@ class Brand extends Controller
         }
          $model = new b();
         if($this->uid==1){
-            $list = $model->alias('b')->field('b.*,fy_admin_user.account,fy_admin_user.realname')->join('fy_admin_user',' b.user_id=fy_admin_user.id','left')->order('b.user_id desc,b.create_time desc')->paginate(10);
+            $list = $model->alias('b')->field('b.*,fy_admin_user.account,fy_admin_user.realname')
+                ->join('fy_admin_user',' b.user_id=fy_admin_user.id','left')->order('b.user_id desc,b.create_time desc')
+                ->paginate(10);
+            $count =$model->alias('b')->field('b.*,fy_admin_user.account,fy_admin_user.realname')
+                ->join('fy_admin_user',' b.user_id=fy_admin_user.id','left')->order('b.user_id desc,b.create_time desc')
+                ->count();
         }else{
             #查出属于自己的 并排序
             $list =$model->where('user_id='.$this->uid)->order('create_time desc')->paginate(10);
-          
+            $count = $model->where('user_id='.$this->uid)->count();
         }
         $this->view->assign('list',$list);
+        $this->view->assign('count',$count);
         return $this->view->fetch();
     }
 

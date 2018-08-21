@@ -166,12 +166,12 @@
             url:url.getGoodsClass,
             success:function (data) {
                 var html='', code = data.code,data = data.data;
-               // html +=' <li  data-classid="all"   >全部</li>';
+                html +=' <li  class="swiper-slide" data-classid="all" data-type="'+constant.lottery.goods+'" ><span class="tc f10 ">全部</span></li>';
                 if(code=='200'){
                     for(var i = 0; i < data.length; i++){
                         html +=' <li class="swiper-slide" data-classid="'+data[i].id+'"   data-type="'+constant.lottery.goods+'" ><span>'+data[i].name+'</span></li>';
                     }
-                    html +=' <li  class="swiper-slide" data-classid="all f10" data-type="'+constant.lottery.all+'" ><span class="tc f10 ">通用券</span></li>';
+                    html +=' <li  class="swiper-slide" data-classid="all" data-type="'+constant.lottery.all+'" ><span class="tc f10 ">通用券</span></li>';
                     $('#voucherClass').empty().append(html);
                     var $targetLi = $('#voucherClass li');
                     tabSwitch($targetLi,goodsWithLottery);

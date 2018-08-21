@@ -2,9 +2,17 @@
 <td>{$vo.name|high_light=$Request.param.name}</td>
 <td><img src="{$vo.main_image}" width="100" alt="主图"></td>
 <td>{$vo.original_price}</td>
-<td>{$vo.price_real}</td>
+<td>{php}if($vo['price_real']!=0){
+        echo $vo['price_real'];
+    }else{
+        echo $vo['basic_price'];
+    }{/php}</td>
 <td>{$vo.score}</td>
-<td>{$vo.price_real}+{$vo.score}</td>
+<td>{php}if($vo['price_real']!=0){
+    echo $vo['price_real'];
+    }else{
+    echo $vo['basic_price'];
+    }{/php}+{$vo.score}</td>
 <td>
     <?php
       $goods_name = \think\Db::name('goods_class')->field('name')->where(['id'=>$vo['goods_class_id']])->find();
@@ -31,7 +39,6 @@
 <td>{$vo.orderby}</td>
 <td>{if condition="$vo.is_real eq 1"}是{else /}否{/if}</td>
 <td>{$vo.return_score}</td>
-<td><a class="btn blue" href="javascript:;" >预览</a>
 </td>
 <td>
 <?php

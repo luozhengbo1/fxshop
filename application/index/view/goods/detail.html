@@ -189,7 +189,7 @@
                 {/foreach}
                 </table>
             </div>
-            <div class="tab-content-item">{$goods['after_sale']??''}</div>
+            <div class="tab-content-item" id="saleSafe"></div>
         </div>
     </div>
 </div>
@@ -351,6 +351,8 @@
         imageLazy();
         goodsLottery();
         $('#goodDetail').append(tagParse("{$goods['detail']??''}"));
+        $('#saleSafe').append(tagParse("{$goods['after_sale']??''}"));
+
         var shadowTimer = setInterval(function () {
             var close = true;
             for(var key in requestStatus){

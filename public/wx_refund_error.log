@@ -346,4 +346,16 @@ Array
     [return_msg] => OK
     [sign] => D5888E05E0ED3D31FB20A4CD945E5196EF2E97AF964EAE829F1FDB2922DFFEB3
 )
+Array
+(
+    [appid] => wxd9da51e6bae6c3c0
+    [err_code] => NOTENOUGH
+    [err_code_des] => 基本账户余额不足，请充值后重新发起
+    [mch_id] => 1441217402
+    [nonce_str] => qwTsQKWHz1mphCMS
+    [result_code] => FAIL
+    [return_code] => SUCCESS
+    [return_msg] => OK
+    [sign] => 6B44E76A1CD2B7EE15D3678415149E6CA92ADEFD2FF9543A0FBB261AE37D69B7
+)
 

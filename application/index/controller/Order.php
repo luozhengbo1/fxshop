@@ -40,7 +40,7 @@ Class Order extends Mustlogin
             if ($data['status'] == 'all') {
                 $where = ['fy_order.openid' => $this->userInfo['openid']];
             } else {
-//                    $this->userInfo['openid']="omQYXwM8TEkiBZR7Ldm891OOWbNQ";
+//                    $this->userInfo['openid']="omQYXwA8qpkaMYAOG5h3aHHLJVOE";
                 #待付款
                 if ($data['status'] == 0) {
                     $where = ['fy_order.openid' => $this->userInfo['openid'], 'fy_order.pay_status' => 0, 'fy_order.order_status' => 0];
@@ -846,7 +846,6 @@ Class Order extends Mustlogin
                 }
             }
         }
-        die;
         $this->view->assign('address', $address);
         $this->view->assign('orderDetail', $orderDetail);
 
@@ -857,6 +856,7 @@ Class Order extends Mustlogin
     public function orderService()
     {
         if ($this->request->isAjax()) {
+//
             $data = $this->request->post();
             if (!$data['order_id'] || !$data['goods_id'] || !$data['sku_id']) {
                 return $this->error('缺少参数id');
@@ -896,6 +896,15 @@ Class Order extends Mustlogin
             #默认寄回地址
             $address = Db::name('customer_address')->where(['id' => $data['address_id']])->find();
             $update['moren_address'] = json_encode($address);
+            $afterSaleData = Db::name('after_sale_following')
+                ->where([
+                    'order_id'=> $orderGoods['order_id'],
+                    'openid'=>$this->userInfo['openid'],
+                    'goods_id'=>$orderGoods['goods_id'],
+                    'ogid'=> $orderGoods['id']])->find();
+            if($afterSaleData){
+                return ajax_return('','请直接联系客服');
+            }
             Db::name('after_sale_following')->insert($update);
 //                $returnMoeny =$orderGoods['goods_num'] ;
             if ($data['after_sale_type'] == 3) {
@@ -959,6 +968,12 @@ Class Order extends Mustlogin
             if (!$data['id']) {
                 return $this->error('缺少参数id');
             }
+            if (!$data['wuliu_order']) {
+                return $this->error('缺少物流公司');
+            }
+            if (!$data['user_wuliu_type_order']) {
+                return $this->error('缺少物流单号');
+            }
             $data['user_wuliu_type_order'] = $data['type'] . $data['wuliu_order'];
             Db::name('after_sale_following')->where(['id' => $data['id']])->update(['user_wuliu_type_order' => $data['user_wuliu_type_order']]);
             return ajax_return('', '更新成功', '200');
@@ -993,6 +1008,9 @@ Class Order extends Mustlogin
             $afterSale = Db::name('after_sale_following')
                 ->where(['order_id' => $data['order_id'], 'goods_id' => $data['goods_id'], 'openid' => $this->userInfo['openid']])
                 ->find();
+            if($afterSale['yes_or_no']==1){
+                return ajax_return('商家已经同意不可以取消');
+            }
             $orderGoods = Db::name('order_goods')->where(['order_id' => $data['order_id'], 'goods_id' => $data['goods_id'], 'sku_id' => $data['sku_id']])->find();
             if ($afterSale['after_sale_type'] == 3) {#
                 $goodsAttribute = Db::name('goods_attribute')->field('price')->where(['id' => $orderGoods['sku_id']])->find();
@@ -1040,7 +1058,7 @@ Class Order extends Mustlogin
         return $this->view->fetch('logistics');
     }
 
-    #商品售后
+    #售后详情
     public function orderTrack()
     {
         $this->assign('titleName', "售后详情");
