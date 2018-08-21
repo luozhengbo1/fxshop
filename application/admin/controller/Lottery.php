@@ -72,7 +72,9 @@ class Lottery extends Controller
                     return ajax_return_adv_error('有效结束时间必须大于开始时间');
                 }
             }
-
+            if(!intval($data['type']) ){
+                return ajax_return_adv_error('请选择优惠券类型');
+            }
             $model = new \app\common\model\Lottery;
             if($data['goods_id']){
                 $goods = Db::name('goods')->field('id,name')->where('id',$data['goods_id'])->find();
@@ -142,7 +144,9 @@ class Lottery extends Controller
                     return ajax_return_adv_error('有效结束时间必须大于开始时间');
                 }
             }
-
+            if(!intval($data['type']) ){
+                return ajax_return_adv_error('请选择优惠券类型');
+            }
             $id = $data['id'];
             $data['user_id']= isset($data['user_id'])?$data['user_id']:$_SESSION['think']['auth_id'];
             $data['surplus_number']= $data['number'];
@@ -154,9 +158,9 @@ class Lottery extends Controller
             unset($data['id']);
             $res = $this->getModel()->where(['id'=>$id])->update($data);
             if($res){
-                return ajax_return_adv('修改成功');
+                return ajax_return_adv('操作成功');
             }else{
-                return ajax_return_adv_error('修改失败');
+                return ajax_return_adv_error('操作失败');
             }
         }else{
             $id = $this->request->param('id');
@@ -198,9 +202,9 @@ class Lottery extends Controller
             $lottery = $this->getModel()->field('status')->where(['id'=>$data['id']])->find();
             $res = $this->getModel()->where(['id'=>$data['id']])->update(['status'=>!$lottery['status']]);
             if($res){
-                return ajax_return('修改成功','修改成功','200');
+                return ajax_return('','操作成功','200');
             }else{
-                return ajax_return('修改失败','修改失败','500');
+                return ajax_return('','操作失败','500');
             }
         }
     }
