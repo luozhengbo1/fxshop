@@ -1,6 +1,10 @@
 #!/usr/bin/php -q
 <?php
-$servername = 'db.istiny.cc';
+//$servername = 'db.istiny.cc';
+//$username = 'root';
+//$password = 'root';
+//$dbname = 'tpadmin';
+$servername = '127.0.0.1';
 $username = 'root';
 $password = 'root';
 $dbname = 'tpadmin';

@@ -3,9 +3,13 @@
 	#思路没确认收货的商品两周自动确认收货
     # 将订单中的商品都确认收货，把订单修改为完成 、
     #查询确认收货的订单 将部分退款、 全部退款、   订单完成 结算给商户
-    $servername = 'db.istiny.cc';
-    $username = 'lzb';
-    $password = '123456';
+//    $servername = 'db.istiny.cc';
+//    $username = 'lzb';
+//    $password = '123456';
+//    $dbname = 'tpadmin';
+    $servername = '127.0.0.1';
+    $username = 'root';
+    $password = 'root';
     $dbname = 'tpadmin';
     $conn = mysqli_connect($servername, $username, $password, $dbname) or die("连接失败：$conn->connect_error");
     $send_time_two_week = time()-24*60*60*7*2;

@@ -1,8 +1,8 @@
 <?php
 
-$servername = 'db.istiny.cc';
-$username = 'lzb';
-$password = '123456';
+$servername = '127.0.0.1';
+$username = 'root';
+$password = 'root';
 $dbname = 'tpadmin';
 $conn = mysqli_connect($servername, $username, $password, $dbname) or die("连接失败：$conn->connect_error");
 $time = time(); #7天做一个提醒 大于6天小于7天做一次提醒 提醒过的用户记录一下  15天自动收货
@@ -13,7 +13,7 @@ $send_time1 = $time-  $day6;
 $query = "select * from fy_order_goods  where is_send=1  and send_time between  $send_time  and $send_time1 and remind_get=0";
 //echo $query;
 $query_result = mysqli_query($conn, $query);
-include_once  "/home/lzb/tpAdmin/application/index/controller/sendMsg/SDK/WeiXin.php";
+include_once  __DIR__."/../controller/sendMsg/SDK/WeiXin.php";
 if ($query_result->num_rows > 0) {
     while ($row = $query_result->fetch_assoc()) {
         //获取用户的id和创建时间
