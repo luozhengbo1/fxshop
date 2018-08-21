@@ -48,6 +48,7 @@ class Lottery extends Controller
 			    return $validate->getError();
             }
             $data = $this->request->post();
+            $data = picHandle($data);
             if($data['expire_type']!=1){
                 if( !empty($data['grant_start_date']) ){
                     $data['grant_start_date']=strtotime($data['grant_start_date']);
@@ -130,6 +131,7 @@ class Lottery extends Controller
                 return $validate->getError();
             }
             $data = $this->request->post();
+            $data = picHandle($data);
             if($data['expire_type']!=1){
                 if( !empty($data['grant_start_date']) ){
                     $data['grant_start_date']=strtotime($data['grant_start_date']);
@@ -163,9 +165,6 @@ class Lottery extends Controller
                     }
                 }
             }
-            if( !empty($data['pic']) ){
-                $data['pic']= json_encode($data['pic']);
-            }
             $id = $data['id'];
             $data['user_id']= isset($data['user_id'])?$data['user_id']:$_SESSION['think']['auth_id'];
             $data['surplus_number']= $data['number'];
@@ -173,6 +172,8 @@ class Lottery extends Controller
             $data['goods_name'] =$goods['name'];
             if(  !empty($data['pic']) ){
                 $data['pic'] = json_encode($data['pic']);
+            }else{
+                $data['pic']='';
             }
             unset($data['id']);
             $res = $this->getModel()->where(['id'=>$id])->update($data);
