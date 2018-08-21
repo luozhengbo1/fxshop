@@ -74,7 +74,14 @@ class Lottery extends Controller
             }
             if(!intval($data['type']) ){
                 return ajax_return_adv_error('请选择优惠券类型');
+            }else{
+                if(intval($data['type'])!= 3){#非代金券都要选择goods_id
+                    if( empty($data['goods_id']) ){
+                        return ajax_return_adv_error('请选择关联商品');
+                    }
+                }
             }
+
             $model = new \app\common\model\Lottery;
             if($data['goods_id']){
                 $goods = Db::name('goods')->field('id,name')->where('id',$data['goods_id'])->find();
@@ -85,6 +92,9 @@ class Lottery extends Controller
 //            dump($data);die;
             unset($data['id']);
             #剩余量
+            if( !empty($data['pic']) ){
+                $data['pic']= json_encode($data['pic']);
+            }
             $data['surplus_number']=$data['number'];
             $res = $model->insert($data);
             if($res){
@@ -146,6 +156,15 @@ class Lottery extends Controller
             }
             if(!intval($data['type']) ){
                 return ajax_return_adv_error('请选择优惠券类型');
+            }else{
+                if(intval($data['type'])!= 3){#非代金券都要选择goods_id
+                    if( empty($data['goods_id']) ){
+                        return ajax_return_adv_error('请选择关联商品');
+                    }
+                }
+            }
+            if( !empty($data['pic']) ){
+                $data['pic']= json_encode($data['pic']);
             }
             $id = $data['id'];
             $data['user_id']= isset($data['user_id'])?$data['user_id']:$_SESSION['think']['auth_id'];
@@ -167,12 +186,13 @@ class Lottery extends Controller
             if(!$id){
                 return  $this->error('缺少参数id');
             }
-            $list = $this->getModel()->where(['id'=>$id])->find();
+            $list = Db::name('lottery')->where(['id'=>$id])->find();
             if($list['status']!=0){
                 return  '已经发行不可更改';
 //                return ajax_return_error("已经发行不可更改");
             }
             $list['pic'] = json_decode($list['pic'],true);
+//            dump($list);die;
             $this->view->assign('vo',$list);
             $this->view->assign('flag',1);
             $goods = Db::name('goods')->field('id,name')->where(['isdelete'=>0,'status'=>1])->select();
