@@ -264,7 +264,7 @@ class Wechatpay extends Controller
             if($lotteryOrder['pay_status']!=1){#表示状态已经修改
                 Db::name('lottery_log')->where($whereOrder)->update(['pay_time'=>$time,'pay_status'=>1,'order_status'=>1]);
                 #减去对应代金券的数量
-                Db::name('lottery')->where(['id'=>$lotteryOrder['lottery_id']])->setDec('number',$lotteryOrder['lottery_num']);
+                Db::name('lottery')->where(['id'=>$lotteryOrder['lottery_id']])->setDec('surplus_number',$lotteryOrder['lottery_num']);
                 #把领取量加上去
                 Db::name('lottery')->where(['id'=>$lotteryOrder['lottery_id']])->setInc('receive_number',$lotteryOrder['lottery_num']);
                 file_put_contents("wx_pay_success.log", $xml . "\r", 8);
