@@ -185,14 +185,33 @@
                 Db::name('search')->insert($data);
             }
             $searchId = Db::name('search')->getLastInsID();
-            if( empty($goodsList) ){
-                return ajax_return_error('什么也没有搜到','500','');
-            }else{
+           //if( empty($goodsList) ){
+           //    return ajax_return_error('什么也没有搜到','500','');
+           //}else{
                 Db::name('search')
                     ->where(['id'=>$searchId])
                     ->update(['goods_id'=>join(array_column($goodsList,'id'),',')]);
                 return ajax_return($goodsList,'ok','200');
-            }
+           // }
+        }
+        public function getSearchName(){
+            $name = $this->request->param('goodsName');
+            $page = $this->request->param('page');
+            $size = $this->request->param('size');
+            $showArea = $this->request->param('show_area');
+            $tempArr = explode(",", $showArea);
+            $where =[
+                'status'=>1,
+                'isdelete'=>0,
+                'name'=>['like',"%$name%"],
+                'show_area'=>['in',$tempArr],
+            ];
+            $nameList = Db::name('goods')
+                ->field('name')
+                ->where($where)
+                ->page( $page,$size)
+                ->select();
+            return ajax_return($nameList,'ok','200');
         }
         public function goodsList(){
             $this->assign('titleName', "商品搜索");
