@@ -86,8 +86,11 @@
     }
     function clearHistory(){
         pub_edit({
-            url:url.collect_update,
-            data:data,
+            url:"{:url('index/goods/delSearchHistory')}",
+            data:{},
+            complete:function () {
+                $('.search-history ul').empty();
+            }
         })
     }
 </script>
