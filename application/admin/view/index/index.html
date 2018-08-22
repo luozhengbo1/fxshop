@@ -32,7 +32,6 @@
         .lockScreen{
             width: 100%;
             background: black;
-            opacity: .6;
             position: fixed;
             top: 0;
             bottom: 0;
@@ -40,12 +39,13 @@
             color: white;
             text-align: center;
             font-size: 18px;
+            padding-top: 200px;
         }
     </style>
 </head>
 <body>
 <div class="lockScreen" style="display: none">
-    <span class="" onclick="closeLockScreen()">退出锁屏</span>
+    <span style="cursor: pointer;" class="" onclick="closeLockScreen()">退出锁屏</span>
 </div>
 <header class="navbar-wrapper">
     <div class="navbar navbar-fixed-top">

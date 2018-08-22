@@ -16,15 +16,36 @@
         color: black;
         margin-bottom: 4px;
     }
+    .search-land{
+        position: absolute;
+        top: 46px;
+        bottom: 0px;
+        width: 100%;
+        z-index: 21;
+        width: 100%;
+        background: white;
+    }
+    .search-land li{
+        padding-left: 10px;
+        line-height: 20px;
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
 </style>
 <div class="search-history mb5">
-    <p class="lh30 h30">搜索历史：</p>
+    <p class="lh30 h30 clear">最近搜索<span class="fr" onclick="clearHistory()"><i class="layui-icon opt-btn dele" style="font-size: 22px; font-weight: bold"></i></span></p>
     <ul class="clear">
         {volist name="searchHistory" id="vo" empty=""}
         <li class="fl" onclick=" getGoods({goodsName:'{$vo.search}'})"><span>{$vo.search}</span></li>
         {/volist}
     </ul>
 </div>
+<!--<ul class="search-land">
+    <li>衣服蓝 衣服女</li>
+    <li>衣服蓝 衣服女</li>
+    <li>衣服蓝 衣服女</li>
+    <li>衣服蓝 衣服女</li>
+</ul>-->
 <div class="module-hot-goods">
     <div id="dataListWrap">
         <ul class="goods-list list clear  grid pb40" id="goodsList">
@@ -84,7 +105,28 @@
             complete:masonryShow,
         });
     }
-
+    function clearHistory(){
+        pub_edit({
+            url:"{:url('index/goods/delSearchHistory')}",
+            data:{},
+            complete:function () {
+                $('.search-history ul').empty();
+            }
+        })
+    }
+    function getSearchName(json){
+        var data= {show_area:showArea.hot+','+showArea.normal}
+        if(json) $.extend(data,json);
+        $.ajax({
+            url:"{:url('index/goods/getSearchName')}",
+            type:'post',
+            data:data,
+            dataType:'json',
+            success: function(data){
+               console.log(data);
+            }
+        })
+    }
 </script>
 </body>
 </html>
