@@ -355,7 +355,21 @@
 //            dump($resultLottery);die;
             return $resultLottery;
         }
-        public function return_lottery($goods_id){
+
+        #清楚浏览记录
+        public function delSearchHistory()
+        {
+            if($this->request->isAjax()){
+                $data = $this->request->post();
+                $res = Db::name('search')->where(['openid'=>$this->userInfo['openid']])->delete();
+                return ajax_return('','删除成功',200);
+            }
+        }
+
+
+
+        public function return_lottery($goods_id)
+        {
             #取出商品中发行中，未删除的所具有的券
             $time = time();
             $lotterys=array();
@@ -407,4 +421,6 @@
 
             return $lotterys;
         }
+
+
 	}
