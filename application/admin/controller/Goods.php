@@ -337,11 +337,15 @@ class Goods extends Controller
             #价格
             if( isset($data['price']) &&  $data['price'] ){
                 $goods['price_real'] = $data['price'];
-            }
+            }else{
+		$goods['price_real'] = '';
+		}
             #积分价
             if( isset($data['score']) &&  $data['score'] ){
                 $goods['score'] = $data['score'];
-            }
+            }else{
+	   	$goods['score'] = '';
+	   }
             #原价
             $goods['original_price'] = $data['original_price'];
             #结算类型
