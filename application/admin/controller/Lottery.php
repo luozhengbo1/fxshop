@@ -48,6 +48,7 @@ class Lottery extends Controller
 			    return $validate->getError();
             }
             $data = $this->request->post();
+            $data = picHandle($data);
             if($data['expire_type']!=1){
                 if( !empty($data['grant_start_date']) ){
                     $data['grant_start_date']=strtotime($data['grant_start_date']);
@@ -71,6 +72,27 @@ class Lottery extends Controller
                 if($data['expire_end_date'] <=  $data['expire_start_date']){
                     return ajax_return_adv_error('有效结束时间必须大于开始时间');
                 }
+            }else{
+                if(empty($data['expire_time'])){
+                    return ajax_return_adv_error('请填有效期天数');
+                }
+            }
+            if(!intval($data['type']) ){
+                return ajax_return_adv_error('请选择优惠券类型');
+            }else{
+                if(intval($data['type'])!= 3){#非代金券都要选择goods_id
+                    if( empty($data['goods_id']) ){
+                        return ajax_return_adv_error('请选择关联商品');
+                    }
+                }
+                if(intval($data['type'])==2|| intval($data['type'])==3){
+                    if(empty($data['coupon_real_money'])){
+                        return ajax_return_adv_error('请填写金额');
+                    }
+                    if(empty($data['coupon_money'])){
+                        return ajax_return_adv_error('请填写金额');
+                    }
+                }
             }
 
             $model = new \app\common\model\Lottery;
@@ -83,6 +105,9 @@ class Lottery extends Controller
 //            dump($data);die;
             unset($data['id']);
             #剩余量
+            if( !empty($data['pic']) ){
+                $data['pic']= json_encode($data['pic']);
+            }
             $data['surplus_number']=$data['number'];
             $res = $model->insert($data);
             if($res){
@@ -118,6 +143,7 @@ class Lottery extends Controller
                 return $validate->getError();
             }
             $data = $this->request->post();
+            $data = picHandle($data);
             if($data['expire_type']!=1){
                 if( !empty($data['grant_start_date']) ){
                     $data['grant_start_date']=strtotime($data['grant_start_date']);
@@ -141,8 +167,28 @@ class Lottery extends Controller
                 if($data['expire_end_date'] <=  $data['expire_start_date']){
                     return ajax_return_adv_error('有效结束时间必须大于开始时间');
                 }
+            }else{
+                if(empty($data['expire_time'])){
+                    return ajax_return_adv_error('请填有效期天数');
+                }
             }
-
+            if(!intval($data['type']) ){
+                return ajax_return_adv_error('请选择优惠券类型');
+            }else{
+                if(intval($data['type'])!= 3){#非代金券都要选择goods_id
+                    if( empty($data['goods_id']) ){
+                        return ajax_return_adv_error('请选择关联商品');
+                    }
+                }
+                if(intval($data['type'])==2|| intval($data['type'])==3){
+                    if(empty($data['coupon_real_money'])){
+                        return ajax_return_adv_error('请填写金额');
+                    }
+                    if(empty($data['coupon_money'])){
+                        return ajax_return_adv_error('请填写金额');
+                    }
+                }
+            }
             $id = $data['id'];
             $data['user_id']= isset($data['user_id'])?$data['user_id']:$_SESSION['think']['auth_id'];
             $data['surplus_number']= $data['number'];
@@ -150,25 +196,28 @@ class Lottery extends Controller
             $data['goods_name'] =$goods['name'];
             if(  !empty($data['pic']) ){
                 $data['pic'] = json_encode($data['pic']);
+            }else{
+                $data['pic']='';
             }
             unset($data['id']);
             $res = $this->getModel()->where(['id'=>$id])->update($data);
             if($res){
-                return ajax_return_adv('修改成功');
+                return ajax_return_adv('操作成功');
             }else{
-                return ajax_return_adv_error('修改失败');
+                return ajax_return_adv_error('操作失败');
             }
         }else{
             $id = $this->request->param('id');
             if(!$id){
                 return  $this->error('缺少参数id');
             }
-            $list = $this->getModel()->where(['id'=>$id])->find();
+            $list = Db::name('lottery')->where(['id'=>$id])->find();
             if($list['status']!=0){
                 return  '已经发行不可更改';
 //                return ajax_return_error("已经发行不可更改");
             }
             $list['pic'] = json_decode($list['pic'],true);
+//            dump($list);die;
             $this->view->assign('vo',$list);
             $this->view->assign('flag',1);
             $goods = Db::name('goods')->field('id,name')->where(['isdelete'=>0,'status'=>1])->select();
@@ -198,9 +247,9 @@ class Lottery extends Controller
             $lottery = $this->getModel()->field('status')->where(['id'=>$data['id']])->find();
             $res = $this->getModel()->where(['id'=>$data['id']])->update(['status'=>!$lottery['status']]);
             if($res){
-                return ajax_return('修改成功','修改成功','200');
+                return ajax_return('','操作成功','200');
             }else{
-                return ajax_return('修改失败','修改失败','500');
+                return ajax_return('','操作失败','500');
             }
         }
     }

@@ -185,7 +185,10 @@ Class Lottery extends Mustlogin
             $insert['use_num'] = 0;
             $insert['openid'] = $this->userInfo['openid'];
             $insert['lottery_info'] = json_encode($lottery);
-            $res = Db::name('lottery')->where(['id' => $data['id']])->update(['number' => $lottery['number'] - 1]);
+            #加上领取量 减去剩余量
+            $incNumber = (($lottery['receive_number'] +1)>=$lottery['number'])?$lottery['number']:$lottery['receive_number'] +1;
+            $decNumber = (($lottery['surplus_number'] -1)<=0)?0:$lottery['surplus_number'] -1;
+            $res = Db::name('lottery')->where(['id' => $data['id']])->update(['receive_number' => $incNumber ,'surplus_number'=>$decNumber ]);
             $res1 = Db::name('lottery_log')->insert($insert);
             if ($res && $res1) {
                 return ajax_return('', '领取成功', '200');

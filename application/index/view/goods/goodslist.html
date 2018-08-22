@@ -18,7 +18,7 @@
     }
 </style>
 <div class="search-history mb5">
-    <p class="lh30 h30">搜索历史：</p>
+    <p class="lh30 h30 clear">搜索历史：<span class="fr sred" onclick="clearHistory()">清空历史</span></p>
     <ul class="clear">
         {volist name="searchHistory" id="vo" empty=""}
         <li class="fl" onclick=" getGoods({goodsName:'{$vo.search}'})"><span>{$vo.search}</span></li>
@@ -84,7 +84,12 @@
             complete:masonryShow,
         });
     }
-
+    function clearHistory(){
+        pub_edit({
+            url:url.collect_update,
+            data:data,
+        })
+    }
 </script>
 </body>
 </html>

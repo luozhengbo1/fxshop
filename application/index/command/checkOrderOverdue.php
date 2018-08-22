@@ -1,11 +1,10 @@
 #!/usr/bin/php -q
 <?php
-$servername = 'db.istiny.cc';
-$username = 'lzb';
-$password = '123456';
-$dbname = 'tpadmin';
-//include_once 'dbConfig.php';
-
+//$servername = '127.0.0.1';
+//$username = 'root';
+//$password = 'root';
+//$dbname = 'tpadmin';
+$reas = include_once 'dbConfig.php';
 $conn = mysqli_connect($servername, $username, $password, $dbname) or die("连接失败：$conn->connect_error");
 $expre =time()-60;
 $query = "SELECT id,order_id,create_time FROM fy_order WHERE pay_status=0 and order_status=0";
@@ -28,6 +27,7 @@ if ($query_result->num_rows > 0) {
         #将订单修改为失效
     }
 }
+echo  111;
 $conn->close();
 
 ?>
