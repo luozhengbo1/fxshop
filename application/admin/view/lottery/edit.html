@@ -115,7 +115,7 @@
                         <!--<option value="1">抵扣券</option>-->
                         <option value="2">优惠券</option>
                         <option value="3">代金券</option>
-                        <option value="4">免邮券</option>
+                        <!--<option value="4">免邮券</option>-->
                         <!--<option value="5">生日券</option>-->
                     </select>
                     <?php } ?>
@@ -158,7 +158,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-xs-3 col-sm-3"></div>
+            <div class="col-xs-3 col-sm-3">当选择所有商品时不用选择关联商户</div>
         </div>
         {php}}{/php}
         <div class="row cl" id="agoods_id">
@@ -168,7 +168,7 @@
                     <select name="goods_id" class="select" >
                         <option value="">--请选择--</option>
                         {php}if($_SESSION['think']['auth_id']==1){ {/php}
-                        <option value="all">所有商品</option>
+                        <option value="all" id="goodsAll">所有商品</option>
                         {php}}{/php}
                         {volist name="goodsList" id="vo1"}
                         <option value="{$vo1.id}" {if condition="isset($vo['goods_id']) && $vo['goods_id'] eq $vo1['id']"}selected{/if}>{$vo1.name}</option>
@@ -234,6 +234,8 @@
         voucherWrap.html(eval('voucher'+val));
         if( val ==3 ){
             $('#agoods_id').css('display','none')
+        }else{
+            $('#agoods_id').css('display','block')
         }
     }
     var ue = UE.getEditor('container', {
@@ -305,13 +307,15 @@
             data:{user_id:$(_this).val()},
             success:function (res) {
                 var data = res.data;
-                var  html ='<select name="goods_id" class="select" datatype="*" nullmsg="请选择关联商品" errormsg="请选择关联商品">';
+                var  html ='<select name="goods_id" class="select" >';
                 html +='    <option value="">--请选择--</option>';
-                html +='    <option value="all">所有商品</option>';
+                // html +='    <option value="all">所有商品</option>';
                 if(data && data.length>0){
                     for(var i=0; i<data.length; i++){
                         html +='    <option value="'+data[i].id+'" >'+data[i].name+'</option>';
                     }
+                }else{
+                    html +='    <option value="all">所有商品</option>';
                 }
                 html +='</select>';
                 $('#goodsList').html(html);

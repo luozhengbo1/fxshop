@@ -180,14 +180,6 @@ class Lottery extends Controller
                         return ajax_return_adv_error('请选择关联商品');
                     }
                 }
-                if(intval($data['type'])==2|| intval($data['type'])==3){
-                    if(empty($data['coupon_real_money'])){
-                        return ajax_return_adv_error('请填写金额');
-                    }
-                    if(empty($data['coupon_money'])){
-                        return ajax_return_adv_error('请填写金额');
-                    }
-                }
             }
             $id = $data['id'];
             $data['user_id']= isset($data['user_id'])?$data['user_id']:$_SESSION['think']['auth_id'];
