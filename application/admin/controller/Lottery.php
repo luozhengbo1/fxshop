@@ -72,6 +72,10 @@ class Lottery extends Controller
                 if($data['expire_end_date'] <=  $data['expire_start_date']){
                     return ajax_return_adv_error('有效结束时间必须大于开始时间');
                 }
+            }else{
+                if(empty($data['expire_time'])){
+                    return ajax_return_adv_error('请填有效期天数');
+                }
             }
             if(!intval($data['type']) ){
                 return ajax_return_adv_error('请选择优惠券类型');
@@ -79,6 +83,14 @@ class Lottery extends Controller
                 if(intval($data['type'])!= 3){#非代金券都要选择goods_id
                     if( empty($data['goods_id']) ){
                         return ajax_return_adv_error('请选择关联商品');
+                    }
+                }
+                if(intval($data['type'])==2|| intval($data['type'])==3){
+                    if(empty($data['coupon_real_money'])){
+                        return ajax_return_adv_error('请填写金额');
+                    }
+                    if(empty($data['coupon_money'])){
+                        return ajax_return_adv_error('请填写金额');
                     }
                 }
             }
@@ -155,6 +167,10 @@ class Lottery extends Controller
                 if($data['expire_end_date'] <=  $data['expire_start_date']){
                     return ajax_return_adv_error('有效结束时间必须大于开始时间');
                 }
+            }else{
+                if(empty($data['expire_time'])){
+                    return ajax_return_adv_error('请填有效期天数');
+                }
             }
             if(!intval($data['type']) ){
                 return ajax_return_adv_error('请选择优惠券类型');
@@ -162,6 +178,14 @@ class Lottery extends Controller
                 if(intval($data['type'])!= 3){#非代金券都要选择goods_id
                     if( empty($data['goods_id']) ){
                         return ajax_return_adv_error('请选择关联商品');
+                    }
+                }
+                if(intval($data['type'])==2|| intval($data['type'])==3){
+                    if(empty($data['coupon_real_money'])){
+                        return ajax_return_adv_error('请填写金额');
+                    }
+                    if(empty($data['coupon_money'])){
+                        return ajax_return_adv_error('请填写金额');
                     }
                 }
             }

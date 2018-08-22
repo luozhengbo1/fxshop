@@ -31,6 +31,7 @@ if ($query_result->num_rows > 0) {
         #将订单修改为失效
     }
 }
+echo  111;
 $conn->close();
 
 ?>
