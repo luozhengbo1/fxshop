@@ -57,16 +57,22 @@ class Activity extends Controller
                 return ajax_return_error('缺少参数id');
             }
             #并且在有效期之内 $time
-
-            $time = time();
             $lotteryList = Db::name('Lottery')
-                ->field('name,id')
-                ->where(['isdelete'=>0])
-                ->where('expire_start_date','<',$time)
-                ->where('expire_end_date','>',$time)
+                ->where(['isdelete'=>0,'status'=>1])
                 ->select();
+            $time = time();
+            $newLottery =[];
+            foreach ($lotteryList as &$v){
+                if($v['expire_type']==0){#表示有效为日期
+                    if($v['expire_start_date'] < $time  && $v['expire_end_date'] >$time ){
+                        $newLottery[] =$v;
+                    }
+                }else{
+                    $newLottery[] =$v;
+                }
+            }
+            $this->view->assign('lotteryList',$newLottery);
             $vo = $this->getModel()->where(['id'=>$this->request->param('id')])->find();
-            $this->view->assign('lotteryList',$lotteryList);
             $this->view->assign('vo', $vo);
             return $this->view->fetch('edit');
         }
@@ -97,12 +103,20 @@ class Activity extends Controller
             #并且在有效期之内 $time
             $time = time();
             $lotteryList = Db::name('Lottery')
-                ->field('name,id')
-                ->where(['isdelete'=>0])
-                ->where('expire_start_date','<',$time)
-                ->where('expire_end_date','>',$time)
+                ->where(['isdelete'=>0,'status'=>1])
                 ->select();
-            $this->view->assign('lotteryList',$lotteryList);
+            $time = time();
+            $newLottery =[];
+            foreach ($lotteryList as &$v){
+                if($v['expire_type']==0){#表示有效为日期
+                    if($v['expire_start_date'] < $time  && $v['expire_end_date'] >$time ){
+                        $newLottery[] =$v;
+                    }
+                }else{
+                    $newLottery[] =$v;
+                }
+            }
+            $this->view->assign('lotteryList',$newLottery);
             return $this->view->fetch('edit');
         }
     }
