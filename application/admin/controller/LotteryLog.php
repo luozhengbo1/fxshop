@@ -37,6 +37,7 @@ class LotteryLog extends Controller
         $page = $list->render();
         // 模板变量赋值
         $this->view->assign('page', $page);
+        $this->datalist($model, $map);
         $this->view->assign('list',$list);
         return $this->view->fetch();
     }

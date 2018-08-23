@@ -189,7 +189,7 @@ class GoodsClass extends Controller
                 $list[$k]['grade'] = $num;
             }
         }
-
+        $this->datalist($model, $map);
         $this->view->assign('list',$list);
         return $this->view->fetch();
     }
