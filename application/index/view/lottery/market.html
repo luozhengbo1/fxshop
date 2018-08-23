@@ -177,20 +177,30 @@
                     tabSwitch($targetLi,goodsWithLottery);
                     var firstLi = $targetLi[0];
                     firstLi.click();
-                    sortSwiper();
+                    sortSwiper(data.length);
                 }
 
             }
         })
     }
-    function sortSwiper(){
-        var swiper = new Swiper('.swiper-container', {
-            pagination: '.swiper-pagination',
-            slidesPerView: 6,
-            slidesPerColumn: 2,
-            paginationClickable: true,
-            spaceBetween: 2
-        });
+    function sortSwiper(size){
+        console.log(size+'=================================')
+        if(size>8){
+            new Swiper('.swiper-container', {
+                pagination: '.swiper-pagination',
+                slidesPerView: 6,
+                slidesPerColumn: 2,
+                paginationClickable: true,
+                spaceBetween: 2
+            });
+        }else{
+            new Swiper('.swiper-container', {
+                pagination: '.swiper-pagination',
+                slidesPerView: 6,
+                paginationClickable: true,
+                spaceBetween: 2
+            });
+        }
     }
     function getLottery(id,_this) {
         loadShadow();
