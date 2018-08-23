@@ -848,8 +848,11 @@ function imageLazy(){
 }
 
 function kefu(mobile,qq) {
-    var html ='<p class="f14 mb10"><a href="tel://'+mobile+'" >电话客服:'+mobile+'</p>';
-        html +='<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2550162927&site=qq&menu=yes&t='+new Date().getTime()+'">qq客服：<img border="0" src="http://wpa.qq.com/pa?p=2:2550162927:52" alt="点击这里给我发消息" title="点击这里给我发消息"/>2550162927</a>';
+    var qqNum = 2550162927;
+    var html ='';
+        if(mobile)
+        html +='<p class="f14 mb10"><a href="tel://'+mobile+'" >电话客服:'+mobile+'</p>';
+        html +='<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin='+qqNum+'&site=qq&menu=yes&t='+new Date().getTime()+'">qq客服：<img border="0" src="http://wpa.qq.com/pa?p=2:'+qqNum+':52" alt="点击这里给我发消息" title="点击这里给我发消息"/>'+qqNum+'</a>';
     layer.open({
          content: html
         ,btn: '关闭'

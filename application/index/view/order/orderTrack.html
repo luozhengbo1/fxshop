@@ -25,6 +25,7 @@
 </div>
 {/if}
 
+
 <div class="bg_white pl10 pb10 mt5">
     <p class="lh30">售后信息</p>
     {include file="Public/header-order"}
@@ -50,7 +51,7 @@
                     <span class="grey">{$afterSale['apply_time']|date="Y-m-d H:i:s",###} </span>
                 </div>
             </div>
-            <pre class="msg clear lh20">发起了售后服务申请，货物状态：已收到货，原因：做工问题，金额：{$orderDetail['return_price']}元。</pre>
+            <pre class="msg clear lh20">发起了售后服务申请，货物状态：已收到货，原因：{$afterSale['after_sale_reson']}，金额：{$orderDetail['return_price']}元。</pre>
         </li>
         {/if}
         {if condition="$afterSale['handle_yes_no_time']" /}
@@ -84,6 +85,7 @@
             <p class="tl lh20">
                 商家确认收货地址：{$afterSale['shop_wuliu_address']}
             </p>
+
         </li>
         {/if}
         {if condition="$afterSale['user_wuliu_type_order']" /}
@@ -142,7 +144,7 @@
     </ul>
 </div>
 <script>
-    console.log("{}")
+   // console.log("{}")
     var url ={
         orderServerAddWuliu:"{:url('index/order/orderServerAddWuliu')}",
     }
