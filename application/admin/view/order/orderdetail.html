@@ -161,10 +161,10 @@
             <label class="ml20">用户邮寄地址:</label>
             <p>{php}
                 $afterData['moren_address'] = json_decode($afterData['moren_address'],true);
-              echo $afterData['moren_address']['name'];
+              echo $afterData['moren_address']['name'],'<br/>';
               echo $afterData['moren_address']['mobile'],'<br/>';
               echo $afterData['moren_address']['address'];
-              echo $afterData['moren_address']['street'];
+              echo $afterData['moren_address']['street'],'<br/>';
               {/php}
             </p>
           </div>
