@@ -242,3 +242,8 @@ function urlConnect(url,json) {
     result = result+'.html';
     return result;
 }
+var settlement={
+    money:1,//价格结算
+    score:2,//积分结算
+    money_score:3,//积分+货币结算
+}
