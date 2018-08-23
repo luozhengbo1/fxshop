@@ -407,6 +407,9 @@ class Order extends Controller
             if (!$data['ogid'] || !$data['id'] || !$data['after_sale_type']) {
                 return ajax_return('', '缺少参数');
             }
+            if( empty( $data['send_wuliu_type']) ||  !$data['send_wuliu_order'] ){
+                return ajax_return('', '请填写物流信息');
+            }
             $orderGoods = Db::name('order_goods')->where(['id' => $data['ogid']])->find();
             Db::name('after_sale_following')
                 ->where(['id' => $data['id']])

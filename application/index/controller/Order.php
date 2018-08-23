@@ -1082,6 +1082,7 @@ Class Order extends Mustlogin
             ])
             ->find();
         $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'], true);
+//        dump($orderGoods);die;
         $this->view->assign('orderDetail', $orderGoods);
         $this->view->assign('userInfo', $this->userInfo);
         //dump($this->userInfo);
