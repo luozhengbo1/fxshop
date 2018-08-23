@@ -75,7 +75,7 @@
                         <option value="">--请选择--</option>
                         {volist name="lotteryList" id="vo1"}
                         <option value="{$vo1.id}" {if condition="$vo1.id eq $vo.lottery_id" }selecdted{
-                        /if}>{$vo.name}</option>
+                        /if}>{$vo1.name??''}</option>
                         {/volist}
                     </select>
                 </div>

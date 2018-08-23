@@ -132,7 +132,8 @@ class WeiXin
     public function sure($goods="test商品",$openid="omQYXwNAT5uC15TQqMGxajJzqo4s",$out_trade_no="")
     {
         $touser =$openid;
-        $templateId="vfjUQ3F8WVhlcbArgxX7rirho2yp9CtnI9UwDZv9UnI";
+        $templateId=Config::get('sure');
+//        $templateId="vfjUQ3F8WVhlcbArgxX7rirho2yp9CtnI9UwDZv9UnI";
         $url =$this->hostUrl."/index/order/index/param/all";
         $first = "亲，物流显示您的订单已签收，请确认！";
         $remark= "如果您已收到货，请点此消息确认收货";
