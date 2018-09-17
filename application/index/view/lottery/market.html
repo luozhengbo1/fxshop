@@ -75,7 +75,7 @@
         initData('dataList');
         var classId = $('#voucherClass').find('.active').attr('data-classid');
         var type = $('#voucherClass').find('.active').attr('data-type');
-        pageload({
+        var loadOption = {
             targetWarp:'dataListWrap',
             target:'dataList',
             page:1,
@@ -85,45 +85,69 @@
                 data:{goodsClassId:classId,type:type},
             },
             dealFun:dealData,
-            complete:imageLazy,
-        });
+            complete:function(){
+                imageLazy();
+                $('.lottery_btn .cancelBubble').each(function (index,ele) {
+                    console.log(ele);
+                    $(ele).click(function (e) {
+                        var oEvent = e || event;
+                        return false;
+                    })
+                });
+            }
+        };
+        if(!(window.loadPageFun)){
+            pageload(loadOption);
+        }else{
+            loadPageFun.dataInit(loadOption);
+        }
     }
 
     function dealData(data) {
         var class_name = $('#voucherClass').find('.active').html();
         var html='';
         for(var i = 0; i < data.length; i++){
+            var coupon_type = data[i].type;
             var imgArr = new Array();
             if(data[i].pic){
                 imgArr = eval(data[i].pic);
             }
             html +='<li>';
-            if(data[i].goods_id=='all'){
-                html +='    <a href="'+urlConnect("{:url('goodsclass/sort',['param'=>'sort'])}")+'" >';
-            }else{
-                html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].goods_id})+'" >';
+            switch(coupon_type){
+                case  constant.coupon.daijin:
+                    html +='    <a href="'+urlConnect("{:url('lottery/detail')}",{id:data[i].id,goods_id:data[i].id,type:'buy'})+'" >';
+                    break;
+                default:
+                    if(data[i].goods_id=='all'){
+                        html +='    <a href="'+urlConnect("{:url('goodsclass/sort',['param'=>'sort'])}")+'" >';
+                    }else{
+                        html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].goods_id})+'" >';
+                    }
+                    break;
             }
+
             html +='        <div class="clear">';
             html +='            <p class="fl" ><span class="catalog border-tag" style="vertical-align: top">'+class_name+'</span><i>'+data[i].name+'</i></p>';
             if(data[i].coupon_money){
-                html +='            <p class="price fr f16 bold pr10">￥'+data[i].coupon_money+'</p>';
+                switch(coupon_type){
+                    case  constant.coupon.daijin:
+                        html +='            <p class="price fr f16 bold pr10">￥'+data[i].coupon_real_money+'</p>';
+                        break;
+                    default:
+                        html +='            <p class="price fr f16 bold pr10">￥'+data[i].coupon_money+'</p>';
+                        break;
+                }
             }
             html +='        </div>';
-            html +='    </a>';
             html +='        <div class="clear mt5">';
-            if(data[i].goods_id=='all'){
-                html +='    <a href="{:url(\'goodsclass/sort\',array(\'param\'=>\'sort\'))}" >';
-            }else{
-                html +='    <a href="'+urlConnect("{:url('goods/detail')}",{id:data[i].id})+'" >';
-            }
             html +='            <ul class="item-img clear fl">';
             for(var n=0; n<imgArr.length; n++){
                 if(n<3)
                 html +='        <li><img  class="lazy"  src="__STATIC__/index/images/no-image.png" data-original="'+imgArr[n]+'"></li>';
             }
             html +='            </ul>';
-            html +='    </a>';
-            html +='            <div class="fr tr">';
+
+            html +='            <div class="fr tr lottery_btn">';
             html +=coupleTypeHtml(data[i]);
             html +='            </div>';
             html +='        </div>';
@@ -139,19 +163,18 @@
             case  constant.coupon.youhui:
                 html +='                <p class="price f12 mt10 tc"> 满'+data.coupon_real_money+'可优惠 </p>';
                 if(data.lotteryLog)
-                    html +='                <button class="layui-btn layui-btn-xs layui-btn-radius bg_grey pl10 pr10 mt10">已领取</button>';
+                    html +='                <button class="layui-btn layui-btn-xs layui-btn-radius bg_grey pl10 pr10 mt10 cancelBubble " onclick="getLottery('+data.id+',this)">已领取</button>';
                 else
-                    html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10 mt10" onclick="getLottery('+data.id+',this)">立即领取</button>';
+                    html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10 mt10 cancelBubble " onclick="getLottery('+data.id+',this)">立即领取</button>';
 
                 break;
             case  constant.coupon.daijin:
                 html +='                <p class="tc base-color mb10 mt10 tc">代'+data.coupon_money+'元券</p>';
-
-                html +='                <a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10 mt10" href="'+urlConnect("{:url('lottery/detail')}",{id:data.id,goods_id:data.id,type:'buy'})+'" >立即购买</a>';
+                html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10 mt10 " >立即购买</button>';
                 break;
             case constant.coupon.mianyou:
                 html +='                <p class="price f12 mt10 tc"> 包邮券 </p>';
-                html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10 mt10" onclick="getLottery('+data.id+',this)">立即领取</button>';
+                html +='                <button class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger pl10 pr10 mt10 cancelBubble " onclick="getLottery('+data.id+',this)">立即领取</button>';
                 break;
             default:
                 //  html +='                <p class="price"> ￥'+data.price+' </p>';
@@ -203,6 +226,7 @@
         }
     }
     function getLottery(id,_this) {
+
         loadShadow();
         $.ajax({
             type:'post',
@@ -221,6 +245,7 @@
                 }
             }
         })
+
     }
 
 </script>

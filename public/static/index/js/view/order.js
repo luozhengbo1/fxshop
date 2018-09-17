@@ -15,31 +15,37 @@ function refund(order_id,goods_id,sku_id) {
             pub_save({
                 url:url.refund,
                 data:{'order_id':order_id,'goods_id':goods_id,'sku_id':sku_id},
-                complete:loadOrderData,
+                complete:function () {
+                    setTimeout(function () {
+                        location.reload()
+                    },2000)
+                },
             })
         }
     });
 }
 //取消订单
 function cancelOrder(order_id,goods_id,sku_id) {
-        //layer.open({
-        //    content: '你确定要取消订单吗？'
-        //    ,btn: ['确定', '不要']
-        //    ,yes: function(index){
-                pub_save({
-                    url:url.cancelOrder,
-                    data:{'order_id':order_id,'goods_id':goods_id,'sku_id':sku_id},
-                    complete:loadOrderData,
-                })
-        //    }
-       // });
+    pub_save({
+        url:url.cancelOrder,
+        data:{'order_id':order_id,'goods_id':goods_id,'sku_id':sku_id},
+        complete:function () {
+            setTimeout(function () {
+                location.reload()
+            },2000)
+        },
+    })
 }
 //删除订单
 function deleOrder(order_id,goods_id,sku_id) {
     pub_save({
         url:url.deleOrder,
         data:{'order_id':order_id,'goods_id':goods_id,'sku_id':sku_id},
-        complete:loadOrderData,
+        complete:function () {
+            setTimeout(function () {
+                location.reload()
+            },2000)
+        },
     })
 }
 //确认收货
@@ -75,12 +81,13 @@ function orderTrack(order_id,goods_id,sku_id) {
 
 //物流单号
 function showWul(name,num) {
-    var msg = '<p class="mt10 f14 tl">物流名称：'+name+'</p>'
+    window.location.href=urlConnect(url.logisticsTrack,{name:name,num:num})
+    /*var msg = '<p class="mt10 f14 tl">物流名称：'+name+'</p>'
     msg += '<p class="mt10 f14 tl">物流单号：'+num+'</p>'
     layer.open({
         content:msg
         ,btn: '确定'
-    });
+    });*/
 }
 function pageReload() {
     setTimeout(function () {
@@ -107,7 +114,7 @@ function logisticForm(id) {
 //商品按钮
 function orderBtnHtml(json){
     var html='';
-    switch(json.order_status)
+    switch(json.pay_status)
     {
         case 1://已支付
             if(json.is_send==0 && json.settlement_type !=settlement.score)
@@ -133,7 +140,8 @@ function orderBtnHtml(json){
             break;
     }
     if( json.is_send!=constant.send.returnMoney && json.is_send!=constant.send.nosend ){
-        html +='    <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="showWul(\''+json.logistics_name+'\',\''+json.logistics_number+'\')">物流单号</button>'
+        // html +='    <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="showWul(\''+json.logistics_name+'\',\''+json.logistics_number+'\')">物流单号</button>'
+        html +='    <button class="layui-btn layui-btn-primary layui-btn-xs layui-btn-radius" onclick="showWul(\''+json.logistics_name+'\',\''+json.logistics_number+'\')">物流信息</button>'
     }
     return html;
 }

@@ -65,7 +65,7 @@
     function dealData(data) {
         var html='';
         for(var i = 0; i < data.length; i++){
-            var avg_score= parseInt(data[i].avg_score)*20;
+            var avg_score= parseFloat(data[i].avg_score)*20;
 
 
             html +='<li>';

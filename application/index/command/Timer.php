@@ -5,7 +5,7 @@
 //$password = 'root';
 //$dbname = 'tpadmin';
 include_once 'dbConfig.php';
-$conn = mysqli_connect($servername, $username, $password, $dbname) or die("连接失败：$conn->connect_error");
+$conn = mysqli_connect($host, $user, $pass, $dbname) or die("连接失败：$conn->connect_error");
 $user_query = "SELECT id,openid,nickname,create_time,score,birthday FROM fy_customer WHERE isdelete=0";
 $user_result = mysqli_query($conn, $user_query) or die('Error: ' . mysqli_error($conn));;
 //$lottery_query = "SELECT * FROM fy_lottery WHERE isdelete=0 and status=1";

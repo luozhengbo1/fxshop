@@ -23,12 +23,9 @@ Class Lottery extends Mustlogin
             $time = time();
             if ($type != 0) {
                 $where = [
-                    // 'fy_lottery.grant_start_date' => ['<', $time],
-                    // 'fy_lottery.grant_end_date' => ['>', $time],
                     'fy_lottery.status' => 1,
                     'fy_lottery.use_type' => 0,
                 ];
-
                 if ($goodsClassId != 'all') {#非通用
                     if (!$goodsClassId) {
                         return ajax_return_error('缺少参数分类id');
@@ -50,8 +47,6 @@ Class Lottery extends Mustlogin
                         ->page($page, $size)
                         ->select();
                 }
-
-//                echo Db::name('goods')->getLastSql();die;
             } else {
                 $lotterys = Db::name('lottery')
                     ->where([
@@ -63,9 +58,11 @@ Class Lottery extends Mustlogin
                     ])
                     ->page($page, $size)
                     ->select();
-                // dump($lotterys);
-                // die;
+
             }
+//            echo Db::name('goods')->getLastSql();die;
+//            dump($lotterys);
+//             die;
             $lotteryLogs = Db::name('lottery_log')->where(['openid' => $this->userInfo['openid']])->select();
             foreach ($lotterys as $k => $lottery) {
                 foreach ($lotteryLogs as $key => $log) {
@@ -129,22 +126,15 @@ Class Lottery extends Mustlogin
     }
 
     #券清单确认
-    public function affairm($lottery_id, $goods_id)
+    public function affairm($lottery_id)
     {
         $this->assign('titleName', "订单确认");
-        $goods = Db::name('goods')
-            ->where([
-                'id' => ['in', $goods_id],
-            ])
-            ->find();
         $lottery = Db::name('lottery')
             ->where([
                 'id' => ['in', $lottery_id],
             ])
             ->find();
         $this->assign('lottery', $lottery);
-        $this->assign('goods', $goods);
-
         return $this->view->fetch();
 
     }

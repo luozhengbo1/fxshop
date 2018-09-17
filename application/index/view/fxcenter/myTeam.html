@@ -1,0 +1,88 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+{include file="Public/header-title"}
+<!--我的活动中心-->
+
+<section>
+    {include file="fxcenter/header-fx"}
+    <div id="dataListWrap1">
+        <ul id="dataList" class="team-list">
+            {volist name="$userArr['child']" id="vo1" key="k1" }
+             <li>
+                  <a class="clear header-parent" href="{:url('fxcenter/userDetail',['uid'=>'2'])}" >
+                       <img class="fl mr20 img ml10" src="{$vo1['headimgurl']??''}">
+                       <p class="fl f16">{$vo1.nickname??''}</p>
+                       <p class="fr grey pr10">{php}echo count($vo1['child2']){/php}</p>
+                  </a>
+                 {if condition="$vo1['child2']" /}
+                 <div class="clear second-team mt10">
+                     {volist name="$vo1['child2']" id="vo2" key="k2"}
+                     <a href="{:url('fxcenter/userDetail',['uid'=>'2'])}">
+                         <div class="tc clear header-img">
+                             <img src="{$vo2['headimgurl']??''}">
+                             <p>{$vo2['nickname']??''}</p>
+                         </div>
+                     </a>
+
+                     {/volist}
+                 </div>
+                 {/if}
+             </li>
+            {/volist}
+        </ul>
+    </div>
+</section>
+{include file="Public/footer-quick-nav"}
+<script>
+    $(function () {
+       // loadDealData();
+        new WOW().init();
+    })
+
+    function loadDealData() {
+        initData('dataList');
+        pageload({
+            targetWarp: 'dataListWrap',
+            target: 'dataList',
+            page: 1,
+            size: 4,
+            ajaxData: {
+                url: "{:url('index/customer/myactivity')}",
+                data: {},
+            },
+            dealFun: dealData
+        });
+    }
+
+    function dealData(data) {
+        console.log(data);
+        var html = '';
+        for (var i = 0; i < data.length; i++) {
+            var animate = "bounceInLeft";
+            if (i % 2 == 0) {
+                animate = "bounceInRight";
+            }
+            html += '<li class="wow ' + animate + '">';
+            html += '     <a href="' + data[i].url + '">';
+            html += '         <img  src="' + data[i].main_pic + '">';
+            //转换时间戳
+            var start_date = new Date(parseInt(data[i].start_date)*1000).Format("yyyy-MM-dd hh:mm:ss");
+            var end_date =  new Date(parseInt(data[i].end_date)*1000).Format("yyyy-MM-dd hh:mm:ss");
+            html += '         <p  class="f12 grey lh30 h30 pl10">' + start_date + '－' + end_date + '</p>';
+            html += '         <div class="status-wrap"  >';
+            //判断所参与活动是否结束
+            var now_date = new Date().toLocaleString();
+            if (now_date > end_date) {
+                html += '             <span class="status ">已结束</span>';
+            } else {
+                html += '             <span class="status ">参与中</span>';
+            }
+            html += '         </div>';
+            html += '     </a>';
+            html += '</li>';
+        }
+        return html;
+    }
+</script>
+</body>
+</html>

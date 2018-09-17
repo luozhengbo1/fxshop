@@ -1,0 +1,88 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-bottom2">
+{include file="Public/header-title"}
+<style>
+    .fx-withdraw-list-tab li{
+        width: 20%;
+    }
+    .fx-withdraw-list li{
+        padding: 8px 10px 6px 10px;
+        margin-bottom: 1px;
+        background: white;
+    }
+    .fx-withdraw-list li p{
+        line-height: 24px;
+    }
+</style>
+<section>
+    <ul class="fx-withdraw-list-tab nav-list-tab" id="navListTab">
+        <li  id="nav_all"  class="active"  data-status="all"><a href="javascript:;">全部</a></li>
+        <li  id="nav_pay" data-status="1"><a href="javascript:;"  >待审核</a></li>
+        <li  id="nav_deliver" data-status="2"><a href="javascript:;"  >待打款</a></li>
+        <li  id="nav_takeDeliver" data-status="3"><a href="javascript:;"  >已打款</a></li>
+        <li  id="nav_refund" data-status="4"><a href="javascript:;"  >无效</a></li>
+    </ul>
+    <div id="dataListWrap">
+        <ul id="dataList" class="fx-withdraw-list mt40">
+            <!--<li class="clear" onclick="goWithDrawDetail()">-->
+            <!--    <div class="fl w70p">-->
+            <!--        <p>七星照：价值消费止规有机柑橘园</p>-->
+            <!--        <p>2018-08-25 12:20:38</p>-->
+            <!--    </div>-->
+            <!--    <div class="fr">-->
+            <!--        <p>提现：366积分</p>-->
+            <!--        <p class="green tr">付款完成</p>-->
+            <!--    </div>-->
+            </li>
+        </ul>
+    </div>
+</section>
+<script>
+    tabSwitch($('.nav-list-tab li'),loadOrderData);
+    $('#nav_all').click();
+    function loadOrderData(){
+
+        var status = $('#navListTab').find('.active').attr('data-status');
+        loadShadow();
+        hideEmptyWrap();
+        var loadOption = {
+            targetWarp:'dataListWrap',
+            target:'dataList',
+            page:1,
+            size:10,
+            ajaxData:{
+                url:"{:url('fxcenter/withdrawList')}",
+                data:{flag:status},
+            },
+            dealFun:dealData,
+
+        };
+        if(!(window.loadPageFun)){
+            pageload(loadOption);
+        }else{
+            loadPageFun.dataInit(loadOption);
+        }
+    }
+    function dealData(result) {
+        var html='';
+        for(var i = 0; i < result.length; i++){
+            var status = result[i].status;
+            html +='<li class="clear" onclick="goWithDrawDetail('+result[i].id+')">';
+            html +='    <div class="fl w60p">'
+            html +='        <p class="ellipsis-oneline">'+result[i].tx_user+'</p>';
+            html +='        <p >'+result[i].create_time+'</p>';
+            html +='    </div>';
+            html +='    <div class="fr">';
+            html +='        <p>提现：'+result[i].tx_money+'积分</p>';
+            html +='        <p class="green tr">'+constant.fxTxStatus[status]+'</p>';
+            html +='    </div>';
+        }
+
+        return html;
+    }
+    function goWithDrawDetail(id) {
+        window.location.href= urlConnect("{:url('fxcenter/withDrawDetail')}",{id:id});
+    }
+</script>
+</body>
+</html>

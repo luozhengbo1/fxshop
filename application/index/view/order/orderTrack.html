@@ -17,7 +17,8 @@
     </div>
     <div class="fr"><img  style="width: 100px" src="__STATIC__/index/images/sell_pay.png"></div>
 </div>
-{if condition="$afterSale['user_wuliu_type_order'] eq ''" /}
+<!--没有填写过快递信息，并且商家同意了退换货-->
+{if condition="$afterSale['user_wuliu_type_order'] eq '' && $afterSale['yes_or_no'] eq 1 " /}
 <div class="bg_white h50 lh50 tc" id="orderInfo">
     <button class="layui-btn  layui-btn-radius  layui-btn-normal" onclick="logisticForm({$afterSale['id']})">
         填写售后快递信息

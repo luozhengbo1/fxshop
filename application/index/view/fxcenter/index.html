@@ -1,0 +1,87 @@
+{include file="Public/header-resource"}
+<body class="footer-boottom">
+<style>
+    .customer-page .my-order-sort li{
+        width: 33.3%;
+    }
+    .customer-page .my-order-sort li p{
+        line-height: 26px;
+    }
+    .customer-page .my-order-sort li .num{
+        font-size: 16px;
+        font-weight: bold;
+    }
+</style>
+<section class="customer-page">
+    {include file="fxcenter/header-fx"}
+    <div class="my-order">
+        <ul class="my-order-sort clear">
+            <li>
+                <a href="{:url('fxcenter/scoreSearchType',['searchtype'=>'0'])}" >
+                    <img src="__STATIC__/index/images/icon/total_point.png">
+                    <p>累计积分</p>
+                    <p class="num">{$user['fx_total_money']??'0.00'}</p>
+                </a>
+            </li>
+            <li>
+                <a href="{:url('fxcenter/scoreSearchType',['searchtype'=>'1'])}"  >
+                    <img src="__STATIC__/index/images/icon/no_draw.png">
+                    <p>未提现积分</p>
+                    <p class="num">{$user['fx_money']??'0.00'}</p>
+                </a>
+            </li>
+            <li>
+                <a href="{:url('fxcenter/scoreSearchType',['searchtype'=>'2'])}"  >
+                    <img src="__STATIC__/index/images/icon/yes_draw.png">
+                    <p>可提现积分</p>
+                    <p class="num">{$user['fx_money']??'0.00'}</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="my-service">
+        <p class="item-title clear">
+            <a href="javascript:;">
+                <span class="fl">我的服务</span>
+            </a>
+        </p>
+        <ul class="service-list">
+
+            <li class="clear">
+                <a href="{:url('fxcenter/scoreSearchType',['searchtype'=>'3'])}"  >
+                    <img src="__STATIC__/index/images/icon/yes_draw.png">
+                    <span >已提现积分{$user['fx_tx_total_money']??'0.00'}</span>
+                    <i class="iconfont icon-right-arrow f12  fr"></i>
+                </a>
+            </li>
+            <li class="clear">
+                <a href="{:\\think\\Url::build(\'fxcenter/withdrawList\')}" >
+                    <img src="__STATIC__/index/images/icon/point_detail.png">
+                    <span >积分提现明细</span>
+                    <i class="iconfont icon-right-arrow f12  fr"></i>
+                </a>
+            </li>
+            <li class="clear">
+                <a  href="{:url('fxcenter/myTeam')}"   >
+                    <img src="__STATIC__/index/images/icon/person.png">
+                    <span >我的客户{$sonUser??'0'}</span>
+                    <i class="iconfont icon-right-arrow f12  fr"></i>
+                </a>
+            </li>
+            <li class="clear">
+                <a href="{:url('fxcenter/myqrcode')}"  >
+                    <img src="__STATIC__/index/images/icon/erweima.png">
+                    <span >分享二维码</span>
+                    <i class="iconfont icon-right-arrow f12  fr"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</section>
+
+{include file="Public/footer"}
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

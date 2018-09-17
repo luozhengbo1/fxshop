@@ -1,0 +1,70 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+
+{include file="Public/header-title"}
+<section>
+    <div class="fx-bank-card base-bg clear">
+        <div class="fl tc w80p">
+            <img src="__STATIC__/index/images/bank_icon/nongye.png">
+            <p class="f14">{$bank['cart_number']|substr=0,6}****************{$bank['cart_number']|substr=-4}</p>
+        </div>
+    </div>
+    <div class="fx-user-detail">
+        <ul class="service-list">
+            <li class="clear">
+                <span class="grey">可提现积分</span>
+                <span>{$user['fx_money']??'0.00'}</span>
+            </li>
+            <li class="clear">
+                <span class="grey">税后所得金额</span>
+                <span>{$user['fx_real_money']??'0.00'}</span>
+            </li>
+            <li class="clear">
+                <span class="grey">手机号</span>
+                <span>{$user['mobile']??''}</span>
+            </li>
+        </ul>
+    </div>
+    <div class="fx-user-detail">
+        <p class="item-title clear">
+            <a href="javacript:;">
+                <span class=" green">温馨提示</span>
+            </a>
+        </p>
+        <ul class="service-list">
+            <li class="clear">
+                <span class="grey">平台运营综合服务费：</span>
+                <span>16.5%</span>
+            </li>
+            <li class="clear">
+                <span class="grey">提现金额0-5000(不含5000)：</span>
+                <span class="red">2元</span>
+            </li>
+            <li class="clear">
+                <span class="grey">提现金额5000-10000(不含10000)：</span>
+                <span class="red">5元</span>
+            </li>
+            <li class="clear">
+                <span class="grey">提现金额10000-20000(不含20000)：</span>
+                <span class="red">10元</span>
+            </li>
+        </ul>
+    </div>
+    <div class="footer-fixed btn-wrap">
+        <a href="javascript:;" onclick="txFunction()" class="btn-dark-red w100p bootstrap-btn">确认提现</a>
+    </div>
+</section>
+
+{include file="Public/footer-quick-nav"}
+</body>
+<script>
+    function txFunction (){
+        var bankId = "{$bank['id']}"
+        pub_edit({
+            url:"{:url('fxcenter/txScoreAdd')}",
+            data:{bankId:bankId},
+            return_url:"{:url('fxcenter/withdrawlist')}",
+        })
+    }
+</script>
+</html>

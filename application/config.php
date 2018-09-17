@@ -229,17 +229,20 @@ return [
         'list_rows' => 15,
     ],
     #微信配置
-    'app_id'=>'wxd9da51e6bae6c3c0',
-    'app_secret'=>'ae60c49ed63b16f55ca76ba597cbb1c8',
-    'wx_key'=>'7c82dcb3c8437f7c654b57fb0509944b',
-    'mchid' => '1441217402',
+    'app_id'=>'wx879e0ef16da851a4',
+    'app_secret'=>'0ed4bfdab70f84e9ea8290fb3f3c8dbf',
+    'wx_key'=>'8265fea37556137b2c8f9bff67c82d9c',
+    'mchid' => '1507944761',
     #订单付款通知
-    'order_pay'=>'hN9bm2tlU2gsBwJxH8eiWFvKHnFabfdlFyZBS3PC5n4',
-    #订单退款通知
-    'order_refund'=>'wFlXa4vtBJvg82JmwIzF8pAt2w7K-wHf0op20uk2dws',
-    #发货提醒通知
-    'send'=>'lxuLCs3_eY7wsa2CTVUT45mqW8hECsK5gqns7LEHy6c',
-    #确认收货提醒
-    'sure'=>'vfjUQ3F8WVhlcbArgxX7rirho2yp9CtnI9UwDZv9UnI',
+    #'order_pay'=>'hN9bm2tlU2gsBwJxH8eiWFvKHnFabfdlFyZBS3PC5n4',
+   'order_pay'=>'9HKxB2nTC5MItLAOM925s2ek6rvkX9sLmozjZx0nrN8',
 
+    #订单退款通知
+    'order_refund'=>'Nfr76-g7rDwoiG5PNtV_jp6cUTEisNBp2O2kNJkeEcg',
+    #发货提醒通知
+    'send'=>'OCbR5gfPchBFk8FdeQcvYNNO6RfbzKfXRh46bWjL55Y',
+    #确认收货提醒
+    'sure'=>'TsrI9Fv_muvSOhjVLvK6sSxAuxwTJ9d5JYvpFgL98lQ',
+    #打款通知
+    'make_money'=>'xsRRmERbpSDvW5GH3nEuWNHF2W2-_PNfqaWqqi_Boc0',
 ];

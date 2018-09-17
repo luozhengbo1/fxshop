@@ -154,4 +154,42 @@ class Index extends Controller
         return $this->view->fetch();
     }
 
+    /**
+     * 清除缓存
+     */
+    public function clear() {
+        if ($this->delete_dir_file(CACHE_PATH) || $this->delete_dir_file(TEMP_PATH)) {
+           return ajax_return_adv('清除缓存成功');
+        } else {
+            return ajax_return_adv_error('清除缓存失败');
+        }
+    }
+    /**
+     * 循环删除目录和文件
+     * @param string $dir_name
+     * @return bool
+     */
+    public function delete_dir_file($dir_name) {
+        $result = false;
+        if(is_dir($dir_name)){
+            if ($handle = opendir($dir_name)) {
+                while (false !== ($item = readdir($handle))) {
+                    if ($item != '.' && $item != '..') {
+                        if (is_dir($dir_name . DS . $item)) {
+                            $this->delete_dir_file($dir_name . DS . $item);
+                        } else {
+                            unlink($dir_name . DS . $item);
+                        }
+                    }
+                }
+                closedir($handle);
+                if (rmdir($dir_name)) {
+                    $result = true;
+                }
+            }
+        }
+        return $result;
+    }
+
+
 }

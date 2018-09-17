@@ -46,17 +46,16 @@ class GoodsComment extends Controller
             if($res){
                 Db::name('order_goods')->where(['id'=>$goodsComment['ogid']])->update(['is_send'=>6]);
 //                #加上10积分
-//                Db::name('customer')->where(['openid'=>$goodsComment['openid']])->setInc('score',10);
-//                #加上用户积分记录
-//                Db::name('score_log')->insert([
-//                    'openid'=>$goodsComment['openid'],
-//                    'source_id'=>$data['id'],
-//                    'source'=>11,
-//                    'source'=>10,
-//                    'time'=>time(),
-//                ]);
+                Db::name('customer')->where(['openid'=>$goodsComment['openid']])->setInc('score',10);
+                #加上用户积分记录
+                Db::name('score_log')->insert([
+                    'openid'=>$goodsComment['openid'],
+                    'source_id'=>$data['id'],
+                    'source'=>11,
+                    'source'=>10,
+                    'time'=>time(),
+                ]);
             }
-
             return ajax_return_adv('回复成功','parent','回复成功','');
         }else{
             $vo = $this->getModel()->where(['id'=>$this->request->param("id")])->find();
@@ -70,11 +69,11 @@ class GoodsComment extends Controller
     {
         $id = $this->request->param('id');
         $goodsComment = Db::name('goodsComment')->where(['id'=>$id])->find();
-        $scoreLog = Db::name('score_log')->where(['source_id'=>$id,'openid'=>$goodsComment['openid']])->find();
+        $scoreLog = Db::name('score_log')->where(['source_id'=>$id, 'source'=>11,'openid'=>$goodsComment['openid']])->find();
         if(!$scoreLog){
             Db::name('customer')->where(['openid'=>$goodsComment['openid']])->setInc('score',10);
             #加上用户积分记录
-            Db::name('score_log')->insert([
+            $res = Db::name('score_log')->insert([
                 'openid'=>$goodsComment['openid'],
                 'source_id'=>$id,
                 'source'=>11,

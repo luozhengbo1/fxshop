@@ -1,26 +1,35 @@
+<style>
+	.search-btn{
+		padding: 6px 10px;
+		display: inline-block;
+		background: white;
+		border-radius: 4px;
+	}
+</style>
 <header class="header-search">
 	<div class="search-box-cover"></div>
 	<div class="search-box">
 		<section  class="input" style="color: rgb(255, 255, 255);">
 			<a class="search_bg" href="javascript:;">
-				<i  class="iconfont icon-search" id="searchIcon" onclick="searchGoods()"></i>
+				<i  class="iconfont icon-search searchIcon" id="searchIcon" onclick="searchGoods()"></i>
 				<div id="form" class="w100p">
 					<input type="text" name="goodsName" onkeyup="searchChange(this)"  id="goodsNameSearch" data-text="商品不为空" placeholder="商品搜索">
 				</div>
-				<i id="clearSearch" style="display: none" class="iconfont icon-guanbi f12" onclick="clearSearch(this)"></i>
+				<i id="clearSearch" style="display: none" class="iconfont icon-guanbi f12 " onclick="clearSearch()"></i>
 			</a>
 		</section>
 		<div class="fl  mr10">
-			<a href="{:url('customer/message')}" class="message">
+			<a class="search-btn searchIcon" href="javascript:;"  onclick="searchGoods()">搜索</a>
+			<!--<a href="{:url('customer/message')}" class="message">
 				<i class="iconfont icon-message"></i>
-			</a>
+			</a>-->
 		</div>
 	</div>
 </header>
 <script>
     enterKey(searchGoods);
     function searchGoods(){
-        $('#searchIcon').removeAttr('onclick')
+        $('.searchIcon').removeAttr('onclick')
 		getGoods(formData('form'))
     }
 	function clearSearch(_this) {

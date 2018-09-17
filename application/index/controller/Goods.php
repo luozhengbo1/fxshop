@@ -4,8 +4,10 @@
 	use think\Cache;
 	use think\Session;
 	use think\Controller;
-
-	Class Goods extends  Controller
+    use think\Request;
+    use think\Config;
+    Class Goods extends  Controller
+//	Class Goods extends  Mustlogin
 	{
 	    protected $userInfo;
 	    public function __construct()
@@ -29,6 +31,21 @@
             $time = time();
             $this->view->assign('currentTime',  $time);
             $this->assign('carNum', $carNum);
+
+            #微信分享
+            $localUrl = 'http://'.$_SERVER['HTTP_HOST'].':'.$_SERVER['SERVER_PORT'].$_SERVER['REQUEST_URI'];
+            $data=[
+                'linkurl'=>$localUrl,
+                'img'=>'http://'.$_SERVER['HTTP_HOST'].':'.$_SERVER['SERVER_PORT'].'/pic/uploads/20180815/e554024d8505052d6bb4deaaa2c23a03.png',
+                'des'=>'泛亚商城各类商品即将上线完毕，商品类型多种多样，欢迎各位会员体验购买！'
+            ];
+            $this->view->assign('fxData',$data);
+            $appid =Config::get('app_id');
+            $appSecret =Config::get('app_secret');
+            $jssdk = new Jssdk($appid,$appSecret);
+            $signPackage = $jssdk->GetSignPackage();
+            $this->view->assign('wx',$signPackage);
+            $this->view->assign('wxShare',$this->view->fetch('Public/wxShare'));
         }
 
         #获取商品的
@@ -45,47 +62,65 @@
                 ->order('orderby desc ,create_time DESC')
                 ->page($page,$size)
                 ->select();
-//            foreach ($goodsList as $k=>$v){
-//                $goods_attribute = Db::name('goods_attribute')
-//                    ->where(['goods_id'=>$v['id']])
-//                    ->page($page,$size)
-//                    ->select();
-//                $goodsList[$k]['skuData'] =$goods_attribute;
-//            }
+
             return ajax_return($goodsList,'ok','200');
         }
         #获取这个商品的详情
-        public function detail($id)
+        public function detail($id,$flag='index')
         {
             $this->assign('titleName', "商品详情");
             if(!$id){
                 return ajax_return_error('缺少商品id','500');
             }
             #浏览记录 start
-            $browse=[];
-            $browseRes = Db::name('goods_browse')
-                ->where(['openid'=>$this->userInfo['openid'],'goods_id'=>$id])
-                ->find();
-            $time = time();
-            if( empty($browseRes) ){
-                Db::name('goods_browse')->insert(['create_time'=>$time,'update_time'=>$time,'openid'=>$this->userInfo['openid'],'goods_id'=>$id ,'num'=>1]);
-            }else{
-                Db::name('goods_browse')->where(['openid'=>$this->userInfo['openid'],'goods_id'=>$id])->setInc('num',1);
+            if($this->userInfo['openid']){
+                $browse=[];
+                $browseRes = Db::name('goods_browse')
+                    ->where(['openid'=>$this->userInfo['openid'],'goods_id'=>$id])
+                    ->find();
+                $time = time();
+                if( empty($browseRes) ){
+
+                    Db::name('goods_browse')
+                        ->insert(['create_time'=>$time,'update_time'=>$time,'openid'=>$this->userInfo['openid'],'goods_id'=>$id ,'num'=>1]);
+                }else{
+                    Db::name('goods_browse')->where(['openid'=>$this->userInfo['openid'],'goods_id'=>$id])->setInc('num',1);
+                }
             }
             #浏览记录 end
-            $goods =Db::name('goods')->where(['id'=>$id])->find();
-//            dump($goods);die;
-            $skuData =  Db::name('goods_attribute')
-                ->where(['goods_id'=>$id])
-                ->select();
-            $proprety_name =  Db::name('goods_proprety_name')
-                ->where(['goods_id'=>$id])
-                ->select();
-            $proprety_name_val =  Db::name('goods_proprety_name')->alias('n')
-                ->field('n.id as pro_id,n.name,fy_goods_proprety_val.value,fy_goods_proprety_val.id')
-                ->join('fy_goods_proprety_val','fy_goods_proprety_val.propre_name_id=n.id')
-                ->where(['n.goods_id'=>$id])
-                ->select();
+            $goods = Cache::get('goodsDetail'.$id);
+            if(!$goods){
+                $goods =Db::name('goods')->where(['id'=>$id])->find();
+                if(empty($goods)){
+                    return $this->view->fetch('index/noPage');
+                }
+                Cache::set('goodsDetail'.$id,$goods,30*60);
+            }
+            $skuData = Cache::get('skuData'.$id);
+            if(!$skuData){
+                $skuData =  Db::name('goods_attribute')
+                    ->field('id,goods_id,attribute_name,goods_code,store,price,bar_code,point_score')
+                    ->where(['goods_id'=>$id])
+                    ->select();
+                Cache::set('skuData'.$id,$skuData,30*60);
+            }
+            $proprety_name = Cache::get('proprety_name'.$id);
+            if(!$proprety_name){
+                $proprety_name =  Db::name('goods_proprety_name')
+                    ->field('id,goods_id,name,goods_class_id')
+                    ->where(['goods_id'=>$id])
+                    ->select();
+                Cache::set('proprety_name'.$id,$proprety_name,30*60);
+            }
+            $proprety_name_val = Cache::get('proprety_name_val'.$id);
+            if(!$proprety_name_val){
+                $proprety_name_val =  Db::name('goods_proprety_name')->alias('n')
+                    ->field('n.id as pro_id,n.name,fy_goods_proprety_val.value,fy_goods_proprety_val.id')
+                    ->join('fy_goods_proprety_val','fy_goods_proprety_val.propre_name_id=n.id')
+                    ->where(['n.goods_id'=>$id])
+                    ->select();
+                Cache::set('proprety_name_val'.$id,$proprety_name_val,30*60);
+            }
             $arr =[];
             foreach($proprety_name as $k=>$v){
                 foreach ($proprety_name_val as $key=>$val){
@@ -105,40 +140,46 @@
                 $goods['service'] = json_decode($goods['service'],true);
             }
             #查询该商品是否有优惠券在这里显示的一定是商品优惠券
-          //  dump($goods);
             $this->view->assign('goods',$goods);
             $this->view->assign('skuData',$skuData);
             $this->view->assign('proprety_name',$proprety_name);
             $this->view->assign('proprety_name_val',$proprety_name_val);
             $this->view->assign('arr',$arr);
             #获取猜你喜欢的商品
-          // dump($arr);
-//           dump($proprety_name_val);
-           //dump($skuData);die;
             $this->view->assign('guestGoods',$this->guestYouLike($id));
             $arr = $this->getGoodsgoodOrBad($id);
-            $lotterys =$this->return_lottery($id);
-            $this->view->assign('lotterys', $lotterys);
+
+            if($goods['settlement_type'] == 2){
+                //结算类型是积分结算
+                $this->view->assign('lotterys', array());
+            }else{
+                $lotterys =$this->return_lottery($id);
+                $this->view->assign('lotterys', $lotterys);
+            }
+
             $this->view->assign('bad', $arr['bad']  );
             $this->view->assign('mid', $arr['mid'] );
             $this->view->assign('good', $arr['good'] );
-            //dump($lotterys);
-            //$this->view->assign('lotterys',$this->getLottery($id) );
             return $this->view->fetch();
         }
 
         public function getGoodsgoodOrBad($id)
         {
-            $bad = Db::name('goods_comment')
-                ->where(['status'=>1,'goods_id'=>$id,'avg_score'=>['between',[0,2] ]])
-                ->count();
-            $mid = Db::name('goods_comment')
-                ->where(['status'=>1,'goods_id'=>$id,'avg_score'=>['between',[2,4] ]])
-                ->count();
-            $good = Db::name('goods_comment')
-                ->where(['status'=>1,'goods_id'=>$id,'avg_score'=>['between',[4,5] ]])
-                ->count();
-            return ['bad'=>$bad,'mid'=>$mid,'good'=>$good];
+            $getGoodsgoodOrBad = Cache::get('getGoodsgoodOrBad'.$id);
+            if(!$getGoodsgoodOrBad){
+                $bad = Db::name('goods_comment')
+                    ->where(['status'=>1,'goods_id'=>$id,'avg_score'=>['between',[0,2] ]])
+                    ->count();
+                $mid = Db::name('goods_comment')
+                    ->where(['status'=>1,'goods_id'=>$id,'avg_score'=>['between',[2.0001,4] ]])
+                    ->count();
+                $good = Db::name('goods_comment')
+                    ->where(['status'=>1,'goods_id'=>$id,'avg_score'=>['between',[4.0001,5] ]])
+                    ->count();
+                $getGoodsgoodOrBad=['bad'=>$bad,'mid'=>$mid,'good'=>$good];
+                Cache::set('getGoodsgoodOrBad'.$id,$getGoodsgoodOrBad,60*30);
+            }
+            return $getGoodsgoodOrBad;
         }
 
         #商品搜索
@@ -149,21 +190,20 @@
             $size = $this->request->param('size');
             $showArea = $this->request->param('show_area');
             $tempArr = explode(",", $showArea);
+            $time = time();
+            $where = [
+                'status'=>1,
+                'isdelete'=>0,
+                'show_area'=>['in',$tempArr],
+            ];
+            if($showArea ==1){
+                //限时抢购，只查活动时间没有结束的活动
+               // $where['start_date'] = ['<',$time];
+                $where['end_date'] = ['>',$time];
+            }
             //空查所有
-            if(empty($name) ){
-                //return ajax_return_error('缺少搜索参数');
-                $where = [
-                    'status'=>1,
-                    'isdelete'=>0,
-                    'show_area'=>['in',$tempArr],
-                ];
-            }else{
-                $where =[
-                    'status'=>1,
-                    'isdelete'=>0,
-                    'name'=>['like',"%$name%"],
-                    'show_area'=>['in',$tempArr],
-                ];
+            if(!empty($name) ){
+                $where['name'] = ['like',"%$name%"];
             }
             $goodsList = Db::name('goods')
                 ->where($where)
@@ -185,14 +225,10 @@
                 Db::name('search')->insert($data);
             }
             $searchId = Db::name('search')->getLastInsID();
-           //if( empty($goodsList) ){
-           //    return ajax_return_error('什么也没有搜到','500','');
-           //}else{
-                Db::name('search')
-                    ->where(['id'=>$searchId])
-                    ->update(['goods_id'=>join(array_column($goodsList,'id'),',')]);
-                return ajax_return($goodsList,'ok','200');
-           // }
+            Db::name('search')
+                ->where(['id'=>$searchId])
+                ->update(['goods_id'=>join(array_column($goodsList,'id'),',')]);
+            return ajax_return($goodsList,'ok','200');
         }
         public function getSearchName(){
             $name = $this->request->param('goodsName');
@@ -264,10 +300,8 @@
                    ->where(['status'=>1,'isdelete'=>'0','goods_class_id'=>$goodsClass['goods_class_id'],'show_area'=>$thisGoods['show_area' ] ])
                     ->limit(24)
                    ->select();
-
             }
             return  array_chunk($goodsList,6,false);
-
         }
         public function getSku($id){
             $skuData =  Db::name('goods_attribute')
@@ -283,7 +317,6 @@
         #获取这个商品的详情
         public function evaluateList()
         {
-
             return $this->view->fetch('evaluateList');
         }
 
@@ -300,15 +333,16 @@
                 if(!$data['id']){
                     return ajax_return_error('缺少参数id');
                 }
+                $data['start']=$data['start']+0.0001;
                 $comment = Db::name('goods_comment')
                     ->where(['status'=>1,'goods_id'=>$data['id'], 'avg_score'=>['between',[$data['start'],$data['end'] ]]])
                     ->page($page,$size)
                     ->select();
+//                echo Db::name('goods_comment')->getLastSql();die;
                 $count = Db::name('goods_comment')
                     ->where(['status'=>1,'goods_id'=>$data['id'],'avg_score'=>['between',[$data['start'],$data['end'] ]]])
                     ->page($page,$size)
                     ->count();
-//                dump($comment);
                 return ajax_return($comment,'ok','200');
             }else{
                 $arr = $this->getGoodsgoodOrBad( $this->request->param('goods_id'));
@@ -319,12 +353,12 @@
                 return $this->view->fetch('commentsList');
             }
         }
-        #获取商品评论接口
+        #积分商城
         public function  goodsScore(){
             $this->assign('titleName', "积分商城");
             return $this->view->fetch('goodsScore');
         }
-        #获取商品评论接口
+        #限时抢购
         public function  rushPurchase(){
             $this->assign('titleName', "限时抢购");
             return $this->view->fetch('rushPurchase');
@@ -339,6 +373,11 @@
             $time = time();
             $resultLottery=array();
             $arrType=[2,4];
+            //积分商品查出优惠券
+            $settlementType = Db::name('goods')
+                ->field('settlement_type')->where(["id"=>$goods_id])->find();
+            dump($settlementType);
+            die;
             $arrGoodsId =[$goods_id,'all'];
             $lotterys = Db::name('lottery')->where([
                 "goods_id"=>['in',$arrGoodsId],
@@ -348,8 +387,6 @@
                 'type'=>['in', $arrType],
                 'grant_end_date' =>['>', $time],
             ])->select();
-//            echo Db::name('lottery')->getLastSql();
-//            dump($lotterys);die;
             #查询领取过这个奖券
             $lotteryLogs = Db::name('lottery_log')->where(['openid' => $this->userInfo['openid']])->select();
             foreach ($lotterys as $k=>$lottery){
@@ -369,9 +406,7 @@
                 }else if($lot['expire_type'] == 1){
                     array_push($resultLottery, $lot);
                 }
-
             }
-//            dump($resultLottery);die;
             return $resultLottery;
         }
 
@@ -385,26 +420,21 @@
             }
         }
 
-
-
         public function return_lottery($goods_id)
         {
             #取出商品中发行中，未删除的所具有的券
             $time = time();
             $lotterys=array();
-            $arrType=[2,4];
+            //券的类型
+            $arrType=[2];
             $arrGoodsId =[$goods_id,'all'];
             $tempLottery = Db::name('lottery')->where([
                 "goods_id"=>['in',$arrGoodsId],
                 'status'=>1,
                 'isdelete'=>'0',
-                // 'grant_start_date' =>['<', $time],
                 'type'=>['in', $arrType],
                 'use_type'=>0,
-                // 'grant_end_date' =>['>', $time],
             ])->select();
-//            echo Db::name('lottery')->getLastSql();
-//            dump($lotterys);die;
             #查询领取过这个奖券
             $lotteryLogs = Db::name('lottery_log')->where(['openid' => $this->userInfo['openid']])->select();
             foreach ($tempLottery as $k=>$lottery){
@@ -415,7 +445,6 @@
                     }
                 }
             }
-            // dump($tempLottery);
             foreach ($tempLottery as $key=>$lot){
                 #expire_type 0 表示有效期是按日期设置 1 按天数设置
                 if($lot['expire_type'] ==0 &&
@@ -437,7 +466,6 @@
                 }
 
             }
-
             return $lotterys;
         }
 

@@ -14,7 +14,12 @@
             if($vo['type']==5){ echo "生日券";}
 ?></td>
 <td><?php
-      echo "满".$vo['coupon_real_money'].'减'.$vo['coupon_money'].'元';
+        if($vo['type']==3){
+             echo $vo['coupon_real_money'].'代'.$vo['coupon_money'].'元';
+        }else{
+              echo "满".$vo['coupon_real_money'].'减'.$vo['coupon_money'].'元';
+
+        }
 ?></td>
 <td>{$vo.number}</td>
 <td>{$vo.surplus_number}</td>

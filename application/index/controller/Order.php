@@ -36,11 +36,11 @@ Class Order extends Mustlogin
             $page = $this->request->param('page') ? $this->request->param('page') : 1;
             $size = $this->request->param('size') ? $this->request->param('size') : 4;
             $data = $this->request->post();
-
+            $this->userInfo['openid']="omQYXwAasNeXdGSMymd91487Ds1g";
             if ($data['status'] == 'all') {
                 $where = ['fy_order.openid' => $this->userInfo['openid']];
             } else {
-//                    $this->userInfo['openid']="omQYXwA8qpkaMYAOG5h3aHHLJVOE";
+
                 #待付款
                 if ($data['status'] == 0) {
                     $where = ['fy_order.openid' => $this->userInfo['openid'], 'fy_order.pay_status' => 0, 'fy_order.order_status' => 0];
@@ -76,6 +76,7 @@ Class Order extends Mustlogin
             foreach ($orderList as $k => $v) {
 
                 $orderList[$k]['goods_detail'] = json_decode($v['goods_detail'], true);
+                $orderList[$k]['lottery_detail'] = json_decode($v['lottery_detail'], true);
             }
             $orderList = array_values($this->array_group_by($orderList, 'order_id'));
             return ajax_return($orderList, 'ok', '200');
@@ -118,6 +119,7 @@ Class Order extends Mustlogin
                         "fy_lottery.goods_id" => ['in', $arrGoodsId],
                         'fy_lottery.status' => 1,
                         'fy_lottery.isdelete' => 0,
+                        'fy_lottery_log.lottery_num' =>['>',0],
                         //'fy_lottery.expire_start_date' =>['<', $time],
                         //'fy_lottery.expire_end_date' =>['>', $time],
                         'fy_lottery_log.openid' => $this->userInfo['openid'],
@@ -267,6 +269,15 @@ Class Order extends Mustlogin
             foreach ($data as $k => $v) {
                 $goodsAttribute = Db::name('goods_attribute')->where(['id' => $v['skuId']])->find();
                 $goods = Db::name('goods')->where(['id' => $v['goodsId']])->find();
+                if($goods['status']==0 || !$goodsAttribute){
+                    return ajax_return('', '商品失效，请重新下单', '500');
+                }
+                if($goods['show_area']==1){
+                    if($time  < $goods['start_date'] ||  $goods['end_date']< $time ){
+                        return ajax_return('', '商品失效，请重新下单1', '500');
+                    }
+
+                }
                 if ($goodsAttribute['store'] < $v['num']) {
                     return ajax_return($goods['name'], '该商品库存不足，还剩' . $goodsAttribute['store'], '500');
                 }
@@ -275,22 +286,25 @@ Class Order extends Mustlogin
                 }
                 if (!empty($v['youhui_lottery_log_id'])) {
                     #查询使用优惠券是否过期
-                    $checkLotteryLog = Db::name('lottery_log')->field('addtime,lottery_info')->where(['id' => $v['youhui_lottery_log_id']])->find();
-                    $checkLotteryLog['lottery_info'] = json_decode($checkLotteryLog['lottery_info'], true);
+                    $checkLotteryLog = Db::name('lottery_log')->where(['id' => $v['youhui_lottery_log_id']])->find();
+                    #检测这张券是否已经使用
+                    $checkLotteryLog['lottery_info'] = Db::name('lottery')->where(['id'=>$v['youhuiId']])->find();
+                    if($checkLotteryLog['lottery_num']<=0){
+                        return ajax_return('', $checkLotteryLog['lottery_info']['name'].'该券已经使用了');
+                    }
                     if( $checkLotteryLog['lottery_info']['goods_id']=='all'){
                         $totalLotteryAll+=1;
                     }
                     if ($checkLotteryLog['lottery_info']['expire_type'] == 1) {
                         if ($time > ($checkLotteryLog['lottery_info']['expire_time'] * 60 * 24 * 60 + $checkLotteryLog['addtime'])) {
-                            return ajax_return('', '使用的券不在使用期限内', '500');
+                            return ajax_return('', '使用的券不在使用期限内2', '500');
                         }
                     } else {
                         if ($time < $checkLotteryLog['lottery_info']['expire_start_date'] || $time > $checkLotteryLog['lottery_info']['expire_end_date']) {
-                            return ajax_return('', '使用的券不在使用期限内', '500');
+                            return ajax_return('', '使用的券不在使用期限内3', '500');
                         }
                     }
                 }
-
             }
             if($totalLotteryAll>1){
                 return ajax_return('', '一个订单只能使用一张通用优惠券', '500');
@@ -314,7 +328,6 @@ Class Order extends Mustlogin
             include_once 'WxPaySDK/WxPay.Config.php';
             #订单总价的计算
             $price = $this->calculateOrderValue($data);
-//                dump($price);die;
             if ($price == 0) {
                 $price = 0.01; #至少支付一分钱
             }
@@ -351,7 +364,6 @@ Class Order extends Mustlogin
                     "type" => $type,
                     "total_point" => $userPoint[$k],
                 );
-
                 #添加上商户id
                 foreach ($v as $val) {
                     $orderRow[$k]["user_id"] = Db::name('goods')->field('user_id')->where(['id' => $val['goodsId']])->find()['user_id'];
@@ -378,6 +390,7 @@ Class Order extends Mustlogin
                 #该商品实际支付价格
                 $skuVal = Db::name('goods_attribute')->where(['id' => $v['skuId']])->find();
                 $orderGoods[$k]['real_pay_price'] = $v['num'] * ($skuVal['price'] + $goodsData['postage']);
+                $orderGoods[$k]['real_pay_score'] = $v['num'] * $skuVal['point_score'] ;
                 $orderGoods[$k]['words'] = $v['words'];
                 $orderGoods[$k]['sku_val'] = $v['val'];
                 $orderGoods[$k]['sku_id'] = $v['skuId'];
@@ -412,7 +425,6 @@ Class Order extends Mustlogin
                     $orderGoods[$k]['lottery_detail'] = '';
                     $orderGoods[$k]['lottery_log_id'] = '';
                 }
-
             }
 //                dump($orderGoods);die;
             #减去子订单对应的价格
@@ -431,30 +443,32 @@ Class Order extends Mustlogin
                         }
                     }
                 }
-
             }
             #减去订单总价上的优惠价
             $orderAll['total_price'] = $orderAll['total_price'] - $lotteryTotalPrice;
-            if( $orderAll['total_price']<=0) $orderAll['total_price']=0.01;
-            #计算几个商户进行分成多个订单
-            $tools = new \JsApiPay();
-            //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名内，所以获取不到，使用github的实现。
-            //②、统一下单
-            $input = new \WxPayUnifiedOrder();
-            $input->SetBody("泛亚商城 的订单");
-            $input->SetAttach("附加参数");
-            $input->SetOut_trade_no($orderId);
-            $input->SetTotal_fee($orderAll['total_price'] * 100);
-            $input->SetTime_start(date("YmdHis"));
-            $input->SetTime_expire(date("YmdHis", time() + 60));
-            $input->SetGoods_tag("");
-            #微信支付回调变更
-            $notifyUrl = $wxConfig->GetNotifyUrl("http://" . $_SERVER['HTTP_HOST'] . "/index.php/index/wechatpay/notify");
-            $input->SetNotify_url($notifyUrl);
-            $input->SetTrade_type("JSAPI");
-            $input->SetOpenid($this->userInfo['openid']);
-            $unifiedOrder = \WxPayApi::unifiedOrder($wxConfig, $input);
-            $jsApiParameters = $tools->GetJsApiParameters($unifiedOrder);
+            if( $orderAll['total_price']<=0) $orderAll['total_price']=0;
+            if( $orderAll['total_price']>0){
+                #计算几个商户进行分成多个订单
+                $tools = new \JsApiPay();
+                //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名内，所以获取不到，使用github的实现。
+                //②、统一下单
+                $input = new \WxPayUnifiedOrder();
+                $input->SetBody("泛亚商城 的订单");
+                $input->SetAttach("附加参数");
+                $input->SetOut_trade_no($orderId);
+                $input->SetTotal_fee($orderAll['total_price'] * 100);
+                $input->SetTime_start(date("YmdHis"));
+                $input->SetTime_expire(date("YmdHis", time() + 600));
+                $input->SetGoods_tag("");
+                #微信支付回调变更
+                $notifyUrl = $wxConfig->GetNotifyUrl("http://" . $_SERVER['HTTP_HOST'] . "/index.php/index/wechatpay/notify");
+                $input->SetNotify_url($notifyUrl);
+                $input->SetTrade_type("JSAPI");
+                $input->SetOpenid($this->userInfo['openid']);
+                $unifiedOrder = \WxPayApi::unifiedOrder($wxConfig, $input);
+                $jsApiParameters = $tools->GetJsApiParameters($unifiedOrder);
+            }
+
 //                $orderAll['prepay_id'] = $unifiedOrder['prepay_id'];
 //                $orderAll['js_api_parameters'] = $jsApiParameters;
             # 插入订单数据
@@ -468,17 +482,37 @@ Class Order extends Mustlogin
 //                dump($type);die;
             #将库存减少，半小时后不付款恢复 或者支付成功减库存
             if ($addId1 > 0 && $addId2 > 0 && $addId3 > 0) {
-                # 清空购物车^M
+                # 清空购物车
                 foreach ($data as $k => $v) {
                     if ($v['carId']) {
                         $res = Db::name('car')->where(['id' => $v['carId']])->delete();
-//                            dump($res);die;^M
                     }
                 }
                 if ($type == 0 || $type == 2) { #钱 和积分加钱
-                    $jsApiParameters = base64_encode($jsApiParameters);
-                    $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index") . "?js_api_parameters={$jsApiParameters}&order_id={$orderId}");
-                    die(json_encode($backData));
+                    if($orderAll['total_price']==0){
+                        $data = array("order_id" => $orderAll['order_id'],"openid" => $this->userInfo['openid'],'flag'=>1);
+                        $data = http_build_query($data);
+                        $opts = array(
+                            'http'=>array(
+                                'method'=>"POST",
+                                'header'=>"Content-type: application/x-www-form-urlencoded\r\n".
+                                    "Content-length:".strlen($data)."\r\n" .
+                                    "Cookie: foo=bar\r\n" .
+                                    "\r\n",
+                                'content' => $data,
+                            )
+                        );
+                        $cxContext = stream_context_create($opts);
+                        $url ="http://".$_SERVER['HTTP_HOST'].'/index.php/index/wechatpay/notify';
+                        $sFile = file_get_contents($url, false, $cxContext);
+                        $backData = array("msg" => "购买", 'code' => 200, 'redirect' => url("order/index", array('param' => 'all')));
+                        die(json_encode($backData));
+                    }else{
+                        $jsApiParameters = base64_encode($jsApiParameters);
+                        $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index") . "?js_api_parameters={$jsApiParameters}&order_id={$orderId}");
+                        die(json_encode($backData));
+                    }
+
                 } else {
                     #将用户积分扣取，并将扣取记录记下来
                     $decScore = $user['score'] - $totalScore;
@@ -490,14 +524,41 @@ Class Order extends Mustlogin
                     $scoreLog['source'] = 7;
                     $scoreLog['source_id'] = 0;
                     $scoreLog['uid'] = $user['id'];
-                    $scoreLog['score'] = -$decScore;
+                    $scoreLog['score'] = -$totalScore;
                     $scoreLog['time'] = time();
                     Db::name('score_log')->insert($scoreLog);
-//                        dump($orderRow);die;
+                    #查出两个子订单，将其状态改成已支付
+                    #积分付款和
+                    $payPoint =0;
                     foreach ($orderRow as $val) {
-                        $res = Db::name('order')->where(['order_id' => $val['order_id']])->update(['pay_status' => 1, 'order_status' => 1, 'pay_time' => time()]);#将订单状态修改为1
+                        $payPoint+=$val['total_point'];
+                        $res = Db::name('order')
+                            ->where(['order_id' => $val['order_id']])
+                            ->update(['pay_status' => 1, 'order_status' => 1, 'pay_time' => time()]);#将订单状态修改为1
                     }
+                    $goodsname='';
+                    $goods_data='';
+                    foreach ($orderGoods as $v){
+                        #减去库存
+                        $v['goods_detail'] = json_decode( $v['goods_detail'],true);
+                        $goodsname .=   $v['goods_detail']['name'].'  ';
+                        Db::name('goods_attribute')->where(['id'=>$v['sku_id']])->setDec('store',$v['goods_num']);
+                        #加上销量
+                        Db::name('goods')->where(['id'=>$v['goods_id']])->setInc('buy_num',$v['goods_num']);
+                        $goods_data .= $goods_data . '' . $v['goods_detail']['name'] . "  " . $v['sku_val'] . "×" . $v['goods_num'] . "<br/>";
+                    }
+                    #付款成功通知
+                    include_once "sendMsg/SDK/WeiXin.php";
+                    $wx = new \WeiXin();
+                    $result = $wx->buySuccess($goodsname, $this->userInfo['openid'], $payPoint."积分");
+
+                    #发消息发送
+                    $order_message = new OrderMessage();
+                    $user_info = ['uid' => $user['id'], 'openid' => $user['openid']];
+                    $goods_info = ['total_price' => $payPoint, 'goods_data' => $goodsname];
+                    $order_message->payMessage('pay_success', $user_info, $goods_info, '');
                     $backData = array("msg" => "积分扣取成功", 'code' => 200, 'redirect' => url("order/index", array('param' => 'all')));
+//                    dump($orderGoods);die;
                     die(json_encode($backData));
                 }
 
@@ -546,20 +607,44 @@ Class Order extends Mustlogin
                 $scoreLog['source'] = 7;
                 $scoreLog['source_id'] = 0;
                 $scoreLog['uid'] = $user['id'];
-                $scoreLog['score'] = -$decScore;
+                $scoreLog['score'] = - $orderData['total_point'];
                 $scoreLog['time'] = time();
                 Db::name('score_log')->insert($scoreLog);
                 $backData = array("msg" => "购买成功", 'code' => 200, 'redirect' => url("order/index"));
                 return json($backData);
             }
             #超过半小时过期
-            if ($orderData['create_time'] + 1800 < time()) {
+            if ($orderData['create_time'] + 600 < time()) {
                 return ajax_return_error('该订单已经失效');
             }
             if ($orderData['pay_status'] == 1 || $orderData['order_status'] == 1) {
                 return ajax_return_error('该订单已经支付');
             }
+            #检测再次支付的时候使用优惠券
+            $time =time();
+            $orderGoods = Db::name('order_goods')->where(['order_id'=>$data['id']])->select();
+            foreach ($orderGoods as $v){
+                #查询使用优惠券是否过期
+                if($v['lottery_log_id'] &&  $v['lottery_id']){
+                    $checkLotteryLog = Db::name('lottery_log')->where(['id' => $v['lottery_log_id']])->find();
+                    #检测这张券是否已经使用
+                    $checkLotteryLog['lottery_info'] = Db::name('lottery')->where(['id'=>$v['lottery_id']])->find();
 
+                    if($checkLotteryLog['lottery_num']<=0){
+                        return ajax_return('', $checkLotteryLog['lottery_info']['name'].'该券已经使用了,请重新下单');
+                    }
+                    if ($checkLotteryLog['lottery_info']['expire_type'] == 1) {
+                        if ($time > ($checkLotteryLog['lottery_info']['expire_time'] * 60 * 24 * 60 + $checkLotteryLog['addtime'])) {
+                            return ajax_return('', '使用的券不在使用期限内', '500');
+                        }
+                    } else {
+                        if ($time < $checkLotteryLog['lottery_info']['expire_start_date'] || $time > $checkLotteryLog['lottery_info']['expire_end_date']) {
+                            return ajax_return('', '使用的券不在使用期限内', '500');
+                        }
+                    }
+                }
+
+            }
             if ($orderData['js_api_parameters'] && $orderData['prepay_id']) {
                 $jsApiParameters = base64_encode($orderData['js_api_parameters']);
                 $backData = array(
@@ -584,7 +669,7 @@ Class Order extends Mustlogin
                 $input->SetOut_trade_no($orderData['order_id']);
                 $input->SetTotal_fee($orderData['total_price'] * 100);
                 $input->SetTime_start(date("YmdHis"));
-                $input->SetTime_expire(date("YmdHis", time() + 60));
+                $input->SetTime_expire(date("YmdHis", time() + 600));
                 $input->SetGoods_tag("");
                 #微信支付回调变更
                 $notifyUrl = $wxConfig->GetNotifyUrl("http://" . $_SERVER['HTTP_HOST'] . "/index.php/index/wechatpay/notify1");
@@ -603,10 +688,10 @@ Class Order extends Mustlogin
                     ]);
                 $jsApiParameters = base64_encode($jsApiParameters);
             }
-            #积分扣取
-            if ($orderData['type'] == 0 || $orderData['type'] == 2) {
-
-            }
+//            #积分扣取
+//            if ($orderData['type'] == 0 || $orderData['type'] == 2) {
+//
+//            }
             $backData = array("msg" => "呼起支付", 'code' => 200, 'redirect' => url("pay/index") . "?js_api_parameters={$jsApiParameters}&order_id={$orderData['order_id']}");
             return json($backData);
         }
@@ -768,6 +853,9 @@ Class Order extends Mustlogin
                 'goods_id' => $data['goods_id'],
                 'sku_id' => $data['sku_id'],
             ])->find();
+            if($orderGoods['real_pay_price']==0){
+                return ajax_return_error('该订单不支持退换');
+            }
             #积分商品不支持退货退款
             $goods = Db::name('goods')->where(['id' => $data['goods_id']])->find();
 //                if($goods['settlement_type']==2 || $goods['settlement_type']==3){
@@ -878,7 +966,6 @@ Class Order extends Mustlogin
             if (($time - $orderGoods['get_goods_time'] > $day7) && $data['after_sale_type'] == 1) {#大于7天不可以退换货
                 return ajax_return('', '超过七天不可以退换货，请联系卖家', '500');
             }
-
             $update = [];
             $update['after_sale_type'] = $data['after_sale_type'];
             $update['after_sale_reson'] = $data['after_sale_reson'];
@@ -968,11 +1055,12 @@ Class Order extends Mustlogin
             if (!$data['id']) {
                 return $this->error('缺少参数id');
             }
-            if (!$data['wuliu_order']) {
+            if (!$data['type']) {
                 return $this->error('缺少物流公司');
             }
-            if (!$data['user_wuliu_type_order']) {
+            if (!$data['wuliu_order']) {
                 return $this->error('缺少物流单号');
+
             }
             $data['user_wuliu_type_order'] = $data['type'] . $data['wuliu_order'];
             Db::name('after_sale_following')->where(['id' => $data['id']])->update(['user_wuliu_type_order' => $data['user_wuliu_type_order']]);
@@ -1044,7 +1132,6 @@ Class Order extends Mustlogin
 
     }
 
-
     #商品售后
     public function logistics()
     {
@@ -1086,7 +1173,6 @@ Class Order extends Mustlogin
         $this->view->assign('orderDetail', $orderGoods);
         $this->view->assign('userInfo', $this->userInfo);
         //dump($this->userInfo);
-        //dump($orderGoods);
         return $this->view->fetch('orderTrack');
     }
 
@@ -1128,6 +1214,7 @@ Class Order extends Mustlogin
                 ->update(['is_send' => 5]);#待回复
             #记录评价内容
             $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'], true);
+            $insert = [];
             $insert = [];
             if ($data['pic']) {
                 $insert['pic'] = join($data['pic'], ',');

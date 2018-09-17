@@ -1,0 +1,13 @@
+<!--微信分享 start-->
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script>
+    var  linkurl = "{$fxData['linkurl']}";
+    var img= "{$fxData['img']}";
+    var des = "{$fxData['des']}";
+    var appId ="<?php echo $wx['appId'];?>";
+    var timestamp ="<?php echo $wx['timestamp'];?>";
+    var nonceStr ="<?php echo $wx['nonceStr'];?>";
+    var signature ="<?php echo $wx['signature'];?>";
+</script>
+<!--微信分享 end-->
+<script src="__STATIC__/index/js/wxShare.js"></script>

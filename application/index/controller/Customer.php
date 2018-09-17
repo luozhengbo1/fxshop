@@ -6,6 +6,8 @@
 namespace app\index\controller;
 
 use think\Db;
+use think\Session;
+use think\Config;
 
 class Customer extends Mustlogin
 {
@@ -364,10 +366,9 @@ class Customer extends Mustlogin
         $userAddress = Db::name('customer_address')->where(
             ['uid' => $userData['id'], 'status' => 1]
         )->find();
-        //dump($userAddress);
         $this->assign('userData', $userData);
         $this->assign('userAddress', $userAddress);
-        return $this->view->fetch();
+        return $this->view->fetch('mySet');
     }
 
     /**
@@ -671,4 +672,7 @@ class Customer extends Mustlogin
         Db::name('message_user')->where(['openid'=>$this->userInfo['openid'],'id'=>$message_user_id,'is_read'=>0])->update(['is_read'=>1,'update_time'=>time()]);
         return $this->view->fetch("msgDetail");
     }
+
+
+
 }

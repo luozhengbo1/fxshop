@@ -1,5 +1,6 @@
 <?php
 use think\Config;
+use think\Session;
 class WeiXin
 {
     private $appID;
@@ -55,14 +56,38 @@ class WeiXin
             // todo 发送成功
         }
     }
-    private function getAccessToken()
-    {
-//        $url = "http://m.gzairports.com/manage.php?s=/addon/Flight/Flight/getAccessToken//is_rabbit/true/publicid/2";
-        $url="http://vip.fyxtw.com/index.php?s=/addon/DeveloperTool/DeveloperTool/getAccessToken/publicid/3";
-        $accessTokenInfo = Http::get($url);
-        $_SESSION['access_token']=$accessTokenInfo;
-//        file_put_contents('./access_token.txt', $accessTokenInfo);
-        return $accessTokenInfo;
+
+//    private function getAccessToken()
+//    {
+////        $url = "http://m.gzairports.com/manage.php?s=/addon/Flight/Flight/getAccessToken//is_rabbit/true/publicid/2";
+//        $url="http://vip.fyxtw.com/index.php?s=/addon/DeveloperTool/DeveloperTool/getAccessToken/publicid/3";
+//        $accessTokenInfo = Http::get($url);
+//        $_SESSION['access_token']=$accessTokenInfo;
+////        file_put_contents('./access_token.txt', $accessTokenInfo);
+//        return $accessTokenInfo;
+//    }
+    private function getAccessToken() {
+        // access_token 应该全局存储与更新，以下代码以写入到文件中做示例
+//  $data = json_decode($this->get_php_file(__DIR__."/access_token.php"));
+        $data = Session::get('access_token_data');
+        if (!$data || $data['expire_time'] < time()) {
+            // 如果是企业号用以下URL获取access_token
+            // $url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$this->appId&corpsecret=$this->appSecret";
+            $appId = Config::get('app_id');
+            $appSecret = Config::get('app_secret');
+            $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$appId&secret=$appSecret";
+            $res = json_decode(Http::get($url));
+//            dump($res);
+            $access_token = $res->access_token;
+            if ($access_token) {
+                $data['expire_time'] = time() + 7000;
+                $data['access_token'] = $access_token;
+                Session::set('access_token_data', $data );
+            }
+        } else {
+            $access_token = $data['access_token'];
+        }
+        return $access_token;
     }
 /*
  *     public function buySuccess($openid, $flightInfo, $method)
@@ -143,17 +168,30 @@ class WeiXin
         $this->sendTemplate($param);
     }
 
-
+    #打款成功通知
+    public function makeMoney($username='用户', $money='10',$openid='' )
+    {
+        $touser =$openid;
+        $templateId=Config::get('make_money');
+        $url =$this->hostUrl."index/index/index";
+        $first = "亲，你好，本周已打款, 请确认！";
+        $remark= "感谢您的使用。";
+        $time = date('Y年m月d日');
+        $template = file_get_contents(__DIR__."/makeMoney.json");
+        $param = sprintf($template, $touser,$templateId, $url, $first,$username, $money, $time,$remark);
+//        dump($param);
+        $this->sendTemplate($param);
+    }
 
     #发送
     public function sendTemplate($param)
     {
         $accessToken = $this->getAccessToken();
-
-        $url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' .  $accessToken;
+        $url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token='.$accessToken;
         $result ['status'] = 0;
         $result ['msg'] = '回复失败';
         $res = Http::post( $url, $param );
+//        dump($accessToken);
 //        var_dump($res);
         if ($res ['errcode'] != 0) {
             $result ['msg'] = $res;

@@ -6,6 +6,7 @@ use Org\Util\Wehcat;
 use think\Controller;
 use think\Db;
 use think\Request;
+use think\Config;
 
 Class MustLogin extends Controller
 {
@@ -35,5 +36,22 @@ Class MustLogin extends Controller
         $time = time();
         $this->view->assign('currentTime',  $time);
         $this->assign('carNum', $carNum);
+
+        #微信分享
+        $localUrl = 'http://'.$_SERVER['HTTP_HOST'].':'.$_SERVER['SERVER_PORT']."/index.php/index/index/index?uid={$user['id']}";
+//       http://blog.istiny.cc/index.php/index/index/index/uid/153
+        $data=[
+            'linkurl'=>$localUrl,
+            'img'=>'http://'.$_SERVER['HTTP_HOST'].':'.$_SERVER['SERVER_PORT'].'/pic/uploads/20180815/e554024d8505052d6bb4deaaa2c23a03.png',
+            'des'=>'泛亚商城各类商品即将上线完毕，商品类型多种多样，欢迎各位会员体验购买！'
+        ];
+        $this->view->assign('fxData',$data);
+        $appid =Config::get('app_id');
+        $appSecret =Config::get('app_secret');
+        $jssdk = new Jssdk($appid,$appSecret);
+        $signPackage = $jssdk->GetSignPackage();
+        $this->view->assign('wx',$signPackage);
+        $this->view->assign('wxShare',$this->view->fetch('Public/wxShare'));
     }
+
 }

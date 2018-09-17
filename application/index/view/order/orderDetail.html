@@ -58,13 +58,13 @@
                     <div class="item-pay-data">
                         <p class="price f14">
                             {php}
-                            $showArea   = $vo['goods_detail']['show_area'];
+                            $settlementType   = $vo['goods_detail']['settlement_type'];
                             $totalPoint   = $vo['total_point'];
                             $totalPrice   = $vo['total_price'];
                             {/php}
-                            {if condition="$showArea eq 2" /}{$vo['point_score']} 积分{/if}
-
-                            {if condition="$showArea neq 2" /}￥{$vo['price']}  {/if}
+                            {if condition="$settlementType neq 1" /}{$vo['point_score']} 积分{/if}
+                            {if condition="$settlementType neq 1 && $settlementType neq 2"  /}+{/if}
+                            {if condition="$settlementType neq 2" /}￥{$vo['price']}  {/if}
                             </p>
                         <p class="nums">x{$vo['goods_num']}</p>
                         <p class=""><span class="fr lh30 orange mt10 goodStatus" data-status="{$vo['is_send']}">'</span></p>
@@ -75,8 +75,8 @@
             </a>
             <div class="module  clear pr10 pt5 mb5" >
                 <div class="cont tr total-info">
-                    {if condition="$vo['lottery_detail'] "}
-                    <p class="lh30 clear pl10" id="goodsLottery" onclick="showPop('goodsVoucher')">
+                    {if condition="$vo['lottery_detail'] && $vo['lottery_detail']['coupon_money']"}
+                    <p class="lh30 clear pl10 goodsLottery" id="goodsLottery" data_coupon_money="{$vo['lottery_detail']['coupon_money']}" onclick="showPop('goodsVoucher')">
                         <span class="fl"> {$vo['lottery_detail']['name']}</span>
                         <span class="fr">
                            -￥{$vo['lottery_detail']['coupon_money']}
@@ -107,6 +107,7 @@
                 {/php}
                 <div class="tr goodsBtnShow"
                      data-order_status="{$status}"
+                     data-pay_status="{$vo['pay_status']}"
                      data-show_area="{$vo['goods_detail']['show_area']}"
                      data-is_send="{$vo['is_send']}"
                      data-order_id="{$orderDetail[0]['order_id']}"
@@ -158,10 +159,18 @@
         if(freetype==constant.freeType.noFree && postage>0){
             totalPrice += postage* num;//加上邮费
         }
+        //优惠券 goodsLottery
+        var lotteryArr =$(ele).parents('.module').find('.goodsLottery');
+        if(lotteryArr.size()>0){
+            lotteryArr.each(function (index,ele) {
+                var couponMoney = $(ele).attr('data_coupon_money');
+                totalPrice -=couponMoney;
+            })
+        }
         switch(stype){
             case settlement.money:
                 totalPrice += parseInt(num)*parseFloat(price);
-                html ='￥'+totalPrice;
+                html ='￥'+totalPrice.toFixed(2);
                 // html ='￥'+"{$orderDetail[0]['total_price']}";
                 break;
             case settlement.score:
@@ -171,7 +180,7 @@
             case settlement.money_score:
                 totalPoint +=parseInt(num)*parseFloat(pointScore);
                 totalPrice += parseInt(num)*parseFloat(price);
-                html =totalPoint+'积分+￥'+totalPrice;
+                html =totalPoint+'积分+￥'+totalPrice.toFixed(2);
                 break;
         }
 
@@ -179,6 +188,7 @@
         if(freetype ==constant.freeType.noFree && postage>0){
             $(ele).parents('.total-info').find('.postage').show();
         }
+
     });
     $('.goodsBtnShow').each(function (index,ele) {
         var json = $(ele).data();
@@ -201,6 +211,7 @@
         cancleAfterSale:"{:url('index/order/cancleAfterSale')}",
         orderTrack:"{:url('index/order/orderTrack')}",
         orderServerAddWuliu:"{:url('index/order/orderServerAddWuliu')}",
+        logisticsTrack:"{:url('index/express/logisticsTrack')}",
     }
     backTime();
 

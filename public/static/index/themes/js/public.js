@@ -434,13 +434,15 @@ function req_opt(type,json,returnUrl){
 function pub_save(json){
     if(request_flag.save){//请求完成后才能进行下一次请求
         request_flag.save = false;
-        layerLoad();
+       // layerLoad();
+        loadShadow();
         $.ajax({
             url:json.url,
             type:'post',
             data:json.data,
             dataType:'json',
             success: function(data){
+                closeLoadShadow();
                 layer_msg(data.msg);
                 if(data.code ==200){
                     if(data.redirect && data.redirect!="undefined"){
@@ -467,7 +469,8 @@ function pub_save(json){
 function pub_edit(json){
     if(request_flag.edit){//请求完成后才能进行下一次请求
         request_flag.edit = false;
-        layerLoad();
+      //  layerLoad();
+        loadShadow();
         setTimeout(function () {
             $.ajax({
                 url:json.url,
@@ -475,6 +478,7 @@ function pub_edit(json){
                 data:json.data,
                 dataType:'json',
                 success: function(data){
+                    closeLoadShadow();
                     layer_msg(data.msg);
                     if(data.code ==200){
                         if(json.complete){
@@ -557,8 +561,8 @@ function masonryShow() {
 
    //setTimeout(function () {
         $('.grid-item-image').height($('.grid-item-image').outerWidth());
-        if($('#searchIcon').size()>0){
-            $('#searchIcon').attr('onclick','searchGoods()')
+        if($('.searchIcon').size()>0){
+            $('.searchIcon').attr('onclick','searchGoods()')
         }
     imageLazy();
     //},500)
@@ -596,7 +600,7 @@ function tagParse(tag){
 function backTime(){
     //28分株
     $('.sulfTime').each(function (index, ele) {
-        var endTime = (parseInt($(ele).attr('data-createtime')) +60);
+        var endTime = (parseInt($(ele).attr('data-createtime')) +10*60);
         var currentTime = parseInt(new Date().getTime()/1000);
         console.log(endTime,currentTime);
         setInterval(function () {
@@ -719,6 +723,12 @@ var constant={
     giftType:{
         newPerson:3//新人
         ,birthday:2//生日
+    },
+    fxTxStatus:{
+        1:'待审核'
+        ,2:'待打款'
+        ,3:'已打款'
+        ,4:'已失效'
     }
 }
 var settlement={
@@ -939,8 +949,19 @@ function dealLottery(res) {
     }
 }
 
+//商品是否失效
+function isDiscardFlag(thisData) {
+    return (thisData.pointScore == null && thisData.price == null )|| thisData.status==constant.goodsStatus.down;
+}
 
+/**
+ * 判断商品是否在活动时间内  true 限时抢购不在时间范围
+ */
 
+function noActivityFlag(thisData){
+    return thisData.show_area ==showArea.time
+        && activeStatus(parseInt(thisData.start_date),parseInt(thisData.end_date),parseInt(thisData.currentTime)) !=constant.activity.inActive;
+}
 
 
 

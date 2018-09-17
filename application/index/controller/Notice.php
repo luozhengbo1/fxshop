@@ -2,6 +2,7 @@
 namespace app\index\controller;
 use think\Controller;
 use think\Db;
+use think\Cache;
 
 Class Notice extends Mustlogin
 {
@@ -40,13 +41,17 @@ Class Notice extends Mustlogin
         if(!$id){
             return $this->error('缺少参数id');
         }
-        $notice =  Db::name('notice')
-            ->field('id,title,create_time,update_time,desc,detail,status,orderby,isdelete')
-            ->where(['id'=>$id,'status'=>1,'isdelete'=>'0'])
-            ->find();
-        if( !empty($notice) ){
-            $notice['create_time'] = date('Y-m-d H:i:s',$notice['create_time']);
-            $notice['update_time'] = date('Y-m-d H:i:s',$notice['update_time']);
+        $notice = Cache::get('notice'.$id);
+        if(!$notice){
+            $notice =  Db::name('notice')
+                ->field('id,title,create_time,update_time,desc,detail,status,orderby,isdelete')
+                ->where(['id'=>$id,'status'=>1,'isdelete'=>'0'])
+                ->find();
+            if( !empty($notice) ){
+                $notice['create_time'] = date('Y-m-d H:i:s',$notice['create_time']);
+                $notice['update_time'] = date('Y-m-d H:i:s',$notice['update_time']);
+            }
+            Cache::set('notice'.$id,$notice,2*60*60);
         }
         $this->view->assign('notice',$notice);
         return $this->view->fetch();

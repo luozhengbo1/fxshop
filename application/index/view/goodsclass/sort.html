@@ -43,6 +43,7 @@
         getHotGoods:"{:url('index/goods/getGoodsHotOrOther')}",//获取热销商品
         getGoods:"{:url('index/goodsclass/getGoodsClassGoods')}",//根据分类获取商品
     }
+    var pageFun;
     $(function () {
         getHotGoods();
         getGoodsClass();
@@ -68,21 +69,24 @@
         }
     }
     function getGoods(data) {
-        //loadShadow();
-        initData('dataList');
-        pageload({
+        loadShadow();
+        var  loadOption =  {
             targetWarp:'dataListWrap',
             target:'dataList',
-            page:1,
-            size:10,
             ajaxData:{
                 url:url.getGoods,
                 data:data,
             },
             dealFun:dealData,
             complete:loadComplete
-        });
+        }
+        if(!(window.loadPageFun)){
+            pageload(loadOption);
+        }else{
+            loadPageFun.dataInit(loadOption);
+        }
     }
+
     function loadComplete() {
         imageLazy();
        // closeLoadShadow();
@@ -150,9 +154,8 @@
     }
     //storageInfo();
     function storageInfo(){
-        localStorage.setItem('sortScrollTop',$(window).scrollTo())
         $(window).scroll(function () {
-            localStorage.setItem('sortScrollTop',$(window).scrollTo())
+            localStorage.setItem('crollTop',$(window).scrollTo())
         });
     }
 

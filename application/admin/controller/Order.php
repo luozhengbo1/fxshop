@@ -106,6 +106,7 @@ class Order extends Controller
 //        dump($orderList);
         // 获取分页显示
 //        $page = $orderList->render();
+
         $this->view->assign('userList', $userList);
         $this->view->assign('list', $orderList);
 //        $this->view->assign('page', $page);
@@ -124,7 +125,7 @@ class Order extends Controller
         $map['fy_order.isdelete'] = 1;
         $userList = Db::name('admin_user')->where(['isdelete' => 0, 'id' => ['>', 1]])->select();
         $orderList = Db::name('order')
-            ->field('fy_order.id,fy_order.buy_list,fy_order.address_id,fy_order.pay_status,
+            ->field('fy_order.id,fy_order.buy_list,fy_order.address_id,fy_order.pay_status,fy_order.address_detail,
             fy_order.order_id,fy_order.order_status,fy_order.total_price,fy_order.customer_name,fy_order.customer_name,fy_order.create_time,fy_order.pay_time,
             fy_order_goods.after_sale_is,fy_order_goods.user_id,fy_order_goods.is_send, fy_order_goods.is_send,fy_order_goods.is_return')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id', 'left')
@@ -150,20 +151,21 @@ class Order extends Controller
         $orderDetail = Db::name('order')
             ->field(' fy_order.id,fy_order.pay_status,
             fy_order.order_id,fy_order.order_status,fy_order.total_price,fy_order.customer_name,fy_order.customer_name,fy_order.create_time,fy_order.pay_time,
-            fy_order_goods.*, fy_goods_attribute.store,fy_goods_attribute.price')
+            fy_order_goods.*, fy_goods_attribute.store,fy_goods_attribute.price,fy_goods_attribute.point_score')
             ->join('fy_order_goods', 'fy_order_goods.order_id=fy_order.order_id', 'left')
             ->join('fy_goods_attribute', 'fy_order_goods.sku_id=fy_goods_attribute.id', 'left')
             ->where(['fy_order.id' => $id])
             ->select();
-//        dump($id);
+        foreach ($orderDetail as $k=>$v){
+            $orderDetail[$k]['goods_detail']= json_decode($v['goods_detail'],true);
+            $orderDetail[$k]['settlement_type']= $orderDetail[$k]['goods_detail']['settlement_type'];
+        }
 //        dump($orderDetail);die;
         $address = Db::name('customer_address')
             ->where(['id' => $orderDetail[0]['address_id']])
             ->find();
-
-        foreach ($orderDetail as $k => $v) {
-            $orderDetail[$k]['goods_detail'] = json_decode($orderDetail[$k]['goods_detail'], true);
-        }
+        $kdList = Db::name('kd')->select();
+        $this->view->assign('kdList', $kdList);
         $this->view->assign('address', $address);
         $this->view->assign('orderDetail', $orderDetail);
         return $this->view->fetch('orderdetail');

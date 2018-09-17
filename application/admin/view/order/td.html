@@ -3,27 +3,26 @@
 <td>{php}
     $vo['buy_list'] =json_decode($vo['buy_list'],true);
     $orderGoods = \think\Db::name('order_goods')->where(['order_id'=>$vo['order_id']])->select();
+    #var_dump($orderGoods);die;
     $isSendCN =[
     '未发货','已发货','待评价','退款中','退款完成','待回复','完成','退货退款'
     ];
     if(!empty($orderGoods)){
         foreach($orderGoods  as $key=> $goodsval ){
-            echo $goodsval['is_send'];
+
             $vo['buy_list'][$key]['is_send'] = $isSendCN[$goodsval['is_send']]?$isSendCN[$goodsval['is_send']]:'';
-            echo $isSendCN[$goodsval['is_send']];
-        }
-    }
-    if(is_array($vo['buy_list']) ){
-        foreach( $vo['buy_list']  as $key=> $val ){
-            echo $val['goods_name']."&nbsp;&nbsp;&nbsp;&nbsp;";
-            echo ($val['sku_val'])?$val['sku_val']:'';
-            echo "&nbsp;&nbsp;&nbsp;&nbsp;x".$val['num']."<br/>";
-            $isSend = isset($val['is_send']) ? $val['is_send']: '';
+            $goodsval['goods_detail'] = json_decode($goodsval['goods_detail'],true);
+            echo  $goodsval['goods_detail']['name']."<br/>";
+            echo "<span style='color: darkorange'>".$orderGoods[$key]['real_pay_price'].'</span>元'.
+                '+<span style="color: darkgoldenrod">'.($orderGoods[$key]['real_pay_score']?$orderGoods[$key]['real_pay_score']:0).'</span>积分<br/>';
+            $isSend =  $vo['buy_list'][$key]['is_send'];
+            echo $vo['buy_list'][$key]['sku_val']?$vo['buy_list'][$key]['sku_val']."X":'';
+            echo $vo['buy_list'][$key]['num']? $vo['buy_list'][$key]['num']."<br/>":'';
             echo "<a href='javascript:;' class='btn' style='color: orangered' >".$isSend."</a><br/>";
         }
     }
     {/php}</td>
-<td>{$vo.total_price}</td>
+<!--<td>{$vo.total_price}</td>-->
 <td>{$vo.create_time|date="Y-m-d H:i:s",###}</td>
 {php}   if($_SESSION['think']['auth_id']==1){ {/php}
 <td><?php

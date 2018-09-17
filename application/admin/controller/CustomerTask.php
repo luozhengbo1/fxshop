@@ -13,7 +13,6 @@ class CustomerTask extends Controller
     use \app\admin\traits\controller\Controller;
     // 方法黑名单
     protected static $blacklist = [];
-
     /**
      * 会员任务参与详情
      */

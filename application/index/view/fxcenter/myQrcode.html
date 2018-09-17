@@ -1,0 +1,26 @@
+{include file="Public/header-resource"}
+<body style="background: #68a50b">
+<style>
+
+</style>
+<section>
+   <div class="fx-my-code">
+       <img class="bg_img" src="__STATIC__/index/images/fx_bg.jpg">
+       {if condition="$userInfo['is_member'] eq 1" /}
+         <img class="img" src="{$myqrcode}">
+       {/if}
+       {if condition="$userInfo['is_member'] neq 1" /}
+         <a href="{:url('goodsclass/sort',['param'=>'sort'])}" >
+                 <div class="buy-btn">
+                   <p class="clickBuy">点击购买</p>
+                   <p class="goCustom">成为会员</p>
+                   <p class="textDesc">Click to buy <br>become member</p>
+                </div>
+           </a>
+       {/if}
+
+   </div>
+
+</section>
+</body>
+</html>

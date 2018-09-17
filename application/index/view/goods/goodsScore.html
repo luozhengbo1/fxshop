@@ -26,9 +26,9 @@
     function getGoods(json) {
         var data= {show_area:showArea.score}
         if(json) $.extend(data,json);
-        initData('goodsList');
+
         destoryMasonry();
-        pageload({
+        var loadOption ={
             targetWarp:'dataListWrap',
             target:'goodsList',
             page:1,
@@ -39,7 +39,12 @@
             },
             dealFun:dealData,
             complete:masonryShow,
-        });
+        };
+        if(!(window.loadPageFun)){
+            pageload(loadOption);
+        }else{
+            loadPageFun.dataInit(loadOption);
+        }
     }
 
     function dealData(data) {

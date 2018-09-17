@@ -28,11 +28,10 @@
 
 
     function loadOrderData(){
-        //loadShadow();
+        loadShadow();
         var start = $('#evaluate_nav').find('.active').attr('data-start');
         var end = $('#evaluate_nav').find('.active').attr('data-end');
-        initData('evaluateList');
-        pageload({
+        var loadOption={
             targetWarp:'dataListWrap',
             target:'evaluateList',
             page:1,
@@ -43,7 +42,12 @@
             },
             dealFun:dealData,
             complete:loadComplete,
-        });
+        };
+        if(!(window.loadPageFun)){
+            pageload(loadOption);
+        }else{
+            loadPageFun.dataInit(loadOption);
+        }
     }
     function loadComplete() {
         imageLazy();

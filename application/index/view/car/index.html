@@ -222,7 +222,7 @@
             switch(stype){
                 case settlement.money:
                     totalPrice += parseInt(num)*parseFloat(price);
-                    html ='￥'+totalPrice;
+                    html ='￥'+totalPrice.toFixed(2);
                     break;
                 case settlement.score:
                     totalPoint +=(parseInt(num)*parseFloat(pointScore));
@@ -231,7 +231,7 @@
                 case settlement.money_score:
                     totalPoint +=parseInt(num)*parseFloat(pointScore);
                     totalPrice += parseInt(num)*parseFloat(price);
-                    html =totalPoint+'积分+￥'+totalPrice;
+                    html =totalPoint+'积分+￥'+totalPrice.toFixed(2);
                     break;
             }
 

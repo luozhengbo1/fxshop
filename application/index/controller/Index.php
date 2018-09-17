@@ -15,12 +15,20 @@ class Index extends Mustlogin
         $this->userInfo['uid'] = isset($this->userInfo['id'])?$this->userInfo['id']:'';
         Hook::exec('app\\index\\behavior\\LoginLog', 'run',  $this->userInfo);
         #获取轮播图数据
-        $sildeShow = new  Sildeshow($num = 6);
-        $getSildeShow = $sildeShow->getSildeShow();
+        $getSildeShow = Cache::get('getSildeShow');
+        if(!$getSildeShow){
+            $sildeShow = new  Sildeshow($num = 6);
+            $getSildeShow = $sildeShow->getSildeShow();
+            Cache::set('getSildeShow',$getSildeShow,60*30);
+        }
         $this->view->assign('sildeShow', $getSildeShow);
         #功能模块
-        $modular = new Modular($num = 5);
-        $getModular = $modular->getModular();
+        $getModular = Cache::get('getModular');
+        if(!$getModular){
+            $modular = new Modular($num = 5);
+            $getModular = $modular->getModular();
+            Cache::set('getModular',$getModular,60*30);
+        }
         $this->view->assign('modular', $getModular);
         $this->view->assign('titleName', "泛亚商城");
         return $this->fetch();
@@ -30,6 +38,11 @@ class Index extends Mustlogin
     {
         $this->assign('titleName', "个人消息 ");
         return $this->view->fetch();
+    }
+    public function waitDevelop()
+    {
+        $this->assign('titleName', "等到开发... ");
+        return $this->view->fetch('waitDevelop');
     }
     public function newCustomerGiftBag($gift_bag_id=3)
     {
@@ -75,6 +88,13 @@ class Index extends Mustlogin
         #不同等级得到不同积分。
     }
 
+    public function testSendMsgMakeMoney()
+    {
+//        include_once "sendMsg/SDK/WeiXin.php";
+//        $wx = new \WeiXin();
+//        $wx->makeMoney($this->userInfo['nickname'],'10',$this->userInfo['openid']);
+
+    }
 }
 
 

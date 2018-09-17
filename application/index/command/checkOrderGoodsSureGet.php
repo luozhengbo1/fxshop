@@ -4,7 +4,7 @@
 //$password = 'root';
 //$dbname = 'tpadmin';
 $reas = include_once 'dbConfig.php';
-$conn = mysqli_connect($servername, $username, $password, $dbname) or die("连接失败：$conn->connect_error");
+$conn = mysqli_connect($host, $user, $pass, $dbname) or die("连接失败：$conn->connect_error");
 $time = time(); #7天做一个提醒 大于6天小于7天做一次提醒 提醒过的用户记录一下  15天自动收货
 $day7 = 24*60*60*7;
 $day6 = 24*60*60*6;

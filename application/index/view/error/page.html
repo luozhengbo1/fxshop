@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>泛亚商城</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    .background {
+        position: fixed;
+        width: 100%;
+        top: 0;
+        bottom: 0;
+        z-index:-1;
+    }
+    .background img{
+        width: 100%;
+        height: 100%;
+    }
+    .footer {
+        text-align: center;
+        color: #fff;
+        position: fixed;
+        bottom: 10px;
+        width: 100%;
+    }
+    .message {
+        color: #fff;
+        width: 54%;
+        position: fixed;
+        bottom: 180px;
+        text-align: center;
+        left: 23%;
+        height: 35px;
+        line-height: 35px;
+    }
+</style>
+<body>
+<div class="background">
+    <img src="__STATIC__/index/images/59793402211490550.jpg"/>
+</div>
+<div class="message">
+</div>
+<div class="footer">
+    <p>技术支持：泛亚科技</p >
+    <p>客服电话：0851-86701701</p >
+    <p>备案号：黔ICP备14006402号</p >
+</div>
+</body>
+<script src="__STATIC__/index/themes/js/jquery.min.js"></script>
+<script>
+    setTimeout(function () {
+        $(".message").css('background-color', '#0f87e6');
+        $('.message').text("您似乎在系统中迷了路...");
+    }, 100);
+    setTimeout(function () {
+        $('.message').text("系统正在为您进行跳转...");
+    }, 2000);
+    setTimeout(function () {
+       document.location.href="{:url('index/index')}"
+    }, 3000);
+    clearTimeout();
+</script>
+</body>
+</html>

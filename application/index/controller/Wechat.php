@@ -56,6 +56,11 @@ class WeChat extends Controller
         $userInfo = json_decode(file_get_contents($url), true);
         $userInfo['login_ip']=$this->get_client_ip();
         # 如果不存在用户就写入
+        $backurl = $this->request->param('state');
+        $uidArr = explode('=',strchr($backurl,'uid'));
+        if( !empty($uidArr[1]) ){
+            $userInfo['pid']=$uidArr[1];
+        }
         $customer = Db::name("customer");
         if (!$user = $customer->where(['openid' => $userInfo['openid']])->find()) {
             $userInfo['create_time'] = strtotime(date("Y-m-d H:i:s"));
@@ -66,6 +71,7 @@ class WeChat extends Controller
             //新增score日志记录
             $user = $customer->where('openid', $userInfo['openid'])->find();
             $time = time();
+
             Db::name('score_log')->insert([
                 'uid' => $user['id'],
                 'openid' => $userInfo['openid'],

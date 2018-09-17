@@ -1,0 +1,57 @@
+{include file="Public/header-resource"}
+<body class="footer-boottom">
+<section>
+    <div class="fx-user-detail">
+        <p class="item-title  f16 green tc">提现状态</p>
+
+        <ul class="service-list">
+            <li class="clear">
+                <span class="grey">提现订单号：</span>
+                <span>{$detail.tx_order_id}</span>
+            </li>
+            <li class="clear">
+                <span class="grey">提现人</span>
+                <span>{$detail.tx_user}</span>
+            </li>
+            <li class="clear">
+                <span class="grey">用户id</span>
+                <span>【<i class="red">{$detail.tx_user_id}</i>】</span>
+            </li>
+            <li class="clear">
+                <span class="grey">审核状态</span>
+                <span class="green" data-status="{$detail.status}" id="shStatus"></span>
+            </li>
+            <li class="clear">
+                <span class="grey">提现积分</span>
+                <span>{$detail.tx_money}</span>
+            </li>
+            <li class="clear">
+                <span class="grey">审批通过金额</span>
+                <span>{$detail.tx_money}</span>
+            </li>
+            <li class="clear">
+                <span class="grey">实际税后金额</span>
+                <span>{$detail.tx_real_money}</span>
+            </li>
+            <li class="clear">
+                <span class="grey">提现描述</span>
+                <span>{$detail.tx_desc}</span>
+            </li>
+            <li class="clear">
+                <span class="grey">一审描述</span>
+                <span>{$detail.sh_desc}</span>
+            </li>
+            <li class="clear">
+                <span class="grey">时间</span>
+                <span>{$detail.create_time}</span>
+            </li>
+
+        </ul>
+    </div>
+</section>
+<script>
+    $('#shStatus').text(constant.fxTxStatus[$("#shStatus").data('status')])
+</script>
+{include file="Public/footer-quick-nav"}
+</body>
+</html>

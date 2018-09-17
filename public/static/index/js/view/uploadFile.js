@@ -20,8 +20,9 @@ layui.use('upload', function(){
 
             var html ='<div class="singer-image" style="" >';
             html +='<img  src="'+data.data.name+'" class="layui-upload-img showImg">';
-            html +='<i class="close-btn" onclick="dele(this)"></i></div>';
+            html +='<i class="close-btn" onclick="dele(this)"></i>';
             html +='<input type="hidden" class="pic" name="pic" value="'+data.data.name+'">'
+            html +='</div>';
             $('#imageShow').prepend(html);
             //console.log(data.data.name)
             //上传完毕

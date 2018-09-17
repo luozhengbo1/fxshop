@@ -29,6 +29,9 @@
                data-score="{$vo['point_score']??''}"
                data-showarea="{$vo['show_area']??''}"
                data-stype="{$vo['settlement_type']}"
+               data-status="{$vo['status']}"
+               data-start_date="{$vo['start_date']}"
+               data-end_date="{$vo['end_date']}"
         >
         <a href="{:url('goods/detail',array('id'=>$vo['goodsId']))}">
             <div class="clear pt10 goods-info-wrap">
@@ -70,7 +73,7 @@
                     {/if}
                 </span>
             </li>
-            {if condition="$vo['youhui']"}
+            {if condition="$vo['youhui'] && $vo['settlement_type'] neq 2 "}
             <li class="clear">
                 <span class="fl">优惠</span>
                 <div class="fr">
@@ -87,7 +90,7 @@
                 </div>
             </li>
             {/if}
-            {if condition="$vo['mianyou']"}
+            {if condition="$vo['mianyou'] && $vo['settlement_type'] neq 2"}
             <li class="clear">
                 <span class="fl">免邮</span>
                 <div class="fr">
@@ -144,6 +147,7 @@
    }
     function saveOrder() {
        saveData = new Array()//初始化数组
+        var isDiscard=false,  noActivity=false;
        $('.goodsData').each(function (index,ele) {
            var $ele = $(ele);
            var $parents = $(ele).parents('.orderWrap');
@@ -160,15 +164,29 @@
                addressId:"{$address['id']??''}",
                show_area:$ele.data('showarea'),
                pointScore:$ele.data('score'),
+               status:$ele.data('status'),
+               start_date:$ele.data('start_date'),
+               end_date:$ele.data('end_date'),
+               currentTime:"{$currentTime}",
                youhuiId:$youhui.val(),
                baoyouId:$mianyou.val(),
                youhui_lottery_log_id:$youhui.find('option:selected').data('lottery_log_id'),
                mianyou_lottery_log_id:$mianyou.find('option:selected').data('lottery_log_id'),
 
            };
+           //商品既没有价格也没有积分，说明该规格商品 sku规格不存在，该规格商品失效
+            isDiscard = isDiscardFlag(thisData);
+            noActivity = noActivityFlag(thisData);
+           if(isDiscard || noActivity) {
+                return ;
+            }
            saveData.push(thisData);
        })
         console.log(saveData)
+        if(isDiscard || noActivity) {
+           layer_msg('该订单已经失效，请重新下单');
+            return ;
+        }
       //  debugger;
        pub_save({
            url:url.pay,
@@ -231,7 +249,7 @@
                     break;
             }
             if($youhui.val() ){
-                totalPrice -=parseInt($youhui.find('option:selected').attr('data-value'));
+                totalPrice -=parseFloat($youhui.find('option:selected').attr('data-value'));
             }
 
             if((freetype==0 && !isNaN(postage))){
@@ -245,7 +263,7 @@
 
         var html='';
         totalPrice = totalPrice.toFixed(2);
-        if(totalPrice>0 && totalPoint>0) html ='￥'+totalPrice+'+'+totalPoint+'积分';
+        if(totalPrice>0 && totalPoint>0) html ='￥'+totalPrice.toFixed(2)+'+'+totalPoint+'积分';
         else{
             if(totalPrice>0)   html +='￥'+totalPrice;
             if (totalPoint>0) html +=totalPoint+'积分'

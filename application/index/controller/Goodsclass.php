@@ -21,7 +21,11 @@
         #查询出所有的一级分类分类
         public  function  getGoodsClass()
         {
-            $goodsClass = $this->model->where(['pid'=>0])->select();
+            $goodsClass = Cache::get('goodsClass');
+            if(!$goodsClass){
+                $goodsClass = $this->model->where(['pid'=>0])->select();
+                Cache::set('goodsClass',$goodsClass,60*30);
+            }
             return ajax_return($goodsClass,'ok','200');
         }
 
@@ -32,7 +36,11 @@
                 return ajax_return_error('缺少参数分类id');
             }
             #查询所有的子分类
-            $goodsClassAllChild = getAllChildcateIds($goodsClassId);
+            $goodsClassAllChild = Cache::get('goodsClassAllChild'.$goodsClassId);
+            if(!$goodsClassAllChild){
+                $goodsClassAllChild = getAllChildcateIds($goodsClassId);
+                Cache::set('goodsClassAllChild'.$goodsClassId,$goodsClassAllChild,60*30);
+            }
             $goodsList = Db::name('goods')
                 ->where(['goods_class_id'=>['in',$goodsClassAllChild],'status'=>1,'isdelete'=>'0','show_area'=>['in',[3,4]]])
                 ->page($page,$size)

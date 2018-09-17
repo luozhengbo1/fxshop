@@ -75,6 +75,9 @@ body{
 .base-color{
     color: #FB6006;
 }
+.base-bg{
+    background-color: #FFAD2C;
+}
 .fl{ float: left}
 .fr{ float: right}
 .clear{ zoom: 1}
@@ -206,7 +209,7 @@ body{
 .bg_red{ background-color: red!important;}
 .bg_sred{ background-color: #de181b!important;}
 .bg_qianred{
-    background-color:#F24B4B!important;
+    background-color:#f36161!important;
 }
 .bg_white{ background-color: white!important;}
 .bg_orange{ background-color: orange!important;}
@@ -689,7 +692,7 @@ body{
     top: 0;
     width: 100%;
     height: 100%;
-    z-index: 11;
+    z-index: 1989101;
 }
 .load-shadow .shodow-content{
     line-height: 22px;

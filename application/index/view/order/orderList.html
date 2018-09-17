@@ -97,6 +97,7 @@
     </div>
 </section>
 <script>
+    $('.header-title a').attr('href',"{:url('customer/customer',['param'=>'customer'])}")
     var nav_param= "{$param}";
     var url = {
         orderList:"{:url('index/order/getOrderListApi')}",
@@ -110,28 +111,32 @@
         cancleAfterSale:"{:url('index/order/cancleAfterSale')}",
         deleOrder:"{:url('index/order/deleteOrder')}",
         orderTrack:"{:url('index/order/orderTrack')}",
-
+        logisticsTrack:"{:url('index/express/logisticsTrack')}",
     }
 
     tabSwitch($('.nav-list-tab li'),loadOrderData);
     $('#nav_'+nav_param).click();
     function loadOrderData(){
         var status = $('#navListTab').find('.active').attr('data-status');
-        //loadShadow();
-        initData('dataList');
+        loadShadow();
         hideEmptyWrap();
-        pageload({
+        var loadOption = {
             targetWarp:'dataListWrap',
             target:'dataList',
             page:1,
-            size:4,
+            size:10,
             ajaxData:{
                 url:url.orderList,
                 data:{status:status},
             },
             dealFun:dealData,
             complete: loadComplete,
-        });
+        };
+        if(!(window.loadPageFun)){
+            pageload(loadOption);
+        }else{
+            loadPageFun.dataInit(loadOption);
+        }
     }
     function dealData(result) {
         var html='';
@@ -139,6 +144,7 @@
         for(var j = 0; j < result.length; j++){
             var data=result[j],//单个订单
                 order_status = data[0].order_status ,
+                pay_status = data[0].pay_status ,
                 serviceMobile='',
                 order_id=data[0].order_id+"";//订单id
             html +='<li class="orderWrap">';
@@ -159,7 +165,6 @@
             for(var i=0; i<data.length; i++ ){
                 console.log(data)
                 var detail = data[i].goods_detail,
-
                     pay_status = data[i].pay_status ,
                     goods_id =data[i].goods_id,
                     sku_id = data[i].sku_id,
@@ -168,8 +173,9 @@
                     is_send= data[i].is_send,
                     serviceMobile =detail.service_mobile,
                     service = eval(detail['service']),
-                    order_id = data[i].order_id;
-                console.log(goods_id)
+                    order_id = data[i].order_id,
+                    lottery =data[i].lottery_detail;
+                console.log(lottery)
                 html +='<a href="'+urlConnect("{:url('index/order/orderDetail')}",{id:order_id})+'">';
                 html +='    <div class="item-list pt10 module clear">';
                 html +='        <div class="item-img">';
@@ -201,24 +207,28 @@
                 html +='            <span class="f14">共<b>'+data[i].goods_num+'</b>件商品</span>';
 
                 //settlementType 结算类型1-货币2-积分3-积分+货币
+                var  totalPrice=0,
+                     totalPoint=0;
+
+                if(lottery && lottery.coupon_money){
+                    totalPrice -=lottery.coupon_money;
+                }
                 switch(stype){
                     case 1:
-                        var totalPrice =parseFloat(data[i].price* data[i].goods_num)+parseFloat(detail.postage*data[i].goods_num);
-                        // html +='            <span class="f14">合计:<b>￥'+totalPrice.toFixed(2)+'</b></span>';
-                        html +='            <span class="f14">合计:<b>￥'+data[i].total_price+'</b></span>';
+                        totalPrice +=parseFloat(data[i].price* data[i].goods_num)+parseFloat(detail.postage*data[i].goods_num);
+                        html +='           <span class="f14">合计:<b>￥'+totalPrice.toFixed(2)+'</b></span>';
                         break;
                     case 2:
-                        var totalScore = (data[i].point_score * data[i].goods_num)//+parseFloat(detail.postage*data[i].goods_num)
-                        html +='            <span class="f14">合计:<b>'+totalScore.toFixed(2)+'积分</b></span>';
+                        totalPoint += (data[i].point_score * data[i].goods_num);
+                        html +='            <span class="f14">合计:<b>'+totalPoint.toFixed(2)+'积分</b></span>';
                         break;
                     case 3:
-                        var totalPrice =parseFloat(data[i].price* data[i].goods_num)+parseFloat(detail.postage*data[i].goods_num);
-                        var totalScore = (data[i].point_score * data[i].goods_num)//+parseFloat(detail.postage*data[i].goods_num)
-                        // html +='            <span class="f14">合计:<b>'+totalScore.toFixed(2)+'积分+￥'+totalPrice.toFixed(2)+'</b></span>';
-                        html +='            <span class="f14">合计:<b>'+data[i].total_price+'积分+￥'+totalPrice.toFixed(2)+'</b></span>';
+                        totalPrice +=parseFloat(data[i].price* data[i].goods_num)+parseFloat(detail.postage*data[i].goods_num);
+                        totalPoint += (data[i].point_score * data[i].goods_num);
+                         html +='            <span class="f14">合计:<b>'+totalPoint.toFixed(2)+'积分+￥'+totalPrice.toFixed(2)+'</b></span>';
+                       // html +='            <span class="f14">合计:<b>'+data[i].total_price+'积分+￥'+totalPrice.toFixed(2)+'</b></span>';
                         break;
                 }
-                // html +='            <span class="f14">合计:<b>￥'+data[i].total_price+'</b></span>';
                 if(detail.free_type ==constant.freeType.noFree && detail.postage>0){
                     html +='            <span class="f14">(含运费<b>￥'+detail.postage+'x'+data[i].goods_num+'</b>)</span>';
                 }
@@ -230,6 +240,7 @@
                 html +=orderBtnHtml(
                     {
                         order_status:order_status,
+                        pay_status:pay_status,
                         show_area:show_area,
                         is_send:is_send,
                         order_id:order_id,

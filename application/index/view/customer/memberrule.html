@@ -12,8 +12,10 @@
 
         <div class="layui-progress mt20" style="width: 90%; margin: 20px auto">
 
-            <span class="f10" style="position: absolute;bottom: 12px; right:0">我的：{$user_data.experience}</span>
-            <div class="layui-progress-bar layui-bg-green" lay-percent="{$user_data.experience/$user_data.next_grade_experience*100}%"></div>
+          <!--  <span class="f10" style="position: absolute;bottom: 12px; right:0">我的：{$user_data.experience}</span>-->
+            <div class="layui-progress-bar bg_orange" lay-percent="{$user_data.experience/$user_data.next_grade_experience*100}%">
+                <span class="layui-progress-text">{$user_data.experience}</span>
+            </div>
             <span class="f10" style="position: absolute;bottom: -20px; right:0">{$user_data.next_grade_experience}经验值</span>
         </div>
 

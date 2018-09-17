@@ -1,0 +1,88 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+<style>
+
+</style>
+{include file="Public/header-title"}
+<section>
+    <header class="base-bg fx-score-detail">
+        <img src="__STATIC__/index/images/icon/money_white.png">
+        <p class="white">{$titleName}:
+            {if condition="$flag eq 0" /} {$user['fx_total_money']??'0.00'} {/if}
+            {if condition="$flag eq 1 || $flag eq 2" /} {$user['fx_money']??'0.00'} {/if}
+            {if condition="$flag eq 3" /} {$user['fx_tx_total_money']??'0.00'} {/if}
+        </p>
+    </header>
+    <div id="dataListWrap">
+        <ul id="orderList" class="message-lists fx-message-lists">
+           <!-- <li class="clear" >
+                <div class="header-img">
+                    <img src="http://scsc.top/data/gallery_album/original_img/5982d8b9d3391.jpg">
+                </div>
+                <div class="content">
+                    <p class="clear mt5">提现</p>
+                    <p class="desc grey mt5">2015-0304 08:24:23</p>
+                </div>
+                <div class="num green">-412</div>
+            </li>-->
+        </ul>
+
+    </div>
+    {if condition="$flag eq 2" /}
+    <div class="footer-fixed btn-wrap">
+        <a href="{:url('fxcenter/bankCard')}" class="btn-dark-red w100p bootstrap-btn">提现</a>
+    </div>
+    {/if}
+</section>
+{include file="Public/footer-quick-nav"}
+<script>
+    $(function () {
+        loadDealData()
+    })
+    var flag = '{$flag}';
+    function loadDealData() {
+        initData('orderList');
+        pageload({
+            targetWarp: 'dataListWrap',
+            target: 'orderList',
+            page: 1,
+            size: 10,
+            ajaxData: {
+                url: "{:url('index/fxcenter/scoreSearchType')}",
+                data: {flag:flag},
+            },
+            dealFun: dealData,
+        });
+    }
+
+    function dealData(data) {
+        var html = '';
+        for(var i=0; i<data.length; i++) {
+            html +='<li class="clear" >';
+            html +='    <div class="header-img">';
+            html +='        <img src="'+data[i].headimgurl+'">';
+            html +='    </div>';
+            var typeText,typeMark ;
+            switch (data[i].type){
+                case 1://重销（增加）
+                    typeText='重销';
+                    typeMark='+';
+                    break;
+                case 2://重销（减少）
+                    typeText='提现';
+                    typeMark='-';
+                    break
+            }
+            html +='    <div class="content">';
+            html +='        <p class="clear mt5">'+typeText+'('+data[i].source_user_name+')['+data[i].source_user_id+']</p>';
+            html +='        <p class="desc grey mt5">'+data[i].create_time+'</p>';
+            html +='    </div>';
+            html +='    <div class="num green">'+typeMark+data[i].money+'</div>';
+            html +='</li>';
+
+        }
+        return html;
+    }
+</script>
+</body>
+</html>

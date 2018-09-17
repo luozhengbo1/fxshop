@@ -1,0 +1,31 @@
+<td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
+<td>{$vo.id}</td>
+<td>{$vo.tx_user}</td>
+<td>{$vo.tx_money}</td>
+<td>{$vo.tx_real_money}</td>
+<td>{$vo.tx_cost}</td>
+<td>{$vo.tx_order_id}</td>
+<td>{$vo.create_time}</td>
+<td>{php}
+        if($vo['status']==1){
+            echo '待审核';
+        }
+        if($vo['status']==2){
+            echo '待打款';
+        }
+        if($vo['status']==3){
+            echo '已打款';
+        }
+        if($vo['status']==4){
+            echo '已失效';
+        }
+
+    {/php}</td>
+<td>{$vo.sh_desc}</td>
+<td>{php}
+        $vo['bank_detail'] = json_decode($vo['bank_detail'],true);
+        echo $vo['bank_detail']['name'].'&nbsp;&nbsp;&nbsp;&nbsp;';
+        echo $vo['bank_detail']['bank_name'].'&nbsp;&nbsp;&nbsp;&nbsp;';
+        echo $vo['bank_detail']['cart_number'].'&nbsp;&nbsp;&nbsp;&nbsp;';
+        echo $vo['bank_detail']['mobile'];
+    {/php}</td>

@@ -57,12 +57,13 @@
             <!--{include file='template/nav_left' /}-->
             <nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
                 <ul class="cl">
+                    <li><a href="javascript::void(0)" onclick="clearPhp(this)" data-GetUrl="{:url('admin/index/clear')}">清除缓存</a> </li>
                     <li>{$Think.session.realname}</li>
                     <li class="dropDown dropDown_hover">
                         <a href="#" class="dropDown_A">{$Think.session.real_name} <i class="Hui-iconfont">&#xe6d5;</i></a>
                         <ul class="dropDown-menu menu radius box-shadow">
                             <li><a href="javascript:;" onclick="layer_open('个人信息', '{:\\think\\Url::build(\'Pub/profile\')}')">个人信息</a></li>
-                            <li><a href="javascript:;" onclick="layer_open('个人信息', '{:\\think\\Url::build(\'Pub/password\')}')">修改密码</a></li>
+                            <li><a href="javascript:;" onclick="layer_open('修改密码', '{:\\think\\Url::build(\'Pub/password\')}')">修改密码</a></li>
                             <li><a href="javascript:;" onclick="logout()">退出</a></li>
                         </ul>
                     </li>
@@ -119,6 +120,24 @@
             location.href = '{:\\think\\Url::build("Pub/logout")}'
         })
     }
+
+    function clearPhp(obj) {
+        var url=obj.getAttribute('data-GetUrl');
+        //询问框
+        layer.confirm('您确定要清除吗？', {
+                btn: ['确定','取消'] //按钮
+            },
+            function(){
+                $.get(url,function(info){
+                    if(info.code === 1){
+                        setTimeout(function () {location.href = info.url;}, 1000);
+                    }
+                    layer.msg(info.msg);
+                });
+            },
+            function(){});
+    }
 </script>
+
 </body>
 </html>

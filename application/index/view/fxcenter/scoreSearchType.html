@@ -1,0 +1,46 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+{include file="Public/header-title"}
+<style>
+    .score-search-type li{
+        padding: 8px 14px;
+        margin-bottom: 2px;
+        color: white;
+    }
+    .score-search-type .score_img{
+        float: left;
+        width: 20%;
+        text-align: center;
+    }
+    .score-search-type .score_show{
+        float: left;
+        width: 80%;
+        font-size: 16px;
+        padding-top: 20px;
+        text-align: center;
+    }
+</style>
+    <section>
+        <ul class="score-search-type">
+            <li class="clear base-bg">
+                <a href="{:url('fxcenter/scoresort',['sorttype'=>'1'])}"  >
+                    <div class="score_img">
+                        <img src="__STATIC__/index/images/icon/score.png">
+                        <p class="white">重消积分</p>
+                    </div>
+                    <div class="score_show white">{$user['fx_money']??'0.00'}积分</div>
+               </a>
+            </li>
+        </ul>
+        <div class="article mt30">
+          <!-- 1.会员积分：自发货之日起，客户收到货并大客户收到货并大客户收到货并大客户收到货并大客户收到货并大-->
+        </div>
+        {if condition="$flag eq 2" /}
+        <div class="footer-fixed btn-wrap">
+            <a href="{:url('fxcenter/bankCard')}" class="btn-dark-red w100p bootstrap-btn">提现</a>
+        </div>
+        {/if}
+
+    </section>
+</body>
+</html>

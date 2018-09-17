@@ -1,0 +1,34 @@
+{include file="Public/header-resource"}
+<body class="title-top footer-boottom">
+
+{include file="Public/header-title"}
+<section>
+    {volist name="bankList" id="vo"}
+       <div class="fx-bank-card base-bg clear">
+           <a class="clear white hrefValue" data-href="{:url('fxcenter/bankCardEdit',array('bankId'=>$vo['id']))}" href="{:url('fxcenter/withdrawAffairm',array('bankId'=>$vo['id']))}">
+               <div class="fl tc w80p" >
+                   <!--<img src="__STATIC__/index/images/bank_icon/nongye.png">-->
+                   <p style="font-size: 20px; font-weight:bold; color: red; line-height: 30px">银 行 卡 号</p>
+                   <p class="f16">{$vo['cart_number']|substr=0,6}***************{$vo['cart_number']|substr=-4}</p>
+               </div>
+               <div id="editBank"  class="fr tc del-btn">
+                       <i class="layui-icon opt-btn f16"></i>
+               </div>
+           </a>
+       </div>
+    {/volist}
+    <a class="clear white" href="{:url('fxcenter/bankCardEdit')}">
+        <div class="fx-bank-card base-bg clear tc">
+            添加
+        </div>
+    </a>
+</section>
+<script>
+    $('#editBank').click(function (e) {
+        window.location.href=$('.hrefValue').attr('data-href');
+        return false
+    })
+</script>
+{include file="Public/footer-quick-nav"}
+</body>
+</html>
