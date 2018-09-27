@@ -36,11 +36,10 @@ Class Order extends Mustlogin
             $page = $this->request->param('page') ? $this->request->param('page') : 1;
             $size = $this->request->param('size') ? $this->request->param('size') : 4;
             $data = $this->request->post();
-            $this->userInfo['openid']="omQYXwAasNeXdGSMymd91487Ds1g";
+//            $this->userInfo['openid']="omQYXwAasNeXdGSMymd91487Ds1g";
             if ($data['status'] == 'all') {
                 $where = ['fy_order.openid' => $this->userInfo['openid']];
             } else {
-
                 #待付款
                 if ($data['status'] == 0) {
                     $where = ['fy_order.openid' => $this->userInfo['openid'], 'fy_order.pay_status' => 0, 'fy_order.order_status' => 0];
@@ -453,7 +452,7 @@ Class Order extends Mustlogin
                 //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名内，所以获取不到，使用github的实现。
                 //②、统一下单
                 $input = new \WxPayUnifiedOrder();
-                $input->SetBody("泛亚商城 的订单");
+                $input->SetBody("秭归有机质商城 的订单");
                 $input->SetAttach("附加参数");
                 $input->SetOut_trade_no($orderId);
                 $input->SetTotal_fee($orderAll['total_price'] * 100);
@@ -466,9 +465,9 @@ Class Order extends Mustlogin
                 $input->SetTrade_type("JSAPI");
                 $input->SetOpenid($this->userInfo['openid']);
                 $unifiedOrder = \WxPayApi::unifiedOrder($wxConfig, $input);
+//                dump($unifiedOrder);die;
                 $jsApiParameters = $tools->GetJsApiParameters($unifiedOrder);
             }
-
 //                $orderAll['prepay_id'] = $unifiedOrder['prepay_id'];
 //                $orderAll['js_api_parameters'] = $jsApiParameters;
             # 插入订单数据
@@ -664,7 +663,7 @@ Class Order extends Mustlogin
                 //内，所以获取不到，使用github的实现。
                 //②、统一下单
                 $input = new \WxPayUnifiedOrder();
-                $input->SetBody("泛亚商城 的订单");
+                $input->SetBody("秭归有机质商城 的订单");
                 $input->SetAttach("附加参数");
                 $input->SetOut_trade_no($orderData['order_id']);
                 $input->SetTotal_fee($orderData['total_price'] * 100);

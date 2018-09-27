@@ -9,7 +9,8 @@
         <img src="__STATIC__/index/images/icon/money_white.png">
         <p class="white">{$titleName}:
             {if condition="$flag eq 0" /} {$user['fx_total_money']??'0.00'} {/if}
-            {if condition="$flag eq 1 || $flag eq 2" /} {$user['fx_money']??'0.00'} {/if}
+            {if condition=" $flag eq 2" /} {$user['fx_money']??'0.00'} {/if}
+            {if condition=" $flag eq 1" /} {$weiTxScorer??'0.00'} {/if}
             {if condition="$flag eq 3" /} {$user['fx_tx_total_money']??'0.00'} {/if}
         </p>
     </header>
@@ -76,10 +77,14 @@
             html +='    <div class="content">';
             html +='        <p class="clear mt5">'+typeText+'('+data[i].source_user_name+')['+data[i].source_user_id+']</p>';
             html +='        <p class="desc grey mt5">'+data[i].create_time+'</p>';
+            html +='        ';
             html +='    </div>';
-            html +='    <div class="num green">'+typeMark+data[i].money+'</div>';
+            if(data[i].status==0){
+                html +='    <div class="num green">'+typeMark+data[i].money+'<p class="mt5 red" >待激活</p></div>';
+            }else{
+                html +='    <div class="num green">'+typeMark+data[i].money+'<p class="mt5 " >已激活</p></div>';
+            }
             html +='</li>';
-
         }
         return html;
     }

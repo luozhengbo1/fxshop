@@ -24,7 +24,7 @@ class Order extends Controller
             $orderStatus = $this->request->param("order_status");
             if ($orderStatus == 99) {#未支付
                 $map['fy_order.pay_status'] = 0;
-                $map['fy_order.order_status'] = 0;
+//                $map['fy_order.order_status'] = 0;
             }
             if ($orderStatus == 1) {#待发货
                 $map['fy_order.pay_status'] = 1;
@@ -190,8 +190,10 @@ class Order extends Controller
             $orderGoods['goods_detail'] = json_decode($orderGoods['goods_detail'], true);
             $address = Db::name('customer_address')->where(['id' => $orderGoods['address_id']])->find();
             $addressStr = $address['name'] . "   " . $address['mobile'] . "    " . $address['address'] . $address['street'];
+//            $orderGoods['openid']= 'oj2u_0j927358n7xbAW-aw-hu1lg';
             $wx = new \WeiXin();
             $wx->sendGoods($orderGoods['goods_detail']['name'], $orderGoods['openid'], $orderGoods['order_id'], $data['logistics_name'], $data['logistics_number'], $addressStr);
+//            die;
             $res = Db::name('order_goods')
                 ->where(['id' => $data['id']])
                 ->update([
@@ -474,11 +476,15 @@ class Order extends Controller
                     $input->SetTotal_fee($order['total_price'] * 100);   //订单标价金额，单位为分
                     $input->SetRefund_fee($orderGoods['real_pay_price'] * 100);  //退款总金额，订单总金额，单位为分，只能为整数
                     $input->SetOp_user_id($merchid);
+
                     $res = \WxPayApi::refund($wxConfig, $input);
                     //退款操作
 
                     if ($res['return_code'] == 'SUCCESS' && $res['result_code'] == "SUCCESS") {
                         file_put_contents("wx_refund_success.log", print_r($res, true) . "\r", 8);
+                        #將获得的积分减回来积分
+                        self::decScore($orderGoods, $data['id'], $order_id);
+
                         //修改订单状态 将订单总金额减少退款金额
                         $orderData = Db::name('order')->field('total_price,buy_list')->where(['order_id' => $order_id])->find();
                         $decPrice = $orderData['total_price'] - $orderGoods['real_pay_price'];#减去订单总价
@@ -490,7 +496,7 @@ class Order extends Controller
                         #退款加上库存
                         $goodsAttribute = Db::name('goods_attribute')->where(['id' => $orderGoods['sku_id']])->find();
                         $storeRes = Db::name('goods_attribute')->where(['id' => $orderGoods['sku_id']])->update(['store' => $orderGoods['goods_num'] + $goodsAttribute['store']]);
-//                    #退款通知
+                        #退款通知
                         include_once APP_PATH . "/index/controller/sendMsg/SDK/WeiXin.php";
                         $wx = new \WeiXin();
                         $wx->refund($orderGoods['goods_detail']['name'], $orderGoods['openid'], $orderGoods['order_id'], $orderGoods['return_price']);
@@ -506,10 +512,8 @@ class Order extends Controller
                         Db::name('wx_pay_refund_log')->insert($wx_pay_refund_log_insert);
                         //退款通知发送到商城
                         $order_message = new OrderMessage();
-//                        dump($orderData);
                         $user_info = ['uid' => $user['id'], 'openid' => $user['openid']];
                         $buy_list = json_decode($orderData['buy_list'], true);
-//                        dump($buy_list);die;
                         $goods_data = '';
                         foreach ($buy_list as $buy_item) {
                             $goods_data .= $buy_item['goods_name'] . ' ' . $buy_item['sku_val'] . '×' . $buy_item['num'] . '<br/>';
@@ -543,6 +547,31 @@ class Order extends Controller
                 $result['msg'] = '订单id不能为空';
 //                file_put_contents("wx_refund_error.log",json_encode($result."\r"), 8);
                 return ajax_return('', '订单id不能为空');
+            }
+        }
+
+    }
+    #处理退款积分
+    public static  function decScore($orderGoods ,$id,$orderId)
+    {
+        #將用户fx_total_money  减少 fx_money 减少。 將记录 新增一条还记录 查看状态是否激活 激活的话需要减少 fx_money 的值
+        self::decScoreHandle($orderId);
+        $newOrderId = substr($orderId, '0', strlen($orderId) - 4);
+        self::decScoreHandle($newOrderId);
+    }
+    public static function decScoreHandle($orderId)
+    {
+        $userScoreList = Db::name('fx_user_log')->where('order_id',$orderId)->select();
+        if( !empty($userScoreList) ){
+            foreach ($userScoreList as $value){
+                $user = Db::name('customer')->where(['openid'=>$value['get_user_openid']])->find();
+                $desc= ($user['fx_money']-$value['money'] ) <0 ?0:$user['fx_money']-$value['money'];
+                $desc1= ($user['fx_total_money']-$value['money'] ) <0 ?0:$user['fx_total_money']-$value['money'];
+                if($value['status']==1){
+                    Db::name('customer')->where(['openid'=>$value['get_user_openid']])->update(['fx_money'=>$desc]);
+                }
+                Db::name('customer')->where(['openid'=>$value['get_user_openid']])->update(['fx_total_money'=>$desc1]);
+                Db::name('fx_user_log')->where(['id'=>$value['id']])->delete();
             }
         }
 

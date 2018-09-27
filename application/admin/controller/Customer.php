@@ -18,13 +18,16 @@ class Customer extends Controller
     protected function filter(&$map)
     {
         //按用户名搜索
-        if ($this->request->param("username")) {
-            $map['username'] = ["like", "%" . $this->request->param("username") . "%"];
+        if ($this->request->param("id")) {
+            $map['id'] = $this->request->param("id");
+        }
+        if ($this->request->param("nickname")) {
+            $map['nickname'] = ["like", "%" . $this->request->param("nickname") . "%"];
         }
 
         //按性别搜索
         if ($this->request->param("sex")) {
-            $map['sex'] = ["like", $this->request->param("sex")];
+            $map['sex'] =$this->request->param("sex");
         }
 
         //按会员等级搜索

@@ -1,14 +1,15 @@
 <td><input type="checkbox" name="id[]" value="{$vo.id}"></td>
-<td>{$vo.openid}</td>
-<td><img src="{$vo.headimgurl}" width="100" height="100"></a></td>
+<td>{$vo.id}</td>
+<td><img src="{$vo.headimgurl}" width="80" ></a></td>
 <td>{$vo.username|high_light=$Request.param.username}</td>
 <td>{$vo.nickname}</td>
 <td>{if condition="$vo.sex==1"}男{elseif condition="$vo.sex==2"/}女{else /}未知{/if}</td>
 <td>{$vo.birthday}</td>
 <td>{$vo.mobile|high_light=$Request.param.mobile}</td>
 <td>{$vo.email}</td>
-<td>{$vo.score}</td>
+<td>{$vo.fx_money}</td>
 <td>{$vo.experience}</td>
+<td>{if condition="$vo.is_member==1"}是{else /}否{/if}</td>
 <td><?php
 $grade_res = \think\Db::table('fy_customer')->alias('c')
     ->join('fy_customer_grade g','g.experience_start <= c.experience and g.experience_end >= c.experience')
@@ -20,4 +21,5 @@ $grade_res = \think\Db::table('fy_customer')->alias('c')
 </td>
 <td>{$vo.login_ip}</td>
 <td>{$vo.create_time}</td>
+<td>{$vo.pid}</td>
 <!--<td>{$vo.update_time}</td>-->

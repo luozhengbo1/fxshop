@@ -29,6 +29,8 @@ class WeChat extends Controller
     {
         $state = $this->request->param('state');
         $authUrl = "http://vip.fyxtw.com/get-weixin-code.html";
+//        $authUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->appId}&redirect_uri={$this->authBack}&response_type=code&scope=snsapi_base&state={$state}#wechat_redirect";
+//        $authUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?redirect_uri={$this->authBack}&response_type=code&scope=snsapi_base#wechat_redirect";
         $this->redirect("{$authUrl}?appid={$this->appId}&scope=snsapi_userinfo&state={$state}&redirect_uri={$this->authBack}");
     }
 
@@ -53,14 +55,17 @@ class WeChat extends Controller
         $url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={$this->appId}&secret={$this->appSecret}&code={$code}&grant_type=authorization_code";
         $accessInfo = json_decode(file_get_contents($url), true);
         $url = "https://api.weixin.qq.com/sns/userinfo?access_token={$accessInfo['access_token']}&openid={$accessInfo['openid']}&lang=zh_CN";
+
         $userInfo = json_decode(file_get_contents($url), true);
         $userInfo['login_ip']=$this->get_client_ip();
         # 如果不存在用户就写入
         $backurl = $this->request->param('state');
         $uidArr = explode('=',strchr($backurl,'uid'));
-        if( !empty($uidArr[1]) ){
-            $userInfo['pid']=$uidArr[1];
+        $getPid =(int)Session::get('pid');
+        if( !empty($uidArr[1]) || $getPid  ){
+            $userInfo['pid']=$uidArr[1]?$uidArr[1]:(int)$getPid;
         }
+
         $customer = Db::name("customer");
         if (!$user = $customer->where(['openid' => $userInfo['openid']])->find()) {
             $userInfo['create_time'] = strtotime(date("Y-m-d H:i:s"));
@@ -92,6 +97,8 @@ class WeChat extends Controller
             # 更新登录时间
             $up['update_time'] = strtotime(date("Y-m-d H:i:s"));
             $up['login_ip'] = get_client_ip();
+            $up['nickname'] = $userInfo['nickname'];
+            $up['headimgurl'] = $userInfo['headimgurl'];
             $customer->where(array('openid' => $userInfo['openid']))->update($up);
         }
         Session::set('wx_user', $userInfo);

@@ -10,7 +10,7 @@ var cfg = {
 wx.config(cfg);
 wx.ready(function () {
     wx.onMenuShareAppMessage({
-        title: '泛亚商城', // 分享标题
+        title: '秭归有机质商城', // 分享标题
         desc: des, // 分享描述
         link: linkurl, // 分享链接
         imgUrl: img, // 分享图标
@@ -28,7 +28,7 @@ wx.ready(function () {
         }
     });
     wx.onMenuShareTimeline({
-        title: '泛亚商城', // 分享标题
+        title: '秭归有机质商城', // 分享标题
         desc: des, // 分享描述
         link: linkurl, // 分享链接
         imgUrl: img, // 分享图标
@@ -47,7 +47,7 @@ wx.ready(function () {
         }
     });
     wx.onMenuShareQQ({
-        title: '泛亚商城', // 分享标题
+        title: '秭归有机质商城', // 分享标题
         desc: des, // 分享描述
         link: linkurl, // 分享链接 // 分享链接
         imgUrl: img, // 分享图标
@@ -68,7 +68,7 @@ wx.ready(function () {
         }
     });
     wx.onMenuShareWeibo({
-        title: '泛亚商城', // 分享标题
+        title: '秭归有机质商城', // 分享标题
         desc: des, // 分享描述
         link: linkurl, // 分享链接
         imgUrl: img, // 分享图标
@@ -88,7 +88,7 @@ wx.ready(function () {
         }
     });
     wx.onMenuShareQZone({
-        title: '泛亚商城', // 分享标题
+        title: '秭归有机质商城', // 分享标题
         desc: des, // 分享描述
         link: linkurl, // 分享链接
         imgUrl: img, // 分享图标

@@ -1,9 +1,8 @@
 <div class="temm-header">
     <div class="img tc"> <img class="headimgurl" src="{$user['headimgurl']??''}"></div>
     <div>
-        <p class="tc white lh20">我的分享人：{$parentUser['nickname']??'无'}</p>
-        <p class="tc white lh20">{$user['nickname']??''}</p>
+        <p class="tc white lh20">我的分享人：{$parUser['nickname']??'无'}</p>
+        <p class="tc white lh20">{$user['nickname']??''}【ID】：{$user['id']??''}</p>
         <p class="tc white lh20">加入时间：{$user['create_time']|date="Y-m-d H:i:s",###}</p>
-
     </div>
 </div>

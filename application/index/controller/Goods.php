@@ -37,7 +37,7 @@
             $data=[
                 'linkurl'=>$localUrl,
                 'img'=>'http://'.$_SERVER['HTTP_HOST'].':'.$_SERVER['SERVER_PORT'].'/pic/uploads/20180815/e554024d8505052d6bb4deaaa2c23a03.png',
-                'des'=>'泛亚商城各类商品即将上线完毕，商品类型多种多样，欢迎各位会员体验购买！'
+                'des'=>'秭归有机质商城各类商品即将上线完毕，商品类型多种多样，欢迎各位会员体验购买！'
             ];
             $this->view->assign('fxData',$data);
             $appid =Config::get('app_id');

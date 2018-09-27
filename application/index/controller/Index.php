@@ -30,7 +30,7 @@ class Index extends Mustlogin
             Cache::set('getModular',$getModular,60*30);
         }
         $this->view->assign('modular', $getModular);
-        $this->view->assign('titleName', "泛亚商城");
+        $this->view->assign('titleName', "秭归有机质商城");
         return $this->fetch();
     }
 

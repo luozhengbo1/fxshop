@@ -23,7 +23,6 @@ class Wechatpay extends Controller
         if(isset($dataPost['flag'])){
             $orderInfo['out_trade_no']=$dataPost['order_id'];
             $orderInfo['openid']=$dataPost['openid'];
-
             $xml='';
         }else{
             $xml = isset($GLOBALS['HTTP_RAW_POST_DATA']) ? $GLOBALS['HTTP_RAW_POST_DATA'] : '';
@@ -35,8 +34,8 @@ class Wechatpay extends Controller
             $notify->Handle($wxConfig, true);
             $orderInfo = \WxPayResults::Init($wxConfig, $xml);
         }
- #       $orderInfo['out_trade_no']="144121740220180904104603";
- #       $orderInfo['openid']="omQYXwM8TEkiBZR7Ldm891OOWbNQ";
+//       $orderInfo['out_trade_no']="150794476120180923204059";
+//        $orderInfo['openid']="oj2u_0toFbhREpQixXq6Es5_c-GU";
         $user = Db::name('customer')->where(['openid'=>$orderInfo['openid']])->find();
 
         if (empty($orderInfo)) {
@@ -51,8 +50,11 @@ class Wechatpay extends Controller
             $goodsname = "";
             $goods_data = "";//商城发货消息
             $orderAllData = Db::name('order_all')->where(['order_id' => $orderInfo['out_trade_no']])->find();
-            if ($orderAllData['is_tui'] == 0 &&$orderAllData['is_tui'] ==0 ) {
-                    file_put_contents("wx_pay_success.log", $xml . "\r", 8);
+            if ($orderAllData['is_tui'] == 0  ) {
+                    #调用分销函数-------------------
+                    self::fxSettlement($orderInfo['out_trade_no'], $orderInfo['openid'],0,$user);
+                    #调用分销函数-----------------------
+                file_put_contents("wx_pay_success.log", $xml . "\r", 8);
                     Db::name('order_all')->where(['order_id' => $orderInfo['out_trade_no']])->update(['is_tui' => 1,'status'=>1]);
                 $totalScore=0;
                 foreach ($arr as $value) {
@@ -88,7 +90,8 @@ class Wechatpay extends Controller
                         }
                     }
                 }
-                #扣取相应的积分
+
+
                 #将用户积分扣取，并将扣取记录记下来
                 $decScore = $user['score'] - $totalScore;
                 if ($decScore < 0) $decScore = 0;
@@ -128,7 +131,169 @@ class Wechatpay extends Controller
         }
         exit;
     }
+    #分销结算
+    public function fxSettlement($orderId,$openId,$flag,$user)
+    {
+        $orderAll = Db::name('order_all')->where('order_id',$orderId)->find();
+        $time = time();
+        if($flag==0){
+            if($user['is_member']!=1){#非会员
+                foreach (explode(',',$orderAll['son_id']) as $value) {
+                    $orderGoods = Db::name('order_goods')
+                        ->field('order_id,openid,real_pay_price')
+                        ->where('order_id',$orderId.$value)
+                        ->select();
+                    $currentTotal = array_sum(array_column($orderGoods,'real_pay_price'));
+                    if($currentTotal>=88){#将当前用户修改为会员，并且将积分送给用户并记录
+                        $updateUser=[
+                            'is_member'=>1,
+//                            'fx_money'=>$user['fx_money']+8.8, #可提现积分暂时不加上去，
+                            'fx_total_money'=>$user['fx_total_money']+8.8
+                        ];
+                        Db::name('customer')->where('openid',$user['openid'])->update($updateUser);
+                        $insertSelf = [
+                            'create_time'=>$time,
+                            'get_user_id'=>$user['id'],
+                            'get_user_name'=>$user['nickname'],
+                            'get_user_openid'=>$user['openid'],
+                            'source_user_id'=>$user['id'],
+                            'source_user_name'=>$user['nickname'],
+                            'source_user_openid'=>$user['openid'],
+                            'order_id'=>$orderId.$value,
+                            'money'=>8.8,
+                            'total_price'=>$orderAll['total_price'],
+                            'rate'=>10,
+                            'is_tx'=>0,
+                            'type'=>1,
+                            'status'=>0,
+                        ];
+                        Db::name('fx_user_log')->insert($insertSelf);
+                    }
+                }
+            }
+        }else{
+            if($user['is_member']!=1){#非会员
+                $orderGoods = Db::name('order_goods')
+                    ->field('order_id,openid,real_pay_price')
+                    ->where('order_id',$orderId)
+                    ->select();
+                $currentTotal = array_sum(array_column($orderGoods,'real_pay_price'));
+                if($currentTotal>=88){#将当前用户修改为会员，并且将积分送给用户并记录
+                    $updateUser=[
+                        'is_member'=>1,
+//                        'fx_money'=>$user['fx_money']+8.8,
+                        'fx_total_money'=>$user['fx_total_money']+8.8
+                    ];
+                    Db::name('customer')->where('openid',$user['openid'])->update($updateUser);
+                    $insertSelf = [
+                        'create_time'=>$time,
+                        'get_user_id'=>$user['id'],
+                        'get_user_name'=>$user['nickname'],
+                        'get_user_openid'=>$user['openid'],
+                        'source_user_id'=>$user['id'],
+                        'source_user_name'=>$user['nickname'],
+                        'source_user_openid'=>$user['openid'],
+                        'order_id'=>$orderId,
+                        'money'=>8.8,
+                        'total_price'=>$orderAll['total_price'],
+                        'rate'=>10,
+                        'is_tx'=>0,
+                        'type'=>1,
+                        'status'=>0,
+                    ];
+                    Db::name('fx_user_log')->insert($insertSelf);
+                }
 
+            }
+
+        }
+
+        $sqlUser ="SELECT T2.id, T2.openid,T2.nickname,T2.fx_money,T2.is_member,T2.fx_total_money FROM (   
+            SELECT  @r AS _id,  (SELECT @r := pid  FROM  fy_customer WHERE id = _id) AS pid,   
+            @l := @l + 1 AS lvl   FROM    (SELECT @r := ".$user['id'] ." , @l := 0) vars,   
+           fy_customer h   WHERE @r <> 0) T1 JOIN fy_customer T2   ON T1._id = T2.id  ORDER BY T1.lvl ASC  limit 4";
+        $parList = Db::name('customer')->query($sqlUser);
+
+        array_shift($parList);
+//            dump($parList);
+        $fxSet = Db::name('fx_set')->where(['status'=>1])->find();
+        if($fxSet){
+            $count = (count($parList)>2)?2:count($parList);
+            $insertFxLog = [];
+            for($i=0;$i<$count;$i++){
+                if( !empty($parList[$i]) &&  $parList[$i]['is_member']==1 ){
+                    if($i == 0){
+                        $money = number_format($orderAll['total_price']*$fxSet['first']/100,2);
+                    }else if($i==1){
+                        $money = number_format($orderAll['total_price']*$fxSet['second']/100,2);
+                    }
+                    $insertFxLog[] = [
+                        'create_time'=>$time,
+                        'get_user_id'=>$parList[$i]['id'],
+                        'get_user_name'=>$parList[$i]['nickname'],
+                        'get_user_openid'=>$parList[$i]['openid'],
+                        'source_user_id'=>$user['id'],
+                        'source_user_name'=>$user['nickname'],
+                        'source_user_openid'=>$user['openid'],
+                        'order_id'=>$orderId,
+                        'money'=>$money,
+                        'total_price'=>$orderAll['total_price'],
+                        'rate'=>$fxSet['first'],
+                        'is_tx'=>0,
+                        'type'=>1,
+                        'status'=>0,
+                    ];
+                    #累计积分的增加
+                    Db::name('customer')
+                        ->where('openid',$parList[$i]['openid'])
+                        ->update([  'fx_total_money'=>$user['fx_total_money']+$money ]);
+                }
+
+            }
+            Db::name('fx_user_log')->insertAll($insertFxLog);
+        }
+        #查询5级用户
+        if( isset($parList[2]) ){
+            $sqlUser5 = "SELECT T2.id, T2.openid,T2.nickname,T2.fx_money,T2.is_member,T2.fx_total_money FROM (   
+            SELECT  @r AS _id,  (SELECT @r := pid  FROM  fy_customer WHERE id = _id) AS pid,   
+            @l := @l + 1 AS lvl   FROM    (SELECT @r := ".$parList[2]['id'] ." , @l := 0) vars,   
+           fy_customer h   WHERE @r <> 0) T1 JOIN fy_customer T2   ON T1._id = T2.id  ORDER BY T1.lvl ASC  limit 3";
+            $parList5 = Db::name('customer')->query($sqlUser5);
+//            dump($parList5);
+            if(!empty($parList5)){
+                $insertFxLog5=[];
+                foreach ($parList5 as $k=>$val){
+                    if($val['fx_total_money']>=10000){# 累计超过10000 可以额外获得1%的积分
+                        $money5 = number_format( 1*$orderAll['total_price']/100,2);
+                        $insertFxLog5[] = [
+                            'create_time'=>$time,
+                            'get_user_id'=>$val['id'],
+                            'get_user_name'=>$val['nickname'],
+                            'get_user_openid'=>$val['openid'],
+                            'source_user_id'=>$user['id'],
+                            'source_user_name'=>$user['nickname'],
+                            'source_user_openid'=>$user['openid'],
+                            'order_id'=>$orderId,
+                            'money'=>$money5,
+                            'total_price'=>$orderAll['total_price'],
+                            'rate'=>1,
+                            'is_tx'=>0,
+                            'type'=>1,
+                            'status'=>0,
+                        ];
+                        #累计积分的增加
+                        Db::name('customer')
+                            ->where('openid',$val['openid'])
+                            ->update(['fx_total_money'=>$val['fx_total_money']+$money5]);
+                    }
+                }
+                Db::name('fx_user_log')->insertAll($insertFxLog5);
+            }
+        }
+
+
+
+    }
     #支付回调
     public function notify1()
     {
@@ -140,14 +305,17 @@ class Wechatpay extends Controller
         $wxConfig = new \WxPayConfig();
         $notify->Handle($wxConfig, true);
         $orderInfo = \WxPayResults::Init($wxConfig, $xml);
-//        $orderInfo['out_trade_no']="1441217402201808311425434714";
-//        $orderInfo['openid']="omQYXwNAT5uC15TQqMGxajJzqo4s";
+//        $orderInfo['out_trade_no']="150794476120180923224507";
+//        $orderInfo['openid']="oj2u_0hqYXzMYv6vvNwPZnTD8gl8";
+        $user = Db::name('customer')->where(['openid' => $orderInfo['openid']])->find();
         if (empty($orderInfo)) {
             file_put_contents("wx_pay_error.log", $xml . "\r", 8);
         } else {
             file_put_contents("wx_pay_success.log", $xml . "\r", 8);
+            self::fxSettlement($orderInfo['out_trade_no'], $orderInfo['openid'],1,$user);
             #付款成功通知
             $orderData = Db::name('order')->where(['order_id' => $orderInfo['out_trade_no']])->find();
+            Db::name('customer')->where(['openid' => $orderInfo['openid']])->update(['is_member' => 1]);
 //            dump(234);
             if ($orderData['is_tui'] == 0  ) {
 
@@ -178,7 +346,6 @@ class Wechatpay extends Controller
                 include_once "sendMsg/SDK/WeiXin.php";
                 $wx = new \WeiXin();
                 $result = $wx->buySuccess($goodsname, $orderInfo['openid'], $orderData['total_price']);
-                $user = Db::name('customer')->where(['openid' => $orderInfo['openid']])->find();
                 $order = Db::name('order')->where(['order_id' => $orderInfo['out_trade_no']])->find();
                 #修改 状态
                 $where['order_id'] = $orderInfo['out_trade_no'];

@@ -234,15 +234,13 @@ return [
     'wx_key'=>'8265fea37556137b2c8f9bff67c82d9c',
     'mchid' => '1507944761',
     #订单付款通知
-    #'order_pay'=>'hN9bm2tlU2gsBwJxH8eiWFvKHnFabfdlFyZBS3PC5n4',
-   'order_pay'=>'9HKxB2nTC5MItLAOM925s2ek6rvkX9sLmozjZx0nrN8',
-
+   'order_pay'=>'OCbR5gfPchBFk8FdeQcvYNNO6RfbzKfXRh46bWjL55Y',
     #订单退款通知
-    'order_refund'=>'Nfr76-g7rDwoiG5PNtV_jp6cUTEisNBp2O2kNJkeEcg',
+    'order_refund'=>'TsrI9Fv_muvSOhjVLvK6sSxAuxwTJ9d5JYvpFgL98lQ',
     #发货提醒通知
-    'send'=>'OCbR5gfPchBFk8FdeQcvYNNO6RfbzKfXRh46bWjL55Y',
+    'send'=>'9HKxB2nTC5MItLAOM925s2ek6rvkX9sLmozjZx0nrN8',
     #确认收货提醒
-    'sure'=>'TsrI9Fv_muvSOhjVLvK6sSxAuxwTJ9d5JYvpFgL98lQ',
+    'sure'=>'Nfr76-g7rDwoiG5PNtV_jp6cUTEisNBp2O2kNJkeEcg',
     #打款通知
     'make_money'=>'xsRRmERbpSDvW5GH3nEuWNHF2W2-_PNfqaWqqi_Boc0',
 ];

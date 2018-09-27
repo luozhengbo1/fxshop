@@ -19,17 +19,23 @@ Class FxCenter extends  Mustlogin
      */
     public function  index()
     {
+//        dump($this->userInfo);die;
         if($this->userInfo['is_member']!=1){
             $this->myqrcode();
         }
         $this->assign('titleName', "分享中心");
         #查出分享人
         $parUser = Db::name('customer')->where('id',$this->userInfo['pid'])->find();
+//        dump($parUser);die;
         #统计我的客户
         $sonUserSql  = "SELECT * from  fy_customer  as a where  a.pid  in 
                           (select b.id from fy_customer b where  b.id={$this->userInfo['id']} or b.pid in 
                           (select c.id from fy_customer c  where  c.id = {$this->userInfo['id']}) )";
+        #未提现积分
+        $scoreList = Db::name('fx_user_log')->where(['get_user_openid'=>$this->userInfo['openid']])->select();
+        $weiTxScore =  array_sum(array_column($scoreList,'money'));
         $sonUser = Db::name('customer')->query($sonUserSql);
+        $this->view->assign('weiTxScorer',$weiTxScore);
         $this->view->assign('parUser',$parUser);
         $this->view->assign('sonUser',count($sonUser));
         $this->view->assign('user',$this->userInfo);
@@ -52,6 +58,7 @@ Class FxCenter extends  Mustlogin
                 case 2:
                     $where['type']=1;
                     $where['is_tx']=0;
+                    $where['fy_fx_user_log.status']=1;
                     break;
                 case 3:
                     $where['type']=2;
@@ -62,13 +69,13 @@ Class FxCenter extends  Mustlogin
                 ->join('fy_customer','fy_fx_user_log.source_user_openid=fy_customer.openid','left')
                 ->where($where)
                 ->page($data['page'],$data['size'])->select();
+//            dump($scoreList);die;
             if( !empty( $scoreList) ){
                 foreach ($scoreList as &$v){
                     $v['create_time']= date('Y-m-d H:i:s',$v['create_time']);
                 }
             }
-
-            return ajax_return(($this->userInfo['fx_money']==0 && ($data['flag']==1 || $data['flag']==2) )?'':$scoreList,'操作成功',200);
+            return ajax_return(($this->userInfo['fx_money']==0 && ( $data['flag']==2) )?'':$scoreList,'操作成功',200);
         }else{
             $searchtype = $this->request->param('searchtype');
             switch ($searchtype){
@@ -85,6 +92,10 @@ Class FxCenter extends  Mustlogin
                     $title = "已提现积分";
                     break;
             }
+            #未提现积分
+            $scoreList = Db::name('fx_user_log')->where(['get_user_openid'=>$this->userInfo['openid']])->select();
+            $weiTxScore =  array_sum(array_column($scoreList,'money'));
+            $this->view->assign('weiTxScorer',$weiTxScore);
             $this->assign('titleName', $title);
             $this->assign('flag', $searchtype);
             $this->assign('user', $this->userInfo);
@@ -227,7 +238,7 @@ Class FxCenter extends  Mustlogin
         if($this->request->isAjax()){
             $data = $this->request->post();
             $user = Db::name('customer')->where('openid',$this->userInfo['openid'])->find();
-            if($user['fx_money'] <1 ){
+            if($user['fx_money'] <100 ){
                 return ajax_return('','提现积分应大于100','500');
             }
             if( !$data['bankId']  ){
@@ -393,8 +404,10 @@ Class FxCenter extends  Mustlogin
      */
     public function fxUserDetail()
     {
-        $parentUser = Db::name('customer')->field('id,nickname,username,mobile')->where('id',$this->userInfo['pid'])->find();
-        return $this->view->fetch('fxUserDetail',['user'=>$this->userInfo,'parentUser'=>$parentUser]);
+        $this->assign('titleName', "我的团队");
+        $user = Db::name('customer')->where('id',$this->request->param('uid'))->find();
+        $this->view->assign(['parUser'=>$this->userInfo,'user'=>$user]);
+        return $this->view->fetch('userDetail');
     }
 
     public function getSonUser($id){

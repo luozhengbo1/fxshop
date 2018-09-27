@@ -378,4 +378,14 @@ Array
     [return_code] => FAIL
     [return_msg] => certificate not match
 )
+Array
+(
+    [return_code] => FAIL
+    [return_msg] => certificate not match
+)
+Array
+(
+    [return_code] => FAIL
+    [return_msg] => certificate not match
+)
 

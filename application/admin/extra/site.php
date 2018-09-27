@@ -10,11 +10,11 @@
 
 return [
     // 网站信息
-    'name'        => '泛亚微商城',
-    'title'       => '泛亚微商城',
+    'name'        => '秭归有机质微商城',
+    'title'       => '秭归有机质微商城',
     'version'     => 'v1.0',
-    'keywords'    => '泛亚微商城',
-    'description' => '泛亚微商城',
+    'keywords'    => '秭归有机质微商城',
+    'description' => '秭归有机质微商城',
 
     // 登录地址
     'logout_url'        => 'Pub/logout',

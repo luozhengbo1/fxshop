@@ -9,7 +9,7 @@ class WeiXin
     protected $hostUrl;
     public function __construct()
     {
-        $this->hostUrl="http://".$_SERVER['SERVER_NAME']."/".$_SERVER['DOCUMENT_URI'];
+        $this->hostUrl="http://".$_SERVER['SERVER_NAME'].$_SERVER['DOCUMENT_URI'];
      /*   foreach ($conf as $key => $val) {
             $$key = $val;
         }
@@ -119,7 +119,7 @@ class WeiXin
             $url = $this->hostUrl."/index/lottery/mycardvoucher.html";
         }
         $template = file_get_contents(__DIR__."/buySuccess.json");
-        $remark = "如有问题请致电400-828-1878或直接在微信留言，小易将第一时间为您服务！";
+        $remark = "如有问题请致电【0717-2868207】或直接在微信留言，将第一时间为您服务！";
         $param = sprintf($template, $touser,$templateId, $url, $first, $pay_price, $goods,$remark);
         $this->sendTemplate($param);
     }
@@ -133,11 +133,10 @@ class WeiXin
         $first = "您购买{$goods}已经发货啦，正快马加鞭向您飞奔而去。";
         #发货时间
         $sendTime=date('Y-m-d H:i:s');
-        $remark= "请保持收件手机畅通！查看详情！";
+        $remark= "请保持收件手机畅通！查看详情！{$url}";
         $template = file_get_contents(__DIR__."/changeBor.json");
         $param = sprintf($template, $touser,$templateId, $url, $first, $out_trade_no, $sendTime, $post, $log_number,$address,$remark);
         $this->sendTemplate($param);
-
     }
     #退款通知
     public function  refund($goods="test商品",$openid="omQYXwNAT5uC15TQqMGxajJzqo4s",$out_trade_no="",$refundMoney ="10")
@@ -146,7 +145,7 @@ class WeiXin
         $templateId=Config::get('order_refund');
         $url =$this->hostUrl."/index/order/index/param/all";
         $first = "您的订单已经完成退款，原路退回到您的支付帐户（零钱20天内到账；储蓄卡1-3个工作日；信用卡2-5个工作日）请留意查收。";
-        $remark= "有什么疑问请联系【0851-86701701】咨询";
+        $remark= "有什么疑问请联系【0717-2868207】咨询";
         $template = file_get_contents(__DIR__."/refund.json");
         $param = sprintf($template, $touser,$templateId, $url, $first, $refundMoney, $goods, $out_trade_no,$remark);
         $this->sendTemplate($param);
@@ -191,7 +190,6 @@ class WeiXin
         $result ['status'] = 0;
         $result ['msg'] = '回复失败';
         $res = Http::post( $url, $param );
-//        dump($accessToken);
 //        var_dump($res);
         if ($res ['errcode'] != 0) {
             $result ['msg'] = $res;

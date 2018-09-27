@@ -298,7 +298,7 @@ Class Lottery extends Mustlogin
             //$openId = $tools->GetOpenid(); # 获取微信用户信息，因为不在安全域名内，所以获取不到，使用github的实现。
             //②、统一下单
             $input = new \WxPayUnifiedOrder();
-            $input->SetBody("泛亚商城 的订单");
+            $input->SetBody("秭归有机质商城 的订单");
             $input->SetAttach("附加参数");
             $input->SetOut_trade_no($orderId);
             $input->SetTotal_fee($orderRow['total_price'] * 100);

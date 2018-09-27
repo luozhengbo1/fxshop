@@ -9,7 +9,7 @@
         <ul id="dataList" class="team-list">
             {volist name="$userArr['child']" id="vo1" key="k1" }
              <li>
-                  <a class="clear header-parent" href="{:url('fxcenter/userDetail',['uid'=>'2'])}" >
+                  <a class="clear header-parent" href="{:url('fxcenter/fxUserDetail',['uid'=>$vo1['id']])}" >
                        <img class="fl mr20 img ml10" src="{$vo1['headimgurl']??''}">
                        <p class="fl f16">{$vo1.nickname??''}</p>
                        <p class="fr grey pr10">{php}echo count($vo1['child2']){/php}</p>
@@ -17,7 +17,7 @@
                  {if condition="$vo1['child2']" /}
                  <div class="clear second-team mt10">
                      {volist name="$vo1['child2']" id="vo2" key="k2"}
-                     <a href="{:url('fxcenter/userDetail',['uid'=>'2'])}">
+                     <a href="{:url('fxcenter/fxUserDetail',['uid'=>$vo2['id']])}">
                          <div class="tc clear header-img">
                              <img src="{$vo2['headimgurl']??''}">
                              <p>{$vo2['nickname']??''}</p>
